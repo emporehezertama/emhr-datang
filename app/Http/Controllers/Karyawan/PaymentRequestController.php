@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\PaymentRequest;
-use App\PaymentRequestForm;
+use App\Models\PaymentRequest;
+use App\Models\PaymentRequestForm;
 use App\User;
 use Carbon\Carbon;
+use App\Models\PaymentRequestOvertime;
+use App\Models\OvertimeSheet;
+use App\Models\PaymentRequestBensin;
 
 class PaymentRequestController extends Controller
 {
@@ -115,12 +118,12 @@ class PaymentRequestController extends Controller
         {
             foreach($request->overtime as $k => $i)
             {
-                $form                       = new \App\PaymentRequestOvertime();
+                $form                       = new PaymentRequestOvertime();
                 $form->payment_request_id   = $data->id;
                 $form->overtime_sheet_id    = $i;
                 $form->save();
 
-                $ov                         = \App\OvertimeSheet::where('id', $i)->first();
+                $ov                         = OvertimeSheet::where('id', $i)->first();
                 $ov->is_payment_request     = 1;
                 $ov->save();
             }
@@ -130,7 +133,7 @@ class PaymentRequestController extends Controller
         {
             foreach($request->bensin['tanggal'] as $k => $item)
             {
-                $bensin                     = new \App\PaymentRequestBensin();
+                $bensin                     = new PaymentRequestBensin();
                 $bensin->payment_request_id = $data->id;
                 $bensin->user_id            = \Auth::user()->id;
                  $bensin->tanggal  = Carbon::parse($request->bensin['tanggal'][$k])->format('d.m.y');

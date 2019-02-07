@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\EmporeOrganisasiStaff;
+use App\Models\EmporeOrganisasiManager;
 
 class EmporeStaffController extends Controller
 {
@@ -24,7 +26,7 @@ class EmporeStaffController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\EmporeOrganisasiStaff::orderBy('id', 'DESC')->get();
+        $params['data'] = EmporeOrganisasiStaff::orderBy('id', 'DESC')->get();
 
         return view('administrator.empore-staff.index')->with($params);
     }
@@ -35,7 +37,7 @@ class EmporeStaffController extends Controller
      */
     public function create()
     {   
-        $params['manager'] = \App\EmporeOrganisasiManager::all();
+        $params['manager'] = EmporeOrganisasiManager::all();
 
         return view('administrator.empore-staff.create')->with($params);
     }
@@ -47,8 +49,8 @@ class EmporeStaffController extends Controller
      */
     public function edit($id)
     {
-        $params['manager']      = \App\EmporeOrganisasiManager::all();
-        $params['data']         = \App\EmporeOrganisasiStaff::where('id', $id)->first();
+        $params['manager']      = EmporeOrganisasiManager::all();
+        $params['data']         = EmporeOrganisasiStaff::where('id', $id)->first();
 
         return view('administrator.empore-staff.edit')->with($params);
     }
@@ -60,9 +62,9 @@ class EmporeStaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data           = \App\EmporeOrganisasiStaff::where('id', $id)->first();
+        $data                               = EmporeOrganisasiStaff::where('id', $id)->first();
         $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
-        $data->name     = $request->name;
+        $data->name                         = $request->name;
         $data->save();
 
         return redirect()->route('administrator.empore-staff.index')->with('message-success', 'Data berhasil disimpan');
@@ -75,7 +77,7 @@ class EmporeStaffController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\EmporeOrganisasiStaff::where('id', $id)->first();
+        $data = EmporeOrganisasiStaff::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.empore-staff.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -88,7 +90,7 @@ class EmporeStaffController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\EmporeOrganisasiStaff();
+        $data       = new EmporeOrganisasiStaff();
         $data->name                         = $request->name;
         $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
         $data->save();

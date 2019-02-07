@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\MedicalReimbursement;
+use App\Models\MedicalReimbursementForm;
 
 class ApprovalMedicalAtasanController extends Controller
 {
@@ -24,7 +26,7 @@ class ApprovalMedicalAtasanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\MedicalReimbursement::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = MedicalReimbursement::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
  
         return view('karyawan.approval-medical-atasan.index')->with($params);
     }
@@ -36,7 +38,7 @@ class ApprovalMedicalAtasanController extends Controller
      */
     public function proses(Request $request)
     {
-        $data = \App\MedicalReimbursement::where('id', $request->id)->first();
+        $data = MedicalReimbursement::where('id', $request->id)->first();
         
         $data->is_approved_atasan = $request->status;
         $params['data'] = $data;
@@ -73,7 +75,7 @@ class ApprovalMedicalAtasanController extends Controller
 
         foreach($request->nominal_approve as $id => $val)
         {
-            $form                       = \App\MedicalReimbursementForm::where('id', $id)->first();
+            $form                       = MedicalReimbursementForm::where('id', $id)->first();
             $form->nominal_approve      = str_replace(',', '', $val);
             $form->save();
         }
@@ -88,7 +90,7 @@ class ApprovalMedicalAtasanController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\MedicalReimbursement::where('id', $id)->first();
+        $params['data'] = MedicalReimbursement::where('id', $id)->first();
 
         return view('karyawan.approval-medical-atasan.detail')->with($params);
     }

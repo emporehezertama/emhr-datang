@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\OvertimeSheet;
-use App\OvertimeSheetForm;
+use App\Models\OvertimeSheet;
+use App\Models\OvertimeSheetForm;
 use App\User;
 
 class OvertimeController extends Controller
@@ -50,7 +50,7 @@ class OvertimeController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\OvertimeSheet::where('id', $id)->first();
+        $params['data'] = OvertimeSheet::where('id', $id)->first();
 
         return view('karyawan.overtime.edit')->with($params);
     }

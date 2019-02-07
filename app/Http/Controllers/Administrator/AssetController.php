@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Asset;
+use App\Models\AssetType;
+use App\Models\AssetTracking;
 
 class AssetController extends Controller
 {
@@ -24,7 +27,7 @@ class AssetController extends Controller
      */
     public function index()
     {
-        $data   = \App\Asset::orderBy('id', 'DESC');
+        $data   = Asset::orderBy('id', 'DESC');
     
         if(isset($_GET['asset_type_id']))
         {
@@ -55,7 +58,7 @@ class AssetController extends Controller
      */
     public function create()
     {   
-        $params['asset_type']       = \App\AssetType::all();
+        $params['asset_type']       = AssetType::all();
         $params['asset_number']     = $this->asset_number();
         
         return view('administrator.asset.create')->with($params);
@@ -69,7 +72,7 @@ class AssetController extends Controller
     {
         $no = 0;
 
-        $count = \App\Asset::count()+1;
+        $count = Asset::count()+1;
 
         if(strlen($count) == 1)
         {
@@ -101,8 +104,8 @@ class AssetController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\Asset::where('id', $id)->first();
-        $params['asset_type']       = \App\AssetType::all();
+        $params['data']         = Asset::where('id', $id)->first();
+        $params['asset_type']       = AssetType::all();
         $params['asset_number']     = $this->asset_number();
 
         return view('administrator.asset.edit')->with($params);
@@ -115,7 +118,7 @@ class AssetController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                   = \App\Asset::where('id', $id)->first();
+        $data                   = Asset::where('id', $id)->first();
         $data->asset_name       = $request->asset_name;
         $data->asset_type_id    = $request->asset_type_id;
         $data->asset_sn         = $request->asset_sn;
@@ -131,7 +134,7 @@ class AssetController extends Controller
         $data->rental_date      = $request->rental_date;
         $data->save();
 
-        $tracking                   = new \App\AssetTracking();
+        $tracking                   = new AssetTracking();
         $tracking->asset_number     = $data->asset_number; 
         $tracking->asset_name       = $data->asset_name;
         $tracking->asset_type_id    = $data->asset_type_id;
@@ -149,7 +152,7 @@ class AssetController extends Controller
         $data->rental_date      = $request->rental_date;
         $tracking->save();
 
-        $params['data']         = \App\Asset::where('id', $data->id)->first();
+        $params['data']         = Asset::where('id', $data->id)->first();
 
         if($data->user->email != "")
         {
@@ -172,7 +175,7 @@ class AssetController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\Asset::where('id', $id)->first();
+        $data = Asset::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.asset.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -185,7 +188,7 @@ class AssetController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\Asset();
+        $data       = new Asset();
         $data->asset_number     = $request->asset_number; 
         $data->asset_name       = $request->asset_name;
         $data->asset_type_id    = $request->asset_type_id;
@@ -202,7 +205,7 @@ class AssetController extends Controller
         $data->rental_date      = $request->rental_date;
         $data->save();
 
-        $tracking                   = new \App\AssetTracking();
+        $tracking                   = new AssetTracking();
         $tracking->asset_name       = $data->asset_name;
         $tracking->asset_type_id    = $data->asset_type_id;
         $tracking->asset_sn         = $data->asset_sn;
@@ -219,7 +222,7 @@ class AssetController extends Controller
         $data->rental_date          = $request->rental_date;
         $tracking->save();
         
-        $params['data']         = \App\Asset::where('id', $data->id)->first();
+        $params['data']         = Asset::where('id', $data->id)->first();
 
         if($data->user->email != "")
         {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\CutiKaryawan;
+use App\Models\CutiKaryawan;
 use App\User;
 
 class CutiController extends Controller 

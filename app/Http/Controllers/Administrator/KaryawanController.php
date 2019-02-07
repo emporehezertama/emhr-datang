@@ -5,14 +5,29 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use App\Department;
-use App\Provinsi;
-use App\UserEducation;
-use App\Kabupaten;
-use App\Kecamatan;
-use App\Kelurahan;
-use App\Division;
-use App\Section;
+use App\Models\Department;
+use App\Models\Provinsi;
+use App\Models\UserEducation;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\Division;
+use App\Models\Section;
+use App\Models\Payroll;
+use App\Models\PayrollNet;
+use App\Models\PayrollGross;
+use App\Models\UserTemp;
+use App\Models\Bank;
+use App\Models\UserCuti;
+use App\Models\UserEducationTemp;
+use App\Models\UserFamilyTemp;
+use App\Models\UserFamily;
+use App\Models\EmporeOrganisasiDirektur;
+use App\Models\EmporeOrganisasiManager;
+use App\Models\EmporeOrganisasiStaff;
+use App\Models\Cabang;
+use App\Models\UserInventarisMobil;
+use App\Models\UserInventaris;
 
 class KaryawanController extends Controller
 {
@@ -33,7 +48,7 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        $params['data'] = User::where('access_id', 2)->orderBy('id', 'DESC')->get();
+        $params['data'] = User::where('access_id', 2)->orderBy('id', 'DESC')->paginate(50);
 
         return view('administrator.karyawan.index')->with($params);
     }
@@ -45,7 +60,7 @@ class KaryawanController extends Controller
      */
     public function printPayslip($id)
     {
-        $params['data'] = \App\Payroll::where('user_id', $id)->first();
+        $params['data'] = Payroll::where('user_id', $id)->first();
 
         $view =  view('administrator.karyawan.print-payslip')->with($params);
 
@@ -57,7 +72,7 @@ class KaryawanController extends Controller
 
     public function printPayslipNet($id)
     {
-        $params['data'] = \App\PayrollNet::where('user_id', $id)->first();
+        $params['data'] = PayrollNet::where('user_id', $id)->first();
 
         $view =  view('administrator.karyawan.print-payslipnet')->with($params);
 
@@ -69,7 +84,7 @@ class KaryawanController extends Controller
 
     public function printPayslipGross($id)
     {
-        $params['data'] = \App\PayrollGross::where('user_id', $id)->first();
+        $params['data'] = PayrollGross::where('user_id', $id)->first();
 
         $view =  view('administrator.karyawan.print-payslipgross')->with($params);
 
@@ -86,7 +101,7 @@ class KaryawanController extends Controller
      */
     public function uploadDokumentFile(Request $request)
     {
-        $data   = \App\User::where('id', $request->user_id)->first();
+        $data   = User::where('id', $request->user_id)->first();
 
         if ($request->hasFile('file'))
         {
@@ -112,13 +127,13 @@ class KaryawanController extends Controller
     public function generateDocumentFile(Request $request)
     {
         // Update profile users
-        $user               = \App\User::where('id', $request->user_id)->first();
+        $user               = User::where('id', $request->user_id)->first();
         $user->join_date    = $request->join_date;
         $user->end_date     = $request->end_date;
         $user->organisasi_status = $request->organisasi_status;
         $user->save();
 
-        $params['data'] = \App\User::where('id', $request->user_id)->first();
+        $params['data'] = User::where('id', $request->user_id)->first();
 
         if($request->organisasi_status == 'Contract' || $request->organisasi_status=="")
             $view = view('administrator.karyawan.dokumen-kontrak')->with($params);
@@ -138,7 +153,7 @@ class KaryawanController extends Controller
      */
     public function printProfile($id)
     {
-        $params['data'] = \App\User::where('id', $id)->first();
+        $params['data'] = User::where('id', $id)->first();
 
         $view = view('administrator.karyawan.print')->with($params);
 
@@ -154,17 +169,17 @@ class KaryawanController extends Controller
      */
     public function importAll()
     {
-        $temp = \App\UserTemp::all();
+        $temp = UserTemp::all();
         foreach($temp as $item)
         {
-            $cekuser = \App\User::where('nik', $item->nik)->first();
+            $cekuser = User::where('nik', $item->nik)->first();
 
             if($cekuser) {
                 $user  = $cekuser;
             }
             else
             {
-                $user               = new \App\User();
+                $user               = new User();
                 $user->nik          = $item->nik;
                 $user->password         = bcrypt('password'); // set default password
             }
@@ -197,7 +212,7 @@ class KaryawanController extends Controller
             if($item->email != "-") $user->email            = $item->email;
 
             // find bank
-            $bank  = \App\Bank::where('name', 'LIKE', '%'. $item->bank_1 .'%')->first();
+            $bank  = Bank::where('name', 'LIKE', '%'. $item->bank_1 .'%')->first();
             if($bank) $user->bank_id = $bank->id;
             $user->nama_rekening        = $item->bank_account_name_1;
             $user->nomor_rekening       = $item->bank_account_number;
@@ -239,11 +254,11 @@ class KaryawanController extends Controller
             if(!empty($item->cuti_cuti_2018) || !empty($item->cuti_terpakai) || !empty($item->cuti_sisa_cuti))
             {
                 // cek exist cuti
-                $c = \App\UserCuti::where('user_id', $user->id)->where('cuti_id', 1)->first();
+                $c = UserCuti::where('user_id', $user->id)->where('cuti_id', 1)->first();
                 if(!$c)
                 {
                     // insert data cuti
-                    $c = new \App\UserCuti();
+                    $c = new UserCuti();
                     $c->user_id     = $user->id;
                 }
 
@@ -277,16 +292,16 @@ class KaryawanController extends Controller
             }
 
             // EDUCATION
-            foreach(\App\UserEducationTemp::where('user_temp_id', $item->id)->get() as $edu)
+            foreach(UserEducationTemp::where('user_temp_id', $item->id)->get() as $edu)
             {
                 if($edu->pendidikan == "") continue;
 
                 // cek pendidikan
-                $education = \App\UserEducation::where('user_id', $user->id)->where('pendidikan', $edu->pendidikan)->first();
+                $education = UserEducation::where('user_id', $user->id)->where('pendidikan', $edu->pendidikan)->first();
 
                 if(empty($education))
                 {
-                    $education                  = new \App\UserEducation();
+                    $education                  = new UserEducation();
                     $education->user_id         = $user->id;
                 }
 
@@ -301,15 +316,15 @@ class KaryawanController extends Controller
             }
 
             // FAMILY
-            foreach(\App\UserFamilyTemp::where('user_temp_id', $item->id)->get() as $fa)
+            foreach(UserFamilyTemp::where('user_temp_id', $item->id)->get() as $fa)
             {
                 if($fa->nama == "") continue;
 
-                $family     = \App\UserFamily::where('user_id', $user->id)->where('hubungan', $fa->hubungan)->first();
+                $family     = UserFamily::where('user_id', $user->id)->where('hubungan', $fa->hubungan)->first();
 
                 if(empty($family))
                 {
-                    $family                 = new \App\UserFamily();
+                    $family                 = new UserFamily();
                     $family->user_id        = $user->id;
                 }
 
@@ -324,9 +339,9 @@ class KaryawanController extends Controller
         }
 
         // delete all table temp
-        \App\UserTemp::truncate();
-        \App\UserEducationTemp::truncate();
-        \App\UserFamilyTemp::truncate();
+        UserTemp::truncate();
+        UserEducationTemp::truncate();
+        UserFamilyTemp::truncate();
 
         return redirect()->route('administrator.karyawan.index')->with('message-success', 'Data Karyawan berhasil di import');
     }
@@ -355,21 +370,21 @@ class KaryawanController extends Controller
             }
 
             // delete all table temp
-            \App\UserTemp::truncate();
-            \App\UserEducationTemp::truncate();
-            \App\UserFamilyTemp::truncate();
+            UserTemp::truncate();
+            UserEducationTemp::truncate();
+            UserFamilyTemp::truncate();
 
             foreach($rows as $key => $item)
             {
                 if($key >= 3)
                 {
-                    $user = new \App\UserTemp();
+                    $user = new UserTemp();
 
                     /**
                      * FIND USER
                      *
                      */
-                    $find_user = \App\User::where('nik', $item[2])->first();
+                    $find_user = User::where('nik', $item[2])->first();
                     if($find_user)
                     {
                         $user->user_id = $find_user->id;
@@ -409,7 +424,7 @@ class KaryawanController extends Controller
                     $user->id_address       = strtoupper($item[15]);
 
                     // find city
-                    $kota = \App\Kabupaten::where('nama', 'LIKE', $item[16])->first();
+                    $kota = Kabupaten::where('nama', 'LIKE', $item[16])->first();
 
                     if(isset($kota))
                         $user->id_city          = $kota->id_kab;
@@ -431,10 +446,10 @@ class KaryawanController extends Controller
 
                     if(!empty($item[29]))
                     {
-                        $direktur = \App\EmporeOrganisasiDirektur::where('name', 'LIKE', '%'. $item[29] .'%')->first();
+                        $direktur = EmporeOrganisasiDirektur::where('name', 'LIKE', '%'. $item[29] .'%')->first();
                         if(!$direktur)
                         {
-                            $direktur = new \App\EmporeOrganisasiDirektur();
+                            $direktur = new \EmporeOrganisasiDirektur();
                             $direktur->name =  $item[29];
                             $direktur->save();
                         }
@@ -443,10 +458,10 @@ class KaryawanController extends Controller
 
                         if(!empty($item[30]))
                         {
-                            $manager = \App\EmporeOrganisasiManager::where('name', 'LIKE', '%'. $item[30] .'%')->where('empore_organisasi_direktur_id', $direktur->id)->first();
+                            $manager = EmporeOrganisasiManager::where('name', 'LIKE', '%'. $item[30] .'%')->where('empore_organisasi_direktur_id', $direktur->id)->first();
                             if(!$manager)
                             {
-                                $manager = new \App\EmporeOrganisasiManager();
+                                $manager = new EmporeOrganisasiManager();
                                 $manager->empore_organisasi_direktur_id = $direktur->id;
                                 $manager->name =  $item[30];
                                 $manager->save();
@@ -457,10 +472,10 @@ class KaryawanController extends Controller
 
                         if(!empty($item[31]))
                         {
-                            $staff = \App\EmporeOrganisasiStaff::where('name', 'LIKE', $item[31])->first();
+                            $staff = EmporeOrganisasiStaff::where('name', 'LIKE', $item[31])->first();
                             if(!$staff)
                             {
-                                $staff = new \App\EmporeOrganisasiStaff();
+                                $staff = new EmporeOrganisasiStaff();
                                 $staff->name =  $item[31];
                                 $staff->save();
                             }
@@ -469,7 +484,7 @@ class KaryawanController extends Controller
                         }
                     }
 
-                    $cabang = \App\Cabang::where('name', 'LIKE', '%'. strtoupper($item[32]) .'%')->first();
+                    $cabang = Cabang::where('name', 'LIKE', '%'. strtoupper($item[32]) .'%')->first();
                     if($cabang)
                     {
                         $user->organisasi_branch    = $cabang->id;
@@ -492,7 +507,7 @@ class KaryawanController extends Controller
                     $user->save();
 
                     // SD
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[39]);
                     $education->tahun_awal      = $item[40];
@@ -508,7 +523,7 @@ class KaryawanController extends Controller
                     // SD KE DUA
                     if(!empty($item[48]))
                     {
-                        $education                  = new \App\UserEducationTemp();
+                        $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = strtoupper($item[48]);
                         $education->tahun_awal      = $item[49];
@@ -523,7 +538,7 @@ class KaryawanController extends Controller
                     }
 
                     // SMP
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[57]);
                     $education->tahun_awal      = $item[58];
@@ -539,7 +554,7 @@ class KaryawanController extends Controller
                     if(!empty($item[66]))
                     {
                         // SMP  KE 2
-                        $education                  = new \App\UserEducationTemp();
+                        $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = strtoupper($item[66]);
                         $education->tahun_awal      = $item[67];
@@ -554,7 +569,7 @@ class KaryawanController extends Controller
                     }
 
                     // SMA
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[75]);
                     $education->tahun_awal      = $item[76];
@@ -570,7 +585,7 @@ class KaryawanController extends Controller
                     // SMA KE 2
                     if(!empty($item[84]))
                     {
-                        $education                  = new \App\UserEducationTemp();
+                        $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = strtoupper($item[84]);
                         $education->tahun_awal      = $item[85];
@@ -584,7 +599,7 @@ class KaryawanController extends Controller
                         $education->save();
                     }
 
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[93]);
                     $education->tahun_awal      = $item[94];
@@ -597,7 +612,7 @@ class KaryawanController extends Controller
                     $education->note            = strtoupper($item[101]);
                     $education->save();
 
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[102]);
                     $education->tahun_awal      = $item[103];
@@ -610,7 +625,7 @@ class KaryawanController extends Controller
                     $education->note            = strtoupper($item[110]);
                     $education->save();
 
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[111]);
                     $education->tahun_awal      = $item[112];
@@ -623,7 +638,7 @@ class KaryawanController extends Controller
                     $education->note            = strtoupper($item[119]);
                     $education->save();
 
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[120]);
                     $education->tahun_awal      = $item[121];
@@ -638,7 +653,7 @@ class KaryawanController extends Controller
 
                     if(!empty($item[129]))
                     {
-                        $education                  = new \App\UserEducationTemp();
+                        $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = strtoupper($item[129]);
                         $education->tahun_awal      = $item[130];
@@ -652,7 +667,7 @@ class KaryawanController extends Controller
                         $education->save();
                     }
 
-                    $education                  = new \App\UserEducationTemp();
+                    $education                  = new UserEducationTemp();
                     $education->user_temp_id    = $user->id;
                     $education->pendidikan      = strtoupper($item[138]);
                     $education->tahun_awal      = $item[139];
@@ -666,7 +681,7 @@ class KaryawanController extends Controller
                     $education->save();
 
                     // ISTRI 1
-                    $family                     = new \App\UserFamilyTemp();
+                    $family                     = new UserFamilyTemp();
                     $family->user_temp_id       = $user->id;
                     $family->hubungan           = strtoupper($item[147]);
                     $family->nama               = strtoupper($item[148]);
@@ -680,7 +695,7 @@ class KaryawanController extends Controller
                     // ISTRI KE 2
                     if(!empty($item[154]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[154]);
                         $family->nama               = strtoupper($item[155]);
@@ -695,7 +710,7 @@ class KaryawanController extends Controller
                     // SUAMI
                     if(!empty($item[160]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[161]);
                         $family->nama               = strtoupper($item[162]);
@@ -710,7 +725,7 @@ class KaryawanController extends Controller
                     // ANAK 1
                     if(!empty($item[168]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[168]);
                         $family->nama               = strtoupper($item[169]);
@@ -725,7 +740,7 @@ class KaryawanController extends Controller
                     // ANAK 2
                     if(!empty($item[175]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[175]);
                         $family->nama               = strtoupper($item[176]);
@@ -740,7 +755,7 @@ class KaryawanController extends Controller
                     // ANAK 3
                     if(!empty($item[182]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[182]);
                         $family->nama               = strtoupper($item[183]);
@@ -755,7 +770,7 @@ class KaryawanController extends Controller
                     // ANAK 4
                     if(!empty($item[189]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[189]);
                         $family->nama               = strtoupper($item[190]);
@@ -770,7 +785,7 @@ class KaryawanController extends Controller
                     // ANAK 5
                     if(!empty($item[196]))
                     {
-                        $family                     = new \App\UserFamilyTemp();
+                        $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = strtoupper($item[196]);
                         $family->nama               = strtoupper($item[197]);
@@ -794,7 +809,7 @@ class KaryawanController extends Controller
      */
     public function previewImport()
     {
-        $params['data'] = \App\UserTemp::all();
+        $params['data'] = UserTemp::all();
 
         return view('administrator.karyawan.preview-import')->with($params);
     }
@@ -806,7 +821,7 @@ class KaryawanController extends Controller
      */
     public function deleteDependent($id)
     {
-        $data = \App\UserFamily::where('id', $id)->first();
+        $data = UserFamily::where('id', $id)->first();
         $id = $data->user_id;
         $data->delete();
 
@@ -819,7 +834,7 @@ class KaryawanController extends Controller
      */
     public function deleteInvetarisMobil($id)
     {
-        $data = \App\UserInventarisMobil::where('id', $id)->first();
+        $data = UserInventarisMobil::where('id', $id)->first();
         $id = $data->user_id;
         $data->delete();
 
@@ -833,7 +848,7 @@ class KaryawanController extends Controller
      */
     public function deleteInvetaris($id)
     {
-        $data = \App\UserInventaris::where('id', $id)->first();
+        $data = UserInventaris::where('id', $id)->first();
         $id = $data->user_id;
         $data->delete();
 
@@ -847,7 +862,7 @@ class KaryawanController extends Controller
      */
     public function deleteEducation($id)
     {
-        $data = \App\UserEducation::where('id', $id)->first();
+        $data = UserEducation::where('id', $id)->first();
         $id = $data->user_id;
         $data->delete();
 
@@ -860,7 +875,7 @@ class KaryawanController extends Controller
      */
     public function deleteTemp($id)
     {
-        $data = \App\UserTemp::where('id', $id)->first();
+        $data = UserTemp::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Data Temporary berhasil di hapus');
@@ -876,16 +891,16 @@ class KaryawanController extends Controller
         $params['data'] = User::where('id', $id)->first();
         $params['department']       = Department::where('division_id', $params['data']['division_id'])->get();
         $params['provinces']        = Provinsi::all();
-        $params['dependent']        = \App\UserFamily::where('user_id', $id)->first();
+        $params['dependent']        = UserFamily::where('user_id', $id)->first();
         $params['education']        = UserEducation::where('user_id', $id)->first();
         $params['kabupaten']        = Kabupaten::where('id_prov', $params['data']['provinsi_id'])->get();
         $params['kecamatan']        = Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
         $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
         $params['division']         = Division::all();
         $params['section']          = Section::where('division_id', $params['data']['division_id'])->get();
-        $params['payroll']          = \App\Payroll::where('user_id', $id)->first();
-        $params['list_manager']          = \App\EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $params['data']['empore_organisasi_direktur'])->get();
-        $params['list_staff']          = \App\EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $params['data']['empore_organisasi_manager_id'])->get();
+        $params['payroll']          = Payroll::where('user_id', $id)->first();
+        $params['list_manager']     = EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $params['data']['empore_organisasi_direktur'])->get();
+        $params['list_staff']       = EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $params['data']['empore_organisasi_manager_id'])->get();
 
         return view('administrator.karyawan.edit')->with($params);
     }
@@ -998,7 +1013,7 @@ class KaryawanController extends Controller
         {
             foreach($request->dependent['nama'] as $key => $item)
             {
-                $dep = new \App\UserFamily();
+                $dep = new UserFamily();
                 $dep->user_id           = $data->id;
                 $dep->nama          = $request->dependent['nama'][$key];
                 $dep->hubungan      = $request->dependent['hubungan'][$key];
@@ -1016,7 +1031,7 @@ class KaryawanController extends Controller
         {
             foreach($request->inventaris_mobil['tipe_mobil'] as $k => $item)
             {
-                $inventaris                 = new \App\UserInventarisMobil();
+                $inventaris                 = new UserInventarisMobil();
                 $inventaris->user_id        = $data->id;
                 $inventaris->tipe_mobil     = $request->inventaris_mobil['tipe_mobil'][$k];
                 $inventaris->tahun          = $request->inventaris_mobil['tahun'][$k];
@@ -1048,7 +1063,7 @@ class KaryawanController extends Controller
             // user Education
             foreach($request->cuti['cuti_id'] as $key => $item)
             {
-                $c = new \App\UserCuti();
+                $c = new UserCuti();
                 $c->user_id = $data->id;
                 $c->cuti_id    = $request->cuti['cuti_id'][$key];
                 $c->kuota    = $request->cuti['kuota'][$key];
@@ -1062,7 +1077,7 @@ class KaryawanController extends Controller
         {
             foreach($request->inventaris_lainnya['jenis'] as $k => $i)
             {
-                $i              = new \App\UserInventaris();
+                $i              = new UserInventaris();
                 $i->user_id     = $data->id;
                 $i->jenis       = $request->inventaris_lainnya['jenis'][$k];
                 $i->description = $request->inventaris_lainnya['description'][$k];
@@ -1153,7 +1168,7 @@ class KaryawanController extends Controller
         {
             foreach($request->dependent['nama'] as $key => $item)
             {
-                $dep = new \App\UserFamily();
+                $dep = new UserFamily();
                 $dep->user_id           = $data->id;
                 $dep->nama          = $request->dependent['nama'][$key];
                 $dep->hubungan      = $request->dependent['hubungan'][$key];
@@ -1171,7 +1186,7 @@ class KaryawanController extends Controller
         {
             foreach($request->inventaris_mobil['tipe_mobil'] as $k => $item)
             {
-                $inventaris                 = new \App\UserInventarisMobil();
+                $inventaris                 = new UserInventarisMobil();
                 $inventaris->user_id        = $data->id;
                 $inventaris->tipe_mobil     = $request->inventaris_mobil['tipe_mobil'][$k];
                 $inventaris->tahun          = $request->inventaris_mobil['tahun'][$k];
@@ -1204,7 +1219,7 @@ class KaryawanController extends Controller
             // user Education
             foreach($request->cuti['cuti_id'] as $key => $item)
             {
-                $c = new \App\UserCuti();
+                $c = new UserCuti();
                 $c->user_id = $data->id;
                 $c->cuti_id    = $request->cuti['cuti_id'][$key];
                 $c->kuota    = $request->cuti['kuota'][$key];
@@ -1216,7 +1231,7 @@ class KaryawanController extends Controller
         {
             foreach($request->inventaris_lainnya['jenis'] as $k => $i)
             {
-                $i              = new \App\UserInventaris();
+                $i              = new UserInventaris();
                 $i->user_id     = $data->id;
                 $i->jenis       = $request->inventaris_lainnya['jenis'][$key];
                 $i->description = $request->inventaris_lainnya['description'][$key];
@@ -1233,7 +1248,7 @@ class KaryawanController extends Controller
      */
     public function deleteInventarisLainnya($id)
     {
-        $data = \App\UserInventaris::where('id', $id)->first();
+        $data = UserInventaris::where('id', $id)->first();
         $id = $data->user_id;
         $data->delete();
 
@@ -1246,7 +1261,7 @@ class KaryawanController extends Controller
      */
     public function DeleteCuti($id)
     {
-        $data = \App\UserCuti::where('id', $id)->first();
+        $data = UserCuti::where('id', $id)->first();
         $user_id = $data->user_id;
         $data->delete();
 
@@ -1275,7 +1290,7 @@ class KaryawanController extends Controller
         $data = User::where('id', $id)->first();
         $data->delete();
 
-        \App\UserFamily::where('user_id', $id)->delete();
+        UserFamily::where('user_id', $id)->delete();
 
         UserEducation::where('user_id', $id)->delete();
 

@@ -2,28 +2,16 @@
 
 @section('title', 'Karyawan')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-  
-        
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Manage Employee</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD EMPLOYEE</a>
-
                 <a class="btn btn-info btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> IMPORT</a>
-                
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Employee</li>
@@ -33,12 +21,10 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage Employee</h3>
-                    <br />
-                    <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                    <div class="table-responsive" style="overflow-y: unset;overflow-x: unset;">
+                        <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -84,31 +70,51 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('administrator.karyawan.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
-                                            <form action="{{ route('administrator.karyawan.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}                                               
-                                                <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete</button>
-                                            </form>
-                                            <a href="{{ route('administrator.karyawan.print-profile', $item->id) }}" target="_blank" class="btn btn-default btn-xs"><i class="fa fa-print"></i> print</a>
+                                            <div class="btn-group m-r-10">
+                                                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-xs btn-default dropdown-toggle waves-effect waves-light" type="button">Action 
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul role="menu" class="dropdown-menu">
+                                                    <li>
+                                                        <a href="{{ route('administrator.karyawan.edit', ['id' => $item->id]) }}"><i class="fa fa-search-plus"></i> Detail</a>
+                                                    </li>
+                                                    <li>
+                                                        <form action="{{ route('administrator.karyawan.destroy', $item->id) }}" method="post">
+                                                            {{ csrf_field() }}
+                                                            {{ method_field('DELETE') }}                                               
+                                                            <a href="javascript:void(0)" onclick="confirm_delete('Delete this data ?', this)"><i class="ti-trash"></i> Delete</a>
+                                                        </form>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('administrator.karyawan.print-profile', $item->id) }}" target="_blank"><i class="fa fa-print"></i> Print</a>
+                                                    </li>
+                                                    
+                                                    @if(!empty($item->generate_kontrak_file))
+                                                        <li>
+                                                            <a href="{{ asset('/storage/file-kontrak/'. $item->id. '/'. $item->generate_kontrak_file) }}" target="_blank"><i class="fa fa-search-plus"></i> View Contract File</a> 
+                                                        </li>
+                                                    @endif
 
-                                            @if(!empty($item->generate_kontrak_file))
-                                                <br />
-                                                <a href="{{ asset('/storage/file-kontrak/'. $item->id. '/'. $item->generate_kontrak_file) }}" class="btn btn-default btn-xs" target="_blank"><i class="fa fa-search-plus"></i> View Contract File</a> 
-                                            @endif
-
-                                            @if($item->is_generate_kontrak == "")
-                                            <br /> <label class="btn btn-info btn-xs" onclick="generate_file_document({{ $item->id }})"><i class="fa fa-file"></i> Generate Contract Document</label><br />
-                                            @endif
-
-                                            <label class="btn btn-info btn-xs" onclick="upload_file_dokument({{ $item->id }})"><i class="fa fa-upload"></i> Upload Contract File</label>
-
-                                            <a onclick="confirm_loginas('{{ $item->name }}','{{ route('administrator.karyawan.autologin', $item->id) }}')"  class="btn btn-warning btn-xs"><i class="fa fa-key"></i> Autologin</a>
+                                                    @if($item->is_generate_kontrak == "")
+                                                    <li>
+                                                        <a onclick="generate_file_document({{ $item->id }})"><i class="fa fa-file"></i> Generate Contract Document</a>
+                                                    </li>
+                                                    @endif
+                                                    <li>
+                                                        <a onclick="upload_file_dokument({{ $item->id }})"><i class="fa fa-upload"></i> Upload Contract File</a>
+                                                    </li>
+                                                    <li>
+                                                        <a onclick="confirm_loginas('{{ $item->name }}','{{ route('administrator.karyawan.autologin', $item->id) }}')"><i class="fa fa-key"></i> Autologin</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="col-m-6 pull-left text-left">Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries</div>
+                        <div class="col-md-6 pull-right text-right">{{ $data->appends($_GET)->render() }}</div><div class="clearfix"></div>
                     </div>
                 </div>
             </div> 

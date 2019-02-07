@@ -1,5 +1,79 @@
 <?php
 
+/**
+ * Times Zone
+ * @return array
+ */
+function generate_timezone_list()
+{
+    static $regions = array(
+        DateTimeZone::AFRICA,
+        DateTimeZone::AMERICA,
+        DateTimeZone::ANTARCTICA,
+        DateTimeZone::ASIA,
+        DateTimeZone::ATLANTIC,
+        DateTimeZone::AUSTRALIA,
+        DateTimeZone::EUROPE,
+        DateTimeZone::INDIAN,
+        DateTimeZone::PACIFIC,
+    );
+
+    $timezones = array();
+    foreach( $regions as $region )
+    {
+        $timezones = array_merge( $timezones, DateTimeZone::listIdentifiers( $region ) );
+    }
+
+    $timezone_offsets = array();
+    foreach( $timezones as $timezone )
+    {
+        $tz = new DateTimeZone($timezone);
+        $timezone_offsets[$timezone] = $tz->getOffset(new DateTime);
+    }
+
+    // sort timezone by offset
+    asort($timezone_offsets);
+
+    $timezone_list = array();
+    foreach( $timezone_offsets as $timezone => $offset )
+    {
+        $offset_prefix = $offset < 0 ? '-' : '+';
+        $offset_formatted = gmdate( 'H:i', abs($offset) );
+
+        $pretty_offset = "UTC${offset_prefix}${offset_formatted}";
+
+        $timezone_list[$timezone] = "(${pretty_offset}) $timezone";
+    }
+
+    return $timezone_list;
+}
+
+/**
+ * List Language
+ * @return array
+ */
+function list_language()
+{
+	return ['id' => 'Indonesia', 'en' => 'English'];
+}
+
+/**
+ * Get Setting
+ * @param  $key
+ * @return string
+ */
+function get_setting($key)
+{
+	$setting = \App\Models\Setting::where('key', $key)->first();
+
+	if($setting)
+	{
+		return $setting->value;
+	}
+	
+	return '';
+}
+
 
 /**
  * [format_tanggal description]
@@ -44,7 +118,7 @@ function jenis_claim_medical($key="")
  */
 function total_medical_nominal($id)
 {
-	$data = \App\MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
+	$data = \App\Models\MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
 	$nominal = 0;
 
 	foreach($data as $item)
@@ -62,7 +136,7 @@ function total_medical_nominal($id)
  */
 function medical_jenis_claim_string($id)
 {
-	$data = \App\MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
+	$data = \App\Models\MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
 	$string = "";
 
 	foreach($data as $item)
@@ -115,7 +189,7 @@ function get_level_organisasi()
  */
 function pay_slip_tahun($id)
 {
-	$data = \App\Payroll::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->get();
+	$data = \App\Models\Payroll::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->get();
 
 	return $data;
 }
@@ -127,21 +201,21 @@ function pay_slip_tahun($id)
  */
 function pay_slip_tahun_history($id)
 {
-	$data = \App\PayrollHistory::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->groupBy('tahun')->get();
+	$data = \App\Models\PayrollHistory::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->groupBy('tahun')->get();
 
 	return $data;
 }
 
 function pay_slip_tahun_historyNet($id)
 {
-	$data = \App\PayrollNetHistory::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->groupBy('tahun')->get();
+	$data = \App\Models\PayrollNetHistory::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->groupBy('tahun')->get();
 
 	return $data;
 }
 
 function pay_slip_tahun_historyGross($id)
 {
-	$data = \App\PayrollGrossHistory::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->groupBy('tahun')->get();
+	$data = \App\Models\PayrollGrossHistory::select(DB::raw('year(created_at) as tahun'))->where('user_id', $id)->groupBy('tahun')->get();
 
 	return $data;
 }
@@ -153,9 +227,9 @@ function pay_slip_tahun_historyGross($id)
 function asset_type($id=null)
 {
 	if($id != null)
-		return \App\AssetType::where('id', $id)->get();
+		return \App\Models\AssetType::where('id', $id)->get();
 	else
-		return \App\AssetType::all();
+		return \App\Models\AssetType::all();
 }
 
 /**
@@ -166,7 +240,7 @@ function asset_type($id=null)
  */
 function get_cuti_user($cuti_id, $user_id, $field)
 {
-	$cuti = \App\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
+	$cuti = \App\Models\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
 
 	if($cuti){
 		if(isset($cuti->$field))
@@ -185,11 +259,11 @@ function cek_cuti_direktur($status='approved')
 {
 	if($status=='approved')
 	{
-		$cuti = \App\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->where('approve_direktur', 1)->count();		
+		$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->where('approve_direktur', 1)->count();		
 	}
 	elseif($status == 'null')
 	{
-		$cuti = \App\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->count();		
+		$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->count();		
 	}
 
 	return $cuti;
@@ -205,18 +279,18 @@ function cek_cuti_atasan($status='approved')
 {
 	if($status =='null')
 	{
-		return \App\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->whereNull('is_approved_atasan')->count();
+		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->whereNull('is_approved_atasan')->count();
 	}
 	elseif($status =='approved')
 	{
-		return \App\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->where('is_approved_atasan',1)->count();
+		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->where('is_approved_atasan',1)->count();
 	}
 	elseif($status=='reject')
 	{
-		return \App\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->where('is_approved_atasan',0)->count();
+		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->where('is_approved_atasan',0)->count();
 	}
 	elseif($status=='all')
 	{
-		return \App\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->count();
+		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->count();
 	}
 }

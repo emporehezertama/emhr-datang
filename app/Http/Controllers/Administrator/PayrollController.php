@@ -7,6 +7,12 @@ use App\Http\Controllers\Controller;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Models\Payroll;
+use App\User;
+use App\Models\Bank;
+use App\Models\PayrollHistory;
+use App\Models\PayrollOthers;
+use App\Models\PayrollPtkp;
 
 class PayrollController extends Controller
 {   
@@ -22,7 +28,7 @@ class PayrollController extends Controller
      */
     public function index()
     {
-        $result = \App\Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
+        $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
 
         if(request())
         {
@@ -76,7 +82,7 @@ class PayrollController extends Controller
 
         foreach($data as $k =>  $item)
         {
-            $bank = \App\Bank::where('id', $item->bank_id)->first();
+            $bank = Bank::where('id', $item->bank_id)->first();
 
             // cek data payroll
             $params[$k]['No']               = $k+1;
@@ -187,7 +193,7 @@ class PayrollController extends Controller
      */
     public function store(Request $request)
     {
-        $temp = new \App\Payroll();
+        $temp = new Payroll();
         
          if((!isset($request->salary) || empty($request->salary)) && (!isset($request->salary) || empty($request->salary))) {
              return redirect()->route('administrator.payroll.create')->with('message-error', 'Employee Name & Actual Salary can not empty');
@@ -274,7 +280,7 @@ class PayrollController extends Controller
             $payroll_id = $temp->id;
 
             // Insert History
-            $temp = new \App\PayrollHistory();
+            $temp = new PayrollHistory();
             $temp->payroll_id            = $payroll_id;
             $temp->user_id              = $request->user_id;
             $temp->basic_salary         = str_replace(',', '', $request->basic_salary);
@@ -329,7 +335,7 @@ class PayrollController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $temp = \App\Payroll::where('id', $id)->first();
+        $temp = Payroll::where('id', $id)->first();
 
         if(!isset($request->basic_salary) || empty($request->basic_salary)) $request->basic_salary = 0;
             if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
@@ -406,7 +412,7 @@ class PayrollController extends Controller
             $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
             $temp->save(); 
 
-            $temp = new \App\PayrollHistory();
+            $temp = new PayrollHistory();
             $temp->payroll_id            = $id;
             $temp->user_id              = $request->user_id;
             $temp->basic_salary         = str_replace(',', '', $request->basic_salary);
@@ -464,7 +470,7 @@ class PayrollController extends Controller
         foreach($users as $k =>  $i)
         {
             // cek data payroll
-            $payroll = \App\Payroll::where('user_id', $i->id)->first();
+            $payroll = Payroll::where('user_id', $i->id)->first();
 
             $params[$k]['NO']           = $k+1;
             $params[$k]['NIK']          = $i->nik;
@@ -525,7 +531,7 @@ class PayrollController extends Controller
      */
     public function detail($id)
     {
-        $params['data'] = \App\Payroll::where('id', $id)->first();
+        $params['data'] = Payroll::where('id', $id)->first();
 
         return view('administrator.payroll.detail')->with($params);
     }
@@ -536,18 +542,17 @@ class PayrollController extends Controller
      */
     public function calculate()
     {
-        $data = \App\Payroll::all();
+        $data = Payroll::all();
 
-        $biaya_jabatan = \App\PayrollOthers::where('id', 1)->first()->value;
-        $upah_minimum = \App\PayrollOthers::where('id', 2)->first()->value;
+        $biaya_jabatan = PayrollOthers::where('id', 1)->first()->value;
+        $upah_minimum = PayrollOthers::where('id', 2)->first()->value;
 
         foreach($data as $item)
         {
-         
-            $temp = \App\Payroll::where('id', $item->id)->first();
-            $ptkp = \App\PayrollPtkp::where('id', 1)->first();
-            $bpjs_pensiunan_batas = \App\PayrollOthers::where('id', 3)->first()->value;
-            $bpjs_kesehatan_batas = \App\PayrollOthers::where('id', 4)->first()->value;
+            $temp = Payroll::where('id', $item->id)->first();
+            $ptkp = PayrollPtkp::where('id', 1)->first();
+            $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
+            $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
 
             $bpjs_ketenagakerjaan_persen = 4.24;
             $bpjs_ketenagakerjaan = ($item->salary * $bpjs_ketenagakerjaan_persen / 100);
@@ -770,7 +775,7 @@ class PayrollController extends Controller
             $user_id        = $temp->user_id;
             $payroll_id     = $temp->id;
 
-            $temp = new \App\PayrollHistory();
+            $temp = new PayrollHistory();
             $temp->payroll_id            = $payroll_id;
             $temp->user_id              = $user_id;
             $temp->salary               = str_replace(',', '', $item->salary);
@@ -865,14 +870,14 @@ class PayrollController extends Controller
                 $remark_other_deduction     = $row[18];
 
                 // cek user 
-                $user = \App\User::where('nik', $nik)->first();
+                $user = User::where('nik', $nik)->first();
                 if($user)
                 {   
                     // cek exit payrol user
-                    $payroll = \App\Payroll::where('user_id', $user->id)->first();
+                    $payroll = Payroll::where('user_id', $user->id)->first();
                     if(!$payroll)
                     {
-                        $payroll            = new \App\Payroll();
+                        $payroll            = new Payroll();
                         $payroll->user_id   = $user->id;
                         $payroll->is_calculate  = 0;
                     }

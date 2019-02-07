@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AssetType;
 
 class AssetTypeController extends Controller
 {
@@ -24,7 +25,7 @@ class AssetTypeController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\AssetType::orderBy('id', 'ASC')->get();
+        $params['data'] = AssetType::orderBy('id', 'ASC')->get();
 
         return view('administrator.asset-type.index')->with($params);
     }
@@ -45,7 +46,7 @@ class AssetTypeController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\AssetType::where('id', $id)->first();
+        $params['data']         = AssetType::where('id', $id)->first();
 
         return view('administrator.asset-type.edit')->with($params);
     }
@@ -57,7 +58,7 @@ class AssetTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data           = \App\AssetType::where('id', $id)->first();
+        $data           = AssetType::where('id', $id)->first();
         $data->name     = $request->name; 
         $data->save();
 
@@ -71,7 +72,7 @@ class AssetTypeController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\AssetType::where('id', $id)->first();
+        $data = AssetType::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.asset-type.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -84,7 +85,7 @@ class AssetTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $data           = new \App\AssetType();
+        $data           = new AssetType();
         $data->name     = $request->name; 
         $data->save();
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\ExitClearance;
+use App\Models\ExitClearance;
 
 class ExitClearanceController extends Controller
 {

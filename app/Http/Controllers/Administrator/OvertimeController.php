@@ -83,7 +83,7 @@ class OvertimeController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\OvertimeSheet::where('id', $id)->first();
+        $params['data'] = OvertimeSheet::where('id', $id)->first();
 
         return view('administrator.overtime.edit')->with($params);
     }
@@ -95,7 +95,7 @@ class OvertimeController extends Controller
      */
     public function batal(Request $request)
     {   
-        $data       = \App\OvertimeSheet::where('id', $request->id)->first();
+        $data       = OvertimeSheet::where('id', $request->id)->first();
         $data->status = 4;
         $data->note_pembatalan = $request->note;
         $data->save(); 

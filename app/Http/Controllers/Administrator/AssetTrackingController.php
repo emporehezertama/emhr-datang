@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AssetTracking;
 
 class AssetTrackingController extends Controller
 {
@@ -24,7 +25,7 @@ class AssetTrackingController extends Controller
      */
     public function index()
     {
-        $data   = \App\AssetTracking::orderBy('id', 'DESC');
+        $data   = AssetTracking::orderBy('id', 'DESC');
     
         if(isset($_GET['asset_type_id']))
         {

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\BranchStaff;
+use App\Models\BranchHead;
 
 class BranchStaffController extends Controller
 {
@@ -24,7 +26,7 @@ class BranchStaffController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\BranchStaff::orderBy('id', 'DESC')->get();
+        $params['data'] = BranchStaff::orderBy('id', 'DESC')->get();
 
         return view('administrator.branch-staff.index')->with($params);
     }
@@ -35,7 +37,7 @@ class BranchStaffController extends Controller
      */
     public function create()
     {   
-        $params['head'] = \App\BranchHead::all();
+        $params['head'] = BranchHead::all();
 
         return view('administrator.branch-staff.create')->with($params);
     }
@@ -47,8 +49,8 @@ class BranchStaffController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\BranchStaff::where('id', $id)->first();
-        $params['head'] = \App\BranchHead::all();
+        $params['data'] = BranchStaff::where('id', $id)->first();
+        $params['head'] = BranchHead::all();
 
         return view('administrator.branch-staff.edit')->with($params);
     }
@@ -60,7 +62,7 @@ class BranchStaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                   = \App\BranchStaff::where('id', $id)->first();
+        $data                   = BranchStaff::where('id', $id)->first();
         $data->branch_head_id   = $request->branch_head_id;         
         $data->name             = $request->name;         
         $data->save();
@@ -75,7 +77,7 @@ class BranchStaffController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\BranchStaff::where('id', $id)->first();
+        $data = BranchStaff::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.branch-staff.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -88,7 +90,7 @@ class BranchStaffController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\BranchStaff();
+        $data                   = new BranchStaff();
         $data->branch_head_id   = $request->branch_head_id;         
         $data->name             = $request->name;   
         $data->save();

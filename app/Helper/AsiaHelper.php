@@ -2,7 +2,7 @@
 
 function cek_create_exit_interview($user_id)
 {
-	$cek = \App\ExitInterview::where('user_id', $user_id)->count();
+	$cek = \App\Models\ExitInterview::where('user_id', $user_id)->count();
 
 	if($cek == 0)
 	{
@@ -20,7 +20,7 @@ function cek_create_exit_interview($user_id)
  */
 function cek_count_training_admin()
 {
-	$total = \App\Training::where('status', 1)->orWhere('status_actual_bill', 2)->count();
+	$total = \App\Models\Training::where('status', 1)->orWhere('status_actual_bill', 2)->count();
 
 	return $total;
 }
@@ -31,7 +31,7 @@ function cek_count_training_admin()
  */
 function cek_count_exit_admin()
 {
-	$total = \App\ExitInterview::where('status', 1)->count();
+	$total = \App\Models\ExitInterview::where('status', 1)->count();
 
 	return $total;
 }
@@ -42,7 +42,7 @@ function cek_count_exit_admin()
  */
 function hari_libur()
 {
-	return \App\LiburNasional::get();
+	return \App\Models\LiburNasional::get();
 }
 
 /**
@@ -51,7 +51,7 @@ function hari_libur()
  */
 function cek_count_cuti_admin()
 {
-	$total = \App\CutiKaryawan::where('status', 1)->count();
+	$total = \App\Models\CutiKaryawan::where('status', 1)->count();
 
 	return $total;
 }
@@ -63,7 +63,7 @@ function cek_count_cuti_admin()
  */
 function sum_payment_request_price($id)
 {
-	$payment = \App\PaymentRequestForm::where('payment_request_id', $id)->get();
+	$payment = \App\Models\PaymentRequestForm::where('payment_request_id', $id)->get();
 	$total  = 0 ;
 
 	foreach($payment as $i)
@@ -82,7 +82,7 @@ function sum_payment_request_price($id)
  */
 function get_cuti_terpakai($cuti_id, $user_id)
 {
-	$cuti = \App\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
+	$cuti = \App\Models\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
 
 	if($cuti)
 		return $cuti->cuti_terpakai;
@@ -98,13 +98,13 @@ function get_cuti_terpakai($cuti_id, $user_id)
  */
 function get_kuota_cuti($cuti_id, $user_id)
 { 
-	$cuti = \App\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
+	$cuti = \App\Models\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
 
 	if($cuti)
 		return $cuti->kuota;
 	else
 	{
-		$cuti = \App\Cuti::where('id', $cuti_id)->first();
+		$cuti = \App\Models\Cuti::where('id', $cuti_id)->first();
 
 		return $cuti->kuota;
 	}
@@ -118,11 +118,11 @@ function plafond_perjalanan_dinas($name, $jenis = 'domestik')
 {
 	if($jenis=='domestik')
 	{
-		return \App\PlafondDinas::where('organisasi_position_text', 'LIKE', '%'. strtoupper($name) .'%')->first();
+		return \App\Models\PlafondDinas::where('organisasi_position_text', 'LIKE', '%'. strtoupper($name) .'%')->first();
 	}
 	else
 	{
-		return \App\PlafondDinasLuarNegeri::where('organisasi_position_text', 'LIKE', '%'. strtoupper($name) .'%')->first();
+		return \App\Models\PlafondDinasLuarNegeri::where('organisasi_position_text', 'LIKE', '%'. strtoupper($name) .'%')->first();
 	}
 }
 
@@ -154,7 +154,7 @@ function get_backup_cuti()
  */
 function list_user_cuti()
 {
-	return \App\Cuti::orderBy('jenis_cuti','ASC')->get();
+	return \App\Models\Cuti::orderBy('jenis_cuti','ASC')->get();
 }
 
 /**
@@ -173,7 +173,7 @@ function jenis_perjalanan_dinas()
  */
 function cek_training_approval_user($user_id)
 {
-	$count =  \App\Training::where('approved_atasan_id', $user_id)->count();
+	$count =  \App\Models\Training::where('approved_atasan_id', $user_id)->count();
 
 	return $count;
 }
@@ -185,8 +185,8 @@ function cek_training_approval_user($user_id)
  */
 function count_training_approval_atasan($user_id)
 {
-	$count =  \App\Training::where('approved_atasan_id', $user_id)->where('is_approved_atasan', 0)->count();
-	$count +=  \App\Training::where('approved_atasan_id', $user_id)->where('status_actual_bill', 2)->where('is_approve_atasan_actual_bill', 0)->count();
+	$count =  \App\Models\Training::where('approved_atasan_id', $user_id)->where('is_approved_atasan', 0)->count();
+	$count +=  \App\Models\Training::where('approved_atasan_id', $user_id)->where('status_actual_bill', 2)->where('is_approve_atasan_actual_bill', 0)->count();
 
 	return $count;
 }
@@ -198,7 +198,7 @@ function count_training_approval_atasan($user_id)
  */
 function cek_exit_approval_user($user_id)
 {
-	return \App\ExitInterview::where('approved_atasan_id', $user_id)->count();
+	return \App\Models\ExitInterview::where('approved_atasan_id', $user_id)->count();
 }
 
 
@@ -209,7 +209,7 @@ function cek_exit_approval_user($user_id)
  */
 function count_exit_approval_user($user_id)
 {
-	return \App\ExitInterview::where('approved_atasan_id', $user_id)->where('is_approved_atasan', '<>', 1)->count();
+	return \App\Models\ExitInterview::where('approved_atasan_id', $user_id)->where('is_approved_atasan', '<>', 1)->count();
 }
 
 /**
@@ -219,7 +219,7 @@ function count_exit_approval_user($user_id)
  */
 function cek_medical_approval_user($user_id)
 {
-	return \App\MedicalReimbursement::where('approved_atasan_id', $user_id)->count();
+	return \App\Models\MedicalReimbursement::where('approved_atasan_id', $user_id)->count();
 }
 
 /**
@@ -229,7 +229,7 @@ function cek_medical_approval_user($user_id)
  */
 function cek_cuti_approval_user($user_id)
 {
-	return \App\CutiKaryawan::where('approved_atasan_id', $user_id)->count();
+	return \App\Models\CutiKaryawan::where('approved_atasan_id', $user_id)->count();
 }
 
 /**
@@ -239,7 +239,7 @@ function cek_cuti_approval_user($user_id)
  */
 function cek_overtime_approval_user_count($user_id)
 {
-	$data =  \App\OvertimeSheet::where('approved_atasan_id', $user_id)->get();
+	$data =  \App\Models\OvertimeSheet::where('approved_atasan_id', $user_id)->get();
 	$count = 0;
 	foreach($data as $i)
 	{	
@@ -259,8 +259,8 @@ function cek_overtime_approval_user_count($user_id)
  */
 function cek_overtime_approval_user_2()
 {
-    $approval = \App\SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','overtime')->first();
-    $data = \App\OvertimeSheet::orderBy('id', 'DESC')->get();
+    $approval = \App\Models\SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','overtime')->first();
+    $data = \App\Models\OvertimeSheet::orderBy('id', 'DESC')->get();
 
     $count = 0;
     foreach($data as $item)
@@ -295,7 +295,7 @@ function cek_overtime_approval_user_2()
  */
 function cek_overtime_approval_user($user_id)
 {
-	return \App\OvertimeSheet::where('approved_atasan_id', $user_id)->count();
+	return \App\Models\OvertimeSheet::where('approved_atasan_id', $user_id)->count();
 }
 
 /**
@@ -615,7 +615,7 @@ function tree_atasan_organisasi()
  */
 function get_organisasi_position_group()
 {
-	return \App\OrganisasiPosition::groupBy('name')->get();
+	return \App\Models\OrganisasiPosition::groupBy('name')->get();
 }
 
 /**
@@ -626,9 +626,9 @@ function get_organisasi_position_group()
 function get_organisasi_position($unit_id = "")
 {
 	if($unit_id != "")
-		return \App\OrganisasiPosition::where('organisasi_unit_id', $unit_id)->get();
+		return \App\Models\OrganisasiPosition::where('organisasi_unit_id', $unit_id)->get();
 	else
-		return \App\OrganisasiPosition::all();
+		return \App\Models\OrganisasiPosition::all();
 
 }
 /**
@@ -639,9 +639,9 @@ function get_organisasi_position($unit_id = "")
 function get_organisasi_unit($department_id = "")
 {
 	if(!empty($department_id))
-		return \App\OrganisasiUnit::where('organisasi_department_id', $department_id)->get();
+		return \App\Models\OrganisasiUnit::where('organisasi_department_id', $department_id)->get();
 	else
-		return \App\OrganisasiUnit::all();
+		return \App\Models\OrganisasiUnit::all();
 }
 
 /**
@@ -651,9 +651,9 @@ function get_organisasi_unit($department_id = "")
 function get_organisasi_department($division_id = 0)
 {
 	if(!empty($division_id))
-		return \App\OrganisasiDepartment::orderBy('name', 'ASC')->get();
+		return \App\Models\OrganisasiDepartment::orderBy('name', 'ASC')->get();
 	else
-		return \App\OrganisasiDepartment::where('organisasi_division_id', $division_id)->orderBy('name', 'ASC')->get();
+		return \App\Models\OrganisasiDepartment::where('organisasi_division_id', $division_id)->orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -662,7 +662,7 @@ function get_organisasi_department($division_id = 0)
  */
 function get_organisasi_division()
 {
-	return \App\OrganisasiDivision::orderBy('name', 'ASC')->get();
+	return \App\Models\OrganisasiDivision::orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -671,7 +671,7 @@ function get_organisasi_division()
  */
 function list_hari_libur()
 {
-	return \App\LiburNasional::all();
+	return \App\Models\LiburNasional::all();
 }
 
 /**
@@ -680,7 +680,7 @@ function list_hari_libur()
  */
 function get_head_branch()
 {
-	return \App\BranchHead::all();
+	return \App\Models\BranchHead::all();
 }
 
 /**
@@ -689,7 +689,7 @@ function get_head_branch()
  */
 function get_staff_branch()
 {
-	return \App\BranchStaff::all();
+	return \App\Models\BranchStaff::all();
 }
 
 /**
@@ -713,7 +713,7 @@ function cek_approval($table)
  */
 function get_master_cuti()
 {
-	return \App\Cuti::all();
+	return \App\Models\Cuti::all();
 }
 
 /**
@@ -744,7 +744,7 @@ if (! function_exists('d')) {
  */
 function total_training()
 {
-	return \App\Training::join('users', 'users.id', '=', 'training.user_id')->count();
+	return \App\Models\Training::join('users', 'users.id', '=', 'training.user_id')->count();
 }
 
 /**
@@ -753,7 +753,7 @@ function total_training()
  */
 function total_exit_interview()
 {
-	return \App\ExitInterview::join('users', 'users.id', '=', 'exit_interview.user_id')->count();
+	return \App\Models\ExitInterview::join('users', 'users.id', '=', 'exit_interview.user_id')->count();
 }
 
 /**
@@ -762,7 +762,7 @@ function total_exit_interview()
  */
 function total_overtime()
 {
-	return \App\OvertimeSheet::join('users', 'users.id', '=', 'overtime_sheet.user_id')->count();
+	return \App\Models\OvertimeSheet::join('users', 'users.id', '=', 'overtime_sheet.user_id')->count();
 }
 
 /**
@@ -771,7 +771,7 @@ function total_overtime()
  */
 function total_medical()
 {
-	return \App\MedicalReimbursement::join('users', 'users.id', '=', 'medical_reimbursement.user_id')->count();
+	return \App\Models\MedicalReimbursement::join('users', 'users.id', '=', 'medical_reimbursement.user_id')->count();
 }
 
 /**
@@ -780,7 +780,7 @@ function total_medical()
  */
 function total_payment_request()
 {
-	return \App\PaymentRequest::join('users', 'users.id', '=', 'payment_request.user_id')->count();
+	return \App\Models\PaymentRequest::join('users', 'users.id', '=', 'payment_request.user_id')->count();
 }
 
 /**
@@ -798,7 +798,7 @@ function total_karyawan()
  */
 function total_cuti_karyawan()
 {
-	return \App\CutiKaryawan::join('users', 'users.id', '=', 'cuti_karyawan.user_id')->count();
+	return \App\Models\CutiKaryawan::join('users', 'users.id', '=', 'cuti_karyawan.user_id')->count();
 }
 
 /**
@@ -808,7 +808,7 @@ function total_cuti_karyawan()
  */
 function list_cuti_user($id)
 {
-	return \App\CutiKaryawan::where('user_id', $id)->get();
+	return \App\Models\CutiKaryawan::where('user_id', $id)->get();
 }
 
 /**
@@ -818,12 +818,12 @@ function list_cuti_user($id)
  */
 function data_overtime_user($id)
 {
-	$total = \App\OvertimeSheet::where('user_id', $id)->where('status', 2)->count();
+	$total = \App\Models\OvertimeSheet::where('user_id', $id)->where('status', 2)->count();
 	
 	if($total == 0)
 		return false;
 	else
-		return \App\OvertimeSheet::where('user_id', $id)->where('status', 2)->get();
+		return \App\Models\OvertimeSheet::where('user_id', $id)->where('status', 2)->get();
 }
 
 /**
@@ -832,7 +832,7 @@ function data_overtime_user($id)
  */
 function get_airports()
 {
-	return \App\Airports::orderBy('code', 'ASC')->get();
+	return \App\Models\Airports::orderBy('code', 'ASC')->get();
 }
 
 /**
@@ -845,7 +845,7 @@ function get_airports()
 function cek_status_approval_user($user_id, $jenis_form, $foreign_id)
 {
 	// cek approval
-	$approval = \App\StatusApproval::where('approval_user_id', $user_id)->where('jenis_form', $jenis_form)->where('foreign_id', $foreign_id)->first();
+	$approval = \App\Models\StatusApproval::where('approval_user_id', $user_id)->where('jenis_form', $jenis_form)->where('foreign_id', $foreign_id)->first();
 
 	if($approval)
 		return true;
@@ -862,7 +862,7 @@ function cek_approval_user()
 	$user = \Auth::user();
 
 	// cek approval
-	$approval = \App\SettingApproval::where('user_id', $user->id)->first();
+	$approval = \App\Models\SettingApproval::where('user_id', $user->id)->first();
 
 	if($approval)
 		return true;
@@ -879,7 +879,7 @@ function list_approval_user()
 	$user = \Auth::user();
 
 	// cek approval
-	$approval = \App\SettingApproval::where('user_id', $user->id)->groupBy('jenis_form')->get();
+	$approval = \App\Models\SettingApproval::where('user_id', $user->id)->groupBy('jenis_form')->get();
 
 	$list = [];
 	foreach($approval as $k => $item)
@@ -1034,7 +1034,7 @@ function status_exit_interview($status)
  */
 function get_reason_interview()
 {
-	return \App\ExitInterviewReason::all();
+	return \App\Models\ExitInterviewReason::all();
 }
 
 /**
@@ -1043,7 +1043,7 @@ function get_reason_interview()
  */
 function get_bank()
 {
-	return \App\Bank::all();
+	return \App\Models\Bank::all();
 }
 
 /**
@@ -1053,7 +1053,7 @@ function get_bank()
  */
 function get_lembur_detail($id)
 {
-	$data = \App\OvertimeSheetForm::where('overtime_sheet_id', $id)->get();
+	$data = \App\Models\OvertimeSheetForm::where('overtime_sheet_id', $id)->get();
 
 	return $data;
 }
@@ -1094,7 +1094,7 @@ function status_overtime($status)
  */
 function get_department_name($id)
 {
-	$data = \App\Department::where('id', $id)->first();
+	$data = \App\Models\Department::where('id', $id)->first();
 
 	if($data)
 		return $data->name;
@@ -1111,11 +1111,11 @@ function get_kabupaten($id_prov = 0)
 {
 	if($id_prov == 0)
 	{
-		$data = \App\Kabupaten::all();
+		$data = \App\Models\Kabupaten::all();
 	}
 	else
 	{
-		$data = \App\Kabupaten::where('id_prov', $id_prov)->get();
+		$data = \App\Models\Kabupaten::where('id_prov', $id_prov)->get();
 	}
 
 	return $data;
@@ -1127,7 +1127,7 @@ function get_kabupaten($id_prov = 0)
  */
 function get_provinsi()
 {
-	return \App\Provinsi::orderBy('nama', 'ASC')->get();;
+	return \App\Models\Provinsi::orderBy('nama', 'ASC')->get();;
 }
 
 /**
@@ -1136,7 +1136,7 @@ function get_provinsi()
  */
 function get_sekolah()
 {
-	return \App\Sekolah::orderBy('name', 'ASC')->get();
+	return \App\Models\Sekolah::orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -1145,7 +1145,7 @@ function get_sekolah()
  */
 function get_cabang()
 {
-	return \App\Cabang::orderBy('name', 'ASC')->get();
+	return \App\Models\Cabang::orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -1154,7 +1154,7 @@ function get_cabang()
  */
 function get_program_studi()
 {
-	return \App\ProgramStudi::orderBy('name', 'ASC')->get();
+	return \App\Models\ProgramStudi::orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -1163,7 +1163,7 @@ function get_program_studi()
  */
 function get_jurusan()
 {
-	return \App\Jurusan::orderBy('name', 'ASC')->get();
+	return \App\Models\Jurusan::orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -1172,7 +1172,7 @@ function get_jurusan()
  */
 function get_universitas()
 {
-	return \App\Universitas::orderBy('name', 'ASC')->get();
+	return \App\Models\Universitas::orderBy('name', 'ASC')->get();
 }
 
 /**
@@ -1290,9 +1290,9 @@ function status_cuti($status)
 function get_section_by_department_id($department_id, $type='array')
 {
 	if($type == 'array')
-		$data = \App\Section::where('department_id', $department_id)->get();
+		$data = \App\Models\Section::where('department_id', $department_id)->get();
 	else
-		$data = \App\Section::where('department_id', $department_id)->first();
+		$data = \App\Models\Section::where('department_id', $department_id)->first();
 	
 	return $data;	
 }
@@ -1305,9 +1305,9 @@ function get_section_by_department_id($department_id, $type='array')
 function get_department_by_division_id($division_id, $type='array')
 {
 	if($type == 'array')
-		$data = \App\Department::where('division_id', $division_id)->get();
+		$data = \App\Models\Department::where('division_id', $division_id)->get();
 	else
-		$data = \App\Department::where('division_id', $division_id)->first();
+		$data = \App\Models\Department::where('division_id', $division_id)->first();
 	
 	return $data;	
 }
@@ -1319,9 +1319,9 @@ function get_department_by_division_id($division_id, $type='array')
 function get_division_by_directorate_id($directorate_id, $type = 'array')
 {
 	if($type == 'array')
-		$data = \App\Division::where('directorate_id', $directorate_id)->get();
+		$data = \App\Models\Division::where('directorate_id', $directorate_id)->get();
 	else
-		$data = \App\Division::where('directorate_id', $directorate_id)->first();
+		$data = \App\Models\Division::where('directorate_id', $directorate_id)->first();
 	
 	return $data;		
 }

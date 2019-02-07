@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrganisasiJobRole;
+use App\Models\OrganisasiDirectorate;
+use App\Models\OrganisasiDivision;
+use App\Models\OrganisasiDepartment;
+use App\Models\OrganisasiSection;
+use App\Models\OrganisasiUnit;
+use App\Models\OrganisasiPosition;
 
 class JobRuleController extends Controller
 {
@@ -24,7 +31,7 @@ class JobRuleController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OrganisasiJobRole::orderBy('id', 'DESC')->get();
+        $params['data'] = OrganisasiJobRole::orderBy('id', 'DESC')->get();
 
         return view('administrator.job-rule.index')->with($params);
     }
@@ -35,10 +42,10 @@ class JobRuleController extends Controller
      */
     public function create()
     {   
-        $params['directorate']  = \App\OrganisasiDirectorate::all();
-        $params['division']     = \App\OrganisasiDivision::all();
-        $params['department']   = \App\OrganisasiDepartment::all();
-        $params['department']   = \App\OrganisasiSection::all();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['division']     = OrganisasiDivision::all();
+        $params['department']   = OrganisasiDepartment::all();
+        $params['department']   = OrganisasiSection::all();
 
         return view('administrator.job-rule.create')->with($params);
     }
@@ -50,11 +57,11 @@ class JobRuleController extends Controller
      */
     public function edit($id)
     {
-        $params['directorate']  = \App\OrganisasiDirectorate::all();
-        $params['division']     = \App\OrganisasiDivision::all();
-        $params['department']   = \App\OrganisasiDepartment::all();
-        $params['unit']         = \App\OrganisasiUnit::all();
-        $params['data']         = \App\OrganisasiPosition::where('id', $id)->first();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['division']     = OrganisasiDivision::all();
+        $params['department']   = OrganisasiDepartment::all();
+        $params['unit']         = OrganisasiUnit::all();
+        $params['data']         = OrganisasiPosition::where('id', $id)->first();
 
         return view('administrator.job-rule.edit')->with($params);
     }
@@ -66,7 +73,7 @@ class JobRuleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data       = \App\OrganisasiPosition::where('id', $id)->first();
+        $data                           = OrganisasiPosition::where('id', $id)->first();
         $data->directorate_id           = $request->directorate_id; 
         $data->division_id              = $request->division_id;
         $data->department_id            = $request->department_id;
@@ -84,7 +91,7 @@ class JobRuleController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\OrganisasiPosition::where('id', $id)->first();
+        $data = OrganisasiPosition::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.job-rule.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -97,7 +104,7 @@ class JobRuleController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\OrganisasiPosition();
+        $data       = new OrganisasiPosition();
         $data->organisasi_directorate_id    = $request->directorate_id; 
         $data->organisasi_division_id       = $request->division_id;
         $data->organisasi_department_id     = $request->department_id;

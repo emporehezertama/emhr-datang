@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PlafondDinas;
+use App\Models\PlafondDinasLuarNegeri;
+use App\Models\OrganisasiPosition;
 
 class PlafondDinasController extends Controller
 {   
@@ -19,8 +22,8 @@ class PlafondDinasController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\PlafondDinas::all();
-        $params['data_luarnegeri'] = \App\PlafondDinasLuarNegeri::all();
+        $params['data']             = PlafondDinas::all();
+        $params['data_luarnegeri']  = PlafondDinasLuarNegeri::all();
 
         return view('administrator.plafond-dinas.index')->with($params);
     }
@@ -41,7 +44,7 @@ class PlafondDinasController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\PlafondDinas::where('id', $id)->first();
+        $params['data'] = PlafondDinas::where('id', $id)->first();
 
         return view('administrator.plafond-dinas.edit')->with($params);
     }
@@ -79,14 +82,14 @@ class PlafondDinasController extends Controller
                     if($row[1] == "") continue;
 
                     if($request->jenis_plafond == 'Domestik'){
-                        $data = new \App\PlafondDinas();
+                        $data = new PlafondDinas();
                     }
                     else
                     {
-                        $data = new \App\PlafondDinasLuarNegeri();
+                        $data = new PlafondDinasLuarNegeri();
                     }
 
-                    $position = \App\OrganisasiPosition::where('name', 'LIKE', '%%'.  $row[1] .'%')->first();
+                    $position = OrganisasiPosition::where('name', 'LIKE', '%%'.  $row[1] .'%')->first();
 
                     if($position)
                     {
@@ -115,7 +118,7 @@ class PlafondDinasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = \App\PlafondDinas::where('id', $id)->first();
+        $data = PlafondDinas::where('id', $id)->first();
         $data->hotel                        = $request->hotel;
         $data->tunjangan_makanan            = $request->tunjangan_makanan;
         $data->tunjangan_harian             = $request->tunjangan_harian;
@@ -134,7 +137,7 @@ class PlafondDinasController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\PlafondDinas::where('id', $id)->first();
+        $data = PlafondDinas::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data berhasi di hapus');
@@ -148,7 +151,7 @@ class PlafondDinasController extends Controller
      */
     public function store(Request $request)
     {
-        $data = new \App\PlafondDinas();
+        $data = new PlafondDinas();
         $data->hotel                        = $request->hotel;
         $data->tunjangan_makanan            = $request->tunjangan_makanan;
         $data->tunjangan_harian             = $request->tunjangan_harian;

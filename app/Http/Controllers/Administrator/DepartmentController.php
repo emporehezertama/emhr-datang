@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrganisasiDepartment;
+use App\Models\OrganisasiDirectorate;
+use App\Models\OrganisasiDivision;
 
 class DepartmentController extends Controller
 {
@@ -24,7 +27,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OrganisasiDepartment::all();
+        $params['data'] = OrganisasiDepartment::all();
 
         return view('administrator.department.index')->with($params);
     }
@@ -35,8 +38,8 @@ class DepartmentController extends Controller
      */
     public function create()
     {   
-        $params['directorate']  = \App\OrganisasiDirectorate::all();
-        $params['division']     = \App\OrganisasiDivision::all();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['division']     = OrganisasiDivision::all();
 
         return view('administrator.department.create')->with($params);
     }
@@ -48,9 +51,9 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        $params['directorate']  = \App\OrganisasiDirectorate::all();
-        $params['division']     = \App\OrganisasiDivision::all();
-        $params['data']         = \App\OrganisasiDepartment::where('id', $id)->first();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['division']     = OrganisasiDivision::all();
+        $params['data']         = OrganisasiDepartment::where('id', $id)->first();
 
         return view('administrator.department.edit')->with($params);
     }
@@ -78,7 +81,7 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\OrganisasiDivision::where('id', $id)->first();
+        $data = OrganisasiDivision::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.department.index')->with('message-sucess', 'Data berhasi di hapus');

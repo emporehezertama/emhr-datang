@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Kabupaten;
+use App\Models\Kabupaten;
 
 class KabupatenController extends Controller
 {

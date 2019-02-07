@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OvertimeSheet;
 
 class ApprovalOvertimeAtasanController extends Controller
 {
@@ -24,7 +25,7 @@ class ApprovalOvertimeAtasanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OvertimeSheet::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = OvertimeSheet::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-overtime-atasan.index')->with($params);
     }
@@ -36,7 +37,7 @@ class ApprovalOvertimeAtasanController extends Controller
      */
     public function proses(Request $request)
     {
-        $data                           = \App\OvertimeSheet::where('id', $request->id)->first();
+        $data                           = OvertimeSheet::where('id', $request->id)->first();
         $data->is_approved_atasan       = $request->status;
         $data->date_approved_atasan     = date('Y-m-d H:i:s');
         
@@ -82,7 +83,7 @@ class ApprovalOvertimeAtasanController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\OvertimeSheet::where('id', $id)->first();
+        $params['data'] = OvertimeSheet::where('id', $id)->first();
 
         return view('karyawan.approval-overtime-atasan.detail')->with($params);
     }

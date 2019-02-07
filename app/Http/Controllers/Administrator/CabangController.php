@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Cabang;
+use App\Models\Cabang;
 
 class CabangController extends Controller
 {
@@ -109,7 +109,7 @@ class CabangController extends Controller
                 {
                     if($item[2] == "") continue;
                     
-                    $data  = new \App\Cabang();
+                    $data  = new Cabang();
                     $data->name     = strtoupper($item[2]);
                     $data->alamat   = $item[3];
                     $data->telepon  = $item[4];

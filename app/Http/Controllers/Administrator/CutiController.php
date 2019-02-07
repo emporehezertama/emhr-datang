@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\CutiKaryawan;
 use App\User;
+use App\Models\UserCuti;
+use App\Models\Cuti;
+use App\Models\CutiKaryawan;
+use App\Models\StatusApproval;
 
 class CutiController extends Controller
 {
@@ -266,7 +269,7 @@ class CutiController extends Controller
      */
     public function proses($id)
     {   
-        $params['data'] = \App\CutiKaryawan::where('id', $id)->first();
+        $params['data'] = CutiKaryawan::where('id', $id)->first();
 
         return view('administrator.cuti.proses')->with($params);
     }
@@ -278,7 +281,7 @@ class CutiController extends Controller
      */
     public function submitProses(Request $request)
     {
-        $status = new \App\StatusApproval;
+        $status = new StatusApproval;
         $status->approval_user_id       = \Auth::user()->id;
         $status->jenis_form             = 'cuti';
         $status->foreign_id             = $request->id;
@@ -286,7 +289,7 @@ class CutiController extends Controller
         $status->noted                  = $request->noted;
         $status->save();    
 
-        $cuti = \App\CutiKaryawan::where('id', $request->id)->first();
+        $cuti = CutiKaryawan::where('id', $request->id)->first();
         $cuti->approve_direktur         = $request->status;
         $cuti->approve_direktur_noted   = $request->noted;
         $cuti->approve_direktur_date    = date('Y-m-d H:i:s');
@@ -305,15 +308,15 @@ class CutiController extends Controller
             $objDemo = new \stdClass();
             $objDemo->content = '<p>Dear '. $cuti->user->name .'</p><p> Pengajuan Cuti anda disetujui.</p>' ; 
 
-            $user_cuti = \App\UserCuti::where('user_id', $cuti->user_id)->where('cuti_id', $cuti->jenis_cuti)->first();
+            $user_cuti = UserCuti::where('user_id', $cuti->user_id)->where('cuti_id', $cuti->jenis_cuti)->first();
             
             if(empty($user_cuti))
             {
-                $temp = \App\Cuti::where('id', $cuti->jenis_cuti)->first();
+                $temp = Cuti::where('id', $cuti->jenis_cuti)->first();
 
                 if($temp)
                 { 
-                    $user_cuti                  = new \App\UserCuti();
+                    $user_cuti                  = new UserCuti();
                     $user_cuti->kuota           = $temp->kuota;
                     $user_cuti->user_id         = $cuti->user_id;
                     $user_cuti->cuti_id         = $cuti->jenis_cuti;

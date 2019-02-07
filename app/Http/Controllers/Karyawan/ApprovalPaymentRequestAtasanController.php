@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentRequest;
+use App\Models\StatusApproval;
+use App\Models\PaymentRequestForm;
 
 class ApprovalPaymentRequestAtasanController extends Controller
 {
@@ -24,7 +27,7 @@ class ApprovalPaymentRequestAtasanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\PaymentRequest::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();    
+        $params['data'] = PaymentRequest::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();    
 
         return view('karyawan.approval-payment-request-atasan.index')->with($params);
     }
@@ -36,7 +39,7 @@ class ApprovalPaymentRequestAtasanController extends Controller
      */
     public function proses(Request $request)
     {
-        $status = new \App\StatusApproval;
+        $status = new StatusApproval;
         $status->approval_user_id       = \Auth::user()->id;
         $status->jenis_form             = 'payment_request';
         $status->foreign_id             = $request->id;
@@ -47,7 +50,7 @@ class ApprovalPaymentRequestAtasanController extends Controller
         {
             foreach($request->nominal_approve as $k => $item)
             {
-                $i = \App\PaymentRequestForm::where('id', $k)->first();
+                $i = PaymentRequestForm::where('id', $k)->first();
                 if($i)
                 {
                     $i->note = $request->note[$k];
@@ -57,7 +60,7 @@ class ApprovalPaymentRequestAtasanController extends Controller
             }
         }
 
-        $data                        = \App\PaymentRequest::where('id', $request->id)->first();
+        $data                        = PaymentRequest::where('id', $request->id)->first();
         $data->date_approved_atasan     = date('Y-m-d H:i:s');
         $params['data']     = $data;
         
@@ -100,7 +103,7 @@ class ApprovalPaymentRequestAtasanController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\PaymentRequest::where('id', $id)->first();
+        $params['data'] = PaymentRequest::where('id', $id)->first();
 
         return view('karyawan.approval-payment-request-atasan.detail')->with($params);
     }

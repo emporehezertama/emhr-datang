@@ -2,17 +2,7 @@
 
 @section('title', 'List of Reason for Leaving')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-  
-        
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -26,9 +16,7 @@
                     <li class="active">List of Reason for Leaving</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
         <!-- .row -->
         <div class="row">
             <div class="col-md-12">
@@ -67,9 +55,7 @@
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
 @endsection

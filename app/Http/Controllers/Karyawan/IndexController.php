@@ -6,7 +6,21 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use DB;
-use App\Directorate;
+use App\Models\OrganisasiDirectorate;
+use App\Models\OrganisasiDepartment;
+use App\Models\Provinsi;
+use App\Models\UserFamily;
+use App\Models\UserEducation;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\OrganisasiDivision;
+use App\Models\OrganisasiSection;
+use App\Models\News;
+use App\Models\InternalMemo;
+use App\Models\PeraturanPerusahaan;
+use App\Models\RelatedSearchKaryawan;
+use App\Models\RequestPaySlip;
 
 class IndexController extends Controller
 {
@@ -28,19 +42,19 @@ class IndexController extends Controller
     public function index()
     {
         $params['data'] = User::where('id', \Auth::user()->id)->first();
-        $params['department']       = \App\Department::where('division_id', $params['data']['division_id'])->get();
-        $params['provinces']        = \App\Provinsi::all();
-        $params['dependent']        = \App\UserFamily::where('user_id', \Auth::user()->id)->first();
-        $params['education']        = \App\UserEducation::where('user_id', \Auth::user()->id)->first();
-        $params['kabupaten']        = \App\Kabupaten::where('id_prov', $params['data']['provinsi_id'])->get();
-        $params['kecamatan']        = \App\Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
-        $params['kelurahan']        = \App\Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
-        $params['division']         = \App\Division::all();
-        $params['section']          = \App\Section::where('division_id', $params['data']['division_id'])->get();
-        $params['news']             = \App\News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
-        $params['internal_memo']    = \App\InternalMemo::orderBy('id', 'DESC')->limit(5)->get();
-        $params['peraturan_perusahaan']    = \App\PeraturanPerusahaan::orderBy('id', 'DESC')->limit(5)->get();
-        $params['ulang_tahun']      = \App\User::whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
+        $params['department']       = OrganisasiDepartment::where('organisasi_division_id', $params['data']['division_id'])->get();
+        $params['provinces']        = Provinsi::all();
+        $params['dependent']        = UserFamily::where('user_id', \Auth::user()->id)->first();
+        $params['education']        = UserEducation::where('user_id', \Auth::user()->id)->first();
+        $params['kabupaten']        = Kabupaten::where('id_prov', $params['data']['provinsi_id'])->get();
+        $params['kecamatan']        = Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
+        $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
+        $params['division']         = OrganisasiDivision::all();
+        $params['section']          = OrganisasiSection::where('organisasi_division_id', $params['data']['division_id'])->get();
+        $params['news']             = News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
+        $params['internal_memo']    = InternalMemo::orderBy('id', 'DESC')->limit(5)->get();
+        $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('id', 'DESC')->limit(5)->get();
+        $params['ulang_tahun']      = User::whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
 
         $data = User::orderBy('name', 'ASC')->limit(1); 
 
@@ -50,7 +64,7 @@ class IndexController extends Controller
 
             if(!empty($_GET['name']))
             {
-                $related            = new \App\RelatedSearchKaryawan();
+                $related            = new RelatedSearchKaryawan();
                 $related->user_id   = \Auth::user()->id;
                 $related->keyword   = $_GET['name'];
                 $related->save();
@@ -58,7 +72,7 @@ class IndexController extends Controller
         }
         else
         {
-            $related = \App\RelatedSearchKaryawan::where('user_id', \Auth::user()->id)->orderBy('id', 'DESC')->first();
+            $related = RelatedSearchKaryawan::where('user_id', \Auth::user()->id)->orderBy('id', 'DESC')->first();
 
             if(isset($related))
             {
@@ -82,7 +96,7 @@ class IndexController extends Controller
      */
     public function requestPaySlip()
     {
-        $params['data'] = \App\RequestPaySlip::where('user_id', \Auth::user()->id)->get();
+        $params['data'] = RequestPaySlip::where('user_id', \Auth::user()->id)->get();
 
         return view('karyawan.request-pay-slip')->with($params);
     }
@@ -94,15 +108,15 @@ class IndexController extends Controller
     public function profile()
     {
         $params['data'] = User::where('id', \Auth::user()->id)->first();
-        $params['department']       = \App\Department::where('division_id', $params['data']['division_id'])->get();
-        $params['provinces']        = \App\Provinsi::all();
-        $params['dependent']        = \App\UserFamily::where('user_id', \Auth::user()->id)->first();
-        $params['education']        = \App\UserEducation::where('user_id', \Auth::user()->id)->first();
-        $params['kabupaten']        = \App\Kabupaten::where('id_prov', $params['data']['provinsi_id'])->get();
-        $params['kecamatan']        = \App\Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
-        $params['kelurahan']        = \App\Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
-        $params['division']         = \App\Division::all();
-        $params['section']          = \App\Section::where('division_id', $params['data']['division_id'])->get();
+        $params['department']       = OrganisasiDepartment::where('organisasi_division_id', $params['data']['division_id'])->get();
+        $params['provinces']        = Provinsi::all();
+        $params['dependent']        = UserFamily::where('user_id', \Auth::user()->id)->first();
+        $params['education']        = UserEducation::where('user_id', \Auth::user()->id)->first();
+        $params['kabupaten']        = Kabupaten::where('id_prov', $params['data']['provinsi_id'])->get();
+        $params['kecamatan']        = Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
+        $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
+        $params['division']         = OrganisasiDivision::all();
+        $params['section']          = OrganisasiSection::where('organisasi_division_id', $params['data']['division_id'])->get();
 
         return view('karyawan.profile')->with($params);
     }
@@ -136,8 +150,8 @@ class IndexController extends Controller
      */
     public function readmore($id)
     {
-        $params['data'] = \App\News::where('id', $id)->first();
-        $params['news_list_right'] = \App\News::orderBy('id', 'DESC')->limit(10)->get();
+        $params['data']             = News::where('id', $id)->first();
+        $params['news_list_right']  = News::orderBy('id', 'DESC')->limit(10)->get();
 
         return view('karyawan.news.readmore')->with($params);
     }
@@ -149,7 +163,7 @@ class IndexController extends Controller
      */
     public function downloadInternalMemo($id)
     {   
-        $im = \App\InternalMemo::where('id', $id)->first();
+        $im = InternalMemo::where('id', $id)->first();
         
         if($im)
         {
@@ -168,7 +182,7 @@ class IndexController extends Controller
      */
     public function downloadPeraturanPerusahaan($id)
     {   
-        $im = \App\PeraturanPerusahaan::where('id', $id)->first();
+        $im = PeraturanPerusahaan::where('id', $id)->first();
         
         if($im)
         {
@@ -186,12 +200,12 @@ class IndexController extends Controller
      */
     public function newsmore()
     {
-        $params['list'] = \App\News::orderBy('id', 'DESC')->get();
-        $params['news_list_right'] = \App\News::orderBy('id', 'DESC')->get();
+        $params['list']             = News::orderBy('id', 'DESC')->get();
+        $params['news_list_right']  = News::orderBy('id', 'DESC')->get();
 
         if(isset($_GET['keyword-news']) and !empty($_GET['keyword-news']))
         {
-            $params['news_list_right'] = \App\News::where('title', 'LIKE', '%'. $_GET['keyword-news'] .'%')->orderBy('id', 'DESC')->get();
+            $params['news_list_right'] = News::where('title', 'LIKE', '%'. $_GET['keyword-news'] .'%')->orderBy('id', 'DESC')->get();
         }
 
         return view('karyawan.morenews')->with($params);
@@ -203,18 +217,18 @@ class IndexController extends Controller
      */
     public function internalMemoMore()
     {
-        $params['data'] = \App\InternalMemo::orderBy('id', 'DESC')->get();
-        $params['internal_memo']    = \App\InternalMemo::orderBy('id', 'DESC')->get();
-        $params['peraturan_perusahaan']    = \App\PeraturanPerusahaan::orderBy('id', 'DESC')->get();
+        $params['data']                 = InternalMemo::orderBy('id', 'DESC')->get();
+        $params['internal_memo']        = InternalMemo::orderBy('id', 'DESC')->get();
+        $params['peraturan_perusahaan'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
 
         if(isset($_GET['keyword-internal-memo']) and !empty($_GET['keyword-internal-memo']))
         {
-            $params['internal_memo'] = \App\InternalMemo::where('title', 'LIKE', '%'. $_GET['keyword-internal-memo'] .'%')->orderBy('id', 'DESC')->get();
+            $params['internal_memo'] = InternalMemo::where('title', 'LIKE', '%'. $_GET['keyword-internal-memo'] .'%')->orderBy('id', 'DESC')->get();
         }
 
         if(isset($_GET['keyword-peraturan']) and !empty($_GET['keyword-peraturan']))
         {
-            $params['peraturan_perusahaan'] = \App\PeraturanPerusahaan::where('title', 'LIKE', '%'. $_GET['keyword-peraturan'] .'%')->orderBy('id', 'DESC')->get();
+            $params['peraturan_perusahaan'] = PeraturanPerusahaan::where('title', 'LIKE', '%'. $_GET['keyword-peraturan'] .'%')->orderBy('id', 'DESC')->get();
         }
 
         return view('karyawan.more-internal-memo')->with($params);

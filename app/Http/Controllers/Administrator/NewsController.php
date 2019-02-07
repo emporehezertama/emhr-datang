@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\News;
 
 class NewsController extends Controller
 {
@@ -25,7 +26,7 @@ class NewsController extends Controller
     public function index()
     {
         //$params['data'] = \App\News::where('status', 1)->orderBy('id', 'DESC')->get();
-        $params['data'] = \App\News::orderBy('id', 'DESC')->get();
+        $params['data'] = News::orderBy('id', 'DESC')->get();
 
         return view('administrator.news.index')->with($params);
     }
@@ -46,7 +47,7 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\News::where('id', $id)->first();
+        $params['data'] = News::where('id', $id)->first();
 
         return view('administrator.news.edit')->with($params);
     }
@@ -58,7 +59,7 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                   = \App\News::where('id', $id)->first();
+        $data                   = News::where('id', $id)->first();
         $data->title            = $request->title;
         $data->content          = $request->content;
         $data->status           = $request->status;
@@ -100,7 +101,7 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\News::where('id', $id)->first();
+        $data = News::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.news.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -113,7 +114,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $data                   = new \App\News();
+        $data                   = new News();
         $data->title            = $request->title;
         $data->content          = $request->content;
         $data->status           = $request->status;

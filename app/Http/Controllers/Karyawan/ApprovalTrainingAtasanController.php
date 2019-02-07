@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Training;
 
 class ApprovalTrainingAtasanController extends Controller
 {
@@ -24,8 +25,8 @@ class ApprovalTrainingAtasanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\Training::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
-        $params['data_biaya'] = \App\Training::where('approved_atasan_id', \Auth::user()->id)->where('is_approve_atasan_actual_bill', 0)->where('status_actual_bill', 2)->get();
+        $params['data']         = Training::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data_biaya']   = Training::where('approved_atasan_id', \Auth::user()->id)->where('is_approve_atasan_actual_bill', 0)->where('status_actual_bill', 2)->get();
 
         return view('karyawan.approval-training-atasan.index')->with($params);
     }
@@ -37,7 +38,7 @@ class ApprovalTrainingAtasanController extends Controller
      */
     public function proses(Request $request)
     {
-        $training                           = \App\Training::where('id', $request->id)->first();
+        $training                           = Training::where('id', $request->id)->first();
         $training->is_approved_atasan       = $request->status;
         $training->date_approved_atasan     = date('Y-m-d H:i:s');
 
@@ -80,7 +81,7 @@ class ApprovalTrainingAtasanController extends Controller
      */
     public function prosesBiaya(Request $request)
     {
-        $data = \App\Training::where('id', $request->id)->first();
+        $data = Training::where('id', $request->id)->first();
  
         $data->transportasi_ticket_disetujui    = $request->transportasi_ticket_disetujui;
         $data->transportasi_ticket_catatan      = $request->transportasi_ticket_catatan;
@@ -131,7 +132,7 @@ class ApprovalTrainingAtasanController extends Controller
      */
     public function biaya($id)
     {
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('karyawan.approval-training-atasan.biaya')->with($params);
     }
@@ -143,7 +144,7 @@ class ApprovalTrainingAtasanController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('karyawan.approval-training-atasan.detail')->with($params);
     }

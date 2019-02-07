@@ -24,7 +24,7 @@ function status_asset($key=NULL)
  */
 function empore_list_direktur()
 {
-	return \App\EmporeOrganisasiDirektur::all();
+	return \App\Models\EmporeOrganisasiDirektur::all();
 }
 	
 /**

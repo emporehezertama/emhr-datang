@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Training;
+use App\Models\SettingApproval;
+use App\Models\StatusApproval;
 
 class ApprovalTrainingController extends Controller
 {
@@ -24,7 +27,7 @@ class ApprovalTrainingController extends Controller
      */
     public function index()
     {
-        $params['data']         = \App\Training::where('approve_direktur_id', \Auth::user()->id)->where('is_approved_atasan', 1)->orderBy('id', 'DESC')->get();
+        $params['data']         = Training::where('approve_direktur_id', \Auth::user()->id)->where('is_approved_atasan', 1)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-training.index')->with($params);
     }
@@ -35,10 +38,10 @@ class ApprovalTrainingController extends Controller
      */
     public function prosesBiaya(Request $request)
     {
-        $data = \App\Training::where('id', $request->id)->first();
+        $data = Training::where('id', $request->id)->first();
         $data->approve_direktur_actual_bill_date = date('Y-m-d H:i:s');
 
-        $approval = \App\SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','training')->first();
+        $approval = SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','training')->first();
 
         $data->transportasi_ticket_disetujui    = $request->transportasi_ticket_disetujui;
         $data->transportasi_ticket_catatan      = $request->transportasi_ticket_catatan;
@@ -89,7 +92,7 @@ class ApprovalTrainingController extends Controller
      */
     public function biaya($id)
     {
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('karyawan.approval-training.biaya')->with($params);
     }
@@ -101,7 +104,7 @@ class ApprovalTrainingController extends Controller
      */
     public function proses(Request $request)
     {
-        $status = new \App\StatusApproval;
+        $status = new StatusApproval;
         $status->approval_user_id       = \Auth::user()->id;
         $status->jenis_form             = 'training';
         $status->foreign_id             = $request->id;
@@ -110,7 +113,7 @@ class ApprovalTrainingController extends Controller
         $status->save();    
 
         $status = $request->status;
-        $training = \App\Training::where('id', $request->id)->first();
+        $training = Training::where('id', $request->id)->first();
         $training->approve_direktur = $status;    
         $training->approve_direktur_date = date('Y-m-d H:i:s');    
 
@@ -157,7 +160,7 @@ class ApprovalTrainingController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('karyawan.approval-training.detail')->with($params);
     }

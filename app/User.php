@@ -33,7 +33,7 @@ class User extends Authenticatable
      */
     public function assets()
     {
-        return $this->hasMany('\App\Asset', 'user_id', 'id');
+        return $this->hasMany('\App\Models\Asset', 'user_id', 'id');
     }
 
     /**
@@ -42,7 +42,7 @@ class User extends Authenticatable
      */
     public function empore_staff()
     {
-        return $this->hasOne('App\EmporeOrganisasiStaff', 'id', 'empore_organisasi_staff_id');
+        return $this->hasOne('App\Models\EmporeOrganisasiStaff', 'id', 'empore_organisasi_staff_id');
     }
 
     /**
@@ -51,7 +51,7 @@ class User extends Authenticatable
      */
     public function empore_manager()
     {
-        return $this->hasOne('App\EmporeOrganisasiManager', 'id', 'empore_organisasi_manager_id');
+        return $this->hasOne('App\Models\EmporeOrganisasiManager', 'id', 'empore_organisasi_manager_id');
     }
 
     /**
@@ -60,7 +60,7 @@ class User extends Authenticatable
      */
     public function empore_direktur()
     {
-        return $this->hasOne('App\EmporeOrganisasiDirektur', 'id', 'empore_organisasi_direktur');
+        return $this->hasOne('App\Models\EmporeOrganisasiDirektur', 'id', 'empore_organisasi_direktur');
     }
 
     /**
@@ -69,7 +69,7 @@ class User extends Authenticatable
      */
     public function inventaris_mobil()
     {
-        return $this->hasMany('App\UserInventarisMobil', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserInventarisMobil', 'user_id', 'id');
     }
 
     /**
@@ -78,7 +78,7 @@ class User extends Authenticatable
      */
     public function inventaris()
     {
-        return $this->hasMany('App\UserInventaris', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserInventaris', 'user_id', 'id');
     }
 
     /**
@@ -87,7 +87,7 @@ class User extends Authenticatable
      */
     public function department()
     {
-        return $this->hasOne('App\OrganisasiDepartment', 'id', 'department_id');
+        return $this->hasOne('App\Models\OrganisasiDepartment', 'id', 'department_id');
     }
 
     /**
@@ -96,7 +96,7 @@ class User extends Authenticatable
      */
     public function section()
     {
-        return $this->hasOne('App\OrganisasiSection', 'id', 'section_id');
+        return $this->hasOne('App\Models\OrganisasiSection', 'id', 'section_id');
     }
 
     /**
@@ -105,7 +105,7 @@ class User extends Authenticatable
      */
     public function position()
     {
-        return $this->hasOne('App\OrganisasiPosition', 'id', 'organisasi_position');
+        return $this->hasOne('App\Models\OrganisasiPosition', 'id', 'organisasi_position');
     }
 
     /**
@@ -114,7 +114,7 @@ class User extends Authenticatable
      */
     public function organisasiposition()
     {
-        return $this->hasOne('App\OrganisasiPosition', 'id', 'organisasi_position');
+        return $this->hasOne('App\Models\OrganisasiPosition', 'id', 'organisasi_position');
     }
 
     /**
@@ -123,7 +123,7 @@ class User extends Authenticatable
      */
     public function division()
     {
-        return $this->hasOne('App\OrganisasiDivision', 'id', 'division_id');
+        return $this->hasOne('App\Models\OrganisasiDivision', 'id', 'division_id');
     }
 
     /**
@@ -132,7 +132,7 @@ class User extends Authenticatable
      */
     public function cabang()
     {
-        return $this->hasOne('App\Cabang', 'id', 'cabang_id');
+        return $this->hasOne('App\Models\Cabang', 'id', 'cabang_id');
     }
 
     /**
@@ -141,7 +141,7 @@ class User extends Authenticatable
      */
     public function bank()
     {
-        return $this->hasOne('App\Bank', 'id', 'bank_id');
+        return $this->hasOne('App\Models\Bank', 'id', 'bank_id');
     }  
 
     /**
@@ -150,7 +150,7 @@ class User extends Authenticatable
      */
     public function userFamily()
     {
-        return $this->hasMany('App\UserFamily', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserFamily', 'user_id', 'id');
     }
 
     /**
@@ -159,7 +159,7 @@ class User extends Authenticatable
      */
     public function userEducation()
     {
-        return $this->hasMany('App\UserEducation', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserEducation', 'user_id', 'id');
     }
 
     /**
@@ -168,7 +168,7 @@ class User extends Authenticatable
      */
     public function cuti()
     {
-        return $this->hasMany('App\UserCuti', 'user_id', 'id');
+        return $this->hasMany('App\Models\UserCuti', 'user_id', 'id');
     }
 
     /**
@@ -177,7 +177,7 @@ class User extends Authenticatable
      */
     public function provinsi()
     {
-        return $this->hasOne('App\Provinsi', 'id_prov', 'provinsi_id');
+        return $this->hasOne('App\Models\Provinsi', 'id_prov', 'provinsi_id');
     }
 
     /**
@@ -186,7 +186,7 @@ class User extends Authenticatable
      */
     public function kabupaten()
     {
-        return $this->hasOne('App\Kabupaten', 'id_kab', 'kabupaten_id');
+        return $this->hasOne('App\Models\Kabupaten', 'id_kab', 'kabupaten_id');
     }
 
     /**
@@ -195,7 +195,7 @@ class User extends Authenticatable
      */
     public function kecamatan()
     {
-        return $this->hasOne('App\Kecamatan', 'id_kec', 'kecamatan_id');
+        return $this->hasOne('App\Models\Kecamatan', 'id_kec', 'kecamatan_id');
     }
 
     /**
@@ -204,6 +204,6 @@ class User extends Authenticatable
      */
     public function kelurahan()
     {
-        return $this->hasOne('App\Kelurahan', 'id_kel', 'kelurahan_id');
+        return $this->hasOne('App\Models\Kelurahan', 'id_kel', 'kelurahan_id');
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Setting;
+use App\Models\Setting;
 
 class SettingController extends Controller
 {   
@@ -18,82 +18,82 @@ class SettingController extends Controller
 
         return view('administrator.setting.index')->with($params);
     }
-
-     /**
+    
+    /**
      * [create description]
      * @return [type] [description]
      */
-    public function create()
+    public function save(Request $request)
     {
-        return view('administrator.setting.create');
+        if($request->setting)
+        {
+            foreach($request->setting as $key => $value)
+            {
+                $setting = Setting::where('key', $key)->first();
+                if(!$setting)
+                {
+                    $setting = new Setting();
+                    $setting->key = $key;
+                }
+                $setting->value = $value;
+                $setting->save();
+            }
+        }
+
+        if ($request->hasFile('logo'))
+        {
+            $file = $request->file('logo');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/upload/setting');
+            $file->move($destinationPath, $fileName);
+
+            $setting = Setting::where('key', 'logo')->first();
+            if(!$setting)
+            {
+                $setting = new Setting();
+                $setting->key = 'logo';
+            }
+            $setting->value = '/upload/setting/' . $fileName;
+            $setting->save();
+        }
+
+        if ($request->hasFile('favicon'))
+        {
+            $file = $request->file('favicon');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/upload/setting');
+            $file->move($destinationPath, $fileName);
+
+            $setting = Setting::where('key', 'favicon')->first();
+            if(!$setting)
+            {
+                $setting = new Setting();
+                $setting->key = 'favicon';
+            }
+            $setting->value = '/upload/setting/' . $fileName;
+            $setting->save();
+        }
+
+        if ($request->hasFile('logo_footer'))
+        {
+            $file = $request->file('logo_footer');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/upload/setting');
+            $file->move($destinationPath, $fileName);
+
+            $setting = Setting::where('key', 'logo_footer')->first();
+            if(!$setting)
+            {
+                $setting = new Setting();
+                $setting->key = 'logo_footer';
+            }
+            $setting->value = '/upload/setting/' . $fileName;
+            $setting->save();
+        }
+
+        return redirect()->route('administrator.setting.general')->with('message-success', 'Setting saved');
     }
-
-    /**
-     * [edit description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
-     */
-    public function edit($id)
-    {
-        $data['data']   = Setting::where('id', $id)->first();;
-        
-        return view('administrator.setting.edit')->with($data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $this->validate($request,[
-            'key'              => 'required',
-            'value'              => 'required',
-        ]);
-        
-        $data               = Setting::where('id', $id)->first();
-        $data->key         = $request->key;
-        $data->value         = $request->value;
-        $data->save();
-
-        return redirect()->route('administrator.setting.index')->with('message-success', 'Data berhasil disimpan'); 
-    }
-
-
-    /**
-     * [desctroy description]
-     * @param  [type] $id [description]
-     * @return [type]     [description]
-     */
-    public function destroy($id)
-    {
-        $data = Setting::where('id', $id)->first();
-        $data->delete();
-
-        return redirect()->route('administrator.setting.index')->with('message-sucess', 'Data berhasi di hapus');
-    }
-
-   /**
-    * Store a newly created resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Response
-    */
-    public function store(Request $request)
-    {
-        $this->validate($request,[
-            'key'              => 'required',
-            'value'              => 'required',
-        ]);
-        
-        $data               =  new Setting();
-        $data->key          = $request->key;
-        $data->value        = $request->value;
-        $data->save();
-
-        return redirect()->route('administrator.setting.index')->with('message-success', 'Data berhasil disimpan'); 
-   }
 }

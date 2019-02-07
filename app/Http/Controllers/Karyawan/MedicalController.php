@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\MedicalReimbursement;
-use App\MedicalReimbursementForm;
+use App\Models\MedicalReimbursement;
+use App\Models\MedicalReimbursementForm;
 use App\User;
 
 class MedicalController extends Controller

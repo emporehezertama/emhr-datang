@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PayrollPtkp;
+use App\Models\PayrollPPH;
+use App\Models\PayrollOthers;
 
 class PayrollSettingController extends Controller
 {   
@@ -19,9 +22,9 @@ class PayrollSettingController extends Controller
      */
     public function index()
     {
-        $params['ptkp']     = \App\PayrollPtkp::all();
-        $params['pph']      = \App\PayrollPPH::all();
-        $params['others']   = \App\PayrollOthers::all();
+        $params['ptkp']     = PayrollPtkp::all();
+        $params['pph']      = PayrollPPH::all();
+        $params['others']   = PayrollOthers::all();
 
         return view('administrator.payroll-setting.index')->with($params);
     }
@@ -33,7 +36,7 @@ class PayrollSettingController extends Controller
      */
     public function deletePtkp($id)
     {       
-        $pph = \App\PayrollPtkp::where('id', $id)->first();
+        $pph = PayrollPtkp::where('id', $id)->first();
         $pph->delete();
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'PTKP Setting berhasil di hapus');
@@ -46,7 +49,7 @@ class PayrollSettingController extends Controller
      */
     public function editOthers($id)
     {
-        $params['data'] = \App\PayrollOthers::where('id', $id)->first();
+        $params['data'] = PayrollOthers::where('id', $id)->first();
 
         return view('administrator.payroll-setting.edit-others')->with($params);
     }
@@ -58,7 +61,7 @@ class PayrollSettingController extends Controller
      */
     public function deleteOthers($id)
     {       
-        $pph = \App\PayrollOthers::where('id', $id)->first();
+        $pph = PayrollOthers::where('id', $id)->first();
         $pph->delete();
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'Others Setting berhasil di hapus');
@@ -71,7 +74,7 @@ class PayrollSettingController extends Controller
      */
     public function updateOthers(Request $request, $id)
     {
-        $data           = \App\PayrollOthers::where('id', $id)->first();
+        $data           = PayrollOthers::where('id', $id)->first();
         $data->label    = $request->label;
         $data->value    = $request->value;
         $data->save();
@@ -92,7 +95,7 @@ class PayrollSettingController extends Controller
      */
     public function editPPH($id)
     {
-        $params['data'] = \App\PayrollPPH::where('id', $id)->first();
+        $params['data'] = PayrollPPH::where('id', $id)->first();
 
         return view('administrator.payroll-setting.edit-pph')->with($params);
     }
@@ -104,7 +107,7 @@ class PayrollSettingController extends Controller
      */
     public function deletePPH($id)
     {       
-        $pph = \App\PayrollPPH::where('id', $id)->first();
+        $pph = PayrollPPH::where('id', $id)->first();
         $pph->delete();
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'PPH Setting berhasil di hapus');
@@ -127,7 +130,7 @@ class PayrollSettingController extends Controller
      */
     public function updatePPH(Request $request, $id)
     {
-        $data                   = \App\PayrollPPH::where('id', $id)->first();
+        $data                   = PayrollPPH::where('id', $id)->first();
         $data->batas_bawah      = $request->batas_bawah;
         $data->batas_atas       = $request->batas_atas;
         $data->tarif            = $request->tarif;
@@ -146,7 +149,7 @@ class PayrollSettingController extends Controller
      */
     public function storePPH(Request $request)
     {
-        $data                   = new \App\PayrollPPH();
+        $data                   = new PayrollPPH();
         $data->batas_bawah      = $request->batas_bawah;
         $data->batas_atas       = $request->batas_atas;
         $data->tarif            = $request->tarif;
@@ -165,7 +168,7 @@ class PayrollSettingController extends Controller
      */
     public function storeOthers(Request $request)
     {
-        $data           = new \App\PayrollOthers();
+        $data           = new PayrollOthers();
         $data->label    = $request->label;
         $data->value    = $request->value;
         $data->save();
@@ -180,7 +183,7 @@ class PayrollSettingController extends Controller
      */
     public function editPtkp($id)
     {
-        $params['data'] = \App\PayrollPtkp::where('id', $id)->first();
+        $params['data'] = PayrollPtkp::where('id', $id)->first();
 
         return view('administrator.payroll-setting.edit-ptkp')->with($params);
     }
@@ -192,7 +195,7 @@ class PayrollSettingController extends Controller
      */
     public function updatePtkp(Request $request)
     {
-        $data                       = new \App\PayrollPtkp();
+        $data                       = new PayrollPtkp();
         $data->bujangan_wanita      = $request->bujangan_wanita;
         $data->menikah              = $request->menikah;
         $data->menikah_anak_1       = $request->menikah_anak_1;

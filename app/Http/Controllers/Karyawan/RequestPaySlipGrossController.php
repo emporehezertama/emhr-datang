@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RequestPaySlipGross;
+use App\Models\RequestPaySlipGrossItem;
 
 class RequestPaySlipGrossController extends Controller
 {
@@ -24,7 +26,7 @@ class RequestPaySlipGrossController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\RequestPaySlipGross::where('user_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlipGross::where('user_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.request-pay-slipgross.index')->with($params);
     }
@@ -45,8 +47,8 @@ class RequestPaySlipGrossController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->first();
-        $params['dataArray'] = \App\RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->get();
+        $params['data']         = RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->first();
+        $params['dataArray']    = RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->get();
 
         return view('karyawan.request-pay-slipgross.edit')->with($params);
     }
@@ -58,7 +60,7 @@ class RequestPaySlipGrossController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\RequestPaySlipGross::where('id', $id)->first();
+        $data = RequestPaySlipGross::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('karyawan.request-pay-slipgross.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -74,14 +76,14 @@ class RequestPaySlipGrossController extends Controller
         if(is_null($request->bulan)){
              return redirect()->route('karyawan.request-pay-slipgross.create')->with('message-error', 'Your request not completed. Please fill year and month!');
         } else{           
-            $data                       = new \App\RequestPaySlipGross();
+            $data                       = new RequestPaySlipGross();
             $data->user_id              = \Auth::user()->id;
             $data->status               = 1;   
             $data->save();
 
             foreach($request->bulan as $key => $i)
             {   
-                $item               = new \App\RequestPaySlipGrossItem();
+                $item               = new RequestPaySlipGrossItem();
                 $item->tahun        = $request->tahun;
                 $item->request_pay_slipgross_id = $data->id;
                 $item->bulan        = $i;

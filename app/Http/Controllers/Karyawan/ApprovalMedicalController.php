@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\MedicalReimbursement;
+use App\Models\MedicalReimbursementForm;
+use App\Models\SettingApproval;
 
 class ApprovalMedicalController extends Controller
 {
@@ -26,7 +29,7 @@ class ApprovalMedicalController extends Controller
     {
         // cek jenis user
        
-        $params['data'] = \App\MedicalReimbursement::where('approve_direktur_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = MedicalReimbursement::where('approve_direktur_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-medical.index')->with($params);
     }
@@ -38,7 +41,7 @@ class ApprovalMedicalController extends Controller
      */
     public function proses(Request $request)
     {
-        $data = \App\MedicalReimbursement::where('id', $request->id)->first();        
+        $data = MedicalReimbursement::where('id', $request->id)->first();        
         $data->approve_direktur = $request->status;
         $data->approve_direktur_date = date('Y-m-d H:i:s');
 
@@ -78,7 +81,7 @@ class ApprovalMedicalController extends Controller
 
         foreach($request->nominal_approve as $id => $val)
         {
-            $form                       = \App\MedicalReimbursementForm::where('id', $id)->first();
+            $form                       = MedicalReimbursementForm::where('id', $id)->first();
             $form->nominal_approve      = str_replace(',', '', $val);
             $form->save();
         }
@@ -93,8 +96,8 @@ class ApprovalMedicalController extends Controller
      */
     public function detail($id)
     {   
-        $params['data']         = \App\MedicalReimbursement::where('id', $id)->first();
-        $params['approval']     = \App\SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','medical')->first();
+        $params['data']         = MedicalReimbursement::where('id', $id)->first();
+        $params['approval']     = SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','medical')->first();
 
         return view('karyawan.approval-medical.detail')->with($params);
     }

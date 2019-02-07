@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\PaymentRequest;
-use App\PaymentRequestForm;
+use App\Models\PaymentRequest;
+use App\Models\PaymentRequestForm;
 use App\User;
 
 class PaymentRequestController extends Controller
@@ -123,7 +123,7 @@ class PaymentRequestController extends Controller
      */
     public function batal(Request $request)
     {
-        $data = \App\PaymentRequest::where('id', $request->id)->first();
+        $data = PaymentRequest::where('id', $request->id)->first();
         $data->note_pembatalan = $request->note;
         $data->status = 4;
         $data->save();

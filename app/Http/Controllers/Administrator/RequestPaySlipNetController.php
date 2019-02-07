@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Models\RequestPaySlipNet;
+use App\Models\RequestPaySlipItemNet;
+
 class RequestPaySlipNetController extends Controller
 {
     /**
@@ -24,7 +27,7 @@ class RequestPaySlipNetController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\RequestPaySlipNet::orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlipNet::orderBy('id', 'DESC')->get();
 
         return view('administrator.request-pay-slipnet.index')->with($params);
     }
@@ -36,9 +39,9 @@ class RequestPaySlipNetController extends Controller
      */
     public function proses($id)
     {
-        $params['datamaster'] = \App\RequestPaySlipNet::where('id', $id)->first();
-        $params['data'] = \App\RequestPaySlipItemNet::where('request_pay_slipNet_id', $id)->first();
-        $params['dataArray'] = \App\RequestPaySlipItemNet::where('request_pay_slipNet_id', $id)->get();
+        $params['datamaster']   = RequestPaySlipNet::where('id', $id)->first();
+        $params['data']         = RequestPaySlipItemNet::where('request_pay_slipNet_id', $id)->first();
+        $params['dataArray']    = RequestPaySlipItemNet::where('request_pay_slipNet_id', $id)->get();
 
         return view('administrator.request-pay-slipnet.proses')->with($params);
     }
@@ -51,9 +54,9 @@ class RequestPaySlipNetController extends Controller
      */
     public function submit(Request $request, $id)
     {
-        $data = \App\RequestPaySlipNet::where('id', $id)->first();
+        $data = RequestPaySlipNet::where('id', $id)->first();
 
-        $bulanItem = \App\RequestPaySlipItemNet::where('request_pay_slipNet_id', $id)->get();
+        $bulanItem = RequestPaySlipItemNet::where('request_pay_slipNet_id', $id)->get();
         $bulan = [];
         $total = 0;
         $dataArray = [];

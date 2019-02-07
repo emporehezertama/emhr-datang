@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Kelurahan;
+use App\Models\Kelurahan;
 
 class KelurahanController extends Controller
 {

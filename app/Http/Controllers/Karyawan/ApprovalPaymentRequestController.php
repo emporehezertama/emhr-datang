@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentRequest;
+use App\Models\PaymentRequestForm;
 
 class ApprovalPaymentRequestController extends Controller
 {
@@ -24,7 +26,7 @@ class ApprovalPaymentRequestController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\PaymentRequest::where('approve_direktur_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = PaymentRequest::where('approve_direktur_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-payment-request.index')->with($params);
     }
@@ -40,7 +42,7 @@ class ApprovalPaymentRequestController extends Controller
         {
             foreach($request->nominal_approve as $k => $item)
             {
-                $i = \App\PaymentRequestForm::where('id', $k)->first();
+                $i = PaymentRequestForm::where('id', $k)->first();
                 if($i)
                 {
                     $i->note                = $request->note[$k];
@@ -50,7 +52,7 @@ class ApprovalPaymentRequestController extends Controller
             }
         }
         
-        $data = \App\PaymentRequest::where('id', $request->id)->first();
+        $data = PaymentRequest::where('id', $request->id)->first();
         $status                         = $request->status;
         $data->approve_direktur         = $status;
         $data->approve_direktur_date    = date('Y-m-d H:i:s');
@@ -98,7 +100,7 @@ class ApprovalPaymentRequestController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\PaymentRequest::where('id', $id)->first();
+        $params['data'] = PaymentRequest::where('id', $id)->first();
 
         return view('karyawan.approval-payment-request.detail')->with($params);
     }

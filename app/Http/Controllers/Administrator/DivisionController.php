@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Division;
-use App\Directorate;
+use App\Models\OrganisasiDivision;
+use App\Models\OrganisasiDirectorate;
 
 class DivisionController extends Controller
 {
@@ -26,7 +26,7 @@ class DivisionController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OrganisasiDivision::all();
+        $params['data'] = OrganisasiDivision::all();
 
         return view('administrator.division.index')->with($params);
     }
@@ -37,7 +37,7 @@ class DivisionController extends Controller
      */
     public function create()
     {   
-        $params['directorate'] = \App\OrganisasiDirectorate::all();
+        $params['directorate'] = OrganisasiDirectorate::all();
 
         return view('administrator.division.create')->with($params);
     }
@@ -49,8 +49,8 @@ class DivisionController extends Controller
      */
     public function edit($id)
     {
-        $params['directorate'] = \App\OrganisasiDirectorate::all();
-        $params['data'] = \App\OrganisasiDivision::where('id', $id)->first();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['data']         = OrganisasiDivision::where('id', $id)->first();
 
         return view('administrator.division.edit')->with($params);
     }
@@ -62,9 +62,9 @@ class DivisionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data       = \App\OrganisasiDivision::where('id', $id)->first();
-        $data->organisasi_directorate_id   = $request->directorate_id;
-        $data->name             = $request->name;
+        $data                               = OrganisasiDivision::where('id', $id)->first();
+        $data->organisasi_directorate_id    = $request->organisasi_directorate_id;
+        $data->name                         = $request->name;
         $data->save();
 
         return redirect()->route('administrator.division.index')->with('message-success', 'Data berhasil disimpan');
@@ -77,7 +77,7 @@ class DivisionController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\OrganisasiDivision::where('id', $id)->first();
+        $data = OrganisasiDivision::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.division.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -90,9 +90,9 @@ class DivisionController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\OrganisasiDivision();
-        $data->organisasi_directorate_id = $request->directorate_id;
-        $data->name         = $request->name;
+        $data                               = new OrganisasiDivision();
+        $data->organisasi_directorate_id    = $request->directorate_id;
+        $data->name                         = $request->name;
         $data->save();
 
         return redirect()->route('administrator.division.index')->with('message-success', 'Data berhasil disimpan !');

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\ProgramStudi;
+use App\Models\ProgramStudi;
 
 class ProgramStudiController extends Controller
 {

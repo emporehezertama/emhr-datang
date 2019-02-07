@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Training;
+use App\Models\Training;
 use App\User;
 
 class TrainingController extends Controller
@@ -37,7 +37,7 @@ class TrainingController extends Controller
      */
     public function detailAll($id)
     {
-        $params['data'] = \App\Training::where('id', $id)->first(); 
+        $params['data'] = Training::where('id', $id)->first(); 
 
         $data = $params['data'];
 
@@ -106,7 +106,7 @@ class TrainingController extends Controller
      */
     public function detailTraining($id)
     {   
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('karyawan.training.detail-training')->with($params);
     }
@@ -118,7 +118,7 @@ class TrainingController extends Controller
      */
     public function biaya($id)
     {
-        $params['data']             = \App\Training::where('id', $id)->first();
+        $params['data']             = Training::where('id', $id)->first();
         //$params['plafond_dinas']    = plafond_perjalanan_dinas( (\Auth::user()->organisasiposition->name == 'Head' ? 'Supervisor' : \Auth::user()->organisasiposition->name));
 
         return view('karyawan.training.biaya')->with($params);
@@ -130,7 +130,7 @@ class TrainingController extends Controller
      */
     public function submitBiaya(Request $request)
     {
-        $data = \App\Training::where('id', $request->id)->first();
+        $data = Training::where('id', $request->id)->first();
         $data->transportasi_ticket = $request->transportasi_ticket;
         $data->transportasi_taxi = $request->transportasi_taxi;
         $data->transportasi_gasoline = $request->transportasi_gasoline;

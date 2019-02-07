@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CutiKaryawan;
+use App\Models\StatusApproval;
+use App\Models\UserCuti;
+use App\Models\Cuti;
 
 class ApprovalCutiController extends Controller
 {
@@ -24,7 +28,7 @@ class ApprovalCutiController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)
+        $params['data'] = CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)
                                                 ->orderBy('id', 'DESC')
                                                 ->get();
 
@@ -38,7 +42,7 @@ class ApprovalCutiController extends Controller
      */
     public function proses(Request $request)
     {
-        $status = new \App\StatusApproval;
+        $status = new StatusApproval;
         $status->approval_user_id       = \Auth::user()->id;
         $status->jenis_form             = 'cuti';
         $status->foreign_id             = $request->id;
@@ -46,7 +50,7 @@ class ApprovalCutiController extends Controller
         $status->noted                  = $request->noted;
         $status->save();    
 
-        $cuti = \App\CutiKaryawan::where('id', $request->id)->first();
+        $cuti = CutiKaryawan::where('id', $request->id)->first();
         $cuti->approve_direktur         = $request->status;
         $cuti->approve_direktur_noted   = $request->noted;
         $cuti->approve_direktur_date    = date('Y-m-d H:i:s');
@@ -80,15 +84,15 @@ class ApprovalCutiController extends Controller
                 }
             );  
 
-            $user_cuti = \App\UserCuti::where('user_id', $cuti->user_id)->where('cuti_id', $cuti->jenis_cuti)->first();
+            $user_cuti = UserCuti::where('user_id', $cuti->user_id)->where('cuti_id', $cuti->jenis_cuti)->first();
 
             if(empty($user_cuti))
             {
-                $temp = \App\Cuti::where('id', $cuti->jenis_cuti)->first();
+                $temp = Cuti::where('id', $cuti->jenis_cuti)->first();
 
                 if($temp)
                 { 
-                    $user_cuti                  = new \App\UserCuti();
+                    $user_cuti                  = new UserCuti();
                     $user_cuti->kuota           = $temp->kuota;
                     $user_cuti->user_id         = $cuti->user_id;
                     $user_cuti->cuti_id         = $cuti->jenis_cuti;
@@ -124,7 +128,7 @@ class ApprovalCutiController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\CutiKaryawan::where('id', $id)->first();
+        $params['data'] = CutiKaryawan::where('id', $id)->first();
 
         return view('karyawan.approval-cuti.detail')->with($params);
     }

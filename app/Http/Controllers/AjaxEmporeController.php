@@ -7,7 +7,8 @@ use App\ModelUser;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Input;
-
+use App\Models\EmporeOrganisasiManager;
+use App\Models\EmporeOrganisasiStaff;
 
 class AjaxEmporeController extends Controller
 {
@@ -47,7 +48,7 @@ class AjaxEmporeController extends Controller
 
         if($request->ajax())
         {
-            $data = \App\EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $request->id)->get();
+            $data = EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $request->id)->get();
             
             $params['data'] = $data;  
         }   
@@ -67,7 +68,7 @@ class AjaxEmporeController extends Controller
 
         if($request->ajax())
         {
-            $data = \App\EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $request->id)->get();
+            $data = EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $request->id)->get();
             
             $params['data'] = $data;  
         }   

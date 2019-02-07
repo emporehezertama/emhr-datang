@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\LiburNasional;
 
 class LiburNasionalController extends Controller
 {
@@ -24,7 +25,7 @@ class LiburNasionalController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\LiburNasional::orderBy('id', 'DESC')->get();
+        $params['data'] = LiburNasional::orderBy('id', 'DESC')->get();
 
         return view('administrator.libur-nasional.index')->with($params);
     }
@@ -57,7 +58,7 @@ class LiburNasionalController extends Controller
                 {
                     if($item[2] == "") continue;
                     
-                    $data  = new \App\LiburNasional();
+                    $data  = new LiburNasional();
                     $data->tanggal = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[2]);
                     $data->keterangan = $item[3];
                     $data->save();
@@ -84,7 +85,7 @@ class LiburNasionalController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\LiburNasional::where('id', $id)->first();
+        $params['data']         = LiburNasional::where('id', $id)->first();
 
         return view('administrator.libur-nasional.edit')->with($params);
     }
@@ -96,7 +97,7 @@ class LiburNasionalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data               = \App\LiburNasional::where('id', $id)->first();
+        $data               = LiburNasional::where('id', $id)->first();
         $data->tanggal      = $request->tanggal; 
         $data->keterangan   = $request->keterangan;
         $data->save();
@@ -111,7 +112,7 @@ class LiburNasionalController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\LiburNasional::where('id', $id)->first();
+        $data = LiburNasional::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.libur-nasional.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -124,9 +125,9 @@ class LiburNasionalController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\LiburNasional();
-        $data->tanggal             = $request->tanggal;
-        $data->keterangan      = $request->keterangan;
+        $data                   = new LiburNasional();
+        $data->tanggal          = $request->tanggal;
+        $data->keterangan       = $request->keterangan;
         $data->save();
 
         return redirect()->route('administrator.libur-nasional.index')->with('message-success', 'Data berhasil disimpan !');

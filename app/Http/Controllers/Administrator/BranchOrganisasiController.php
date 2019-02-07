@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\BranchHead;
 
 class BranchOrganisasiController extends Controller
 {
@@ -24,7 +25,7 @@ class BranchOrganisasiController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\BranchHead::orderBy('id', 'DESC')->get();
+        $params['data'] = BranchHead::orderBy('id', 'DESC')->get();
 
         return view('administrator.branch-organisasi.index')->with($params);
     }
@@ -54,7 +55,7 @@ class BranchOrganisasiController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\BranchHead::where('id', $id)->first();
+        $params['data']         = BranchHead::where('id', $id)->first();
 
         return view('administrator.branch-organisasi.edit')->with($params);
     }
@@ -66,7 +67,7 @@ class BranchOrganisasiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data               = \App\BranchHead::where('id', $id)->first();
+        $data               = BranchHead::where('id', $id)->first();
         $data->name         = $request->name;         
         $data->save();
 
@@ -80,7 +81,7 @@ class BranchOrganisasiController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\BranchHead::where('id', $id)->first();
+        $data = BranchHead::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.branch-organisasi.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -93,7 +94,7 @@ class BranchOrganisasiController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\BranchHead();
+        $data       = new BranchHead();
         $data->name             = $request->name;
         $data->save();
 

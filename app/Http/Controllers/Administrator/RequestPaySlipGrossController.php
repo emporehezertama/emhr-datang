@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RequestPaySlipGross;
+use App\Models\RequestPaySlipGrossItem;
 
 class RequestPaySlipGrossController extends Controller
 {
@@ -24,7 +26,7 @@ class RequestPaySlipGrossController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\RequestPaySlipGross::orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlipGross::orderBy('id', 'DESC')->get();
 
         return view('administrator.request-pay-slipgross.index')->with($params);
     }
@@ -36,9 +38,9 @@ class RequestPaySlipGrossController extends Controller
      */
     public function proses($id)
     {
-        $params['datamaster'] = \App\RequestPaySlipGross::where('id', $id)->first();
-        $params['data'] = \App\RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->first();
-        $params['dataArray'] = \App\RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->get();
+        $params['datamaster']   = RequestPaySlipGross::where('id', $id)->first();
+        $params['data']         = RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->first();
+        $params['dataArray']    = RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->get();
 
         return view('administrator.request-pay-slipgross.proses')->with($params);
     }
@@ -51,9 +53,9 @@ class RequestPaySlipGrossController extends Controller
      */
     public function submit(Request $request, $id)
     {
-        $data = \App\RequestPaySlipGross::where('id', $id)->first();
+        $data = RequestPaySlipGross::where('id', $id)->first();
 
-        $bulanItem = \App\RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->get();
+        $bulanItem = RequestPaySlipGrossItem::where('request_pay_slipgross_id', $id)->get();
         $bulan = [];
         $total = 0;
         $dataArray = [];

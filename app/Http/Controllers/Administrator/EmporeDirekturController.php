@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\EmporeOrganisasiDirektur;
 
 class EmporeDirekturController extends Controller
 {
@@ -24,7 +25,7 @@ class EmporeDirekturController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\EmporeOrganisasiDirektur::orderBy('id', 'DESC')->get();
+        $params['data'] = EmporeOrganisasiDirektur::orderBy('id', 'DESC')->get();
 
         return view('administrator.empore-direktur.index')->with($params);
     }
@@ -45,7 +46,7 @@ class EmporeDirekturController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\EmporeOrganisasiDirektur::where('id', $id)->first();
+        $params['data']         = EmporeOrganisasiDirektur::where('id', $id)->first();
 
         return view('administrator.empore-direktur.edit')->with($params);
     }
@@ -57,7 +58,7 @@ class EmporeDirekturController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data           = \App\EmporeOrganisasiDirektur::where('id', $id)->first();
+        $data           = EmporeOrganisasiDirektur::where('id', $id)->first();
         $data->name     = $request->name;
         $data->save();
 
@@ -71,7 +72,7 @@ class EmporeDirekturController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\EmporeOrganisasiDirektur::where('id', $id)->first();
+        $data = EmporeOrganisasiDirektur::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.empore-direktur.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -84,7 +85,7 @@ class EmporeDirekturController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\EmporeOrganisasiDirektur();
+        $data       = new EmporeOrganisasiDirektur();
         $data->name                         = $request->name;
         $data->save();
 

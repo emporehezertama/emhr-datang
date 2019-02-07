@@ -4,7 +4,12 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\ExitInterview;
+use App\Models\ExitInterview;
+use App\Models\ExitClearanceDocument;
+use App\Models\ExitClearanceInventoryHrd;
+use App\Models\ExitClearanceInventoryGa;
+use App\Models\ExitClearanceInventoryIt;
+use App\Models\ExitInterviewAssets;
 
 class ExitInterviewController extends Controller
 {
@@ -48,11 +53,11 @@ class ExitInterviewController extends Controller
      */
     public function detail($id)
     {
-        $params['data'] = \App\ExitInterview::where('id', $id)->first();
-        $params['list_exit_clearance_document'] = \App\ExitClearanceDocument::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_hrd'] = \App\ExitClearanceInventoryHrd::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_ga'] = \App\ExitClearanceInventoryGa::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_it'] = \App\ExitClearanceInventoryIt::where('exit_interview_id', $id)->get();
+        $params['data']                             = ExitInterview::where('id', $id)->first();
+        $params['list_exit_clearance_document']     = ExitClearanceDocument::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_hrd'] = ExitClearanceInventoryHrd::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_ga'] = ExitClearanceInventoryGa::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_it'] = ExitClearanceInventoryIt::where('exit_interview_id', $id)->get();
 
         return view('karyawan.exit-interview.detail')->with($params);
     }
@@ -150,7 +155,7 @@ class ExitInterviewController extends Controller
         // DOCUMENT LIST
         foreach(list_exit_clearance_document() as $i)
         {
-            $doc = new \App\ExitClearanceDocument();
+            $doc = new ExitClearanceDocument();
             $doc->exit_interview_id     = $data->id;
             $doc->name                  = $i['item'];
             $doc->form_no               = $i['form_no'];   
@@ -160,7 +165,7 @@ class ExitInterviewController extends Controller
         // INVENTORY RETURN HRD
         foreach(list_exit_clearance_inventory_to_hrd() as $i)
         {
-            $doc = new \App\ExitClearanceInventoryHrd();
+            $doc = new ExitClearanceInventoryHrd();
             $doc->exit_interview_id     = $data->id;
             $doc->name                  = $i['item'];
             $doc->save();
@@ -169,7 +174,7 @@ class ExitInterviewController extends Controller
         // INVENTORY RETURN GA
         foreach(list_exit_clearance_inventory_to_ga() as $i)
         {
-            $doc = new \App\ExitClearanceInventoryGa();
+            $doc = new ExitClearanceInventoryGa();
             $doc->exit_interview_id     = $data->id;
             $doc->name                  = $i['item'];
             $doc->save();
@@ -178,7 +183,7 @@ class ExitInterviewController extends Controller
         // INVENTORY RETURN GA
         foreach(list_exit_clearance_inventory_to_it() as $i)
         {
-            $doc = new \App\ExitClearanceInventoryIt();
+            $doc = new ExitClearanceInventoryIt();
             $doc->exit_interview_id     = $data->id;
             $doc->name                  = $i['item'];
             $doc->save();
@@ -189,7 +194,7 @@ class ExitInterviewController extends Controller
         {
             foreach($request->assets as $item)
             {
-                $new                        = new \App\ExitInterviewAssets();
+                $new                        = new ExitInterviewAssets();
                 $new->asset_id    = $item;
                 $new->exit_interview_id     = $data->id; 
                 $new->save();

@@ -3,18 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\ModelUser;
+use App\Models\ModelUser;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Input;
-use App\Directorate;
-use App\Division;
-use App\Department;
-use App\Section;
-use App\Provinsi;
-use App\Kabupaten;
-use App\Kecamatan;
-use App\Kelurahan;
+use App\Models\Directorate;
+use App\Models\Division;
+use App\Models\Department;
+use App\Models\Section;
+use App\Models\Provinsi;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
+use App\Models\UserInventarisMobil;
+use App\Models\UserInventaris;
+use App\Models\UserCuti;
+use App\Models\UserEducation;
+use App\Models\UserFamily;
+use App\Models\PayrollOthers;
+use App\Models\PayrollPtkp;
+use App\Models\Payroll;
+use App\Models\PayrollNet;
+use App\Models\PayrollGross;
+use App\Models\Airports;
+use App\Models\MedicalReimbursement;
+use App\Models\OvertimeSheet;
+use App\Models\PaymentRequest;
+use App\Models\StatusApproval;
+use App\Models\CutiKaryawan;
+use App\Models\ExitInterview;
+use App\Models\Training;
+use App\Models\SettingApproval;
+use App\Models\BranchHead;
+use App\Models\BranchStaff;
+use App\Models\EmporeOrganisasiDirektur;
+use App\Models\EmporeOrganisasiManager;
+use App\Models\EmporeOrganisasiStaff;
 use App\User;
 
 class AjaxController extends Controller
@@ -107,7 +131,7 @@ class AjaxController extends Controller
         
         if($request->ajax())
         {
-            $data = \App\UserInventarisMobil::where('id', $request->id)->first();
+            $data = UserInventarisMobil::where('id', $request->id)->first();
             $data->tipe_mobil           = $request->tipe_mobil;
             $data->tahun                = $request->tahun;
             $data->no_polisi            = $request->no_polisi;
@@ -131,7 +155,7 @@ class AjaxController extends Controller
         
         if($request->ajax())
         {
-            $data = \App\UserInventaris::where('id', $request->id)->first();
+            $data = UserInventaris::where('id', $request->id)->first();
             $data->jenis            = $request->jenis;
             $data->description      = $request->description;
             $data->save();
@@ -153,7 +177,7 @@ class AjaxController extends Controller
         
         if($request->ajax())
         {
-            $data = \App\UserCuti::where('id', $request->id)->first();
+            $data = UserCuti::where('id', $request->id)->first();
             $data->cuti_id          = $request->cuti_id;
             $data->kuota            = $request->kuota;
             $data->cuti_terpakai    = $request->terpakai;
@@ -177,7 +201,7 @@ class AjaxController extends Controller
         
         if($request->ajax())
         {
-            $data = \App\UserEducation::where('id', $request->id)->first();
+            $data = UserEducation::where('id', $request->id)->first();
             $data->pendidikan       = $request->pendidikan;
             $data->tahun_awal       = $request->tahun_awal;
             $data->tahun_akhir      = $request->tahun_akhir;
@@ -204,7 +228,7 @@ class AjaxController extends Controller
         
         if($request->ajax())
         {
-            $data = \App\UserFamily::where('id', $request->id)->first();
+            $data = UserFamily::where('id', $request->id)->first();
             $data->nama             = $request->nama;
             $data->hubungan         = $request->hubungan;
             $data->tempat_lahir     = $request->tempat_lahir;
@@ -233,7 +257,7 @@ class AjaxController extends Controller
         {
             //$params = \App\Payroll::select(\DB::raw('month(created_at) as bulan'))->whereYear('created_at', '=', $request->tahun)->where('user_id', $request->user_id)->get();
 
-            $params = \App\User::select(\DB::raw('month(join_date) as bulan'))->whereYear('join_date', '=', $request->tahun)->where('id', $request->user_id)->first();
+            $params = User::select(\DB::raw('month(join_date) as bulan'))->whereYear('join_date', '=', $request->tahun)->where('id', $request->user_id)->first();
 
             $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
             
@@ -251,10 +275,10 @@ class AjaxController extends Controller
    
     public function getCalculatePayroll(Request $request)
     {
-        $biaya_jabatan  = \App\PayrollOthers::where('id', 1)->first()->value;
-        $upah_minimum   = \App\PayrollOthers::where('id', 2)->first()->value;
-        $bpjs_pensiunan_batas = \App\PayrollOthers::where('id', 3)->first()->value;
-        $bpjs_kesehatan_batas = \App\PayrollOthers::where('id', 4)->first()->value;
+        $biaya_jabatan  = PayrollOthers::where('id', 1)->first()->value;
+        $upah_minimum   = PayrollOthers::where('id', 2)->first()->value;
+        $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
+        $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
         
         $params = [];
         if($request->ajax())
@@ -333,7 +357,7 @@ class AjaxController extends Controller
 
             $untaxable_income = 0;
 
-            $ptkp = \App\PayrollPtkp::where('id', 1)->first();
+            $ptkp = PayrollPtkp::where('id', 1)->first();
             if($request->marital_status == 'Bujangan/Wanita' || $request->marital_status == "")
             {
                 $untaxable_income = $ptkp->bujangan_wanita;
@@ -442,10 +466,10 @@ class AjaxController extends Controller
 
     public function getCalculatePayrollNet(Request $request)
     {
-        $biaya_jabatan = \App\PayrollOthers::where('id', 1)->first()->value;
-        $upah_minimum = \App\PayrollOthers::where('id', 2)->first()->value;
-        $bpjs_pensiunan_batas = \App\PayrollOthers::where('id', 3)->first()->value;
-        $bpjs_kesehatan_batas = \App\PayrollOthers::where('id', 4)->first()->value;
+        $biaya_jabatan = PayrollOthers::where('id', 1)->first()->value;
+        $upah_minimum = PayrollOthers::where('id', 2)->first()->value;
+        $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
+        $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
         
         $params = [];
         if($request->ajax())
@@ -533,7 +557,7 @@ class AjaxController extends Controller
 
             $untaxable_income = 0;
 
-            $ptkp = \App\PayrollPtkp::where('id', 1)->first();
+            $ptkp = PayrollPtkp::where('id', 1)->first();
             if($request->marital_status == 'Bujangan/Wanita' || $request->marital_status == "")
             {
                 $untaxable_income = $ptkp->bujangan_wanita;
@@ -625,10 +649,10 @@ class AjaxController extends Controller
 
 public function getCalculatePayrollGross(Request $request)
     {
-        $biaya_jabatan  = \App\PayrollOthers::where('id', 1)->first()->value;
-        $upah_minimum   = \App\PayrollOthers::where('id', 2)->first()->value;
-        $bpjs_pensiunan_batas = \App\PayrollOthers::where('id', 3)->first()->value;
-        $bpjs_kesehatan_batas = \App\PayrollOthers::where('id', 4)->first()->value;
+        $biaya_jabatan  = PayrollOthers::where('id', 1)->first()->value;
+        $upah_minimum   = PayrollOthers::where('id', 2)->first()->value;
+        $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
+        $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
         
         $params = [];
         if($request->ajax())
@@ -707,7 +731,7 @@ public function getCalculatePayrollGross(Request $request)
 
             $untaxable_income = 0;
 
-            $ptkp = \App\PayrollPtkp::where('id', 1)->first();
+            $ptkp = PayrollPtkp::where('id', 1)->first();
             if($request->marital_status == 'Bujangan/Wanita' || $request->marital_status == "")
             {
                 $untaxable_income = $ptkp->bujangan_wanita;
@@ -823,7 +847,7 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-                $data =  \App\User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+                $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
 
                 $params = [];
                 foreach($data as $k => $item)
@@ -848,12 +872,12 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-            $data =  \App\User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
 
             $karyawan = [];
             foreach($data as $k => $i)
             {
-                $payroll = \App\Payroll::where('user_id', $i->id)->first();
+                $payroll = Payroll::where('user_id', $i->id)->first();
                 // existing user payroll skip
                 if($payroll) continue;
 
@@ -872,12 +896,12 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-            $data =  \App\User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            $data =  \User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
 
             $karyawan = [];
             foreach($data as $k => $i)
             {
-                $payroll = \App\PayrollNet::where('user_id', $i->id)->first();
+                $payroll = PayrollNet::where('user_id', $i->id)->first();
                 // existing user payroll skip
                 if($payroll) continue;
 
@@ -896,12 +920,12 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-            $data =  \App\User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
 
             $karyawan = [];
             foreach($data as $k => $i)
             {
-                $payroll = \App\PayrollGross::where('user_id', $i->id)->first();
+                $payroll = PayrollGross::where('user_id', $i->id)->first();
                 // existing user payroll skip
                 if($payroll) continue;
 
@@ -926,7 +950,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             if(strlen($request->word) >=3 ) 
             { 
-                $data =  \App\Airports::where('name', 'LIKE', "%". $request->word . "%")->orWhere('cityName', 'LIKE', '%'. $request->word .'%')->orWhere('countryName', 'LIKE', '%'. strtoupper($request->word) .'%')->groupBy('code')->get();
+                $data =  Airports::where('name', 'LIKE', "%". $request->word . "%")->orWhere('cityName', 'LIKE', '%'. $request->word .'%')->orWhere('countryName', 'LIKE', '%'. strtoupper($request->word) .'%')->groupBy('code')->get();
 
                 $params = [];
                 foreach($data as $k => $item)
@@ -952,7 +976,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\MedicalReimbursement::where('id', $request->foreign_id)->first();
+            $data = MedicalReimbursement::where('id', $request->foreign_id)->first();
 
             $data->jenis_karyawan = strtolower(jabatan_level_user($data->user_id));
 
@@ -982,7 +1006,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\OvertimeSheet::where('id', $request->foreign_id)->first();
+            $data = OvertimeSheet::where('id', $request->foreign_id)->first();
 
             $data->jenis_karyawan = strtolower(jabatan_level_user($data->user_id));
 
@@ -1012,7 +1036,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\PaymentRequest::where('id', $request->foreign_id)->first();
+            $data = PaymentRequest::where('id', $request->foreign_id)->first();
             $data->jenis_karyawan = strtolower(jabatan_level_user($data->user_id));
 
             if(isset($data->atasan->name))
@@ -1039,7 +1063,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\StatusApproval::where('jenis_form', $request->jenis_form)->where('foreign_id', $request->foreign_id)->get();
+            $data = StatusApproval::where('jenis_form', $request->jenis_form)->where('foreign_id', $request->foreign_id)->get();
 
             $obj = [];
             foreach($data as $key => $item)
@@ -1063,10 +1087,10 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\CutiKaryawan::where('id', $request->foreign_id)->first();
+            $data = CutiKaryawan::where('id', $request->foreign_id)->first();
 
-            $atasan = \App\User::where('id', $data->approved_atasan_id)->first();
-            $direktur = \App\User::where('id', $data->approve_direktur_id)->first();
+            $atasan = User::where('id', $data->approved_atasan_id)->first();
+            $direktur = User::where('id', $data->approve_direktur_id)->first();
             
             $data->atasan = "";
             $data->jenis_karyawan = strtolower(jabatan_level_user($data->user_id));
@@ -1097,7 +1121,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\ExitInterview::where('id', $request->foreign_id)->first();
+            $data = ExitInterview::where('id', $request->foreign_id)->first();
             $data->jenis_karyawan = strtolower(jabatan_level_user($data->user_id));
 
             if(isset($data->atasan->name))
@@ -1126,9 +1150,9 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\Training::where('id', $request->foreign_id)->first();
-            $atasan = \App\User::where('id', $data->approved_atasan_id)->first();
-            $direktur = \App\User::where('id', $data->approve_direktur_id)->first();
+            $data       = Training::where('id', $request->foreign_id)->first();
+            $atasan     = User::where('id', $data->approved_atasan_id)->first();
+            $direktur   = User::where('id', $data->approve_direktur_id)->first();
 
             $data->atasan = "";
 
@@ -1159,9 +1183,9 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data = \App\Training::where('id', $request->foreign_id)->first();
-            $atasan = \App\User::where('id', $data->approved_atasan_id)->first();
-            $direktur = \App\User::where('id', $data->approve_direktur_id)->first();
+            $data       = Training::where('id', $request->foreign_id)->first();
+            $atasan     = User::where('id', $data->approved_atasan_id)->first();
+            $direktur   = User::where('id', $data->approve_direktur_id)->first();
             
             $data->atasan = "";
 
@@ -1199,7 +1223,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'training_mengetahui';
             $data->user_id      = $request->id;
             $data->nama_approval= 'GA Department';
@@ -1221,7 +1245,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'overtime';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Manager Department';
@@ -1243,7 +1267,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit_clearance';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HRD';
@@ -1265,7 +1289,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit_clearance';
             $data->user_id      = $request->id;
             $data->nama_approval= 'GA';
@@ -1287,7 +1311,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit_clearance';
             $data->user_id      = $request->id;
             $data->nama_approval= 'IT';
@@ -1309,7 +1333,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit_clearance';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Accounting';
@@ -1331,7 +1355,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'training';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HRD';
@@ -1353,7 +1377,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'training';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Finance';
@@ -1375,7 +1399,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'overtime';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HR Operation';
@@ -1397,7 +1421,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HR Director';
@@ -1419,7 +1443,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HR GM';
@@ -1441,7 +1465,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'exit';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HR Manager';
@@ -1463,7 +1487,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'overtime';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Manager HR';
@@ -1485,7 +1509,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'medical';
             $data->user_id      = $request->id;
             $data->nama_approval= 'GM HR';
@@ -1507,7 +1531,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'medical';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Manager HR';
@@ -1529,7 +1553,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'medical';
             $data->user_id      = $request->id;
             $data->nama_approval= 'HR Benefit';
@@ -1551,7 +1575,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\UserInvetarisMobil();
+            $data               = new UserInvetarisMobil();
             $data->user_id      = $request->user_id;
             $data->tipe_mobil   = $request->tipe_mobil;
             $data->tahun        = $request->tahun;
@@ -1574,7 +1598,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'payment_request';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Approval';
@@ -1598,7 +1622,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'payment_request';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Verification';
@@ -1622,7 +1646,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'payment_request';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Payment';
@@ -1645,7 +1669,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'cuti';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Personalia';
@@ -1668,7 +1692,7 @@ public function getCalculatePayrollGross(Request $request)
     {
         if($request->ajax())
         {
-            $data               = new \App\SettingApproval();
+            $data               = new SettingApproval();
             $data->jenis_form   = 'cuti';
             $data->user_id      = $request->id;
             $data->nama_approval= 'Atasan';
@@ -1696,7 +1720,7 @@ public function getCalculatePayrollGross(Request $request)
             $data->department_name  = isset($data->department) ? $data->department->name : '';
             $data->cabang_name      = isset($data->cabang->name) ? $data->cabang->name : '';
 
-            $data->dependent =  \App\UserFamily::where('user_id', $data->id)->get();
+            $data->dependent    = UserFamily::where('user_id', $data->id)->get();
             $data->jabatan      = empore_jabatan($request->id);
 
             return response()->json(['message' => 'success', 'data' => $data]);
@@ -1810,13 +1834,13 @@ public function getCalculatePayrollGross(Request $request)
      */
     public function getStructureBranch()
     {
-        foreach(\App\BranchHead::all() as $k => $item)
+        foreach(BranchHead::all() as $k => $item)
         {
             $data[$k]['name'] = 'Head';
             $data[$k]['title'] = $item->name;
             $data[$k]['children'] = [];
 
-            foreach(\App\BranchStaff::where('branch_head_id', $item->id)->get() as $k2 => $i2)
+            foreach(BranchStaff::where('branch_head_id', $item->id)->get() as $k2 => $i2)
             {
                 $data[$k]['children'][$k2]['title'] = $i2->name;
                 $data[$k]['children'][$k2]['name'] = 'Staff';
@@ -1830,51 +1854,11 @@ public function getCalculatePayrollGross(Request $request)
      * [getStructure description]
      * @return [type] [description]
      */
-    // public function getStructure()
-    // {
-    //     $data = [];
-
-    //     $directorate = Directorate::all();
-    //     foreach($directorate as $key_dir => $dir)
-    //     {
-    //         $data[$key_dir]['name'] = 'Directorate';
-    //         $data[$key_dir]['title'] = $dir->name;
-    //         $data[$key_dir]['children'] = [];
-
-    //         $num_key_div = 0;
-    //         foreach(get_division_by_directorate_id($dir->id) as $key_div => $div)
-    //         {
-    //             $data[$key_dir]['children'][$key_div]['name'] = 'Division';
-    //             $data[$key_dir]['children'][$key_div]['title'] = $div->name;
-
-    //             foreach(get_department_by_division_id($div->id) as $key_dept => $dept)
-    //             {
-    //                 $data[$key_dir]['children'][$key_div]['children'][$key_dept]['name'] = 'Division';
-    //                 $data[$key_dir]['children'][$key_div]['children'][$key_dept]['title'] = $div->name;
-
-    //                 foreach(get_section_by_department_id($dept->id) as $key_sec => $sec)
-    //                 {
-    //                     $data[$key_dir]['children'][$key_div]['children'][$key_dept]['children'][$key_sec]['name'] = 'Section';
-    //                     $data[$key_dir]['children'][$key_div]['children'][$key_dept]['children'][$key_sec]['title'] = $sec->name;
-    //                 } 
-    //             }
-    //             $num_key_div++;
-    //         }
-    //     }
-
-    //     return response()->json($data);
-    // } 
-
-
-    /**
-     * [getStructure description]
-     * @return [type] [description]
-     */
     public function getStructure()
     {
         $data = [];
 
-        $directorate = \App\EmporeOrganisasiDirektur::all();
+        $directorate = EmporeOrganisasiDirektur::all();
         foreach($directorate as $key_dir => $dir)
         {
             $data['name'] = 'Director';
@@ -1882,12 +1866,12 @@ public function getCalculatePayrollGross(Request $request)
             $data['children'] = [];
 
             $num_key_div = 0;
-            foreach(\App\EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $dir->id)->get() as $key_div => $div)
+            foreach(EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $dir->id)->get() as $key_div => $div)
             {
                 $data['children'][$key_div]['name'] = 'Manager';
                 $data['children'][$key_div]['title'] = $div->name;
 
-                foreach(\App\EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $div->id)->get() as $key_dept => $dept)
+                foreach(EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $div->id)->get() as $key_dept => $dept)
                 {
                     $data['children'][$key_div]['children'][$key_dept]['name'] = 'Staff';
                     $data['children'][$key_div]['children'][$key_dept]['title'] = $dept->name;

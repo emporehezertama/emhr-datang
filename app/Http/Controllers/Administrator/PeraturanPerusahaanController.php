@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PeraturanPerusahaan;
 
 class PeraturanPerusahaanController extends Controller
 {
@@ -14,7 +15,7 @@ class PeraturanPerusahaanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\PeraturanPerusahaan::orderBy('id', 'DESC')->get();
+        $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
 
         return view('administrator.peraturan-perusahaan.index')->with($params);
     }
@@ -35,7 +36,7 @@ class PeraturanPerusahaanController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\PeraturanPerusahaan::where('id', $id)->first();
+        $params['data'] = PeraturanPerusahaan::where('id', $id)->first();
 
         return view('administrator.peraturan-perusahaan.edit')->with($params);
     }
@@ -47,7 +48,7 @@ class PeraturanPerusahaanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                   = \App\PeraturanPerusahaan::where('id', $id)->first();
+        $data                   = PeraturanPerusahaan::where('id', $id)->first();
         $data->title            = $request->title;
         
         if (request()->hasFile('file'))
@@ -73,7 +74,7 @@ class PeraturanPerusahaanController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\PeraturanPerusahaan::where('id', $id)->first();
+        $data = PeraturanPerusahaan::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -86,7 +87,7 @@ class PeraturanPerusahaanController extends Controller
      */
     public function store(Request $request)
     {
-        $data                   = new \App\PeraturanPerusahaan();
+        $data                   = new PeraturanPerusahaan();
         $data->title            = $request->title;
 
         if (request()->hasFile('file'))

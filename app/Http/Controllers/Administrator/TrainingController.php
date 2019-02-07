@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Training;
+use App\Models\StatusApproval;
+use App\Models\SettingApproval;
 
 class TrainingController extends Controller
 {
@@ -24,8 +27,8 @@ class TrainingController extends Controller
      */
     public function index()
     {
-        $data       =  \App\Training::orderBy('id', 'DESC')->select('training.*')->join('users', 'users.id', '=', 'training.user_id');
-        $params['data_biaya'] = \App\Training::where('is_approve_atasan_actual_bill', 1)->where('status_actual_bill', 2)->orderBy('id', 'DESC')->get();
+        $data                   = Training::orderBy('id', 'DESC')->select('training.*')->join('users', 'users.id', '=', 'training.user_id');
+        $params['data_biaya']   = Training::where('is_approve_atasan_actual_bill', 1)->where('status_actual_bill', 2)->orderBy('id', 'DESC')->get();
 
         if(request())
         {
@@ -70,7 +73,7 @@ class TrainingController extends Controller
      */
     public function batal(Request $request)
     {   
-        $data       = \App\Training::where('id', $request->id)->first();
+        $data       = Training::where('id', $request->id)->first();
         $data->status = 4;
         $data->note_pembatalan = $request->note;
         $data->save(); 
@@ -84,7 +87,7 @@ class TrainingController extends Controller
      */
     public function prosesBiaya(Request $request)
     {
-        $data = \App\Training::where('id', $request->id)->first();
+        $data = Training::where('id', $request->id)->first();
 
         $data->transportasi_ticket_disetujui    = $request->transportasi_ticket_disetujui;
         $data->transportasi_ticket_catatan      = $request->transportasi_ticket_catatan;
@@ -138,7 +141,7 @@ class TrainingController extends Controller
      */
     public function biaya($id)
     {
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('administrator.training.biaya')->with($params);
     }
@@ -150,7 +153,7 @@ class TrainingController extends Controller
      */
     public function proses(Request $request)
     {
-        $status = new \App\StatusApproval;
+        $status = new StatusApproval;
         $status->approval_user_id       = \Auth::user()->id;
         $status->jenis_form             = 'training';
         $status->foreign_id             = $request->id;
@@ -159,7 +162,7 @@ class TrainingController extends Controller
         $status->save();    
 
         $status = $request->status;
-        $training = \App\Training::where('id', $request->id)->first();
+        $training = Training::where('id', $request->id)->first();
 
         $training->approved_hrd = $status;
         $training->approved_hrd_id = \Auth::user()->id;
@@ -186,7 +189,7 @@ class TrainingController extends Controller
         }
 
         // cek user yang mengetahui
-        $mengetahui = \App\SettingApproval::where('jenis_form', 'training_mengetahui')->get(); 
+        $mengetahui = SettingApproval::where('jenis_form', 'training_mengetahui')->get(); 
         foreach($mengetahui as $item)
         {
             //\Mail::to($item->user->email)->send(new \App\Mail\GeneralMail($objDemo));
@@ -207,7 +210,7 @@ class TrainingController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\Training::where('id', $id)->first();
+        $params['data'] = Training::where('id', $id)->first();
 
         return view('administrator.training.detail')->with($params);
     }

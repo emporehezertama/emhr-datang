@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\RequestPaySlip;
+use App\Model\RequestPaySlipItem;
 
 class RequestPaySlipController extends Controller
 {
@@ -24,7 +26,7 @@ class RequestPaySlipController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\RequestPaySlip::orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->get();
 
         return view('administrator.request-pay-slip.index')->with($params);
     }
@@ -36,9 +38,9 @@ class RequestPaySlipController extends Controller
      */
     public function proses($id)
     {
-        $params['datamaster'] = \App\RequestPaySlip::where('id', $id)->first();
-        $params['data'] = \App\RequestPaySlipItem::where('request_pay_slip_id', $id)->first();
-        $params['dataArray'] = \App\RequestPaySlipItem::where('request_pay_slip_id', $id)->get();
+        $params['datamaster']   = RequestPaySlip::where('id', $id)->first();
+        $params['data']         = RequestPaySlipItem::where('request_pay_slip_id', $id)->first();
+        $params['dataArray']    = RequestPaySlipItem::where('request_pay_slip_id', $id)->get();
 
         return view('administrator.request-pay-slip.proses')->with($params);
     }
@@ -51,9 +53,9 @@ class RequestPaySlipController extends Controller
      */
     public function submit(Request $request, $id)
     {
-        $data = \App\RequestPaySlip::where('id', $id)->first();
+        $data = RequestPaySlip::where('id', $id)->first();
 
-        $bulanItem = \App\RequestPaySlipItem::where('request_pay_slip_id', $id)->get();
+        $bulanItem = RequestPaySlipItem::where('request_pay_slip_id', $id)->get();
         $bulan = [];
         $total = 0;
         $dataArray = [];

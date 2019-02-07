@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrganisasiPosition;
+use App\Models\OrganisasiDirectorate;
+use App\Models\OrganisasiDivision;
+use App\Models\OrganisasiDepartment;
+use App\Models\OrganisasiUnit;
 
 class PositionController extends Controller
 {
@@ -24,7 +29,7 @@ class PositionController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OrganisasiPosition::orderBy('id', 'DESC')->get();
+        $params['data'] = OrganisasiPosition::orderBy('id', 'DESC')->get();
 
         return view('administrator.position.index')->with($params);
     }
@@ -35,10 +40,10 @@ class PositionController extends Controller
      */
     public function create()
     {   
-        $params['directorate']  = \App\OrganisasiDirectorate::all();
-        $params['division']     = \App\OrganisasiDivision::all();
-        $params['department']   = \App\OrganisasiDepartment::all();
-        $params['unit']   = \App\OrganisasiUnit::all();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['division']     = OrganisasiDivision::all();
+        $params['department']   = OrganisasiDepartment::all();
+        $params['unit']         = OrganisasiUnit::all();
 
         return view('administrator.position.create')->with($params);
     }
@@ -50,11 +55,11 @@ class PositionController extends Controller
      */
     public function edit($id)
     {
-        $params['directorate']  = \App\OrganisasiDirectorate::all();
-        $params['division']     = \App\OrganisasiDivision::all();
-        $params['department']   = \App\OrganisasiDepartment::all();
-        $params['unit']         = \App\OrganisasiUnit::all();
-        $params['data']         = \App\OrganisasiPosition::where('id', $id)->first();
+        $params['directorate']  = OrganisasiDirectorate::all();
+        $params['division']     = OrganisasiDivision::all();
+        $params['department']   = OrganisasiDepartment::all();
+        $params['unit']         = OrganisasiUnit::all();
+        $params['data']         = OrganisasiPosition::where('id', $id)->first();
 
         return view('administrator.position.edit')->with($params);
     }
@@ -66,12 +71,12 @@ class PositionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data       = \App\OrganisasiPosition::where('id', $id)->first();
-        $data->directorate_id           = $request->directorate_id; 
-        $data->division_id              = $request->division_id;
-        $data->department_id            = $request->department_id;
-        $data->organisasi_unit_id       = $request->unit_id;
-        $data->name                     = $request->name;
+        $data       = OrganisasiPosition::where('id', $id)->first();
+        $data->organisasi_directorate_id            = $request->directorate_id; 
+        $data->organisasi_division_id               = $request->division_id;
+        $data->organisasi_department_id             = $request->department_id;
+        $data->organisasi_organisasi_unit_id        = $request->unit_id;
+        $data->name                                 = $request->name;
         $data->save();
 
         return redirect()->route('administrator.position.index')->with('message-success', 'Data berhasil disimpan');
@@ -84,7 +89,7 @@ class PositionController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\OrganisasiPosition::where('id', $id)->first();
+        $data = OrganisasiPosition::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.position.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -97,7 +102,7 @@ class PositionController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\OrganisasiPosition();
+        $data       = new OrganisasiPosition();
         $data->organisasi_division_id       = $request->division_id;
         $data->organisasi_department_id     = $request->department_id;
         $data->organisasi_unit_id           = $request->unit_id;

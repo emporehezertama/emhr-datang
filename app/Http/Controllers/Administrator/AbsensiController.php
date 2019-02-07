@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AbsensiItemTemp;
+use App\Models\AbsensiItem;
+use App\Models\User;
 
 class AbsensiController extends Controller
 {   
@@ -28,7 +31,7 @@ class AbsensiController extends Controller
      */
     public function importAll()
     {
-        $data = \App\AbsensiItemTemp::all();
+        $data = AbsensiItemTemp::all();
 
         $absensi                    = new \App\Absensi();
         $absensi->tanggal_upload    = date('Y-m-d');
@@ -36,9 +39,9 @@ class AbsensiController extends Controller
 
         foreach ($data as $k => $v) 
         {
-            $temp       = new \App\AbsensiItem();
+            $temp       = new AbsensiItem();
 
-            $user       = \App\User::where('employee_number', $v->emp_no)->where('absensi_number', $v->ac_no)->first();
+            $user       = User::where('employee_number', $v->emp_no)->where('absensi_number', $v->ac_no)->first();
             
             if($user) $temp->user_id = $user->id;
 
@@ -75,7 +78,7 @@ class AbsensiController extends Controller
             $temp->save();
         }
 
-        \App\AbsensiItemTemp::truncate();
+        AbsensiItemTemp::truncate();
 
         return redirect()->route('administrator.absensi.index')->with('message-success', 'Data absen berhasil di import');
     }
@@ -96,7 +99,7 @@ class AbsensiController extends Controller
      */
     public function deleteNew($id)
     {
-        \App\AbsensiItem::where('id', $id)->first()->delete();
+        AbsensiItem::where('id', $id)->first()->delete();
 
         return redirect()->route()->with('messages-success', 'Data berhasil dihapus');
     }
@@ -108,7 +111,7 @@ class AbsensiController extends Controller
      */
     public function deleteOld($id)
     {
-        \App\AbsensiItem::where('id', $id)->first()->delete();
+        AbsensiItem::where('id', $id)->first()->delete();
 
         return redirect()->route()->with('messages-success', 'Data berhasil dihapus');
     }
@@ -141,15 +144,15 @@ class AbsensiController extends Controller
             }
 
             // delete all table temp
-            \App\AbsensiItemTemp::truncate();
+            AbsensiItemTemp::truncate();
             foreach($rows as $key => $row)
             {
             	if($key ==0) continue;
 
-            	$temp 				= new \App\AbsensiItemTemp();
+            	$temp 				= new AbsensiItemTemp();
 
             	// cek absensi yang sama dengan no karyawa dan tanggal yang sama
-            	$absensiCek = \App\AbsensiItem::where('emp_no', $row[0])->where('date', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]))->first();
+            	$absensiCek = AbsensiItem::where('emp_no', $row[0])->where('date', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]))->first();
             	
             	if($absensiCek) $temp->absensi_item_id = $absensiCek->id;
 
@@ -195,7 +198,7 @@ class AbsensiController extends Controller
      */
     public function previewTemp()
     {
-    	$params['data'] = \App\AbsensiItemTemp::all();
+    	$params['data'] = AbsensiItemTemp::all();
 
     	return view('administrator.absensi.preview-temp')->with($params);
     }

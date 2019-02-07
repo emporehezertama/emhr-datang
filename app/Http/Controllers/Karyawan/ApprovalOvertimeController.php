@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OvertimeSheet;
+use App\Models\SettingApproval;
 
 class ApprovalOvertimeController extends Controller
 {
@@ -24,7 +26,7 @@ class ApprovalOvertimeController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OvertimeSheet::where('approve_direktur_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = OvertimeSheet::where('approve_direktur_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-overtime.index')->with($params);
     }
@@ -36,7 +38,7 @@ class ApprovalOvertimeController extends Controller
      */
     public function proses(Request $request)
     {
-        $overtime = \App\OvertimeSheet::where('id', $request->id)->first();
+        $overtime = OvertimeSheet::where('id', $request->id)->first();
         $overtime->approve_direktur = $request->status;
         $overtime->approve_direktur_date = date('Y-m-d H:i:s');
         
@@ -79,8 +81,8 @@ class ApprovalOvertimeController extends Controller
      */
     public function detail($id)
     {   
-        $params['data']         = \App\OvertimeSheet::where('id', $id)->first();
-        $params['approval']     = \App\SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','overtime')->first();
+        $params['data']         = OvertimeSheet::where('id', $id)->first();
+        $params['approval']     = SettingApproval::where('user_id', \Auth::user()->id)->where('jenis_form','overtime')->first();
 
         return view('karyawan.approval-overtime.detail')->with($params);
     }

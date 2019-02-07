@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CutiBersama;
+use App\Models\UserCuti;
+use App\Models\CutiBersamaHistoryKaryawan;
 
 class CutiBersamaController extends Controller
 {
@@ -24,7 +27,7 @@ class CutiBersamaController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\CutiBersama::orderBy('id', 'DESC')->get();
+        $params['data'] = CutiBersama::orderBy('id', 'DESC')->get();
 
         return view('administrator.cuti-bersama.index')->with($params);
     }
@@ -45,7 +48,7 @@ class CutiBersamaController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\CutiBersama::where('id', $id)->first();
+        $params['data']         = CutiBersama::where('id', $id)->first();
 
         return view('administrator.cuti-bersama.edit')->with($params);
     }
@@ -56,7 +59,7 @@ class CutiBersamaController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\CutiBersama::where('id', $id)->first();
+        $data = CutiBersama::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.cuti-bersama.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -69,23 +72,23 @@ class CutiBersamaController extends Controller
      */
     public function store(Request $request)
     {
-        $data                   = new \App\CutiBersama();
+        $data                   = new CutiBersama();
         $data->dari_tanggal     = $request->dari_tanggal;
         $data->sampai_tanggal   = $request->sampai_tanggal;
         $data->total_cuti       = $request->total_cuti;
         $data->save();
 
         // minus cuti bersama semua karyawan
-        $cuti_karyawan = \App\UserCuti::where('cuti_id', 1)->get();
+        $cuti_karyawan = UserCuti::where('cuti_id', 1)->get();
         foreach($cuti_karyawan as $item)
         {
             // update cuti karyawan
-             $cuti          = \App\UserCuti::where('id', $item->id)->first();
+             $cuti          = UserCuti::where('id', $item->id)->first();
              $cuti->kuota   = $item->kuota - $request->total_cuti;
              $cuti->save();
 
              // save history karyawan
-             $history                       = new \App\CutiBersamaHistoryKaryawan();
+             $history                       = new CutiBersamaHistoryKaryawan();
              $history->user_id              = $item->user_id;
              $history->cuti_bersama_id      = $data->id;
              $history->cuti_bersama_old     = $item->kuota;

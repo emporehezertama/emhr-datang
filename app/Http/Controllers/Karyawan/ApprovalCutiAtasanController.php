@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CutiKaryawan;
 
 class ApprovalCutiAtasanController extends Controller
 {
@@ -24,7 +25,7 @@ class ApprovalCutiAtasanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-cuti-atasan.index')->with($params);
     }
@@ -36,7 +37,7 @@ class ApprovalCutiAtasanController extends Controller
      */
     public function proses(Request $request)
     {
-        $cuti                           = \App\CutiKaryawan::where('id', $request->id)->first();
+        $cuti                           = CutiKaryawan::where('id', $request->id)->first();
         $cuti->is_approved_atasan       = $request->status;
         $cuti->catatan_atasan           = $request->noted;
         $cuti->date_approved_atasan     = date('Y-m-d H:i:s');
@@ -82,7 +83,7 @@ class ApprovalCutiAtasanController extends Controller
      */
     public function detail($id)
     {   
-        $params['data'] = \App\CutiKaryawan::where('id', $id)->first();
+        $params['data'] = CutiKaryawan::where('id', $id)->first();
 
         return view('karyawan.approval-cuti-atasan.detail')->with($params);
     }

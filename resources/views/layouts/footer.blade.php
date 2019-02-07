@@ -1,1 +1,1 @@
-<footer class="footer text-center"> <?=date('Y')?> &copy; PT. Empore Hezer Tama </footer>
+<footer class="footer text-center"> {{ get_setting('footer_description') }} Design By <a href="https://www.empore.co.id/" title="PT. Empore Hezer Tama" target="_blank">PT. Empore Hezer Tama</a> </footer>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RequestPaySlip;
+use App\Models\RequestPaySlipItem;
 
 class RequestPaySlipController extends Controller
 {
@@ -24,7 +26,7 @@ class RequestPaySlipController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\RequestPaySlip::where('user_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlip::where('user_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.request-pay-slip.index')->with($params);
     }
@@ -45,8 +47,8 @@ class RequestPaySlipController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\RequestPaySlipItem::where('request_pay_slip_id', $id)->first();
-        $params['dataArray'] = \App\RequestPaySlipItem::where('request_pay_slip_id', $id)->get();
+        $params['data']         = RequestPaySlipItem::where('request_pay_slip_id', $id)->first();
+        $params['dataArray']    = RequestPaySlipItem::where('request_pay_slip_id', $id)->get();
 
         return view('karyawan.request-pay-slip.edit')->with($params);
     }
@@ -58,7 +60,7 @@ class RequestPaySlipController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\RequestPaySlip::where('id', $id)->first();
+        $data = RequestPaySlip::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('karyawan.request-pay-slip.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -74,14 +76,14 @@ class RequestPaySlipController extends Controller
         if(is_null($request->bulan)){
              return redirect()->route('karyawan.request-pay-slip.create')->with('message-error', 'Your request not completed. Please fill year and month!');
         } else{           
-            $data                       = new \App\RequestPaySlip();
+            $data                       = new RequestPaySlip();
             $data->user_id              = \Auth::user()->id;
             $data->status               = 1;   
             $data->save();
 
             foreach($request->bulan as $key => $i)
             {   
-                $item               = new \App\RequestPaySlipItem();
+                $item               = new RequestPaySlipItem();
                 $item->tahun        = $request->tahun;
                 $item->request_pay_slip_id = $data->id;
                 $item->bulan        = $i;

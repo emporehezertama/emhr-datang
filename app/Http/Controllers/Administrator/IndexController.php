@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use DB;
-use App\Directorate;
+use App\Models\Directorate;
 
 class IndexController extends Controller
 {
@@ -17,7 +16,7 @@ class IndexController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        #$this->middleware('auth');
     }
 
     /**

@@ -8,7 +8,7 @@
         <li class="devider"></li>
         <li>
             <a href="{{ route('administrator.karyawan.index') }}">
-                <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Employee<span class="fa arrow"></span></span>
+                <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">@lang('menu.employee')<span class="fa arrow"></span></span>
             </a>
         </li>
         <li class="mega-nav">
@@ -17,17 +17,17 @@
             </a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Leave / Permit</span>
+                    <a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Payment Request</span></a>
+                    <a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a>
+                    <a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.medical_reimbursement')</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Overtime Sheet </span></a>
+                    <a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a>
                 </li>
                 <li>
                     <a href="{{ route('administrator.exit-interview.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance </span>
@@ -51,7 +51,7 @@
 
         <li>
             <a href="{{ route('administrator.structure') }}" class="waves-effect">
-                <i class="mdi mdi-account-network fa-fw"></i> <span class="hide-menu">Organization Structure<span class="fa arrow"></span></span>
+                <i class="mdi mdi-account-network fa-fw"></i> <span class="hide-menu">@lang('menu.organization_structure')<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
                 <li>
@@ -65,10 +65,9 @@
                 </li>
             </ul>
         </li>
-        
         <li class="mega-nav">
             <a href="{{ route('administrator.setting.index') }}" class="waves-effect">
-                <i class="mdi mdi-settings fa-fw"></i> <span class="hide-menu">Setting</span>
+                <i class="mdi mdi-settings fa-fw"></i> <span class="hide-menu">@lang('menu.setting')</span>
             </a>
         </li>
         <li>

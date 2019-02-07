@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Karyawan;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ExitInterview;
+use App\Models\ExitClearanceDocument;
+use App\Models\ExitClearanceInventoryHrd;
+use App\Models\ExitClearanceInventoryGa;
+use App\Models\ExitInterviewAssets;
+use App\Models\ExitClearanceInventoryIt;
 
 class ApprovalExitAtasanController extends Controller
 {
@@ -24,7 +30,7 @@ class ApprovalExitAtasanController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\ExitInterview::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $params['data'] = ExitInterview::where('approved_atasan_id', \Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         return view('karyawan.approval-exit-atasan.index')->with($params);
     }
@@ -36,7 +42,7 @@ class ApprovalExitAtasanController extends Controller
      */
     public function proses(Request $request)
     {
-        $exit                           = \App\ExitInterview::where('id', $request->id)->first();
+        $exit                           = ExitInterview::where('id', $request->id)->first();
 
         if($request->action == 'proses')
         {
@@ -72,7 +78,7 @@ class ApprovalExitAtasanController extends Controller
             {
                 if(!empty($item))
                 {
-                    $doc = \App\ExitClearanceDocument::where('id', $k)->first();
+                    $doc = ExitClearanceDocument::where('id', $k)->first();
 
                     if($doc->hrd_checked == 0)
                     {
@@ -92,7 +98,7 @@ class ApprovalExitAtasanController extends Controller
             {
                 if(!empty($item))
                 {
-                    $doc = \App\ExitClearanceInventoryHrd::where('id', $k)->first();
+                    $doc = ExitClearanceInventoryHrd::where('id', $k)->first();
                     
                     if($doc->hrd_checked == 0)
                     {
@@ -112,7 +118,7 @@ class ApprovalExitAtasanController extends Controller
             {
                 if(!empty($item))
                 {
-                    $doc = \App\ExitClearanceInventoryGa::where('id', $k)->first();
+                    $doc = ExitClearanceInventoryGa::where('id', $k)->first();
                     
                     if($doc->ga_checked == 0)
                     {
@@ -130,7 +136,7 @@ class ApprovalExitAtasanController extends Controller
         {
             foreach($request->asset as $item)
             {
-                $asset          = \App\ExitInterviewAssets::where('id', $item)->first();
+                $asset          = ExitInterviewAssets::where('id', $item)->first();
                 $asset->status  = $request->check_asset[$item];
                 $asset->catatan = $request->catatan_asset[$item];
                 $asset->save();
@@ -147,11 +153,11 @@ class ApprovalExitAtasanController extends Controller
      */
     public function detail($id)
     {   
-        $params['data']                                 = \App\ExitInterview::where('id', $id)->first();
-        $params['list_exit_clearance_document']         = \App\ExitClearanceDocument::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_hrd'] = \App\ExitClearanceInventoryHrd::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_ga']  = \App\ExitClearanceInventoryGa::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_it']  = \App\ExitClearanceInventoryIt::where('exit_interview_id', $id)->get();
+        $params['data']                                 = ExitInterview::where('id', $id)->first();
+        $params['list_exit_clearance_document']         = ExitClearanceDocument::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_hrd'] = ExitClearanceInventoryHrd::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_ga']  = ExitClearanceInventoryGa::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_it']  = ExitClearanceInventoryIt::where('exit_interview_id', $id)->get();
 
         return view('karyawan.approval-exit-atasan.detail')->with($params);
     }

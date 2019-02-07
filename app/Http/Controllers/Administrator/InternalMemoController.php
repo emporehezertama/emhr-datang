@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\InternalMemo;
 
 class InternalMemoController extends Controller
 {
@@ -14,7 +15,7 @@ class InternalMemoController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\InternalMemo::orderBy('id', 'DESC')->get();
+        $params['data'] = InternalMemo::orderBy('id', 'DESC')->get();
 
         return view('administrator.internal-memo.index')->with($params);
     }
@@ -35,7 +36,7 @@ class InternalMemoController extends Controller
      */
     public function edit($id)
     {
-        $params['data'] = \App\InternalMemo::where('id', $id)->first();
+        $params['data'] = InternalMemo::where('id', $id)->first();
 
         return view('administrator.internal-memo.edit')->with($params);
     }
@@ -47,7 +48,7 @@ class InternalMemoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                   = \App\InternalMemo::where('id', $id)->first();
+        $data                   = InternalMemo::where('id', $id)->first();
         $data->title            = $request->title;
         
         if (request()->hasFile('file'))
@@ -73,7 +74,7 @@ class InternalMemoController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\InternalMemo::where('id', $id)->first();
+        $data = InternalMemo::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.internal-memo.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -86,7 +87,7 @@ class InternalMemoController extends Controller
      */
     public function store(Request $request)
     {
-        $data                   = new \App\InternalMemo();
+        $data                   = new InternalMemo();
         $data->title            = $request->title;
 
         if (request()->hasFile('file'))

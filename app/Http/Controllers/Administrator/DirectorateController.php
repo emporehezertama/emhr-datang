@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrganisasiDirectorate;
 
 class DirectorateController extends Controller
 {
@@ -24,7 +25,7 @@ class DirectorateController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\OrganisasiDirectorate::all();
+        $params['data'] = OrganisasiDirectorate::all();
 
         return view('administrator.directorate.index')->with($params);
     }
@@ -55,7 +56,7 @@ class DirectorateController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\OrganisasiDirectorate::where('id', $id)->first();
+        $data = OrganisasiDirectorate::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.directorate.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -68,7 +69,7 @@ class DirectorateController extends Controller
      */
     public function store(Request $request)
     {
-        $data       = new \App\OrganisasiDirectorate();
+        $data       = new OrganisasiDirectorate();
         $data->name         = $request->name;
         $data->save();
 

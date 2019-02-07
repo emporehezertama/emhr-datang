@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\ExitInterview;
+use App\Models\ExitInterview;
+use App\Models\ExitClearanceDocument;
+use App\Models\ExitClearanceInventoryHrd;
+use App\Models\ExitClearanceInventoryGa;
+use App\Models\ExitClearanceInventoryIt;
 
 class ExitInterviewController extends Controller
 {
@@ -147,10 +151,10 @@ class ExitInterviewController extends Controller
         $approval->user_id = \Auth::user()->id;
         $params['approval'] = $approval;
 
-        $params['list_exit_clearance_document'] = \App\ExitClearanceDocument::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_hrd'] = \App\ExitClearanceInventoryHrd::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_ga'] = \App\ExitClearanceInventoryGa::where('exit_interview_id', $id)->get();
-        $params['list_exit_clearance_inventory_to_it'] = \App\ExitClearanceInventoryIt::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_document']             = ExitClearanceDocument::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_hrd']     = ExitClearanceInventoryHrd::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_ga']      = ExitClearanceInventoryGa::where('exit_interview_id', $id)->get();
+        $params['list_exit_clearance_inventory_to_it']      = ExitClearanceInventoryIt::where('exit_interview_id', $id)->get();
 
         return view('administrator.exit-interview.detail')->with($params);
     }
@@ -168,7 +172,7 @@ class ExitInterviewController extends Controller
             {
                 if(!empty($item))
                 {
-                    $doc = \App\ExitClearanceDocument::where('id', $k)->first();
+                    $doc = ExitClearanceDocument::where('id', $k)->first();
 
                     if($doc->hrd_checked == 0)
                     {
@@ -188,7 +192,7 @@ class ExitInterviewController extends Controller
             {
                 if(!empty($item))
                 {
-                    $doc = \App\ExitClearanceInventoryHrd::where('id', $k)->first();
+                    $doc = ExitClearanceInventoryHrd::where('id', $k)->first();
                     
                     if($doc->hrd_checked == 0)
                     {
@@ -202,7 +206,7 @@ class ExitInterviewController extends Controller
             }
         }
 
-        $exit = \App\ExitInterview::where('id', $request->id)->first();
+        $exit = ExitInterview::where('id', $request->id)->first();
 
         if($exit)
         {

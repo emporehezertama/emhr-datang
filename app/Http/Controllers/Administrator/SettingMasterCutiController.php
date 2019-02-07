@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Cuti;
 
 class SettingMasterCutiController extends Controller
 {
@@ -24,7 +25,7 @@ class SettingMasterCutiController extends Controller
      */
     public function index()
     {
-        $params['data'] = \App\Cuti::orderBy('id', 'DESC')->get();
+        $params['data'] = Cuti::orderBy('id', 'DESC')->get();
 
         return view('administrator.setting-master-cuti.index')->with($params);
     }
@@ -45,7 +46,7 @@ class SettingMasterCutiController extends Controller
      */
     public function edit($id)
     {
-        $params['data']         = \App\Cuti::where('id', $id)->first();
+        $params['data']         = Cuti::where('id', $id)->first();
 
         return view('administrator.setting-master-cuti.edit')->with($params);
     }
@@ -57,7 +58,7 @@ class SettingMasterCutiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                   = \App\Cuti::where('id', $id)->first();
+        $data                   = Cuti::where('id', $id)->first();
         $data->jenis_cuti       = $request->jenis_cuti; 
         $data->kuota            = $request->kuota;
         $data->save();
@@ -72,7 +73,7 @@ class SettingMasterCutiController extends Controller
      */
     public function delete($id)
     {
-        $data = \App\Cuti::where('id', $id)->first();
+        $data = Cuti::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.setting-master-cuti.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -85,7 +86,7 @@ class SettingMasterCutiController extends Controller
      */
     public function destroy($id)
     {
-        $data = \App\Cuti::where('id', $id)->first();
+        $data = Cuti::where('id', $id)->first();
         $data->delete();
 
         return redirect()->route('administrator.setting-master-cuti.index')->with('message-sucess', 'Data berhasi di hapus');
@@ -98,7 +99,7 @@ class SettingMasterCutiController extends Controller
      */
     public function store(Request $request)
     {
-        $data               = new \App\Cuti();
+        $data               = new Cuti();
         $data->jenis_cuti   = $request->jenis_cuti;
         $data->kuota        = $request->kuota;
         $data->save();

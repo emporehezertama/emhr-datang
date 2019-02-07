@@ -2,12 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="logo.gif" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="../plugins/images/favicon.png">
+    
+    @if(get_setting('favicon') != "")
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ get_setting('favicon') }}">
+    @endif
+
     <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap Core CSS -->
@@ -65,6 +68,16 @@
             background: #eaeaea;
             border-top: 5px solid red;
         }
+        @if(get_setting('header_color') !="")
+            .navbar-header {
+                background: {{ get_setting('header_color')  }};
+            }
+        @endif
+        @if(get_setting('menu_color') != "")
+            #side-menu > li > a.active {
+                background: {{ get_setting('menu_color')  }};
+            }
+        @endif
     </style>
 </head>
 
@@ -91,12 +104,11 @@
                 <div class="top-left-part">
                     <!-- Logo -->
                     <a class="logo" href="{{ route('administrator.dashboard') }}">
-                        <!-- <b>
-                            <img src="{{ asset('empore.png') }}" style="width: 132px;" class="light-logo">
-                        </b> -->
+                        @if(get_setting('logo') != "")
                         <span class="hidden-xs">
-                            <img src="{{ asset('empore.png') }}" style="width: 132px;" class="light-logo">
+                            <img src="{{ get_setting('logo') }}" style="width: 132px;" class="light-logo">
                         </span>
+                        @endif
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -814,7 +826,10 @@
 
     </script>
 
+    @yield('js')
+
     @yield('footer-script')
+
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     {{ csrf_field() }}
 </form>
