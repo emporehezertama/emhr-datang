@@ -71,6 +71,7 @@
         @if(get_setting('header_color') !="")
             .navbar-header {
                 background: {{ get_setting('header_color')  }};
+                border-top: 5px solid {{ get_setting('menu_color')  }};
             }
         @endif
         @if(get_setting('menu_color') != "")
@@ -106,7 +107,7 @@
                     <a class="logo" href="{{ route('administrator.dashboard') }}">
                         @if(get_setting('logo') != "")
                         <span class="hidden-xs">
-                            <img src="{{ get_setting('logo') }}" style="width: 132px;" class="light-logo">
+                            <img src="{{ get_setting('logo') }}" style="height: 40px;" class="light-logo">
                         </span>
                         @endif
                     </a>
@@ -128,6 +129,9 @@
                                         <h4 style="color:black;">{{ Auth::user()->name }}</h4>
                                     </div>
                                 </div>
+                            </li>
+                            <li>
+                                <a href="{{ route('administrator.profile') }}">@lang('menu.profile')</a>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" onclick="event.preventDefault();

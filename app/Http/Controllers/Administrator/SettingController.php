@@ -18,7 +18,58 @@ class SettingController extends Controller
 
         return view('administrator.setting.index')->with($params);
     }
+
+    /**
+     * Setting Email
+     * @return view
+     */
+    public function email()
+    {
+        return view('administrator.setting.email');
+    }
     
+    /**
+     * Email Save
+     * @param  Request $request
+     * @return void
+     */
+    public function emailSave(Request $request)
+    {
+        if($request->setting)
+        {
+            foreach($request->setting as $key => $value)
+            {
+                $setting = Setting::where('key', $key)->first();
+                if(!$setting)
+                {
+                    $setting = new Setting();
+                    $setting->key = $key;
+                }
+                $setting->value = $value;
+                $setting->save();
+            }
+        }
+
+        return redirect()->route('administrator.setting.email')->with('message-success', 'Setting saved');
+    }
+
+    /**
+     * Email Test Send
+     * @param  Request $request
+     */
+    public function emailTestSend(Request $request)
+    {
+        \Mail::send('email.blank', ['data' => $request->test_message],
+            function($message) use($request) {
+                $message->from(get_setting('mail_address'));
+                $message->to($request->to);
+                $message->subject($request->subject);
+            }
+        );
+        
+        return redirect()->route('administrator.setting.email')->with('message-success', 'Email berhasil dikirim');
+    }
+
     /**
      * [create description]
      * @return [type] [description]

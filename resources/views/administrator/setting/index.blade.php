@@ -11,13 +11,11 @@
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
                 <button type="button" class="btn btn-info" onclick="form_setting.submit()"><i class="fa fa-save"></i> Save Setting</button>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
             <form class="form-horizontal" id="form-setting" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.save') }}" method="POST">
                 {{ csrf_field() }}
-                <div class="col-md-6">
+                <div class="col-md-6 p-l-0 p-r-0">
                     <div class="white-box">
                         <div class="form-group">
                             <label class="col-md-12">Website Title</label>
@@ -54,12 +52,11 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 p-r-0">
                     <div class="white-box">
                        <div class="form-group">
                             <label class="col-md-6">Header Color</label>
@@ -109,27 +106,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!--
-                <div class="col-md-6">
-                    <div class="white-box">
-                        <h3 class="box-title">Cuti</h3>
-                        <div class="form-group">
-                            <label class="col-md-12">Cuti</label>
-                            <div class="col-md-12">
-                                <input type="text" name="setting[cuti]" class="form-control" value="{{ get_setting('cuti') }}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-12">Cuti</label>
-                            <div class="col-md-12">
-                                <input type="text" name="setting[cuti]" class="form-control" value="{{ get_setting('cuti') }}">
-                            </div>
-                        </div>
-                    </div>
-                </div> 
-                -->
-
             </form>                   
         </div>
     </div>
@@ -172,6 +148,7 @@
             $(".menu_color").val(this.color);
 
             this.element.css({'backgroundColor': this.color, 'color': this.color});
+            $('.navbar-header').css("border-top", '5px solid '+ this.color );
         }
     });
 
@@ -179,13 +156,15 @@
     $(".header_color").on("input",function(){
         var warna  = $(this).val();
 
-        $('.navbar-header').css({ backgroundColor: warna });
+        $('.navbar-header').css({ backgroundColor: warna});
     });
 
     $(".menu_color").on("input",function(){
         var warna  = $(this).val();
 
         $('#side-menu > li > a.active').css("background-color",  warna);
+        $('.navbar-header').css("border-top", '5px solid '+ warna );
+
     });
 </script>
 @endsection

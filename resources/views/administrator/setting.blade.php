@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 pt-1">
+            <div class="col-md-12 pt-1 p-l-0 p-r-0">
                 <div class="white-box">
                     <div>
                         <div class="col-md-2">
@@ -65,7 +65,7 @@
                             <a href="{{ route('administrator.program-studi.index') }}"><i class="mdi mdi-library-books fa-fw"></i><span class="hide-menu">Major</span></a>
                         </div>
                         <div class="col-md-2">
-                            <a href="{{ route('administrator.profile') }}"><i class="mdi mdi-account fa-fw"></i><span class="hide-menu">Profile Administrator</span></a>
+                            <a href="{{ route('administrator.setting.email') }}"><i class="mdi mdi-email fa-fw"></i><span class="hide-menu">Email</span></a>
                         </div>
                         <div class="clearfix"></div><br />
                     </div>
