@@ -51,8 +51,8 @@
 <!-- ============================================================== -->
 </div>
 @section('footer-script')
-    <link href="{{ asset('orgchart/jquery.orgchart.css') }}" rel="stylesheet">
-    <script src="{{ asset('orgchart/jquery.orgchart.js') }}"></script>
+    <link href="{{ asset('admin-css/js/orgchart/jquery.orgchart.css') }}" rel="stylesheet">
+    <script src="{{ asset('admin-css/js/orgchart/jquery.orgchart.js') }}"></script>
     <style type="text/css">
         .orgchart{
             background: white
