@@ -75,16 +75,16 @@ function structure_custom()
 
 	foreach($structure as $key => $item)
 	{
-		if($item->parent_navigation_id != 0) continue;
+		if($item->parent_id != 0) continue;
 
 		$sub_menu = get_sub_structure($item->id);
 
-		$object['title'] =  'Directure';
-		$object['name'] =  $item->name;
+		$object[$key]['title'] =  'Directure';
+		$object[$key]['name'] =  $item->name;
 
 	  	if(count($sub_menu) > 0)
 	  	{
-	  		$object['children'][$key]  = structure_ul_form_sub_menu($sub_menu, []);	
+	  		$object[$key]['children']  = structure_ul_form_sub_menu($sub_menu, []);	
 	  	}
 	}
 
@@ -102,8 +102,8 @@ function structure_ul_form_sub_menu($object, $data)
 	{
 	  	$sub_menu = get_sub_structure($item->id);
 	  	
-	  	$data['title'] 	= $item->name;
-	  	$data['name'] 	= $item->name;
+	  	$data[$key]['title'] 	= $item->name .' title';
+	  	$data[$key]['name'] 	= $item->name;
 
 	  	// if(count($sub_menu) > 0)
 	  	// {

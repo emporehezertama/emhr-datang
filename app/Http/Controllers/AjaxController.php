@@ -1861,20 +1861,20 @@ public function getCalculatePayrollGross(Request $request)
         $directorate = EmporeOrganisasiDirektur::all();
         foreach($directorate as $key_dir => $dir)
         {
-            $data['name'] = 'Director';
-            $data['title'] = $dir->name;
-            $data['children'] = [];
+            $data[$key_dir]['name'] = 'Director';
+            $data[$key_dir]['title'] = $dir->name;
+            $data[$key_dir]['children'] = [];
 
             $num_key_div = 0;
             foreach(EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $dir->id)->get() as $key_div => $div)
             {
-                $data['children'][$key_div]['name'] = 'Manager';
-                $data['children'][$key_div]['title'] = $div->name;
+                $data[$key_dir]['children'][$key_div]['name'] = 'Manager';
+                $data[$key_dir]['children'][$key_div]['title'] = $div->name;
 
                 foreach(EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $div->id)->get() as $key_dept => $dept)
                 {
-                    $data['children'][$key_div]['children'][$key_dept]['name'] = 'Staff';
-                    $data['children'][$key_div]['children'][$key_dept]['title'] = $dept->name;
+                    $data[$key_dir]['children'][$key_div]['children'][$key_dept]['name'] = 'Staff';
+                    $data[$key_dir]['children'][$key_div]['children'][$key_dept]['title'] = $dept->name;
                 }
                 
                 $num_key_div++;
@@ -1890,8 +1890,50 @@ public function getCalculatePayrollGross(Request $request)
      */
     public function getStructureCustome()
     {
-        $data = structure_custom();
+        $all = \App\Models\StructureOrganizationCustom::all();
+        $data = [];
+
+        foreach ($all as $key => $item) 
+        {
+            $data[$key]['id']       = $item->id;
+            $data[$key]['name']     = $item->name;
+            //$data[$key]['description']= 'this description';
+            $data[$key]['parent']   = (int)$item->parent_id;
+        }
 
         return json_encode($data);
     } 
+
+
+    /**
+     * Store
+     * @param  Request $request
+     */
+    public function structureCustomeAdd(Request $request)
+    {
+        $data               = new \App\Models\StructureOrganizationCustom();
+        $data->parent_id    = $request->parent_id;
+        $data->name         = $request->name;
+        $data->save();
+
+        return json_encode(['message' => 'success']);
+    }
+
+    /**
+     * Delete
+     * @param  $id
+     */
+    public function structureCustomeDelete(Request $request)
+    {
+        $data = \App\Models\StructureOrganizationCustom::where('id', $request->id)->first();
+        $data->delete();
+
+        $data = \App\Models\StructureOrganizationCustom::where('parent_id', $request->id);
+        if($data)
+        {
+            $data->delete();            
+        }
+
+        return json_encode(['message' => 'success']);
+    }
 }

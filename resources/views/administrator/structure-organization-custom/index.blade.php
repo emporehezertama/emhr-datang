@@ -2,17 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-  
-        
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -25,84 +15,118 @@
                     <li class="active">Organization Structure</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
-        <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
-                <div class="white-box" style="overflow: scroll;">
-                    <div id="chart-container">
-                    </div>
+            <div class="col-md-12 p-l-0 p-r-0">
+                <div class="white-box">
+                    <div id="orgChart" style="overflow: scroll;"></div>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </div>
-
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
-</div>
+
 @section('footer-script')
-    <link href="{{ asset('orgchart/jquery.orgchart.css') }}" rel="stylesheet">
-    <script src="{{ asset('orgchart/jquery.orgchart.js') }}"></script>
-    <style type="text/css">
-        .orgchart{
-            background: white
-        }
-        .orgchart td.left, .orgchart td.right, .orgchart td.top { border-color: #aaa; }
-        .orgchart td>.down { background-color: #aaa; }
-        .orgchart .middle-level .title { background-color: #006699; }
-        .orgchart .middle-level .content { border-color: #006699; }
-        .orgchart .product-dept .title { background-color: #009933; }
-        .orgchart .product-dept .content { border-color: #009933; }
-        .orgchart .rd-dept .title { background-color: #993366; }
-        .orgchart .rd-dept .content { border-color: #993366; }
-        .orgchart .pipeline1 .title { background-color: #996633; }
-        .orgchart .pipeline1 .content { border-color: #996633; }
-        .orgchart .frontend1 .title { background-color: #cc0066; }
-        .orgchart .frontend1 .content { border-color: #cc0066; }
-    </style>
-    <script type="text/javascript">
+<div id="modal_structure_organization" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="title_structure_organization"></h4> </div>
+                <form method="POST" class="form-horizontal" action="{{ route('administrator.organization-structure-custom.store') }}">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <input type="hidden" name="parent_id" class="form-control" />
+                        <div class="form-group">
+                            <label class="col-md-3">Name</label>
+                            <div class="col-md-9">
+                                <input type="text" name="name" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-save"></i> Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="{{ asset('admin-css/js/jquery.orgchart/jquerysctipttop.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('admin-css/js/jquery.orgchart/jquery.orgchart.css') }}" media="all" rel="stylesheet" type="text/css" />
+<script src="{{ asset('admin-css/js/jquery.orgchart/jquery.orgchart.js') }}?v={{ date('YmdHis') }}"></script>
+<script type="text/javascript">
+
+    function confirm_delete_structure(id, org_chart)
+    {
+        bootbox.confirm({
+            title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+            message: 'Delete Structure ?',
+            closeButton: false,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn btn-sm btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+              if(result)
+              { 
+                 $.ajax({
+                    type: 'POST',
+                    url: '{{ route('ajax.structure-custome-delete') }}',
+                    data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    success: function (data) {
+                         org_chart.deleteNode(id);
+                    }
+                });
+              }
+            }
+        });
+    }
+
+    function add_structure(id, title)
+    {
+        $("input[name='parent_id']").val(id);
+        $("#title_structure_organization").html(title);
+
+        $("#modal_structure_organization").modal("show");
+    }
+
+    $(function(){
          $.ajax({
             type: 'GET',
             url: '{{ route('ajax.get-stucture-custome') }}',
             dataType: 'json',
             success: function (data) {
-    //             data = {
-    //  'name': 'Lao Lao',
-    //  'title': 'general manager',
-    //  'children': [
-    //    { 'name': 'Bo Miao', 'title': 'department manager' },
-    //    { 'name': 'Su Miao', 'title': 'department manager',
-    //      'children': [
-    //        { 'name': 'Tie Hua', 'title': 'senior engineer' },
-    //        { 'name': 'Hei Hei', 'title': 'senior engineer',
-    //          'children': [
-    //            { 'name': 'Pang Pang', 'title': 'engineer' },
-    //            { 'name': 'Xiang Xiang', 'title': 'UE engineer' }
-    //          ]
-    //         }
-    //       ]
-    //     },
-    //     { 'name': 'Hong Miao', 'title': 'department manager' },
-    //     { 'name': 'Chun Miao', 'title': 'department manager' }
-    //   ]
-    // };
-                console.log(data);
 
-                $('#chart-container').orgchart({
-                    'data' : data,
-                    'nodeContent': 'title'
-                }); 
+                org_chart = $('#orgChart').orgChart({
+                    data: data,
+                    showControls: true,
+                    allowEdit: true,
+                    newNodeText : 'Add',
+                    onAddNode: function(node){ 
+                        add_structure(node.data.id, node.data.name);
+                    },
+                    onDeleteNode: function(node){
+                        confirm_delete_structure(node.data.id, org_chart);
+                    },
+                    onClickNode: function(node){
+
+                    }
+                });
+               
             }
         })
-
+    });
     </script>
 @endsection
 

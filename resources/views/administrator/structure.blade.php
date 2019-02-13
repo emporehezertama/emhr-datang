@@ -35,27 +35,6 @@
                     <h3 class="box-title m-b-0">Organization Structure</h3>
                     <hr />
                     <div id="chart-container">
-                       <!--  <ul>
-                            @foreach($directorate as $dir)
-                            <li>
-                                <a href="#">{{ $dir->name }}</a>
-                                <ul>
-                                @foreach(get_division_by_directorate_id($dir->id) as $key => $div)
-                                    <li>
-                                        <a href="#">{{ $div->name }}</a>
-                                        <ul>
-                                        @foreach(get_department_by_division_id($div->id) as $dept)
-                                            <li>
-                                                <a href="#">{{ $dept->name }}</a>
-                                            </li>
-                                        @endforeach
-                                        </ul>
-                                    </li>
-                                @endforeach
-                                </ul>
-                            </li>
-                            @endforeach
-                        </ul>  -->
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -98,23 +77,11 @@
             dataType: 'json',
             success: function (data) {
 
-                // var datasource = {
-                //       'name': 'Hiromichi Yabana',
-                //       'title': 'President Director',
-                //       'children': data
-                //     }
-
-                // $('#chart-container').orgchart({
-                //     'data' : datasource,
-                //     'nodeContent': 'title'
-                //   });     
-                //   
-                
-                console.log(data);
-
-                $('#chart-container').orgchart({
-                    'data' : data,
-                    'nodeContent': 'title'
+                $(data).each(function(k,v){
+                    $('#chart-container').orgchart({
+                        'data' : v,
+                        'nodeContent': 'title'
+                    }); 
                 }); 
             }
         })
