@@ -26,16 +26,16 @@
                             <a href="{{ route('administrator.cabang.index') }}"><i class="mdi mdi-office fa-fw"></i><span class="hide-menu">Branch</span></a>
                         </div>
                         <div class="col-md-2">
+                            <a href="{{ route('administrator.provinsi.index') }}"><i class="mdi mdi-google-maps fa-fw"></i><span class="hide-menu">@lang('setting.provinsi')</span></a>
+                        </div>
+                        <div class="col-md-2">
                             <a href="{{ route('administrator.kabupaten.index') }}"><i class="mdi mdi-google-maps fa-fw"></i><span class="hide-menu">District / City</span></a>
                         </div>
                         <div class="col-md-2">
-                            <a href="{{ route('administrator.bank.index') }}"><i class="mdi mdi-bank fa-fw"></i><span class="hide-menu">Bank</span></a>
+                            <a href="{{ route('administrator.kecamatan.index') }}"><i class="mdi mdi-google-maps fa-fw"></i><span class="hide-menu">@lang('setting.kecamatan')</span></a>
                         </div>
                         <div class="col-md-2">
                             <a href="{{ route('administrator.alasan-pengunduran-diri.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Reason for Leaving</span></a>
-                        </div>
-                        <div class="col-md-2">
-                            <a href="{{ route('administrator.setting-master-cuti.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Leave</span></a>
                         </div>
                         <div class="clearfix"></div><hr />
                         <div class="col-md-2">
@@ -51,21 +51,21 @@
                             <a href="{{ route('administrator.plafond-dinas.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Business Trip Allowance</span></a>
                         </div>
                         <div class="col-md-2">
-                            <a href="{{ route('administrator.asset.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Asset</span></a>
-                        </div>
-                        <div class="col-md-2">
-                            <a href="{{ route('administrator.asset-type.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Asset Type</span></a>
-                        </div>
-                        <div class="clearfix"></div>
-                        <hr />
-                        <div class="col-md-2">
                             <a href="{{ route('administrator.universitas.index') }}"><i class="mdi mdi-library-books fa-fw"></i><span class="hide-menu">University</span></a>
                         </div>
                         <div class="col-md-2">
                             <a href="{{ route('administrator.program-studi.index') }}"><i class="mdi mdi-library-books fa-fw"></i><span class="hide-menu">Major</span></a>
                         </div>
+                        <div class="clearfix"></div>
+                        <hr />
                         <div class="col-md-2">
                             <a href="{{ route('administrator.setting.email') }}"><i class="mdi mdi-email fa-fw"></i><span class="hide-menu">Email</span></a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.setting-master-cuti.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Leave</span></a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.bank.index') }}"><i class="mdi mdi-bank fa-fw"></i><span class="hide-menu">Bank</span></a>
                         </div>
                         <div class="clearfix"></div><br />
                     </div>

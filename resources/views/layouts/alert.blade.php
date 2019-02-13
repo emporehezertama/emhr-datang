@@ -1,14 +1,11 @@
-<link href="{{ asset('admin-css/plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet">
-<script src="{{ asset('admin-css/plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
-
 @if(Session::has('message-success'))
 <script type="text/javascript">
-		swal("Success", "{{ Session::get('message-success') }}", "success");
+	_alert("{{ Session::get('message-success') }}");
 </script>
 @endif
 
 @if(Session::has('message-error'))
 <script type="text/javascript">
-	swal("Error!", "{{ Session::get('message-error') }}", "error");
+	_alert("{{ Session::get('message-error') }}");
 </script>
 @endif

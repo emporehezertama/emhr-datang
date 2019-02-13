@@ -163,8 +163,6 @@
         
         @yield('content')
 
-        @include('layouts.alert')
-
     <!-- modal status exit -->
     <div id="modal_status_exit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -790,49 +788,13 @@
             $(this).parents(".myadmin-alert").fadeToggle(350);
             return false;
         });
-
-        $('#data_table_no_copy').DataTable({
-            dom: 'Bfrtip',
-             buttons: []
-        });
-
-        $('#data_table_no_copy2').DataTable({
-            dom: 'Bfrtip',
-             buttons: []
-        });
-
-        $('#data_table_no_copy3').DataTable({
-            dom: 'Bfrtip',
-             buttons: []
-        });
-        
-
-        $('#data_table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-        $('#data_table2').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-        $('#data_table3').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
     </script>
 
-    @yield('js')
+@yield('js')
 
-    @yield('footer-script')
+@yield('footer-script')
+
+@include('layouts.alert')
 
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     {{ csrf_field() }}

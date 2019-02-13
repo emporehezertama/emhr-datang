@@ -1,3 +1,41 @@
+ $('#data_table_no_copy').DataTable({
+    dom: 'Bfrtip',
+     buttons: []
+});
+
+$('#data_table_no_copy2').DataTable({
+    dom: 'Bfrtip',
+     buttons: []
+});
+
+$('#data_table_no_copy3').DataTable({
+    dom: 'Bfrtip',
+     buttons: []
+});
+
+
+$('#data_table').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ],
+    pageLength: 100
+});
+
+$('#data_table2').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ]
+});
+
+$('#data_table3').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ]
+});
+
 /**
  * [numberWithComma description]
  * @param  {[type]} x [description]
@@ -34,6 +72,7 @@ $("#data_table_no_pagging").DataTable({
     ]
 });
 
+/*
 function confirm_delete(msg, el)
 {
     swal({
@@ -63,6 +102,7 @@ function confirm_delete(msg, el)
         }
     });
 }
+*/
 
 function _confirm(msg)
 {
@@ -94,4 +134,65 @@ function _confirm(msg)
     });
 
     return false;
+}
+
+
+
+
+
+/**
+ * [alert_ description]
+ * @param  {[type]} msg [description]
+ * @return {[type]}     [description]
+ */
+function _alert(msg)
+{
+  if(msg == "") return false;
+
+  bootbox.alert({
+    title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+    closeButton: false,
+    message: msg,
+     buttons: {
+        ok: {
+            label: 'OK',
+            className: 'btn btn-sm btn-success'
+        },
+    },
+  })
+}
+
+/**
+ * [_confirm description]
+ * @param  {[type]} msg [description]
+ * @return {[type]}     [description]
+ */
+function confirm_delete(msg, el)
+{
+  if(msg == "") return false;
+
+  bootbox.confirm({
+    title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+    message: msg,
+    closeButton: false,
+    buttons: {
+        confirm: {
+            label: 'Yes',
+            className: 'btn btn-sm btn-success'
+        },
+        cancel: {
+            label: 'No',
+            className: 'btn btn-sm btn-danger'
+        }
+    },
+    callback: function (result) {
+      if(result)
+      { 
+           $(el).parent().submit();
+      }
+      
+    }
+  });
+
+  return false;
 }

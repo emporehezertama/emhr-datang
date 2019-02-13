@@ -1884,4 +1884,14 @@ public function getCalculatePayrollGross(Request $request)
         return response()->json($data);
     } 
 
+    /**
+     * Get structure custom
+     * @return json
+     */
+    public function getStructureCustome()
+    {
+        $data = structure_custom();
+
+        return json_encode($data);
+    } 
 }

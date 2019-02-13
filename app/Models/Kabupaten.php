@@ -8,6 +8,8 @@ class Kabupaten extends Model
 {
     protected $table = 'kabupaten';
 
+    protected $primaryKey = 'id_kab';
+
     /**
      * [provinsi description]
      * @return [type] [description]

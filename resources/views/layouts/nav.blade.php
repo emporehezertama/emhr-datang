@@ -50,6 +50,11 @@
         </li>
 
         <li>
+            @if(get_setting('struktur_organisasi') == 3)
+            <a href="{{ route('administrator.organization-structure-custom.index') }}" class="waves-effect">
+                <i class="mdi mdi-account-network fa-fw"></i> <span class="hide-menu">@lang('menu.organization_structure')<span class="fa arrow"></span></span>
+            </a>
+            @else
             <a href="{{ route('administrator.structure') }}" class="waves-effect">
                 <i class="mdi mdi-account-network fa-fw"></i> <span class="hide-menu">@lang('menu.organization_structure')<span class="fa arrow"></span></span>
             </a>
@@ -64,6 +69,7 @@
                     <a href="{{ route('administrator.empore-staff.index') }}"><i class="mdi mdi-account-network fa-fw"></i><span class="hide-menu">Staff</span></a>
                 </li>
             </ul>
+            @endif
         </li>
         <li class="mega-nav">
             <a href="{{ route('administrator.setting.index') }}" class="waves-effect">
@@ -102,6 +108,22 @@
                 </li>
                 <li>
                     <a href="{{ route('administrator.payroll-setting.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Setting Payroll</span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:void(0)">
+                <i class="mdi mdi-database fa-fw"></i> <span class="hide-menu">Asset Management<span class="fa arrow"></span></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="{{ route('administrator.asset.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.asset-type.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset Type</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.asset-tracking.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset Tracking</span></a>
                 </li>
             </ul>
         </li>

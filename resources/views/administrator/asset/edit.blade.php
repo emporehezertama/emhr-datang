@@ -2,15 +2,7 @@
 
 @section('title', 'List of Asset')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -23,16 +15,12 @@
                     <li class="active">List of Asset</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.asset.update', $data->id) }}" method="POST">
-                <div class="col-md-12">
+                <div class="col-md-12 p-l-0 p-r-0">
                     <input type="hidden" name="_method" value="PUT">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Asset</h3>
-                        <hr />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -164,10 +152,7 @@
                 </div>    
             </form>                    
         </div>
-        <!-- /.row -->
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
 <style type="text/css">
@@ -199,7 +184,4 @@
     });
 </script>
 @endsection
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
 @endsection

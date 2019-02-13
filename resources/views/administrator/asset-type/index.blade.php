@@ -28,7 +28,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
                     <h3 class="box-title m-b-0">Manage List Asset</h3>
                     <br />
