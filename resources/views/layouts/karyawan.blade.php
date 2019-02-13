@@ -49,6 +49,17 @@
             background: #eaeaea;
             border-top: 5px solid red;
         }
+        @if(get_setting('header_color') !="")
+            .navbar-header {
+                background: {{ get_setting('header_color')  }};
+                border-top: 5px solid {{ get_setting('menu_color')  }};
+            }
+        @endif
+        @if(get_setting('menu_color') != "")
+            #side-menu > li > a.active {
+                background: {{ get_setting('menu_color')  }};
+            }
+        @endif
     </style>
 </head>
 
@@ -73,12 +84,11 @@
             <div class="navbar-header">
                 <div class="top-left-part">
                     <a class="logo" href="{{ route('karyawan.dashboard') }}">
-                        <!-- <b>
-                            <img src="{{ asset('empore.png') }}" style="width: 132px;" class="light-logo">
-                        </b> -->
+                        @if(get_setting('logo') != "")
                         <span class="hidden-xs">
-                            <img src="{{ asset('empore.png') }}" style="width: 132px;" class="light-logo">
+                            <img src="{{ get_setting('logo') }}" style="height: 40px;" class="light-logo">
                         </span>
+                        @endif
                     </a>
                 </div>
                 <!-- /Logo -->
