@@ -9,7 +9,9 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Organization Structure</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-
+                @if(countStructureOrganization() < 0)
+                <a href="javascript:void(0)" onclick="add_structure()" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> Add Direktur</a>
+                @endif
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Organization Structure</li>
@@ -57,7 +59,7 @@
 </div>
 
 <link href="{{ asset('admin-css/js/jquery.orgchart/jquerysctipttop.css') }}" rel="stylesheet" type="text/css">
-<link href="{{ asset('admin-css/js/jquery.orgchart/jquery.orgchart.css') }}" media="all" rel="stylesheet" type="text/css" />
+<link href="{{ asset('admin-css/js/jquery.orgchart/jquery.orgchart.css') }}?v={{ date('YmdHis') }}" media="all" rel="stylesheet" type="text/css" />
 <script src="{{ asset('admin-css/js/jquery.orgchart/jquery.orgchart.js') }}?v={{ date('YmdHis') }}"></script>
 <script type="text/javascript">
 
@@ -97,8 +99,18 @@
     {
         $("input[name='parent_id']").val(id);
         $("#title_structure_organization").html(title);
-
         $("#modal_structure_organization").modal("show");
+    }
+
+    function edit_inline_structure(obj)
+    {
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('ajax.structure-custome-edit') }}',
+            data: {'id' : obj.id, 'name' : obj.name, '_token' : $("meta[name='csrf-token']").attr('content')},
+            success: function (data) {
+            }
+        });
     }
 
     $(function(){

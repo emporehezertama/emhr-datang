@@ -75,6 +75,8 @@
                     })
                 }
                 inputElement.replaceWith(h2Element);
+
+                edit_inline_structure(nodes[id].data);
             }  
             inputElement.focus();
             inputElement.keyup(function(event){
@@ -170,7 +172,7 @@
 
             mainTable = "<table cellpadding='0' cellspacing='0' border='0'>";
             var nodeColspan = childLength>0?2*childLength:2;
-            mainTable += "<tr><td colspan='"+nodeColspan+"'>"+self.formatNode(opts)+"</td></tr>";
+            mainTable += "<tr><td nowrap colspan='"+nodeColspan+"'>"+self.formatNode(opts)+"</td></tr>";
 
             if(childLength > 0){
                 var downLineTable = "<table cellpadding='0' cellspacing='0' border='0'><tr class='lines x'><td class='line left half'></td><td class='line right half'></td></table>";

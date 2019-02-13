@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/update-password-administrator', 'AjaxController@updatePasswordAdministrator')->name('ajax.update-password-administrator');		
 	Route::post('ajax/structure-custome-add', 'AjaxController@structureCustomeAdd')->name('ajax.structure-custome-add');		
 	Route::post('ajax/structure-custome-delete', 'AjaxController@structureCustomeDelete')->name('ajax.structure-custome-delete');		
+	Route::post('ajax/structure-custome-edit', 'AjaxController@structureCustomeEdit')->name('ajax.structure-custome-edit');		
 });
 
 /**

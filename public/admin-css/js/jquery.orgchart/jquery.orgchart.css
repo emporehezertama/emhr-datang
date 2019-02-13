@@ -6,7 +6,7 @@ div.orgChart {
 
 div.orgChart h2 {
   margin : 0px;
-  font-size : 16px;
+  font-size : 13px;
   font-weight: normal;
   min-height: 20px;
 }
@@ -97,6 +97,10 @@ div.orgChart div.node {
   right: 5px;
 }
 
-.org-input { width: 90px; }
+.org-input { 
+  min-width: 200px;
+  height: 30px; 
+  color: black;
+}
 
 .org-confirm-del-button { display: none; }

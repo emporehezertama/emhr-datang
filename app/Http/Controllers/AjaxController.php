@@ -1936,4 +1936,20 @@ public function getCalculatePayrollGross(Request $request)
 
         return json_encode(['message' => 'success']);
     }
+
+    /**
+     * Delete
+     * @param  $id
+     */
+    public function structureCustomeEdit(Request $request)
+    {
+        $data = \App\Models\StructureOrganizationCustom::where('id', $request->id)->first();
+        if($data)
+        {
+            $data->name = $request->name;
+        }
+        $data->save();
+
+        return json_encode(['message' => 'success']);
+    }
 }

@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * Count
+ * @return integer
+ */
+function countStructureOrganization()
+{
+	return \App\Models\StructureOrganizationCustom::count();
+}
+
+/**
  * get sub menu
  * @return object / objects
  */
@@ -10,59 +19,6 @@ function get_sub_structure($id)
 
 	return \App\Models\StructureOrganizationCustom::where('parent_id',$id)->get();
 }
-
-/*
-function structure_custom()
-{
-	$data = [];
-	
-	$structure = \App\Models\StructureOrganizationCustom::all();
-
-	foreach($structure as $item)
-	{
-		if($item->parent_id != 0) continue;
-
-		$sub_menu = get_sub_structure($item->id);
-
-		$data['name']  = $item->name; //'<li><a href="#">'. $item->name .'</a> <i class="fa fa-plus text-info" title="Add Structure" style="cursor: pointer;" onclick="add_structure('. $item->id .',\''. $item->name .'\')"></i>'. "\n";
-		$data['title'] = $item->name; //'<i class="fa fa-trash text-danger" onclick="confirm_delete_structure(\''. route('administrator.organization-structure-custom.delete', $item->id) .'\')" title="Delete Structure" style="cursor: pointer;"></i>';
-
-	  	if(count($sub_menu) > 0)
-	  	{
-	  		#$html 	.= '<ul>';
-	  		$html  	.= structure_ul_form_sub_menu($sub_menu, "");	
-	  		$html 	.= '</ul>'. "\n";
-	  	}
-	  	$html .'</li>'. "\n";
-	}
-
-	$html .= '</ul>'. "\n";
-
-	return $data;
-}
-
-function structure_ul_form_sub_menu($object, $html)
-{
-	foreach($object as $item)
-	{
-	  	$sub_menu = get_sub_structure($item->id);
-	  	
-	  	$html  .= '<li><a href="#">'. $item->name .'</a> <i class="fa fa-plus text-info" title="Add Structure" style="cursor: pointer;" onclick="add_structure('. $item->id .',\''. $item->name .'\')"></i>'. "\n";
-		$html  .= '<i class="fa fa-trash text-danger"  onclick="confirm_delete_structure(\''. route('administrator.organization-structure-custom.delete', $item->id) .'\')" title="Delete Structure" style="cursor: pointer;"></i>';
-
-	  	if(count($sub_menu) > 0)
-	  	{
-	  		$html .= '<ul>'. "\n";
-	  		$html .= structure_ul_form_sub_menu($sub_menu, '');	
-	  		$html .= "</ul>". "\n";
-	  	}
-
-	  	$html .= '</li>'. "\n";
-	}
-
-	return $html;
-}
-*/
 
 /**
  * Select Navigation Form
