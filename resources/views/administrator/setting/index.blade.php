@@ -58,7 +58,7 @@
                             <div class="col-md-6">
                                 <select class="form-control" name="setting[struktur_organisasi]">
                                     <option value="1" {{ get_setting('struktur_organisasi') == 1 ? 'selected' : '' }}>Standar</option>
-                                    <option value="3" {{ get_setting('struktur_organisasi') == 3 ? 'selected' : '' }}>Custome</option>
+                                    <option value="3" {{ get_setting('struktur_organisasi') == 3 ? 'selected' : '' }}>Custom</option>
                                 </select>
                             </div>
                         </div>
