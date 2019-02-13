@@ -9,8 +9,8 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Organization Structure</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                @if(countStructureOrganization() < 0)
-                <a href="javascript:void(0)" onclick="add_structure()" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> Add Direktur</a>
+                @if(countStructureOrganization() == 0)
+                <a href="javascript:void(0)" onclick="add_structure()" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> Add Presiden Direktur</a>
                 @endif
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
