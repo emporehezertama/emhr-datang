@@ -28,10 +28,10 @@
 /**
  * Custom Style
  */
-.dropdown-menu>li>form>a {
+.btn-group .dropdown-menu>li>form>a {
     padding: 9px 20px;
 }
-.dropdown-menu>li>form>a {
+.btn-group .dropdown-menu>li>form>a {
     display: block;
     padding: 3px 20px;
     clear: both;
@@ -40,7 +40,7 @@
     color: #333;
     white-space: nowrap;
 }
-.dropdown-menu {
+.btn-group .dropdown-menu {
 	left: auto;
 	right: 0;
 }

@@ -50,7 +50,7 @@ class IndexController extends Controller
         $params['kecamatan']        = Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
         $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
         $params['division']         = OrganisasiDivision::all();
-        $params['section']          = OrganisasiSection::where('organisasi_division_id', $params['data']['division_id'])->get();
+        $params['section']          = OrganisasiSection::where('division_id', $params['data']['division_id'])->get();
         $params['news']             = News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
         $params['internal_memo']    = InternalMemo::orderBy('id', 'DESC')->limit(5)->get();
         $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('id', 'DESC')->limit(5)->get();
@@ -116,7 +116,7 @@ class IndexController extends Controller
         $params['kecamatan']        = Kecamatan::where('id_kab', $params['data']['kabupaten_id'])->get();
         $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
         $params['division']         = OrganisasiDivision::all();
-        $params['section']          = OrganisasiSection::where('organisasi_division_id', $params['data']['division_id'])->get();
+        $params['section']          = OrganisasiSection::where('division_id', $params['data']['division_id'])->get();
 
         return view('karyawan.profile')->with($params);
     }

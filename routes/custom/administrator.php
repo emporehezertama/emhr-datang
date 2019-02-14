@@ -166,5 +166,11 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('exit-interview/index', 'ExitInterviewController@index')->name('administrator.exit-interview.index');
 	Route::get('exit-interview/index', 'ExitInterviewController@index')->name('administrator.exit-interview.index');
 	Route::get('setting/general', 'SettingController@index')->name('administrator.setting.general');
+	Route::get('setting/email', 'SettingController@email')->name('administrator.setting.email');
+	Route::get('organization-structure-custom', 'StructureOrganizationCustomController@index')->name('administrator.organization-structure-custom.index');
+	Route::get('organization-structure-custom/delete/{id}', 'StructureOrganizationCustomController@delete')->name('administrator.organization-structure-custom.delete');
 	Route::post('setting/save','SettingController@save')->name('administrator.setting.save');
+	Route::post('setting/email-save', 'SettingController@emailSave')->name('administrator.setting.email-save');
+	Route::post('setting/email-test-send', 'SettingController@emailTestSend')->name('administrator.setting.email-test-send');
+	Route::post('organization-structure-custom/store', 'StructureOrganizationCustomController@store')->name('administrator.organization-structure-custom.store');
 });

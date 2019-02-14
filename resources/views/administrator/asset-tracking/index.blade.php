@@ -2,20 +2,12 @@
 
 @section('title', 'Asset Tracking')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Manage List of Asset Tracking</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
@@ -23,14 +15,10 @@
                     <li class="active">Asset Tracking</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage List of Asset Tracking</h3>
-                    <br />
                     <form method="GET">
                         <div class="col-md-2" style="padding-left: 0;">
                             <select name="asset_type_id" class="form-control">

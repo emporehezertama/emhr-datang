@@ -25,7 +25,7 @@ class KecamatanController extends Controller
      */
     public function index()
     {
-        $params['data'] = Kecamatan::orderBy('nama', 'ASC')->get();
+        $params['data'] = Kecamatan::orderBy('nama', 'ASC')->paginate(100);
 
         return view('administrator.kecamatan.index')->with($params);
     }

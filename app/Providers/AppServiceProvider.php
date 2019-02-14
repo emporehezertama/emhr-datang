@@ -14,8 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        //Schema::defaultStringLength(191);
+        \Config::set('mail.driver', get_setting('mail_driver'));
+        \Config::set('mail.host', get_setting('mail_host'));
+        \Config::set('mail.port', get_setting('mail_port'));
+        \Config::set('mail.from', ['address' => get_setting('mail_address'), 'name' => get_setting('name') ]);
+        \Config::set('mail.username', get_setting('mail_username'));
+        \Config::set('mail.password', get_setting('mail_password'));
+        \Config::set('mail.encryption', get_setting('mail_encryption'));
     }
 
     /**
@@ -29,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         require_once app_path('Helper/EmporeHelper.php');
         require_once app_path('Helper/GeneralHelper.php');
         require_once app_path('Helper/ApprovalHelper.php');
+        require_once app_path('Helper/StructureHelper.php');
     }
 }

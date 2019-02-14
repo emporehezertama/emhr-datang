@@ -35,27 +35,6 @@
                     <h3 class="box-title m-b-0">Organization Structure</h3>
                     <hr />
                     <div id="chart-container">
-                       <!--  <ul>
-                            @foreach($directorate as $dir)
-                            <li>
-                                <a href="#">{{ $dir->name }}</a>
-                                <ul>
-                                @foreach(get_division_by_directorate_id($dir->id) as $key => $div)
-                                    <li>
-                                        <a href="#">{{ $div->name }}</a>
-                                        <ul>
-                                        @foreach(get_department_by_division_id($div->id) as $dept)
-                                            <li>
-                                                <a href="#">{{ $dept->name }}</a>
-                                            </li>
-                                        @endforeach
-                                        </ul>
-                                    </li>
-                                @endforeach
-                                </ul>
-                            </li>
-                            @endforeach
-                        </ul>  -->
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -72,8 +51,8 @@
 <!-- ============================================================== -->
 </div>
 @section('footer-script')
-    <link href="{{ asset('orgchart/jquery.orgchart.css') }}" rel="stylesheet">
-    <script src="{{ asset('orgchart/jquery.orgchart.js') }}"></script>
+    <link href="{{ asset('admin-css/js/orgchart/jquery.orgchart.css') }}" rel="stylesheet">
+    <script src="{{ asset('admin-css/js/orgchart/jquery.orgchart.js') }}"></script>
     <style type="text/css">
         .orgchart{
             background: white
@@ -98,23 +77,11 @@
             dataType: 'json',
             success: function (data) {
 
-                // var datasource = {
-                //       'name': 'Hiromichi Yabana',
-                //       'title': 'President Director',
-                //       'children': data
-                //     }
-
-                // $('#chart-container').orgchart({
-                //     'data' : datasource,
-                //     'nodeContent': 'title'
-                //   });     
-                //   
-                
-                console.log(data);
-
-                $('#chart-container').orgchart({
-                    'data' : data,
-                    'nodeContent': 'title'
+                $(data).each(function(k,v){
+                    $('#chart-container').orgchart({
+                        'data' : v,
+                        'nodeContent': 'title'
+                    }); 
                 }); 
             }
         })

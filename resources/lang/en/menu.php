@@ -7,7 +7,8 @@ return [
 	'medical_reimbursement' => 'Medical Reimbursement',
 	'overtime_sheet' => 'Overtime Sheet',
 	'organization_structure' => 'Organization Structure',
-	'setting' => 'Setting'
+	'setting' => 'Setting',
+	'profile' => 'Profile'
 ];
 
 ?>

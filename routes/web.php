@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-department-by-division', 'AjaxController@getDepartmentByDivision')->name('ajax.get-department-by-division');
 	Route::post('ajax/get-section-by-department', 'AjaxController@getSectionByDepartment')->name('ajax.get-section-by-department');
 	Route::get('ajax/get-structure', 'AjaxController@getStructure')->name('ajax.get-stucture');
+	Route::get('ajax/get-structure-custome', 'AjaxController@getStructureCustome')->name('ajax.get-stucture-custome');
 	Route::get('ajax/get-structure-branch', 'AjaxController@getStructureBranch')->name('ajax.get-stucture-branch');
 	Route::post('ajax/get-kabupaten-by-provinsi', 'AjaxController@getKabupatenByProvinsi')->name('ajax.get-kabupaten-by-provinsi');
 	Route::post('ajax/get-kecamatan-by-kabupaten', 'AjaxController@getKecamatanByKabupaten')->name('ajax.get-kecamatan-by-kabupaten');
@@ -89,6 +90,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-staff-by-manager', 'AjaxEmporeController@getStaffByManager')->name('ajax.get-staff-by-manager');
 	Route::post('ajax/update-first-password', 'AjaxController@updatePassword')->name('ajax.update-first-password');		
 	Route::post('ajax/update-password-administrator', 'AjaxController@updatePasswordAdministrator')->name('ajax.update-password-administrator');		
+	Route::post('ajax/structure-custome-add', 'AjaxController@structureCustomeAdd')->name('ajax.structure-custome-add');		
+	Route::post('ajax/structure-custome-delete', 'AjaxController@structureCustomeDelete')->name('ajax.structure-custome-delete');		
+	Route::post('ajax/structure-custome-edit', 'AjaxController@structureCustomeEdit')->name('ajax.structure-custome-edit');		
 });
 
 /**
