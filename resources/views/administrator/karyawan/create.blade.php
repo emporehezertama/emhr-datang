@@ -52,7 +52,7 @@
 
                         <li role="presentation" class=""><a href="#rekening_bank" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Bank Account</span></a></li>
 
-                        <!-- <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventaris</span></a></li> -->
+                         <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventaris</span></a></li>
 
                         <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Leave</span></a></li>
                         
@@ -77,7 +77,7 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                        <!-- <div role="tabpanel" class="tab-pane fade" id="inventaris">
+                        <div role="tabpanel" class="tab-pane fade" id="inventaris">
                             <h3>Mobil</h3>
                             <a class="btn btn-info btn-xs" id="add_inventaris_mobil"><i class="fa fa-plus"></i> Tambah</a>
                             <table class="table">
@@ -105,7 +105,7 @@
                                 </thead>
                                 <tbody class="table_inventaris_lainnya"></tbody>
                             </table><br />
-                        </div> -->
+                        </div> 
                         <div role="tabpanel" class="tab-pane fade" id="rekening_bank">
                             <div class="form-group">
                                 <label class="col-md-12">Name of Account</label>
@@ -230,11 +230,6 @@
                                         <input type="text" name="ext" value="{{ old('ext') }}" class="form-control form-control-line"> </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">LDAP</label>
-                                    <div class="col-md-10">
-                                        <input type="number" name="ldap" value="{{ old('ldap')}}" class="form-control form-control-line"> </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-md-12">Place of Birth</label>
                                     <div class="col-md-10">
                                         <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir')}}" class="form-control form-control-line"> </div>
@@ -243,17 +238,13 @@
                                     <label class="col-md-12">Date of Birth</label>
                                     <div class="col-md-10">
                                         <input type="text" name="tanggal_lahir" value="{{ old('tanggal_lahir')}}" class="form-control form-control-line datepicker"> </div>
+
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Marital Status</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" name="marital_status">
+                                        <select class="form-control form-control-line" name="marital_status">
                                             <option value="">- Marital Status -</option>
-                                            <!--
-                                            @foreach(['Single','Married', 'Married with 1 Child','Married with 2 Child','Married with 3 Child'] as $item)
-                                            <option {{ old('marital_status') == $item ? 'selected' : '' }}>{{ $item }}</option>
-                                            @endforeach
-                                            -->
                                             <option value="Bujangan/Wanita" >Single</option>
                                             <option value="Menikah" >Married</option>
                                             <option value="Menikah Anak 1" >Married with 1 Child</option>
@@ -266,7 +257,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Gender</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" name="jenis_kelamin">
+                                        <select class="form-control form-control-line" name="jenis_kelamin">
                                             <option value=""> - Gender - </option>
                                             @foreach(['Male', 'Female'] as $item)
                                                 <option {{ old('jenis_kelamin')== $item ? 'selected' : '' }}>{{ $item }}</option>
@@ -287,26 +278,26 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Password</label>
                                     <div class="col-md-10">
-                                        <input type="password" value="{{ old('password') }}" name="password" class="form-control">
+                                        <input type="password" value="{{ old('password') }}" name="password" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Confirm Password</label>
                                     <div class="col-md-10">
                                         <input type="password" value="{{ old('
-                                            confirm') }}" name="confirm" class="form-control">
+                                            confirm') }}" name="confirm" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Join Date</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="join_date" value="{{ old('join_date') }}" class="form-control datepicker">
+                                        <input type="text" name="join_date" value="{{ old('join_date') }}" class="form-control form-control-line datepicker">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Employee Status</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" name="organisasi_status">
+                                        <select class="form-control form-control-line" name="organisasi_status">
                                             <option value="">- selectd - </option>
                                             @foreach(['Permanent', 'Contract'] as $item)
                                             <option {{ old('organisasi_status') == $item ? 'selected' : '' }}>{{ $item }}</option>
@@ -321,52 +312,58 @@
                                 <div class="form-group">
                                     <label class="col-md-12">NPWP Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="npwp_number" value="{{ old('npwp_number') }}" class="form-control">
+                                        <input type="text" name="npwp_number" value="{{ old('npwp_number') }}" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">BPJS Number</label>
+                                    <label class="col-md-12">BPJS Employment Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="bpjs_number" value="{{ old('bpjs_number') }}" class="form-control">
+                                        <input type="text" name="bpjs_number" value="{{ old('bpjs_number') }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">BPJS Health Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="jamsostek_number" value="{{ old('jamsostek_number') }}" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">ID Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="ktp_number" class="form-control">
+                                        <input type="text" name="ktp_number" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Passport Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="passport_number" class="form-control">
+                                        <input type="text" name="passport_number" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">KK Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="kk_number" class="form-control">
+                                        <input type="text" name="kk_number" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Telephone</label>
-                                    <div class="col-md-12">
+                                    <div class="col-md-10">
                                         <input type="number" value="{{ old('telepon') }}" name="telepon" class="form-control form-control-line"> </div>
                                 </div>
                                  <div class="form-group">
                                     <label class="col-md-12">Mobile 1</label>
-                                    <div class="col-md-12">
-                                        <input type="number" name="telepon" class="form-control form-control-line"> </div>
+                                    <div class="col-md-10">
+                                        <input type="number" name="mobile_1" class="form-control form-control-line"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mobile 2</label>
-                                    <div class="col-md-12">
-                                        <input type="number" name="telepon" class="form-control form-control-line"> </div>
+                                    <div class="col-md-10">
+                                        <input type="number" name="mobile_2" class="form-control form-control-line"> </div>
                                 </div>
                                <div class="form-group">
                                     <label class="col-md-12">Religion</label>
-                                    <div class="col-md-12">
-                                        <select class="form-control" name="agama">
+                                    <div class="col-md-10">
+                                        <select class="form-control form-control-line" name="agama">
                                             <option value=""> - Religion - </option>
                                             @foreach(agama() as $item)
                                                 <option value="{{ $item }}"> {{ $item }} </option>
@@ -376,37 +373,26 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Current Address</label>
-                                    <div class="col-md-12">
-                                        <textarea class="form-control" name="alamat"></textarea>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control form-control-line" name="current_address"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">ID Addres</label>
-                                    <div class="col-md-12">
-                                        <textarea class="form-control" name="id_address"></textarea>
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <label class="col-md-12">ID City</label>
-                                    <div class="col-md-12">
-                                        <select class="form-control" name="id_city">
-                                            <option value="">- none - </option>
-                                            @foreach(get_kabupaten() as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">ID Zip Code</label>
-                                    <div class="col-md-12">
-                                        <input type="text" name="id_zip_code" class="form-control" />
+                                    <div class="col-md-10">
+                                        <textarea class="form-control form-control-line" name="id_address"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Foto</label>
-                                    <div class="col-md-12">
-                                        <input type="file" name="foto" class="form-control" />
+                                    <div class="col-md-10">
+                                        <input type="file" name="foto" class="form-control form-control-line" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Foto KTP</label>
+                                    <div class="col-md-10">
+                                        <input type="file" name="foto_ktp" class="form-control form-control-line" />
                                     </div>
                                 </div>
                             </div>
@@ -586,7 +572,11 @@
                             <div class="col-md-9">
                                 <select class="form-control modal-pendidikan">
                                     <option value="">Choose Education</option>
-                                    <option>SMA</option>
+                                    <option>SD</option>
+                                    <option>SMP</option>
+                                    <option>SMA/SMK</option>
+                                    <option>D1</option>
+                                    <option>D2</option>
                                     <option>D3</option>
                                     <option>S1</option>
                                     <option>S2</option>
@@ -632,15 +622,7 @@
                         <div class="form-group">
                             <label class="col-md-3">City</label>
                             <div class="col-md-9">
-                                <select class="form-control" onchange="get_kabupaten(this)">
-                                    <option>Choose Province</option>
-                                    @foreach(get_provinsi() as $item)
-                                    <option value="{{ $item->id_prov }}">{{ $item->nama }}</option>
-                                    @endforeach
-                                </select>
-                                <select class="form-control modal-kota">
-                                    <option>Choose Districts / City</option>
-                                </select>
+                                <input type="text" class="form-control modal-kota" />
                             </div>
                         </div>
                    </form>
@@ -957,7 +939,7 @@
             el +='<input type="hidden" name="dependent[tempat_lahir][]" value="'+ modal_tempat_lahir +'" />';
             el +='<input type="hidden" name="dependent[tanggal_lahir][]" value="'+ modal_tanggal_lahir +'" />';
             el +='<input type="hidden" name="dependent[tanggal_meninggal][]" value="'+ modal_tanggal_meninggal +'" />';
-            el +='<input type="hidden" name="dependent[jenjang_pendidikan][]" value="'+ modal_tanggal_meninggal +'" />';
+            el +='<input type="hidden" name="dependent[jenjang_pendidikan][]" value="'+ modal_jenjang_pendidikan +'" />';
             el +='<input type="hidden" name="dependent[pekerjaan][]" value="'+ modal_pekerjaan +'" />';
             el +='<input type="hidden" name="dependent[tertanggung][]" value="'+ modal_tertanggung +'" />';
 

@@ -8,6 +8,7 @@
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Employee</h4> 
+                <a href="{{ route('administrator.karyawan.downloadExcel') }}"><button type="button" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button></a>
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD EMPLOYEE</a>
@@ -17,6 +18,7 @@
                     <li class="active">Employee</li>
                 </ol>
             </div>
+
             <!-- /.col-lg-12 -->
         </div>
         <!-- .row -->
@@ -230,7 +232,7 @@
                     </div>
                 </form>
                 <div style="text-align: center;display: none;" class="div-proses-upload">
-                    <h3>Proses upload harap menunggu !</h3>
+                    <h3>Uploading !</h3>
                     <h1 class=""><i class="fa fa-spin fa-spinner"></i></h1>
                 </div>
         </div>

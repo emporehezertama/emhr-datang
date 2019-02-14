@@ -448,53 +448,43 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Name</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="name" style="text-transform: uppercase" class="form-control  " value="{{ $data->name }}"> </div>
+                                        <input type="text" name="name" style="text-transform: uppercase" class="form-control form-control-line " value="{{ $data->name }}"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Employee Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="employee_number" class="form-control  " value="{{ $data->employee_number }}"> </div>
+                                        <input type="text" name="employee_number" class="form-control form-control-line " value="{{ $data->employee_number }}"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Absensi Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="absensi_number" class="form-control  " value="{{ $data->employee_number }}"> </div>
+                                        <input type="text" name="absensi_number" class="form-control form-control-line " value="{{ $data->absensi_number }}"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">NIK</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="nik" value="{{ $data->nik }}" class="form-control  "> </div>
+                                        <input type="text" name="nik" value="{{ $data->nik }}" class="form-control form-control-line  "> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Ext</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="ext" value="{{ $data->ext }}" class="form-control  "> </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">LDAP</label>
-                                    <div class="col-md-10">
-                                        <input type="number" name="ldap" value="{{ $data->ldap }}" class="form-control  "> </div>
+                                        <input type="text" name="ext" value="{{ $data->ext }}" class="form-control form-control-line "> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Place of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tempat_lahir" value="{{ $data->tempat_lahir }}" class="form-control  "> </div>
+                                        <input type="text" name="tempat_lahir" value="{{ $data->tempat_lahir }}" class="form-control form-control-line "> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Date of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control   datepicker"> </div>
+                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control form-control-line datepicker"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Marital Status</label>
                                     <div class="col-md-10">
-                                        <select class="form-control" name="marital_status">
+                                        <select class="form-control form-control-line" name="marital_status">
                                             <option value="">- Marital Status -</option>
-                                            <!--
-                                            @foreach(['Single','Married', 'Married with 1 Child','Married with 2 Child','Married with 3 Child'] as $item)
-                                            <option {{ $data->marital_status == $item ? 'selected' : '' }}>{{ $item }}</option>
-                                            @endforeach
-                                            -->
                                              <option value="Bujangan/Wanita" {{old('marital_status',$data->marital_status)=="Bujangan/Wanita"? 'selected':''}} >Single</option>
                                     <option value="Menikah" {{old('marital_status',$data->marital_status)=="Menikah"? 'selected':''}} >Married</option>
                                     <option value="Menikah Anak 1" {{old('marital_status',$data->marital_status)=="Menikah Anak 1"? 'selected':''}} >Married with 1 Child</option>
@@ -505,45 +495,49 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-5">Gender</label>
-                                    <label class="col-md-5">Blood Type</label>
-                                    <div class="col-md-5">
-                                        <select class="form-control" name="jenis_kelamin">
+                                    <label class="col-md-12">Gender</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control form-control-line" name="jenis_kelamin">
                                             <option value=""> - Gender - </option>
                                             @foreach(['Male', 'Female'] as $item)
                                                 <option {{ $data->jenis_kelamin == $item ? 'selected' : '' }}>{{ $item }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-5">
-                                        <input type="text" class="form-control  " value="{{ $data->blood_type }}" name="blood_type">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Blood Type</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control form-control-line " value="{{ $data->blood_type }}" name="blood_type">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">Email</label>
                                     <div class="col-md-10">
-                                        <input type="email" value="{{ $data->email }}" class="form-control  " name="email" id="example-email"> </div>
+                                        <input type="email" value="{{ $data->email }}" class="form-control form-control-line" name="email" id="example-email"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Password</label>
                                     <div class="col-md-10">
-                                        <input type="password" name="password" class="form-control" value="{{ $data->password }}">
+                                        <input type="password" name="password" class="form-control form-control-line" value="{{ $data->password }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Confirm Password</label>
                                     <div class="col-md-10">
-                                        <input type="password" name="confirm" class="form-control" value="{{ $data->password }}">
+                                        <input type="password" name="confirm" class="form-control form-control-line" value="{{ $data->password }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-5">Join Date</label>
-                                    <label class="col-md-5">Employee Status</label>
-                                    <div class="col-md-5">
-                                        <input type="text" name="join_date" class="form-control datepicker" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
+                                    <label class="col-md-12">Join Date</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="join_date" class="form-control form-control-line datepicker" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
                                     </div>
-                                    <div class="col-md-5">
-                                        <select class="form-control" name="organisasi_status">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Employee Status</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control form-control-line" name="organisasi_status">
                                             <option value="">- select - </option>
                                             @foreach(['Permanent', 'Contract'] as $item)
                                             <option {{ $data->organisasi_status == $item ? 'selected' : '' }}>{{ $item }}</option>
@@ -554,24 +548,60 @@
                             </div>
                             <div class="col-md-6" style="padding-left: 0">
                                 <div class="form-group">
+                                    <label class="col-md-12">NPWP Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="npwp_number" class="form-control form-control-line"  value="{{ $data->npwp_number }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">BPJS Employment Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="bpjs_number" value="{{ $data->bpjs_number }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">BPJS Health Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="jamsostek_number" value="{{ $data->jamsostek_number }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">ID Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="ktp_number" value="{{ $data->ktp_number }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Passport Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="passport_number" value="{{ $data->passport_number }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">KK Number</label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="kk_number" class="form-control form-control-line" value="{{ $data->kk_number }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-12">Telephone</label>
                                     <div class="col-md-12">
-                                        <input type="number" value="{{ $data->telepon }}" name="telepon" class="form-control  "> </div>
+                                        <input type="number" value="{{ $data->telepon }}" name="telepon" class="form-control form-control-line"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mobile 1</label>
                                     <div class="col-md-12">
-                                        <input type="number" value="{{ $data->mobile_1 }}" name="mobile_1" class="form-control  "> </div>
+                                        <input type="number" value="{{ $data->mobile_1 }}" name="mobile_1" class="form-control form-control-line "> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mobile 2</label>
                                     <div class="col-md-12">
-                                        <input type="number" value="{{ $data->mobile_2 }}" name="mobile_2" class="form-control  "> </div>
+                                        <input type="number" value="{{ $data->mobile_2 }}" name="mobile_2" class="form-control form-control-line"> </div>
                                 </div>
                                <div class="form-group">
                                     <label class="col-md-12">Religion</label>
                                     <div class="col-md-12">
-                                        <select class="form-control" name="agama">
+                                        <select class="form-control form-control-line" name="agama">
                                             <option value=""> - Religion - </option>
                                             @foreach(agama() as $item)
                                                 <option value="{{ $item }}" {{ $data->agama == $item ? 'selected' : '' }}> {{ $item }} </option>
@@ -582,71 +612,34 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Current Address</label>
                                     <div class="col-md-12">
-                                        <textarea class="form-control" name="current_address">{{ $data->current_address }}</textarea>
+                                        <textarea class="form-control form-control-line" name="current_address">{{ $data->current_address }}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">ID Addres</label>
                                     <div class="col-md-12">
-                                        <textarea class="form-control" name="id_address">{{ $data->id_address }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">ID City</label>
-                                    <div class="col-md-12">
-                                        <select class="form-control" name="id_city">
-                                            <option value="">- none - </option>
-                                            @foreach(get_kabupaten() as $item)
-                                            <option value="{{ $item->id_kab }}" {{ $data->id_city == $item->id_kab ? 'selected' : '' }}>{{ $item->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">ID Zip Code</label>
-                                    <div class="col-md-12">
-                                        <input type="text" name="id_zip_code" class="form-control" value="{{ $data->id_zip_code }}" />
+                                        <textarea class="form-control form-control-line" name="id_address">{{ $data->id_address }}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Foto</label>
                                     <div class="col-md-12">
-                                        <input type="file" name="foto" class="form-control" />
+                                        <input type="file" name="foto" class="form-control form-control-line" />
                                         @if(!empty($data->foto))
                                         <img src="{{ asset('storage/foto/'. $data->foto) }}" style="width: 200px;" />
                                         @endif
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">KTP Number</label>
-                                    <div class="col-md-10">
-                                        <input type="text" name="ktp_number" value="{{ $data->ktp_number }}" class="form-control">
+                                    <label class="col-md-12">Foto Ktp</label>
+                                    <div class="col-md-12">
+                                        <input type="file" name="foto_ktp" class="form-control form-control-line" />
+                                        @if(!empty($data->foto_ktp))
+                                        <img src="{{ asset('storage/fotoktp/'. $data->foto_ktp) }}" style="width: 200px;" />
+                                        @endif
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">Passport Number</label>
-                                    <div class="col-md-10">
-                                        <input type="text" name="passport_number" value="{{ $data->passport_number }}" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">KK Number</label>
-                                    <div class="col-md-10">
-                                        <input type="text" name="kk_number" class="form-control" value="{{ $data->ktp_number }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">NPWP Number</label>
-                                    <div class="col-md-10">
-                                        <input type="text" name="npwp_number" class="form-control"  value="{{ $data->npwp_number }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">BPJS Number</label>
-                                    <div class="col-md-10">
-                                        <input type="text" name="bpjs_number" value="{{ $data->bpjs_number }}" class="form-control">
-                                    </div>
-                                </div>
+                                
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -856,7 +849,11 @@
                             <div class="col-md-9">
                                 <select class="form-control modal-pendidikan">
                                     <option value="">Coose Education</option>
-                                    <option>SMA</option>
+                                    <option>SD</option>
+                                    <option>SMP</option>
+                                    <option>SMA/SMK</option>
+                                    <option>D1</option>
+                                    <option>D2</option>
                                     <option>D3</option>
                                     <option>S1</option>
                                     <option>S2</option>

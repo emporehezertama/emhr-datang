@@ -116,7 +116,7 @@ class KaryawanController extends Controller
 
         $data->save();
 
-        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Dokumen berhasil di upload');
+        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Document uploaded successfully');
     }
 
     /**
@@ -187,15 +187,27 @@ class KaryawanController extends Controller
             $user->name         = empty($item->name) ? $user->name : $item->name;
             $user->join_date    = empty($item->join_date) ? $user->join_date : $item->join_date;
             $user->jenis_kelamin= empty($item->gender) ? $user->jenis_kelamin : $item->gender;
+            $user->employee_number= empty($item->employee_number) ? $user->employee_number : $item->employee_number;
+            $user->absensi_number= empty($item->absensi_number) ? $user->absensi_number : $item->absensi_number;
             $user->marital_status   = empty($item->marital_status) ? $user->marital_status : $item->marital_status;
             $user->agama        = empty($item->agama) ? $user->agama : $item->agama;
-            $user->bpjs_number= empty($item->no_bpjs_kesehatan) ? $user->bpjs_number : $item->no_bpjs_kesehatan;
+            $user->bpjs_number= empty($item->bpjs_number) ? $user->bpjs_number : $item->bpjs_number;
+            $user->jamsostek_number= empty($item->jamsostek_number) ? $user->jamsostek_number : $item->jamsostek_number;
             $user->tempat_lahir     = empty($item->place_of_birth) ? $user->tempat_lahir : $item->place_of_birth ;
             $user->tanggal_lahir    = empty($item->date_of_birth) ? $user->tanggal_lahir : $item->date_of_birth ;
             $user->id_address       = empty($item->id_address) ? $user->id_address : $item->id_address;
-            $user->id_city          = empty($item->id_city) ? $user->id_city : $item->id_city;
+            $user->provinsi_id      = empty($item->provinsi_id) ? $user->provinsi_id : $item->provinsi_id;
+            $user->kabupaten_id     = empty($item->kabupaten_id) ? $user->kabupaten_id : $item->kabupaten_id;
+            $user->kecamatan_id     = empty($item->kecamatan_id) ? $user->kecamatan_id : $item->kecamatan_id;
+            $user->kelurahan_id     = empty($item->kelurahan_id) ? $user->kelurahan_id : $item->kelurahan_id;
             $user->id_zip_code      = empty($item->id_zip_code) ? $user->id_zip_code : $item->id_zip_code;
-            $user->current_address  = empty($item->current_address) ? $user->current_address : $item->current_address;
+            $user->current_address  = empty($item->current_address) ? $user->current_address : $item->current_address;  
+            $user->provinsi_current  = empty($item->provinsi_current) ? $user->provinsi_current : $item->provinsi_current;
+            $user->kabupaten_current  = empty($item->kabupaten_current) ? $user->kabupaten_current : $item->kabupaten_current;
+            $user->kecamatan_current  = empty($item->kecamatan_current) ? $user->kecamatan_current : $item->kecamatan_current;
+            $user->kelurahan_current  = empty($item->kelurahan_current) ? $user->kelurahan_current : $item->kelurahan_current;
+            $user->current_zip_code  = empty($item->current_zip_code) ? $user->current_zip_code : $item->current_zip_code;
+
             $user->telepon          = empty($item->telp) ? $user->telepon : $item->telp;
             $user->mobile_1         = empty($item->mobile_1) ? $user->mobile_1 : $item->mobile_1;
             $user->mobile_2         = empty($item->mobile_2) ? $user->mobile_2 : $item->mobile_2;
@@ -207,7 +219,6 @@ class KaryawanController extends Controller
             $user->kk_number        = empty($item->kk_number) ? $user->kk_number : $item->kk_number;
             $user->npwp_number      = empty($item->npwp_number) ? $user->npwp_number : $item->npwp_number;
             $user->ext              = empty($item->ext) ? $user->ext : $item->ext;
-            $user->ldap             = empty($item->ldap) ? $user->ldap : $item->ldap;
 
             if($item->email != "-") $user->email            = $item->email;
 
@@ -222,13 +233,6 @@ class KaryawanController extends Controller
             $user->length_of_service    = $item->cuti_length_of_service;
             $user->cuti_status          = $item->cuti_status;
             $user->cuti_2018            = $item->cuti_cuti_2018;
-
-            // get division
-            $user->division_id      = $item->organisasi_division;
-            $user->department_id    = $item->organisasi_department;
-            $user->section_id       = $item->organisasi_unit;
-            $user->organisasi_job_role       = $item->organisasi_position_sub;
-            $user->organisasi_position       = $item->organisasi_position;
 
             $user->cabang_id            = empty($item->organisasi_branch) ? $user->cabang_id : $item->organisasi_branch;
             $user->branch_type          = strtoupper(empty($item->organisasi_ho_or_branch) ? $user->branch_type : $item->organisasi_ho_or_branch);
@@ -312,6 +316,8 @@ class KaryawanController extends Controller
                 $education->jurusan         = !empty($edu->jurusan) ? $edu->jurusan : $education->jurusan;
                 $education->nilai           = !empty($edu->nilai) ? $edu->nilai : $education->nilai;
                 $education->kota            = !empty($edu->kota) ? $edu->kota : $education->kota;
+                $education->certificate     = !empty($edu->certificate) ? $edu->certificate : $education->certificate;
+                $education->note            = !empty($edu->note) ? $edu->note : $education->note;
                 $education->save();
             }
 
@@ -343,7 +349,7 @@ class KaryawanController extends Controller
         UserEducationTemp::truncate();
         UserFamilyTemp::truncate();
 
-        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Data Karyawan berhasil di import');
+        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Employee data successfully imported');
     }
 
     /**
@@ -418,65 +424,102 @@ class KaryawanController extends Controller
                     $user->passport_number  = $item[9];
                     $user->kk_number        = $item[10];
                     $user->npwp_number      = $item[11];
-                    $user->no_bpjs_kesehatan= $item[12];
-                    $user->place_of_birth   = strtoupper($item[13]);
-                    $user->date_of_birth    = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[14]);
-                    $user->id_address       = strtoupper($item[15]);
+                    $user->bpjs_number      = $item[12];
+                    $user->jamsostek_number = $item[13];
+                    $user->place_of_birth   = strtoupper($item[14]);
+                    $user->date_of_birth    = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[15]);
+                    $user->id_address       = strtoupper($item[16]);
 
-                    // find city
-                    $kota = Kabupaten::where('nama', 'LIKE', $item[16])->first();
+                    //provinsi
+                    $provinsi = Provinsi::where('nama','LIKE',$item[17])->first();
+                    if(isset($provinsi)){
+                        $user->provinsi_id          = $provinsi->id_prov;
+                    }
+                    //kabupaten
+                    $kabupaten = Kabupaten::where('nama','LIKE',$item[18])->first();
+                    if(isset($kabupaten)){
+                        $user->kabupaten_id          = $kabupaten->id_kab;
+                    }
+                    //kecamatan
+                    $kecamatan = Kecamatan::where('nama','LIKE',$item[19])->first();
+                    if(isset($kecamatan)){
+                        $user->kecamatan_id          = $kecamatan->id_kec;
+                    }
+                    //kelurahan
+                    $kelurahan = Kelurahan::where('nama','LIKE',$item[20])->first();
+                    if(isset($kelurahan)){
+                        $user->kelurahan_id          = $kelurahan->id_kel;
+                    }
 
-                    if(isset($kota))
-                        $user->id_city          = $kota->id_kab;
-                    else
-                        $user->id_city          = $item[16];
+                    $user->id_zip_code      = $item[21];
+                    $user->current_address  = strtoupper($item[22]);
 
-                    $user->id_zip_code      = $item[17];
-                    $user->current_address  = strtoupper($item[18]);
-                    $user->telp             = $item[19];
-                    $user->ext              = $item[20];
-                    $user->ldap              = $item[21];
-                    $user->mobile_1         = $item[22];
-                    $user->mobile_2         = $item[23];
-                    $user->email            = $item[24];
-                    $user->blood_type       = $item[25];
-                    $user->bank_1           = $item[26];
-                    $user->bank_account_name_1= $item[27];
-                    $user->bank_account_number= $item[28];
+                    //provinsi
+                    $provinsiCurrent = Provinsi::where('nama','LIKE',$item[23])->first();
+                    if(isset($provinsiCurrent)){
+                        $user->provinsi_current          = $provinsi->id_prov;
+                    }
+                    //kabupaten
+                    $kabupatenCurrent = Kabupaten::where('nama','LIKE',$item[24])->first();
+                    if(isset($kabupatenCurrent)){
+                        $user->kabupaten_current          = $kabupaten->id_kab;
+                    }
+                    //kecamatan
+                    $kecamatanCurrent = Kecamatan::where('nama','LIKE',$item[25])->first();
+                    if(isset($kecamatanCurrent)){
+                        $user->kecamatan_current          = $kecamatan->id_kec;
+                    }
+                    //kelurahan
+                    $kelurahanCurrent = Kelurahan::where('nama','LIKE',$item[26])->first();
+                    if(isset($kelurahanCurrent)){
+                        $user->kelurahan_current          = $kelurahan->id_kel;
+                    }
 
-                    if(!empty($item[29]))
+                    $user->current_zip_code      = $item[27];
+
+                    $user->telp             = $item[28];
+                    $user->ext              = $item[29];
+                    $user->mobile_1         = $item[30];
+                    $user->mobile_2         = $item[31];
+                    $user->email            = $item[32];
+                    $user->blood_type       = $item[33];
+                    $user->bank_1           = $item[34];
+                    $user->bank_account_name_1= $item[35];
+                    $user->bank_account_number= $item[36];
+
+                    if(!empty($item[37]))
                     {
-                        $direktur = EmporeOrganisasiDirektur::where('name', 'LIKE', '%'. $item[29] .'%')->first();
+                        $direktur = EmporeOrganisasiDirektur::where('name', 'LIKE', '%'. $item[37] .'%')->first();
                         if(!$direktur)
                         {
                             $direktur = new \EmporeOrganisasiDirektur();
-                            $direktur->name =  $item[29];
+                            $direktur->name =  $item[37];
                             $direktur->save();
                         }
 
                         $user->empore_organisasi_direktur = $direktur->id;
 
-                        if(!empty($item[30]))
+                        if(!empty($item[38]))
                         {
-                            $manager = EmporeOrganisasiManager::where('name', 'LIKE', '%'. $item[30] .'%')->where('empore_organisasi_direktur_id', $direktur->id)->first();
+                            $manager = EmporeOrganisasiManager::where('name', 'LIKE', '%'. $item[38] .'%')->where('empore_organisasi_direktur_id', $direktur->id)->first();
                             if(!$manager)
                             {
                                 $manager = new EmporeOrganisasiManager();
                                 $manager->empore_organisasi_direktur_id = $direktur->id;
-                                $manager->name =  $item[30];
+                                $manager->name =  $item[38];
                                 $manager->save();
                             }
 
                             $user->empore_organisasi_manager_id = $manager->id;
                         }
 
-                        if(!empty($item[31]))
+                        if(!empty($item[39]))
                         {
-                            $staff = EmporeOrganisasiStaff::where('name', 'LIKE', $item[31])->first();
+                            $staff = EmporeOrganisasiStaff::where('name', 'LIKE', $item[39])->first();
                             if(!$staff)
                             {
                                 $staff = new EmporeOrganisasiStaff();
-                                $staff->name =  $item[31];
+                                $staff->name =  $item[39];
                                 $staff->save();
                             }
 
@@ -484,7 +527,7 @@ class KaryawanController extends Controller
                         }
                     }
 
-                    $cabang = Cabang::where('name', 'LIKE', '%'. strtoupper($item[32]) .'%')->first();
+                    $cabang = Cabang::where('name', 'LIKE', '%'. strtoupper($item[40]) .'%')->first();
                     if($cabang)
                     {
                         $user->organisasi_branch    = $cabang->id;
@@ -492,314 +535,303 @@ class KaryawanController extends Controller
                     else
                     {
                         $cabang = new \App\Cabang();
-                        $cabang->name = $item[32];
+                        $cabang->name = $item[40];
                         $cabang->save();
 
                         $user->organisasi_branch    = $cabang->id;
                     }
 
-                    $user->organisasi_ho_or_branch= $item[33];
-                    $user->organisasi_status    = $item[34];
-                    $user->cuti_length_of_service = $item[35];
-                    $user->cuti_cuti_2018       = $item[36];
-                    $user->cuti_terpakai        = $item[37];
-                    $user->cuti_sisa_cuti       = $item[38];
+                    $user->organisasi_ho_or_branch= $item[41];
+                    $user->organisasi_status    = $item[42];
+                    $user->cuti_length_of_service = $item[43];
+                    $user->cuti_cuti_2018       = $item[44];
+                    $user->cuti_terpakai        = $item[45];
+                    $user->cuti_sisa_cuti       = $item[46];
                     $user->save();
 
-                    // SD
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[39]);
-                    $education->tahun_awal      = $item[40];
-                    $education->tahun_akhir     = $item[41];
-                    $education->fakultas        = strtoupper($item[42]);
-                    $education->kota            = strtoupper($item[43]); // CITY
-                    $education->jurusan         = strtoupper($item[44]); // MAJOR
-                    $education->nilai           = $item[45]; // GPA
-                    $education->certificate     = $item[46];
-                    $education->note            = strtoupper($item[47]);
-                    $education->save();
-
-                    // SD KE DUA
-                    if(!empty($item[48]))
-                    {
+                     // SD
+                    if(!empty($item[47])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
-                        $education->pendidikan      = strtoupper($item[48]);
-                        $education->tahun_awal      = $item[49];
-                        $education->tahun_akhir     = $item[50];
-                        $education->fakultas        = strtoupper($item[51]);
-                        $education->kota            = strtoupper($item[52]); // CITY
-                        $education->jurusan         = strtoupper($item[53]); // MAJOR
-                        $education->nilai           = $item[54]; // GPA
-                        $education->certificate     = $item[55];
-                        $education->note            = strtoupper($item[56]);
+                        $education->pendidikan      = "SD";
+                        $education->tahun_awal      = $item[47];
+                        $education->tahun_akhir     = $item[48];
+                        $education->fakultas        = strtoupper($item[49]);
+                        $education->kota            = strtoupper($item[50]); // CITY
+                        $education->jurusan         = strtoupper($item[51]); // MAJOR
+                        $education->nilai           = $item[52]; // GPA
+                        $education->certificate     = $item[53];
+                        $education->note            = strtoupper($item[54]);
                         $education->save();
                     }
 
-                    // SMP
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[57]);
-                    $education->tahun_awal      = $item[58];
-                    $education->tahun_akhir     = $item[59];
-                    $education->fakultas        = strtoupper($item[60]);
-                    $education->kota            = strtoupper($item[61]); // CITY
-                    $education->jurusan         = strtoupper($item[62]); // MAJOR
-                    $education->nilai           = $item[63]; // GPA
-                    $education->certificate     = $item[64];
-                    $education->note            = strtoupper($item[65]);
-                    $education->save();
-
-                    if(!empty($item[66]))
-                    {
-                        // SMP  KE 2
+                     // SMP
+                    if(!empty($item[55])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
-                        $education->pendidikan      = strtoupper($item[66]);
-                        $education->tahun_awal      = $item[67];
-                        $education->tahun_akhir     = $item[68];
-                        $education->fakultas        = strtoupper($item[69]);
-                        $education->kota            = strtoupper($item[70]); // CITY
-                        $education->jurusan         = strtoupper($item[71]); // MAJOR
-                        $education->nilai           = $item[72]; // GPA
-                        $education->certificate     = $item[73];
-                        $education->note            = strtoupper($item[74]);
+                        $education->pendidikan      = "SMP";
+                        $education->tahun_awal      = $item[55];
+                        $education->tahun_akhir     = $item[56];
+                        $education->fakultas        = strtoupper($item[57]);
+                        $education->kota            = strtoupper($item[58]); // CITY
+                        $education->jurusan         = strtoupper($item[59]); // MAJOR
+                        $education->nilai           = $item[60]; // GPA
+                        $education->certificate     = $item[61];
+                        $education->note            = strtoupper($item[62]);
                         $education->save();
                     }
 
-                    // SMA
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[75]);
-                    $education->tahun_awal      = $item[76];
-                    $education->tahun_akhir     = $item[77];
-                    $education->fakultas        = strtoupper($item[78]);
-                    $education->kota            = strtoupper($item[79]); // CITY
-                    $education->jurusan         = strtoupper($item[80]); // MAJOR
-                    $education->nilai           = $item[81]; // GPA
-                    $education->certificate     = $item[82];
-                    $education->note            = strtoupper($item[83]);
-                    $education->save();
-
-                    // SMA KE 2
-                    if(!empty($item[84]))
-                    {
+                    // SMA/SMK
+                    if(!empty($item[63])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
-                        $education->pendidikan      = strtoupper($item[84]);
-                        $education->tahun_awal      = $item[85];
-                        $education->tahun_akhir     = $item[86];
-                        $education->fakultas        = strtoupper($item[87]);
-                        $education->kota            = strtoupper($item[88]); // CITY
-                        $education->jurusan         = strtoupper($item[89]); // MAJOR
-                        $education->nilai           = $item[90]; // GPA
-                        $education->certificate     = $item[91];
-                        $education->note            = strtoupper($item[92]);
+                        $education->pendidikan      = "SMA/SMK";
+                        $education->tahun_awal      = $item[63];
+                        $education->tahun_akhir     = $item[64];
+                        $education->fakultas        = strtoupper($item[65]);
+                        $education->kota            = strtoupper($item[66]); // CITY
+                        $education->jurusan         = strtoupper($item[67]); // MAJOR
+                        $education->nilai           = $item[68]; // GPA
+                        $education->certificate     = $item[69];
+                        $education->note            = strtoupper($item[70]);
                         $education->save();
                     }
 
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[93]);
-                    $education->tahun_awal      = $item[94];
-                    $education->tahun_akhir     = $item[95];
-                    $education->fakultas        = strtoupper($item[96]);
-                    $education->kota            = strtoupper($item[97]); // CITY
-                    $education->jurusan         = strtoupper($item[98]); // MAJOR
-                    $education->nilai           = $item[99]; // GPA
-                    $education->certificate     = $item[100];
-                    $education->note            = strtoupper($item[101]);
-                    $education->save();
-
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[102]);
-                    $education->tahun_awal      = $item[103];
-                    $education->tahun_akhir     = $item[104];
-                    $education->fakultas        = strtoupper($item[105]);
-                    $education->kota            = strtoupper($item[106]); // CITY
-                    $education->jurusan         = strtoupper($item[107]); // MAJOR
-                    $education->nilai           = $item[108]; // GPA
-                    $education->certificate     = $item[109];
-                    $education->note            = strtoupper($item[110]);
-                    $education->save();
-
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[111]);
-                    $education->tahun_awal      = $item[112];
-                    $education->tahun_akhir     = $item[113];
-                    $education->fakultas        = strtoupper($item[114]);
-                    $education->kota            = strtoupper($item[115]); // CITY
-                    $education->jurusan         = strtoupper($item[116]); // MAJOR
-                    $education->nilai           = $item[117]; // GPA
-                    $education->certificate     = $item[118];
-                    $education->note            = strtoupper($item[119]);
-                    $education->save();
-
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[120]);
-                    $education->tahun_awal      = $item[121];
-                    $education->tahun_akhir     = $item[122];
-                    $education->fakultas        = strtoupper($item[123]);
-                    $education->kota            = strtoupper($item[124]); // CITY
-                    $education->jurusan         = strtoupper($item[125]); // MAJOR
-                    $education->nilai           = $item[126]; // GPA
-                    $education->certificate     = $item[127];
-                    $education->note            = strtoupper($item[128]);
-                    $education->save();
-
-                    if(!empty($item[129]))
-                    {
+                    // D1
+                    if(!empty($item[71])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
-                        $education->pendidikan      = strtoupper($item[129]);
-                        $education->tahun_awal      = $item[130];
-                        $education->tahun_akhir     = $item[131];
-                        $education->fakultas        = strtoupper($item[132]);
-                        $education->kota            = strtoupper($item[133]); // CITY
-                        $education->jurusan         = strtoupper($item[134]); // MAJOR
-                        $education->nilai           = $item[135]; // GPA
-                        $education->certificate     = $item[136];
-                        $education->note            = strtoupper($item[137]);
+                        $education->pendidikan      = "D1";
+                        $education->tahun_awal      = $item[71];
+                        $education->tahun_akhir     = $item[72];
+                        $education->fakultas        = strtoupper($item[73]);
+                        $education->kota            = strtoupper($item[74]); // CITY
+                        $education->jurusan         = strtoupper($item[75]); // MAJOR
+                        $education->nilai           = $item[76]; // GPA
+                        $education->certificate     = $item[77];
+                        $education->note            = strtoupper($item[78]);
                         $education->save();
                     }
 
-                    $education                  = new UserEducationTemp();
-                    $education->user_temp_id    = $user->id;
-                    $education->pendidikan      = strtoupper($item[138]);
-                    $education->tahun_awal      = $item[139];
-                    $education->tahun_akhir     = $item[140];
-                    $education->fakultas        = strtoupper($item[141]);
-                    $education->kota            = strtoupper($item[142]); // CITY
-                    $education->jurusan         = strtoupper($item[143]); // MAJOR
-                    $education->nilai           = $item[144]; // GPA
-                    $education->certificate     = $item[145];
-                    $education->note            = strtoupper($item[146]);
-                    $education->save();
+                    // D2
+                    if(!empty($item[79])){
+                        $education                  = new UserEducationTemp();
+                        $education->user_temp_id    = $user->id;
+                        $education->pendidikan      = "D2";
+                        $education->tahun_awal      = $item[79];
+                        $education->tahun_akhir     = $item[80];
+                        $education->fakultas        = strtoupper($item[81]);
+                        $education->kota            = strtoupper($item[82]); // CITY
+                        $education->jurusan         = strtoupper($item[83]); // MAJOR
+                        $education->nilai           = $item[84]; // GPA
+                        $education->certificate     = $item[85];
+                        $education->note            = strtoupper($item[86]);
+                        $education->save();
+                    }
 
-                    // ISTRI 1
-                    $family                     = new UserFamilyTemp();
-                    $family->user_temp_id       = $user->id;
-                    $family->hubungan           = strtoupper($item[147]);
-                    $family->nama               = strtoupper($item[148]);
-                    $family->gender             = ($item[149] =='Male' ? 'Laki-laki' : 'Perempuan');
-                    $family->tempat_lahir       = strtoupper($item[150]);
-                    $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[151]);
-                    $family->pekerjaan          = strtoupper($item[152]);
-                    $family->note               = strtoupper($item[153]);
-                    $family->save();
+                    // D3
+                    if(!empty($item[87])){
+                        $education                  = new UserEducationTemp();
+                        $education->user_temp_id    = $user->id;
+                        $education->pendidikan      = "D3";
+                        $education->tahun_awal      = $item[87];
+                        $education->tahun_akhir     = $item[88];
+                        $education->fakultas        = strtoupper($item[89]);
+                        $education->kota            = strtoupper($item[90]); // CITY
+                        $education->jurusan         = strtoupper($item[91]); // MAJOR
+                        $education->nilai           = $item[92]; // GPA
+                        $education->certificate     = $item[93];
+                        $education->note            = strtoupper($item[94]);
+                        $education->save();
+                    }
 
-                    // ISTRI KE 2
-                    if(!empty($item[154]))
+                    // S1
+                    if(!empty($item[95])){
+                        $education                  = new UserEducationTemp();
+                        $education->user_temp_id    = $user->id;
+                        $education->pendidikan      = "S1";
+                        $education->tahun_awal      = $item[95];
+                        $education->tahun_akhir     = $item[96];
+                        $education->fakultas        = strtoupper($item[97]);
+                        $education->kota            = strtoupper($item[98]); // CITY
+                        $education->jurusan         = strtoupper($item[99]); // MAJOR
+                        $education->nilai           = $item[100]; // GPA
+                        $education->certificate     = $item[101];
+                        $education->note            = strtoupper($item[102]);
+                        $education->save();
+                    }
+
+                    // S2
+                    if(!empty($item[103])){
+                        $education                  = new UserEducationTemp();
+                        $education->user_temp_id    = $user->id;
+                        $education->pendidikan      = "S2";
+                        $education->tahun_awal      = $item[103];
+                        $education->tahun_akhir     = $item[104];
+                        $education->fakultas        = strtoupper($item[105]);
+                        $education->kota            = strtoupper($item[106]); // CITY
+                        $education->jurusan         = strtoupper($item[107]); // MAJOR
+                        $education->nilai           = $item[108]; // GPA
+                        $education->certificate     = $item[109];
+                        $education->note            = strtoupper($item[110]);
+                        $education->save();
+                    }
+
+                    // S3
+                    if(!empty($item[111])){
+                        $education                  = new UserEducationTemp();
+                        $education->user_temp_id    = $user->id;
+                        $education->pendidikan      = "S3";
+                        $education->tahun_awal      = $item[111];
+                        $education->tahun_akhir     = $item[112];
+                        $education->fakultas        = strtoupper($item[113]);
+                        $education->kota            = strtoupper($item[114]); // CITY
+                        $education->jurusan         = strtoupper($item[115]); // MAJOR
+                        $education->nilai           = $item[116]; // GPA
+                        $education->certificate     = $item[117];
+                        $education->note            = strtoupper($item[118]);
+                        $education->save();
+                    }
+                   
+                   //AYAH
+                    if(!empty($item[119]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[154]);
+                        $family->hubungan           = "Ayah Kandung";
+                        $family->nama               = strtoupper($item[119]);
+                        $family->gender             = ($item[120]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[121]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[122]);
+                        $family->jenjang_pendidikan = strtoupper($item[123]);
+                        $family->pekerjaan          = strtoupper($item[124]);
+                        $family->save();
+                    }
+
+                    //IBU
+                    if(!empty($item[125]))
+                    {
+                        $family                     = new UserFamilyTemp();
+                        $family->user_temp_id       = $user->id;
+                        $family->hubungan           = "Ibu Kandung";
+                        $family->nama               = strtoupper($item[125]);
+                        $family->gender             = ($item[126]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[127]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[128]);
+                        $family->jenjang_pendidikan = strtoupper($item[129]);
+                        $family->pekerjaan          = strtoupper($item[130]);
+                        $family->save();
+                    }
+
+                    //ISTRI
+                    if(!empty($item[131]))
+                    {
+                        $family                     = new UserFamilyTemp();
+                        $family->user_temp_id       = $user->id;
+                        $family->hubungan           = "Istri";
+                        $family->nama               = strtoupper($item[131]);
+                        $family->gender             = ($item[132]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[133]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[134]);
+                        $family->jenjang_pendidikan = strtoupper($item[135]);
+                        $family->pekerjaan          = strtoupper($item[136]);
+                        $family->save();
+                    }
+
+                    //SUAMI
+                    if(!empty($item[137]))
+                    {
+                        $family                     = new UserFamilyTemp();
+                        $family->user_temp_id       = $user->id;
+                        $family->hubungan           = "Suami";
+                        $family->nama               = strtoupper($item[137]);
+                        $family->gender             = ($item[138]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[139]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[140]);
+                        $family->jenjang_pendidikan = strtoupper($item[141]);
+                        $family->pekerjaan          = strtoupper($item[142]);
+                        $family->save();
+                    }
+
+                    //Anak 1
+                    if(!empty($item[143]))
+                    {
+                        $family                     = new UserFamilyTemp();
+                        $family->user_temp_id       = $user->id;
+                        $family->hubungan           = "Anak 1";
+                        $family->nama               = strtoupper($item[143]);
+                        $family->gender             = ($item[144]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[145]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[146]);
+                        $family->jenjang_pendidikan = strtoupper($item[147]);
+                        $family->pekerjaan          = strtoupper($item[148]);
+                        $family->save();
+                    }
+
+                    //Anak 2
+                    if(!empty($item[149]))
+                    {
+                        $family                     = new UserFamilyTemp();
+                        $family->user_temp_id       = $user->id;
+                        $family->hubungan           = "Anak 2";
+                        $family->nama               = strtoupper($item[149]);
+                        $family->gender             = ($item[150]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[151]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[152]);
+                        $family->jenjang_pendidikan = strtoupper($item[153]);
+                        $family->pekerjaan          = strtoupper($item[154]);
+                        $family->save();
+                    }
+
+                     //Anak 3
+                    if(!empty($item[155]))
+                    {
+                        $family                     = new UserFamilyTemp();
+                        $family->user_temp_id       = $user->id;
+                        $family->hubungan           = "Anak 3";
                         $family->nama               = strtoupper($item[155]);
                         $family->gender             = ($item[156]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[157]);
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[158]);
-                        $family->pekerjaan          = strtoupper($item[159]);
-                        $family->note               = strtoupper($item[160]);
+                        $family->jenjang_pendidikan = strtoupper($item[159]);
+                        $family->pekerjaan          = strtoupper($item[160]);
                         $family->save();
                     }
 
-                    // SUAMI
-                    if(!empty($item[160]))
+
+                    //Anak 4
+                    if(!empty($item[161]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[161]);
-                        $family->nama               = strtoupper($item[162]);
-                        $family->gender             = ($item[163]== 'Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[164]);
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[165]);
+                        $family->hubungan           = "Anak 4";
+                        $family->nama               = strtoupper($item[161]);
+                        $family->gender             = ($item[162]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[163]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[164]);
+                        $family->jenjang_pendidikan = strtoupper($item[165]);
                         $family->pekerjaan          = strtoupper($item[166]);
-                        $family->note               = strtoupper($item[167]);
                         $family->save();
                     }
 
-                    // ANAK 1
-                    if(!empty($item[168]))
+                    //Anak 5
+                    if(!empty($item[167]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[168]);
-                        $family->nama               = strtoupper($item[169]);
-                        $family->gender             = $item[170] == 'Male' ? 'Laki-laki' : 'Perempuan';
-                        $family->tempat_lahir       = strtoupper($item[171]);
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[172]);
-                        $family->pekerjaan          = strtoupper($item[173]);
-                        $family->note               = strtoupper($item[174]);
+                        $family->hubungan           = "Anak 5";
+                        $family->nama               = strtoupper($item[167]);
+                        $family->gender             = ($item[168]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[169]);
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[170]);
+                        $family->jenjang_pendidikan = strtoupper($item[171]);
+                        $family->pekerjaan          = strtoupper($item[172]);
                         $family->save();
-                    }
-
-                    // ANAK 2
-                    if(!empty($item[175]))
-                    {
-                        $family                     = new UserFamilyTemp();
-                        $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[175]);
-                        $family->nama               = strtoupper($item[176]);
-                        $family->gender             = ($item[177] == 'Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[178]);
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[179]);
-                        $family->pekerjaan          = strtoupper($item[180]);
-                        $family->note               = strtoupper($item[181]);
-                        $family->save();
-                    }
-
-                    // ANAK 3
-                    if(!empty($item[182]))
-                    {
-                        $family                     = new UserFamilyTemp();
-                        $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[182]);
-                        $family->nama               = strtoupper($item[183]);
-                        $family->gender             = $item[184] == 'Male' ? 'Laki-laki' : 'Perempuan';
-                        $family->tempat_lahir       = strtoupper($item[185]);
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[186]);
-                        $family->pekerjaan          = strtoupper($item[187]);
-                        $family->note               = strtoupper($item[188]);
-                        $family->save();
-                    }
-
-                    // ANAK 4
-                    if(!empty($item[189]))
-                    {
-                        $family                     = new UserFamilyTemp();
-                        $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[189]);
-                        $family->nama               = strtoupper($item[190]);
-                        $family->gender             = $item[191]== 'Male' ? 'Laki-laki' : 'Perempuan';
-                        $family->tempat_lahir       = strtoupper($item[192]);
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[193]);
-                        $family->pekerjaan          = strtoupper($item[194]);
-                        $family->note               = strtoupper($item[195]);
-                        $family->save();
-                    }
-
-                    // ANAK 5
-                    if(!empty($item[196]))
-                    {
-                        $family                     = new UserFamilyTemp();
-                        $family->user_temp_id       = $user->id;
-                        $family->hubungan           = strtoupper($item[196]);
-                        $family->nama               = strtoupper($item[197]);
-                        $family->gender             = $item[198] == 'Male' ? 'Laki-laki' : 'Perempuan';
-                        $family->tempat_lahir       = strtoupper($item[199]);
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[200]);
-                        $family->pekerjaan          = strtoupper($item[201]);
-                        $family->note               = strtoupper($item[202]);
-                        $family->save();
-                    }
+                    }   
                 }
             }
 
-            return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Data berhasil di import');
+            return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Data successfully imported');
         }
     }
 
@@ -825,7 +857,7 @@ class KaryawanController extends Controller
         $id = $data->user_id;
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Data Dependent Berhasil dihapus !');
+        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Dependent Data Successfully deleted !');
     }
     /**
      * [deleteInvetarisMobil description]
@@ -838,7 +870,7 @@ class KaryawanController extends Controller
         $id = $data->user_id;
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Data Invetaris Berhasil dihapus !');
+        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Invetaris Data Successfully deleted !');
     }
 
     /**
@@ -852,7 +884,7 @@ class KaryawanController extends Controller
         $id = $data->user_id;
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Data Invetaris Berhasil dihapus !');
+        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Invetaris Data Successfully deleted !');
     }
 
     /**
@@ -866,7 +898,7 @@ class KaryawanController extends Controller
         $id = $data->user_id;
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Data Educatuin Berhasil dihapus !');
+        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Educatuin data was successfully deleted !');
     }
 
     /**
@@ -878,7 +910,7 @@ class KaryawanController extends Controller
         $data = UserTemp::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Data Temporary berhasil di hapus');
+        return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Temporary Data was successfully deleted');
     }
 
     /**
@@ -942,56 +974,42 @@ class KaryawanController extends Controller
         }
 
         $data->name         = strtoupper($request->name);
-        $data->nik          = $request->nik;
-        $data->ldap         = $request->ldap;
-        $data->jenis_kelamin= $request->jenis_kelamin;
-        $data->email        = $request->email;
-        // $data->provinsi_id  = $request->provinsi_id;
-        // $data->kabupaten_id = $request->kabupaten_id;
-        // $data->kecamatan_id = $request->kecamatan_id;
-        // $data->kelurahan_id = $request->kelurahan_id;
-
-        $data->telepon      = $request->telepon;
-        $data->agama        = $request->agama;
-        $data->current_address= $request->current_address;
-        $data->access_id    = 2; //
-        $data->division_id  = $request->division_id;
-        $data->department_id= $request->department_id;
-        $data->section_id   = $request->section_id;
-        $data->type_jabatan = $request->type_jabatan;
-        $data->nama_jabatan = $request->nama_jabatan;
-        $data->hak_cuti     = 12;
-        $data->cuti_yang_terpakai = 0;
-        $data->cabang_id    =$request->cabang_id;
-        $data->nama_rekening    = $request->nama_rekening;
-        $data->nomor_rekening   = $request->nomor_rekening;
-        $data->bank_id          = $request->bank_id;
-        // $data->cabang           = $request->cabang;
-        $data->join_date        = $request->join_date;
-        $data->tempat_lahir     = $request->tempat_lahir;
-        $data->tanggal_lahir    = $request->tanggal_lahir;
-        $data->absensi_number       = $request->absensi_number;
         $data->employee_number      = $request->employee_number;
+        $data->absensi_number       = $request->absensi_number;
+        $data->nik                  = $request->nik;
+        $data->ext                  = $request->ext;
+        $data->tempat_lahir         = $request->tempat_lahir;
+        $data->tanggal_lahir        = $request->tanggal_lahir;
+        $data->marital_status       = $request->marital_status;
+        $data->jenis_kelamin        = $request->jenis_kelamin;
+        $data->blood_type           = $request->blood_type;
+        $data->email                = $request->email;
+        $data->join_date            = $request->join_date;
+        $data->organisasi_status    = $request->organisasi_status;
+        $data->npwp_number          = $request->npwp_number;
+        $data->bpjs_number          = $request->bpjs_number;
+        $data->jamsostek_number     = $request->jamsostek_number;
         $data->ktp_number           = $request->ktp_number;
         $data->passport_number      = $request->passport_number;
         $data->kk_number            = $request->kk_number;
-        $data->npwp_number          = $request->npwp_number;
-        $data->bpjs_number          = $request->bpjs_number;
-        $data->organisasi_position     = $request->organisasi_position;
-        $data->organisasi_job_role     = $request->organisasi_job_role;
-        $data->section_id              = $request->section_id;
-        $data->organisasi_status    = $request->organisasi_status;
-        $data->branch_type          = $request->branch_type;
-        $data->ext                  = $request->ext;
-        $data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
-        $data->branch_staff_id      = $request->branch_staff_id;
-        $data->branch_head_id       = $request->branch_head_id;
-        $data->blood_type           = $request->blood_type;
-        $data->marital_status       = $request->marital_status;
+        $data->telepon              = $request->telepon;
         $data->mobile_1             = $request->mobile_1;
         $data->mobile_2             = $request->mobile_2;
+        $data->agama                = $request->agama;
+        $data->current_address      = $request->current_address;
         $data->id_address           = $request->id_address;
-        $data->id_city              = $request->id_city;
+       
+        $data->access_id            = 2;
+        $data->branch_type          = $request->branch_type;
+        $data->hak_cuti             = 12;
+        $data->cuti_yang_terpakai   = 0;
+        $data->cabang_id            =$request->cabang_id;
+        $data->nama_rekening        = $request->nama_rekening;
+        $data->nomor_rekening       = $request->nomor_rekening;
+        $data->bank_id              = $request->bank_id;
+        $data->ext                  = $request->ext;
+        $data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
+        
         $data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
         $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
         $data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
@@ -1005,6 +1023,17 @@ class KaryawanController extends Controller
             $file->move($destinationPath, $fileName);
 
             $data->foto = $fileName;
+        }
+
+        if ($request->hasFile('foto_ktp'))
+        {
+            $fileKtp = $request->file('foto_ktp');
+            $fileNameKtp = md5($fileKtp->getClientOriginalName() . time()) . "." . $fileKtp->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/fotoktp/');
+            $fileKtp->move($destinationPath, $fileNameKtp);
+
+            $data->foto_ktp = $fileNameKtp;
         }
 
         $data->save();
@@ -1085,7 +1114,7 @@ class KaryawanController extends Controller
             }
         }
 
-        return redirect()->route('administrator.karyawan.edit', $data->id)->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.karyawan.edit', $data->id)->with('message-success', 'Data saved successfully');
     }
 
     /**
@@ -1104,48 +1133,42 @@ class KaryawanController extends Controller
         ]);
 
         $data->password             = bcrypt($request->password);
-
-        $data->name         = strtoupper($request->name);
-        $data->nik          = $request->nik;
-        $data->ldap         = $request->ldap;
-        $data->jenis_kelamin= $request->jenis_kelamin;
-        $data->email        = $request->email;
-        $data->ext          = $request->ext;
-        $data->telepon      = $request->telepon;
-        $data->agama        = $request->agama;
-        $data->alamat       = $request->alamat;
-        $data->access_id    = 2;
-        $data->jabatan_cabang= $request->jabatan_cabang;
-        $data->division_id  = $request->division_id;
-        $data->department_id= $request->department_id;
-        $data->section_id   = $request->section_id;
-        $data->type_jabatan = $request->type_jabatan;
-        $data->nama_jabatan = $request->nama_jabatan;
-        $data->hak_cuti     = 12;
-        $data->cuti_yang_terpakai = 0;
-        $data->cabang_id    =$request->cabang_id;
-        $data->nama_rekening    = $request->nama_rekening;
-        $data->nomor_rekening   = $request->nomor_rekening;
-        $data->bank_id          = $request->bank_id;
-        $data->join_date        = $request->join_date;
-        $data->tempat_lahir     = $request->tempat_lahir;
-        $data->tanggal_lahir    = $request->tanggal_lahir;
-        $data->absensi_number       = $request->absensi_number;
+        $data->name                 = strtoupper($request->name);
         $data->employee_number      = $request->employee_number;
+        $data->absensi_number       = $request->absensi_number;
+        $data->nik                  = $request->nik;
+        $data->ext                  = $request->ext;
+        $data->tempat_lahir         = $request->tempat_lahir;
+        $data->tanggal_lahir        = $request->tanggal_lahir;
+        $data->marital_status       = $request->marital_status;
+        $data->jenis_kelamin        = $request->jenis_kelamin;
+        $data->blood_type           = $request->blood_type;
+        $data->email                = $request->email;
+        $data->join_date            = $request->join_date;
+        $data->organisasi_status    = $request->organisasi_status;
+        $data->npwp_number          = $request->npwp_number;
+        $data->bpjs_number          = $request->bpjs_number;
+        $data->jamsostek_number     = $request->jamsostek_number;
         $data->ktp_number           = $request->ktp_number;
         $data->passport_number      = $request->passport_number;
         $data->kk_number            = $request->kk_number;
-        $data->npwp_number          = $request->npwp_number;
-        $data->bpjs_number          = $request->bpjs_number;
-        $data->organisasi_position     = $request->organisasi_position;
-        $data->organisasi_job_role     = $request->organisasi_job_role;
-        $data->section_id              = $request->section_id;
-        $data->organisasi_status    = $request->organisasi_status;
+        $data->telepon              = $request->telepon;
+        $data->mobile_1             = $request->mobile_1;
+        $data->mobile_2             = $request->mobile_2;
+        $data->agama                = $request->agama;
+        $data->current_address      = $request->current_address;
+        $data->id_address           = $request->id_address;
+        $data->access_id            = 2;
         $data->branch_type          = $request->branch_type;
+        $data->hak_cuti             = 12;
+        $data->cuti_yang_terpakai   = 0;
+        $data->cabang_id            =$request->cabang_id;
+        $data->nama_rekening        = $request->nama_rekening;
+        $data->nomor_rekening       = $request->nomor_rekening;
+        $data->bank_id              = $request->bank_id;
         $data->ext                  = $request->ext;
         $data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
-        $data->blood_type           = $request->blood_type;
-        $data->marital_status           = $request->marital_status;
+        
         $data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
         $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
         $data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
@@ -1159,6 +1182,16 @@ class KaryawanController extends Controller
             $file->move($destinationPath, $fileName);
 
             $data->foto = $fileName;
+        }
+        if (request()->hasFile('foto_ktp'))
+        {
+            $fileKtp = $request->file('foto_ktp');
+            $fileNameKtp = md5($fileKtp->getClientOriginalName() . time()) . "." . $fileKtp->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/fotoktp/');
+            $fileKtp->move($destinationPath, $fileNameKtp);
+
+            $data->foto_ktp = $fileNameKtp;
         }
 
         $data->save();
@@ -1239,7 +1272,7 @@ class KaryawanController extends Controller
             }
         }
 
-        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Data saved successfully !');
     }
     /**
      * [deleteInvetaris description]
@@ -1252,7 +1285,7 @@ class KaryawanController extends Controller
         $id = $data->user_id;
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Data Invetaris Berhasil dihapus !');
+        return redirect()->route('administrator.karyawan.edit', $id)->with('message-success', 'Invetaris Data Successfully deleted!');
     }
 
     /**
@@ -1265,7 +1298,7 @@ class KaryawanController extends Controller
         $user_id = $data->user_id;
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.edit', $user_id)->with('message-success', 'Data Cuti berhasil dihapus');
+        return redirect()->route('administrator.karyawan.edit', $user_id)->with('message-success', 'Leave data successfully deleted');
     }
 
     /**
@@ -1277,7 +1310,7 @@ class KaryawanController extends Controller
         $data = User::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Data lama berhasil di hapus');
+        return redirect()->route('administrator.karyawan.preview-import')->with('message-success', 'Old data was successfully deleted');
     }
 
     /**
@@ -1294,7 +1327,7 @@ class KaryawanController extends Controller
 
         UserEducation::where('user_id', $id)->delete();
 
-        return redirect()->route('administrator.karyawan.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.karyawan.index')->with('message-sucess', 'Data successfully deleted');
     }
 
     /**
@@ -1307,5 +1340,437 @@ class KaryawanController extends Controller
         \Session::put('is_login_administrator', true);
         
         return redirect()->route('karyawan.dashboard');
+    }
+
+    public function downloadExcel()
+    {
+        $data       = User::where('access_id', 2)->orderBy('id', 'DESC')->get();
+        $params = [];
+
+         $params = [];
+
+        foreach($data as $k =>  $item)
+        {
+            
+            $params[$k]['No']                   = $k+1;
+            $params[$k]['Employee Number ']     = $item->employee_number;
+            $params[$k]['Absensi Number']       = $item->absensi_number;
+            $params[$k]['NIK']                  = $item->nik;
+            $params[$k]['Name']                 = $item->name;
+            $params[$k]['Join Date']            = $item->join_date;
+            $params[$k]['Gender']               = $item->jenis_kelamin;
+            $params[$k]['Maritial Status']      = $item->marital_status;
+            $params[$k]['Religion']             = $item->agama;
+            $params[$k]['KTP Number']           = $item->ktp_number;
+            $params[$k]['Passport Number']      = $item->passport_number;
+            $params[$k]['KK Number']            = $item->kk_number;
+            $params[$k]['NPWP Number']          = $item->npwp_number;
+            $params[$k]['No BPJS Kesehatan']    = $item->jamsostek_number;
+            $params[$k]['No BPJS Ketenagakerjaan']  = $item->bpjs_number;
+            $params[$k]['Place of Birth']       = $item->tempat_lahir;
+            $params[$k]['Date of Birth']        = $item->tanggal_lahir;
+            $params[$k]['ID Address']           = $item->id_address;
+            //$params[$k]['ID City']              = isset($item->kota->nama) ? $item->kota->nama : '';
+            //$params[$k]['ID Zip Code']          = $item->id_zip_code;
+            $params[$k]['Current Address']      = $item->current_address;
+            $params[$k]['Telp']                 = $item->telepon;
+            $params[$k]['Ext']                  = $item->ext;
+            $params[$k]['Mobile 1']             = $item->mobile_1;
+            $params[$k]['Mobile 2']             = $item->mobile_2;
+            $params[$k]['Email']                = $item->email;
+            $params[$k]['Blood Type']           = $item->blood_type;
+
+            if(!empty($item->bank_id)) {
+                $params[$k]['Bank ']                = $item->bank->name;
+            }elseif (empty($item->bank_id)) {
+                $params[$k]['Bank ']                ="";
+            }
+
+            $params[$k]['Bank Account Name']    = $item->nama_rekening;
+            $params[$k]['Bank Account Number']  = $item->nomor_rekening;
+
+            $pos ="";
+            if(!empty($item->empore_organisasi_staff_id)){
+                $pos= "Staff";
+            }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_supervisor_id)) {
+                $pos= "Supervisor";
+            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and !empty($item->empore_organisasi_manager_id)) {
+                 $pos= "Manager";
+            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and empty($item->empore_organisasi_manager_id) and !empty($item->empore_organisasi_direktur)) {
+                 $pos= "Direkitur";
+            }
+
+            $params[$k]['Position']             = $pos;
+
+            $jobrule ="";
+            if(!empty($item->empore_organisasi_staff_id)){
+                $jobrule = isset($item->empore_staff->name) ? $item->empore_staff->name : '';
+
+            }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_supervisor_id)) {
+                $jobrule = isset($item->empore_supervisor->name) ? $item->empore_supervisor->name : ''; 
+            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and !empty($tem->empore_organisasi_manager_id)) {
+                $jobrule = isset($item->empore_manager->name) ? $item->empore_manager->name : '';
+            }
+                                    
+            $params[$k]['Job Rule']             = $jobrule;
+            
+            $params[$k]['status']               = $item->organisasi_status;
+
+            $sd = UserEducation::where('user_id', $item->id)->where('pendidikan','SD')->first();
+
+            if(!empty($sd)) {
+                    $params[$k]['Education SD']           = $sd ->pendidikan;
+                    $params[$k]['Start Year SD']          = $sd->tahun_awal;
+                    $params[$k]['End Year SD']            = $sd->tahun_akhir;
+                    $params[$k]['Institution SD']         = $sd->fakultas;
+                    $params[$k]['City Education SD']      = $sd->kota;
+                    $params[$k]['Major SD']               = $sd->jurusan;
+                    $params[$k]['GPA SD']                 = $sd->nilai;
+            } else
+            {
+                    $params[$k]['Education SD']           = "-";
+                    $params[$k]['Start Year SD']          = "-";
+                    $params[$k]['End Year SD']            = "-";
+                    $params[$k]['Institution SD']         = "-";
+                    $params[$k]['City Education SD']      = "-";
+                    $params[$k]['Major SD']               = "-";
+                    $params[$k]['GPA SD']                 = "-";
+            }
+            $smp = UserEducation::where('user_id', $item->id)->where('pendidikan','SMP')->first();
+            if(!empty($smp)) {
+                    $params[$k]['Education SMP']           = $smp ->pendidikan;
+                    $params[$k]['Start Year SMP']          = $smp->tahun_awal;
+                    $params[$k]['End Year SMP']            = $smp->tahun_akhir;
+                    $params[$k]['Institution SMP']         = $smp->fakultas;
+                    $params[$k]['City Education SMP']      = $smp->kota;
+                    $params[$k]['Major SMP']               = $smp->jurusan;
+                    $params[$k]['GPA SMP']                 = $smp->nilai;
+            } else
+            {
+                    $params[$k]['Education SMP']           = "-";
+                    $params[$k]['Start Year SMP']          = "-";
+                    $params[$k]['End Year SMP']            = "-";
+                    $params[$k]['Institution SMP']         = "-";
+                    $params[$k]['City Education SMP']      = "-";
+                    $params[$k]['Major SMP']               = "-";
+                    $params[$k]['GPA SMP']                 = "-";
+            }
+
+            $sma = UserEducation::where('user_id', $item->id)->where('pendidikan','SMA/SMK')->first();
+            if(!empty($sma)) {
+                    $params[$k]['Education SMA/SMK']           = $sma ->pendidikan;
+                    $params[$k]['Start Year SMA/SMK']          = $sma->tahun_awal;
+                    $params[$k]['End Year SMA/SMK']            = $sma->tahun_akhir;
+                    $params[$k]['Institution SMA/SMK']         = $sma->fakultas;
+                    $params[$k]['City Education SMA/SMK']      = $sma->kota;
+                    $params[$k]['Major SMA/SMK']               = $sma->jurusan;
+                    $params[$k]['GPA SMA/SMK']                 = $sma->nilai;
+            } else
+            {
+                    $params[$k]['Education SMA/SMK']           = "-";
+                    $params[$k]['Start Year SMA/SMK']          = "-";
+                    $params[$k]['End Year SMA/SMK']            = "-";
+                    $params[$k]['Institution SMA/SMK']         = "-";
+                    $params[$k]['City Education SMA/SMK']      = "-";
+                    $params[$k]['Major SMA/SMK']               = "-";
+                    $params[$k]['GPA SMA/SMK']                 = "-";
+            }
+
+            $diploma = UserEducation::where('user_id', $item->id)->where('pendidikan','D1')->first();
+            if(!empty($diploma)) {
+                    $params[$k]['Education D1']           = $diploma ->pendidikan;
+                    $params[$k]['Start Year D1']          = $diploma->tahun_awal;
+                    $params[$k]['End Year D1']            = $diploma->tahun_akhir;
+                    $params[$k]['Institution D1']         = $diploma->fakultas;
+                    $params[$k]['City Education D1']      = $diploma->kota;
+                    $params[$k]['Major D1']               = $diploma->jurusan;
+                    $params[$k]['GPA D1']                 = $diploma->nilai;
+            } else
+            {
+                    $params[$k]['Education D1']           = "-";
+                    $params[$k]['Start Year D1']          = "-";
+                    $params[$k]['End Year D1']            = "-";
+                    $params[$k]['Institution D1']         = "-";
+                    $params[$k]['City Education D1']      = "-";
+                    $params[$k]['Major D1']               = "-";
+                    $params[$k]['GPA D1']                 = "-";
+            }
+
+            $diploma2 = UserEducation::where('user_id', $item->id)->where('pendidikan','D2')->first();
+            if(!empty($diploma2)) {
+                    $params[$k]['Education D2']           = $diploma2 ->pendidikan;
+                    $params[$k]['Start Year D2']          = $diploma2->tahun_awal;
+                    $params[$k]['End Year D2']            = $diploma2->tahun_akhir;
+                    $params[$k]['Institution D2']         = $diploma2->fakultas;
+                    $params[$k]['City Education D2']      = $diploma2->kota;
+                    $params[$k]['Major D2']               = $diploma2->jurusan;
+                    $params[$k]['GPA D2']                 = $diploma2->nilai;
+            } else
+            {
+                    $params[$k]['Education D2']           = "-";
+                    $params[$k]['Start Year D2']          = "-";
+                    $params[$k]['End Year D2']            = "-";
+                    $params[$k]['Institution D2']         = "-";
+                    $params[$k]['City Education D2']      = "-";
+                    $params[$k]['Major D2']               = "-";
+                    $params[$k]['GPA D2']                 = "-";
+            }
+
+            $diploma3 = UserEducation::where('user_id', $item->id)->where('pendidikan','D3')->first();
+            if(!empty($diploma3)) {
+                    $params[$k]['Education D3']           = $diploma3 ->pendidikan;
+                    $params[$k]['Start Year D3']          = $diploma3->tahun_awal;
+                    $params[$k]['End Year D3']            = $diploma3->tahun_akhir;
+                    $params[$k]['Institution D3']         = $diploma3->fakultas;
+                    $params[$k]['City Education D3']      = $diploma3->kota;
+                    $params[$k]['Major D3']               = $diploma3->jurusan;
+                    $params[$k]['GPA D3']                 = $diploma3->nilai;
+            } else
+            {
+                    $params[$k]['Education D3']           = "-";
+                    $params[$k]['Start Year D3']          = "-";
+                    $params[$k]['End Year D3']            = "-";
+                    $params[$k]['Institution D3']         = "-";
+                    $params[$k]['City Education D3']      = "-";
+                    $params[$k]['Major D3']               = "-";
+                    $params[$k]['GPA D3']                 = "-";
+            }
+
+            $s1 = UserEducation::where('user_id', $item->id)->where('pendidikan','S1')->first();
+            if(!empty($s1)) {
+                    $params[$k]['Education S1']           = $s1 ->pendidikan;
+                    $params[$k]['Start Year S1']          = $s1->tahun_awal;
+                    $params[$k]['End Year S1']            = $s1->tahun_akhir;
+                    $params[$k]['Institution S1']         = $s1->fakultas;
+                    $params[$k]['City Education S1']      = $s1->kota;
+                    $params[$k]['Major S1']               = $s1->jurusan;
+                    $params[$k]['GPA S1']                 = $s1->nilai;
+            } else
+            {
+                    $params[$k]['Education S1']           = "-";
+                    $params[$k]['Start Year S1']          = "-";
+                    $params[$k]['End Year S1']            = "-";
+                    $params[$k]['Institution S1']         = "-";
+                    $params[$k]['City Education S1']      = "-";
+                    $params[$k]['Major S1']               = "-";
+                    $params[$k]['GPA S1']                 = "-";
+            }
+
+            $s2 = UserEducation::where('user_id', $item->id)->where('pendidikan','S2')->first();
+            if(!empty($s2)) {
+                    $params[$k]['Education S2']           = $s2 ->pendidikan;
+                    $params[$k]['Start Year S2']          = $s2->tahun_awal;
+                    $params[$k]['End Year S2']            = $s2->tahun_akhir;
+                    $params[$k]['Institution S2']         = $s2->fakultas;
+                    $params[$k]['City Education S2']      = $s2->kota;
+                    $params[$k]['Major S2']               = $s2->jurusan;
+                    $params[$k]['GPA S2']                 = $s2->nilai;
+            } else
+            {
+                    $params[$k]['Education S2']           = "-";
+                    $params[$k]['Start Year S2']          = "-";
+                    $params[$k]['End Year S2']            = "-";
+                    $params[$k]['Institution S2']         = "-";
+                    $params[$k]['City Education S2']      = "-";
+                    $params[$k]['Major S2']               = "-";
+                    $params[$k]['GPA S2']                 = "-";
+            }
+
+            $s3 = UserEducation::where('user_id', $item->id)->where('pendidikan','S3')->first();
+            if(!empty($s3)) {
+                    $params[$k]['Education S3']           = $s3 ->pendidikan;
+                    $params[$k]['Start Year S3']          = $s3->tahun_awal;
+                    $params[$k]['End Year S3']            = $s3->tahun_akhir;
+                    $params[$k]['Institution S3']         = $s3->fakultas;
+                    $params[$k]['City Education S3']      = $s3->kota;
+                    $params[$k]['Major S3']               = $s3->jurusan;
+                    $params[$k]['GPA S3']                 = $s3->nilai;
+            } else
+            {
+                    $params[$k]['Education S3']           = "-";
+                    $params[$k]['Start Year S3']          = "-";
+                    $params[$k]['End Year S3']            = "-";
+                    $params[$k]['Institution S3']         = "-";
+                    $params[$k]['City Education S3']      = "-";
+                    $params[$k]['Major S3']               = "-";
+                    $params[$k]['GPA S3']                 = "-";
+            }
+
+            $ayah = UserFamily::where('user_id', $item->id)->where('hubungan','Ayah Kandung')->first();
+            if(!empty($ayah)) {
+                    $params[$k]['Relative Name Ayah Kandung']           = $ayah ->nama;
+                    $params[$k]['Place of birth Ayah Kandung']          = $ayah->tempat_lahir;
+                    $params[$k]['Date of birth Ayah Kandung']           = $ayah->tanggal_lahir;
+                    $params[$k]['Education level Ayah Kandung']         = $ayah->jenjang_pendidikan;
+                    $params[$k]['Occupation Ayah Kandung']              = $ayah->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Ayah Kandung']           = "-";
+                    $params[$k]['Place of birth Ayah Kandung']          = "-";
+                    $params[$k]['Date of birth Ayah Kandung']           = "-";
+                    $params[$k]['Education level Ayah Kandung']         = "-";
+                    $params[$k]['Occupation Ayah Kandung']              = "-";
+            }
+            $ibu = UserFamily::where('user_id', $item->id)->where('hubungan','Ibu Kandung')->first();
+            if(!empty($ibu)) {
+                    $params[$k]['Relative Name Ibu Kandung']           = $ibu ->nama;
+                    $params[$k]['Place of birth Ibu Kandung']          = $ibu->tempat_lahir;
+                    $params[$k]['Date of birth Ibu Kandung']           = $ibu->tanggal_lahir;
+                    $params[$k]['Education level Ibu Kandung']         = $ibu->jenjang_pendidikan;
+                    $params[$k]['Occupation Ibu Kandung']              = $ibu->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Ibu Kandung']           = "-";
+                    $params[$k]['Place of birth Ibu Kandung']          = "-";
+                    $params[$k]['Date of birth Ibu Kandung']           = "-";
+                    $params[$k]['Education level Ibu Kandung']         = "-";
+                    $params[$k]['Occupation Ibu Kandung']              = "-";
+            }
+            
+            $istri = UserFamily::where('user_id', $item->id)->where('hubungan','Istri')->first();
+            if(!empty($istri)) {
+                    $params[$k]['Relative Name Istri']           = $istri ->nama;
+                    $params[$k]['Place of birth Istri']          = $istri->tempat_lahir;
+                    $params[$k]['Date of birth Istri']           = $istri->tanggal_lahir;
+                    $params[$k]['Education level Istri']         = $istri->jenjang_pendidikan;
+                    $params[$k]['Occupation Istri']              = $istri->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Istri']           = "-";
+                    $params[$k]['Place of birth Istri']          = "-";
+                    $params[$k]['Date of birth Istri']           = "-";
+                    $params[$k]['Education level Istri']         = "-";
+                    $params[$k]['Occupation Istri']              = "-";
+            }
+
+            $suami = UserFamily::where('user_id', $item->id)->where('hubungan','Suami')->first();
+            if(!empty($suami)) {
+                    $params[$k]['Relative Name Suami']           = $suami ->nama;
+                    $params[$k]['Place of birth Suami']          = $suami->tempat_lahir;
+                    $params[$k]['Date of birth Suami']           = $suami->tanggal_lahir;
+                    $params[$k]['Education level Suami']         = $suami->jenjang_pendidikan;
+                    $params[$k]['Occupation Suami']              = $suami->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Suami']           = "-";
+                    $params[$k]['Place of birth Suami']          = "-";
+                    $params[$k]['Date of birth Suami']           = "-";
+                    $params[$k]['Education level Suami']         = "-";
+                    $params[$k]['Occupation Suami']              = "-";
+            }
+
+            $anak1 = UserFamily::where('user_id', $item->id)->where('hubungan','Anak 1')->first();
+            if(!empty($anak1)) {
+                    $params[$k]['Relative Name Anak 1']           = $anak1 ->nama;
+                    $params[$k]['Place of birth Anak 1']          = $anak1->tempat_lahir;
+                    $params[$k]['Date of birth Anak 1']           = $anak1->tanggal_lahir;
+                    $params[$k]['Education level Anak 1']         = $anak1->jenjang_pendidikan;
+                    $params[$k]['Occupation Anak 1']              = $anak1->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Anak 1']           = "-";
+                    $params[$k]['Place of birth Anak 1']          = "-";
+                    $params[$k]['Date of birth Anak 1']           = "-";
+                    $params[$k]['Education level Anak 1']         = "-";
+                    $params[$k]['Occupation Anak 1']              = "-";
+            }
+
+            $anak2 = UserFamily::where('user_id', $item->id)->where('hubungan','Anak 2')->first();
+            if(!empty($anak2)) {
+                    $params[$k]['Relative Name Anak 2']           = $anak2 ->nama;
+                    $params[$k]['Place of birth Anak 2']          = $anak2->tempat_lahir;
+                    $params[$k]['Date of birth Anak 2']           = $anak2->tanggal_lahir;
+                    $params[$k]['Education level Anak 2']         = $anak2->jenjang_pendidikan;
+                    $params[$k]['Occupation Anak 2']              = $anak2->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Anak 2']           = "-";
+                    $params[$k]['Place of birth Anak 2']          = "-";
+                    $params[$k]['Date of birth Anak 2']           = "-";
+                    $params[$k]['Education level Anak 2']         = "-";
+                    $params[$k]['Occupation Anak 2']              = "-";
+            }
+
+            $anak3 = UserFamily::where('user_id', $item->id)->where('hubungan','Anak 3')->first();
+            if(!empty($anak3)) {
+                    $params[$k]['Relative Name Anak 3']           = $anak3 ->nama;
+                    $params[$k]['Place of birth Anak 3']          = $anak3->tempat_lahir;
+                    $params[$k]['Date of birth Anak 3']           = $anak3->tanggal_lahir;
+                    $params[$k]['Education level Anak 3']         = $anak3->jenjang_pendidikan;
+                    $params[$k]['Occupation Anak 3']              = $anak3->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Anak 3']           = "-";
+                    $params[$k]['Place of birth Anak 3']          = "-";
+                    $params[$k]['Date of birth Anak 3']           = "-";
+                    $params[$k]['Education level Anak 3']         = "-";
+                    $params[$k]['Occupation Anak 3']              = "-";
+            }
+
+            $anak4 = UserFamily::where('user_id', $item->id)->where('hubungan','Anak 4')->first();
+            if(!empty($anak4)) {
+                    $params[$k]['Relative Name Anak 4']           = $anak4 ->nama;
+                    $params[$k]['Place of birth Anak 4']          = $anak4->tempat_lahir;
+                    $params[$k]['Date of birth Anak 4']           = $anak4->tanggal_lahir;
+                    $params[$k]['Education level Anak 4']         = $anak4->jenjang_pendidikan;
+                    $params[$k]['Occupation Anak 4']              = $anak4->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Anak 4']           = "-";
+                    $params[$k]['Place of birth Anak 4']          = "-";
+                    $params[$k]['Date of birth Anak 4']           = "-";
+                    $params[$k]['Education level Anak 4']         = "-";
+                    $params[$k]['Occupation Anak 4']              = "-";
+            }
+
+            $anak5 = UserFamily::where('user_id', $item->id)->where('hubungan','Anak 5')->first();
+            if(!empty($anak5)) {
+                    $params[$k]['Relative Name Anak 5']           = $anak5 ->nama;
+                    $params[$k]['Place of birth Anak 5']          = $anak5->tempat_lahir;
+                    $params[$k]['Date of birth Anak 5']           = $anak5->tanggal_lahir;
+                    $params[$k]['Education level Anak 5']         = $anak5->jenjang_pendidikan;
+                    $params[$k]['Occupation Anak 5']              = $anak5->pekerjaan;
+            } else
+            {       
+                    $params[$k]['Relative Name Anak 5']           = "-";
+                    $params[$k]['Place of birth Anak 5']          = "-";
+                    $params[$k]['Date of birth Anak 5']           = "-";
+                    $params[$k]['Education level Anak 5']         = "-";
+                    $params[$k]['Occupation Anak 5']              = "-";
+            }
+        }
+
+        $styleHeader = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+                'rotation' => 90,
+                'startColor' => [
+                    'argb' => 'FFA0A0A0',
+                ],
+                'endColor' => [
+                    'argb' => 'FFFFFFFF',
+                ],
+            ],
+            ''
+        ];
+
+        return \Excel::create('Report-Employee',  function($excel) use($params, $styleHeader){
+              $excel->sheet('mysheet',  function($sheet) use($params){
+                $sheet->fromArray($params);
+              });
+            $excel->getActiveSheet()->getStyle('A1:EI1')->applyFromArray($styleHeader);
+        })->download('xls');
     }
 }

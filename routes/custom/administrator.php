@@ -67,6 +67,8 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('karyawan/import-all', 'KaryawanController@importAll')->name('administrator.karyawan.import-all');
 	Route::get('karyawan/print-profile/{id}', 'KaryawanController@printProfile')->name('administrator.karyawan.print-profile');
 	Route::get('karyawan/delete-old-user/{id}', 'KaryawanController@deleteOldUser')->name('administrator.karyawan.delete-old-user');
+	Route::get('karyawan/downloadExcel','KaryawanController@downloadExcel')->name('administrator.karyawan.downloadExcel');
+
 	Route::get('absensi/index', 'AbsensiController@index')->name('administrator.absensi.index');
 	Route::get('absensi/import', 'AbsensiController@import')->name('administrator.absensi.import');
 	Route::post('absensi/temp-import', 'AbsensiController@tempImport')->name('administrator.absensi.temp-import');

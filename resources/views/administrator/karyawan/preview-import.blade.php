@@ -49,8 +49,6 @@
                                     <th>PLACE OF BIRTH</th>
                                     <th>DATE OF BIRTH</th>
                                     <th>ID ADDRESS</th>
-                                    <th>ID CITY</th>
-                                    <th>ID ZIP CODE</th>
                                     <th>CURRENT ADDRESS</th>
                                     <th>TELP</th>
                                     <th>MOBILE 1</th>
@@ -73,12 +71,10 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->join_date }}</td>
                                         <td>{{ $item->gender }}</td>
-                                        <td>{{ $item->no_bpjs_kesehatan }}</td>
+                                        <td>{{ $item->jamsostek_number }}</td>
                                         <td>{{ $item->place_of_birth }}</td>
                                         <td>{{ $item->date_of_birth }}</td>
                                         <td>{{ $item->id_address }}</td>
-                                        <td>{{ $item->id_city }}</td>
-                                        <td>{{ $item->id_zip_code }}</td>
                                         <td>{{ $item->current_address }}</td>
                                         <td>{{ $item->telp }}</td>
                                         <td>{{ $item->mobile_1 }}</td>
@@ -110,10 +106,8 @@
                                                                 <th>Relationship</th>
                                                                 <th>Relative Name</th>
                                                                 <th>Gender</th>
-                                                                <th>City</th>
                                                                 <th>Date of Birth</th>
                                                                 <th>Occupation</th>
-                                                                <th>Note</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -123,10 +117,8 @@
                                                                 <td>{{ $i->hubungan  }}</td>
                                                                 <td>{{ $i->nama  }}</td>
                                                                 <td>{{ $i->gender  }}</td>
-                                                                <td>{{ $i->city  }}</td>
                                                                 <td>{{ $i->tanggal_lahir  }}</td>
                                                                 <td>{{ $i->pekerjaan  }}</td>
-                                                                <td>{{ $i->note  }}</td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
