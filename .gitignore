@@ -1,5 +1,4 @@
 /public/file-struk/*
-/config/database.php
 /node_modules
 /public/hot
 /public/storage
