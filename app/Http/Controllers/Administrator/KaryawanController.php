@@ -1390,7 +1390,8 @@ class KaryawanController extends Controller
             $params[$k]['Bank Account Number']  = $item->nomor_rekening;
 
             $pos ="";
-            if(!empty($item->empore_organisasi_staff_id)){
+
+            /*if(!empty($item->empore_organisasi_staff_id)){
                 $pos= "Staff";
             }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_supervisor_id)) {
                 $pos= "Supervisor";
@@ -1399,16 +1400,32 @@ class KaryawanController extends Controller
             }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and empty($item->empore_organisasi_manager_id) and !empty($item->empore_organisasi_direktur)) {
                  $pos= "Direkitur";
             }
+            */
+            if(!empty($item->empore_organisasi_staff_id)){
+                $pos= "Staff";
+            }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_manager_id)) {
+                 $pos= "Manager";
+            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_manager_id) and !empty($item->empore_organisasi_direktur)) {
+                $pos= "Direktur";
+            }
 
             $params[$k]['Position']             = $pos;
 
             $jobrule ="";
+            /*
             if(!empty($item->empore_organisasi_staff_id)){
                 $jobrule = isset($item->empore_staff->name) ? $item->empore_staff->name : '';
 
             }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_supervisor_id)) {
                 $jobrule = isset($item->empore_supervisor->name) ? $item->empore_supervisor->name : ''; 
             }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and !empty($tem->empore_organisasi_manager_id)) {
+                $jobrule = isset($item->empore_manager->name) ? $item->empore_manager->name : '';
+            }
+            */
+
+            if(!empty($item->empore_organisasi_staff_id)){
+                $jobrule = isset($item->empore_staff->name) ? $item->empore_staff->name : '';
+            }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_manager_id)) {
                 $jobrule = isset($item->empore_manager->name) ? $item->empore_manager->name : '';
             }
                                     
