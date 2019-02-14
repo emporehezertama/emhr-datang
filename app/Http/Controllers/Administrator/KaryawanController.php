@@ -400,7 +400,9 @@ class KaryawanController extends Controller
                     $user->absensi_number   = $item[1];
                     $user->nik              = $item[2];
                     $user->name             = strtoupper($item[3]);
-                    $user->join_date        = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[4]);
+                    if(!empty($item[4])){
+                       $user->join_date        = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[4]);
+                    }
 
                     if($item[5] == 'Male' || $item[5] == 'male' || $item[5] == 'Laki-laki' || $item[5]=='laki-laki' || strtoupper($item[5]) == 'PRIA')
                     {
@@ -427,7 +429,11 @@ class KaryawanController extends Controller
                     $user->bpjs_number      = $item[12];
                     $user->jamsostek_number = $item[13];
                     $user->place_of_birth   = strtoupper($item[14]);
-                    $user->date_of_birth    = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[15]);
+                    
+                    if(!empty($item[15])){
+                       $user->date_of_birth    = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[15]);
+                    }
+
                     $user->id_address       = strtoupper($item[16]);
 
                     //provinsi
@@ -702,7 +708,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[119]);
                         $family->gender             = ($item[120]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[121]);
+                        if(!empty($item[122])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[122]);
+                        }
+
                         $family->jenjang_pendidikan = strtoupper($item[123]);
                         $family->pekerjaan          = strtoupper($item[124]);
                         $family->save();
@@ -717,7 +726,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[125]);
                         $family->gender             = ($item[126]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[127]);
+                        
+                        if(!empty($item[128])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[128]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[129]);
                         $family->pekerjaan          = strtoupper($item[130]);
                         $family->save();
@@ -732,7 +744,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[131]);
                         $family->gender             = ($item[132]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[133]);
+                        
+                         if(!empty($item[134])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[134]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[135]);
                         $family->pekerjaan          = strtoupper($item[136]);
                         $family->save();
@@ -747,7 +762,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[137]);
                         $family->gender             = ($item[138]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[139]);
+                        
+                        if(!empty($item[140])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[140]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[141]);
                         $family->pekerjaan          = strtoupper($item[142]);
                         $family->save();
@@ -762,7 +780,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[143]);
                         $family->gender             = ($item[144]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[145]);
+                        
+                        if(!empty($item[146])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[146]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[147]);
                         $family->pekerjaan          = strtoupper($item[148]);
                         $family->save();
@@ -777,7 +798,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[149]);
                         $family->gender             = ($item[150]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[151]);
+                        
+                        if(!empty($item[152])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[152]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[153]);
                         $family->pekerjaan          = strtoupper($item[154]);
                         $family->save();
@@ -792,7 +816,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[155]);
                         $family->gender             = ($item[156]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[157]);
+                        
+                        if(!empty($item[158])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[158]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[159]);
                         $family->pekerjaan          = strtoupper($item[160]);
                         $family->save();
@@ -808,7 +835,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[161]);
                         $family->gender             = ($item[162]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[163]);
+                        
+                        if(!empty($item[164])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[164]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[165]);
                         $family->pekerjaan          = strtoupper($item[166]);
                         $family->save();
@@ -823,7 +853,10 @@ class KaryawanController extends Controller
                         $family->nama               = strtoupper($item[167]);
                         $family->gender             = ($item[168]=='Male' ? 'Laki-laki' : 'Perempuan');
                         $family->tempat_lahir       = strtoupper($item[169]);
+                        
+                        if(!empty($item[170])){
                         $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[170]);
+                        }
                         $family->jenjang_pendidikan = strtoupper($item[171]);
                         $family->pekerjaan          = strtoupper($item[172]);
                         $family->save();

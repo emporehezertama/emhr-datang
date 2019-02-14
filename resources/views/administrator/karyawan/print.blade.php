@@ -31,8 +31,12 @@
 	<hr>
 	<table>
 		<tr>
-			<td>LDAP</td>
-			<td>: {{ $data->ldap }}</td>
+			<td>Employee Number</td>
+			<td>: {{ $data->employee_number }}</td>
+		</tr>
+		<tr>
+			<td>Absensi Number</td>
+			<td>: {{ $data->absensi_number }}</td>
 		</tr>
 		<tr>
 			<td>Place of birth</td>
@@ -55,19 +59,32 @@
 			<td>: {{ $data->join_date }}</td>
 		</tr>
 		<tr>
+			<td>Marital Status</td>
+			<td>: {{ $data->marital_status }}</td>
+		</tr>
+
+		<tr>
+			<td>Ext</td>
+			<td>: {{ $data->ext }}</td>
+		</tr>
+		<tr>
 			<td>Telephone</td>
 			<td>: {{ $data->telepon }}</td>
+		</tr>
+		<tr>
+			<td>Mobile 1</td>
+			<td>: {{ $data->mobile_1 }}</td>
+		</tr>
+		<tr>
+			<td>Mobile 2</td>
+			<td>: {{ $data->mobile_2 }}</td>
 		</tr>
 		<tr>
 			<td>Religion</td>
 			<td>: {{ $data->agama }}</td>
 		</tr>
 		<tr>
-			<td>Handphone</td>
-			<td>: {{ $data->handphone }}</td>
-		</tr>
-		<tr>
-			<td>KTP Number</td>
+			<td>ID Number</td>
 			<td>: {{ $data->ktp_number }}</td>
 		</tr>
 		<tr>
@@ -87,36 +104,32 @@
 			<td>: {{ $data->jamsostek_number }}</td>
 		</tr>
 		<tr>
-			<td>Province</td>
-			<td>: {{ (isset($data->provinsi->nama) ? $data->provinsi->nama : '') }}</td>
-		</tr>
-		<tr>
-			<td>Districts</td>
-			<td>: {{ (isset($data->kabupaten->nama) ? $data->kabupaten->nama : '') }}</td>
-		</tr>
-		<tr>
-			<td>Sub-district</td>
-			<td>: {{ (isset($data->kecamatan->nama) ? $data->kecamatan->nama : '') }}</td>
-		</tr>
-		<tr>
-			<td>Village</td>
-			<td>: {{ (isset($data->kelurahan->nama) ? $data->kelurahan->nama : '') }}</td>
-		</tr>
-		<tr>
-			<td>Division</td>
-			<td>: {{ (isset($data->division->name) ? $data->division->name : '') }}</td>
-		</tr>
-		<tr>
-			<td>Department</td>
-			<td>: {{ (isset($data->department->name) ? $data->department->name : '') }}</td>
+			<td>BPJS Number</td>
+			<td>: {{ $data->bpjs_number }}</td>
 		</tr>
 		<tr>
 			<td>Position</td>
-			<td>: {{ (isset($data->organisasiposition->name) ? $data->organisasiposition->name : '') }}</td>
+			<td>:@if(!empty($data->empore_organisasi_staff_id))
+                                                Staff
+                                            @endif
+
+                                            @if(empty($data->empore_organisasi_staff_id) and !empty($data->empore_organisasi_manager_id))
+                                                Manager
+                                            @endif
+
+                                            @if(empty($data->empore_organisasi_staff_id) and empty($data->empore_organisasi_manager_id) and !empty($data->empore_organisasi_direktur))
+                                                Direktur
+                                            @endif</td>
 		</tr>
 		<tr>
 			<td>Job Rule</td>
-			<td>: {{ (isset($data->organisasi_job_role) ? $data->organisasi_job_role : '') }}</td>
+			<td>: @if(!empty($data->empore_organisasi_staff_id))
+                                                {{ isset($data->empore_staff->name) ? $data->empore_staff->name : '' }}
+                                            @endif
+
+                                            @if(empty($data->empore_organisasi_staff_id) and !empty($data->empore_organisasi_manager_id))
+                                                {{ isset($data->empore_manager->name) ? $data->empore_manager->name : '' }}
+                                            @endif</td>
 		</tr>
 		<tr>
 			<td>Branch</td>
@@ -127,12 +140,8 @@
 			<td>: {{ (isset($data->id_address) ? $data->id_address : '') }}</td>
 		</tr>
 		<tr>
-			<td>ID City</td>
-			<td>: {{ (isset($data->id_city) ? $data->id_city : '') }}</td>
-		</tr>
-		<tr>
-			<td>ID Zip Code</td>
-			<td>: {{ (isset($data->id_zip_code) ? $data->id_zip_code : '') }}</td>
+			<td>Current Address</td>
+			<td>: {{ (isset($data->current_address) ? $data->current_address : '') }}</td>
 		</tr>
 		<tr>
 			<td>Blood Type</td>
@@ -155,9 +164,10 @@
 			<td>: {{ (isset($data->nomor_rekening) ? $data->nomor_rekening : '') }}</td>
 		</tr>
 		<tr>
-			<td>Name of Bank</td>
-			<td>: {{ (isset($data->cabang) ? $data->cabang : '') }}</td>
+			<td>Employee Status</td>
+			<td>: {{ $data->organisasi_status }}</td>
 		</tr>
+		
 	</table>
 	<br />
 	<h4 style="background: #eee; padding: 10px; margin-bottom: 0; ">Dependent</h4>
@@ -265,12 +275,16 @@
 			<th>#</th>
 			<th>Leave Type</th>
 			<th>Quota</th>
+			<th>Leave Taken	</th>
+			<th>Leave Balance</th>
 		</tr>
 		@foreach($data->cuti as $no => $m)
 		<tr>
 			<td>{{ $no+1 }}</td>
-			<td>{{ $m->jenis_cuti }}</td>
+			<td>{{ isset($m->cuti->jenis_cuti) ? $m->cuti->jenis_cuti : '' }}</td>
 			<td>{{ $m->kuota }}</td>
+			<td>{{ $m->cuti_terpakai }}</td>
+            <td>{{ $m->sisa_cuti }}</td>
 		</tr>		
 		@endforeach
 	</table>
