@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
         \Config::set('mail.driver', get_setting('mail_driver'));
         \Config::set('mail.host', get_setting('mail_host'));
         \Config::set('mail.port', get_setting('mail_port'));
-        \Config::set('mail.from', ['address' => get_setting('mail_address'), 'name' => get_setting('name') ]);
+        \Config::set('mail.from', ['address' => get_setting('mail_address'), 'name' => get_setting('mail_name') ]);
         \Config::set('mail.username', get_setting('mail_username'));
         \Config::set('mail.password', get_setting('mail_password'));
         \Config::set('mail.encryption', get_setting('mail_encryption'));

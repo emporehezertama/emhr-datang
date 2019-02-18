@@ -39,6 +39,57 @@ class LoginController extends Controller
     }
 
     /**
+     * Validate the user login request.
+     *
+     * @param Request $request
+     */
+    protected function validateLogin(Request $request)
+    {
+        /*
+        if(get_setting('login_with_captcha')==2)
+        {
+            $this->validate($request, [
+                $this->username() => 'required',
+                'password'        => 'required',
+                'captcha'         => 'required|captcha',
+            ]);
+        }
+
+        if(get_setting('login_with_captcha')==3)
+        {
+            $var = "g-recaptcha-response";
+            $response = $request->$var;
+                                  
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
+            $data = array(
+                'secret' => env('RECAPTCHA_SECRET'),
+                'response' => $request->$var
+            );
+
+            $options = array(
+                 'http' => array (
+                    'method' => 'POST',
+                    'content' => http_build_query($data),
+                    'header' =>
+                        "Content-Type: application/x-www-form-urlencoded\r\n".
+                        "Authorization: Bearer sdf541gs6df51gsd1bsb16etb16teg1etr1ge61g\n",
+                 )
+            );
+            
+            $context    = stream_context_create($options);
+            $verify     = file_get_contents($url, false, $context);
+
+            $captcha_success=json_decode($verify);
+            if ($captcha_success->success==false) 
+            {          
+                return redirect('login')->with('error', 'Captcha salah silahkan dicoba kembali.'); 
+
+            }
+        }
+        */
+    }
+
+    /**
      * [credentials description]
      * @param  Request $request [description]
      * @return [type]           [description]

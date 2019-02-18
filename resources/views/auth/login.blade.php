@@ -21,6 +21,12 @@
               @if($errors->has('email'))
                 <label style="color: red;">Nomor Induk Karyawan anda atau Password anda salah, silahkan dicoba kembali</label> 
               @endif
+              
+              @if ($errors->has('captcha'))
+              <span class="help-block">
+                  <strong>Captcha salah dicoba kembali.</strong>
+              </span>
+              @endif
 
               <div class="form-group  m-t-20">
                 <div class="col-xs-12">
@@ -36,6 +42,32 @@
                   <span class="field-icon toggle-password fa fa-fw fa-eye"></span>
                 </div>
               </div>
+              <!--
+              @if(get_setting('login_with_captcha') == 2)
+              <div class="form-group">
+                <div class="col-md-12">
+                  <label>Captcha</label>
+                </div>
+                <div class="col-md-4">
+                  {!! Captcha::img('inverse') !!}
+                </div>
+                <div class="col-md-8">
+                  <input type="text" class="form-control" name="captcha">
+                </div>
+              </div>
+              @endif
+
+              @if(get_setting('login_with_captcha') == 3)
+              <div class="form-group">
+                <div class="col-md-12">
+                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <div class="g-recaptcha" data-sitekey="{!! env('RECAPTCHA_SITEKEY') !!}"></div>
+                </div>
+              </div>
+              @endif
+              -->
+             
+
               <div class="form-group">
                 <div class="col-md-12">
                   <div class="checkbox checkbox-info pull-left p-t-0">

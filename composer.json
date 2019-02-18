@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
+        "anhskohbo/no-captcha": "^3.0",
         "barryvdh/laravel-dompdf": "^0.8.3",
         "doctrine/dbal": "^2.8",
         "dompdf/dompdf": "^0.8.2",
@@ -15,6 +16,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.2.0",
         "maatwebsite/excel": "^2.0",
+        "mews/captcha": "^2.2",
         "mpdf/mpdf": "^7.0",
         "phpoffice/phpspreadsheet": "^1.2"
     },

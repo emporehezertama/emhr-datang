@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Model\RequestPaySlip;
-use App\Model\RequestPaySlipItem;
+use App\Models\RequestPaySlip;
+use App\Models\RequestPaySlipItem;
 
 class RequestPaySlipController extends Controller
 {

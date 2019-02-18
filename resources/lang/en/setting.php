@@ -13,5 +13,6 @@ return [
 	'kabupaten' => 'Kabupaten',
 	'select-kabupaten' => 'Select Kabupaten',
 	'select-kecamatan' => 'Select Kecamatan',
-	'struktur-organisasi' => 'Struktur Organisasi'
+	'struktur-organisasi' => 'Struktur Organisasi',
+	'login-with-captcha' => 'Login with Captcha',
 ];

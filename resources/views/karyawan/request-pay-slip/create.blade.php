@@ -2,22 +2,13 @@
 
 @section('title', 'Request Pay Slip')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Form Request Pay Slip</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Request Pay Slip</li>
@@ -28,11 +19,8 @@
         <!-- .row -->
         <div class="row">
             <form class="form-horizontal" id="form_payment" enctype="multipart/form-data" action="{{ route('karyawan.request-pay-slip.store') }}" method="POST">
-                <div class="col-md-12">
+                <div class="col-md-12 p-l-0 p-r-0">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Request Pay Slip</h3>
-                        <hr />
-                        <br />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -43,7 +31,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         {{ csrf_field() }}
                         <div class="col-md-4">
                             <div class="form-group">
@@ -77,15 +64,10 @@
                 </div>    
             </form>                    
         </div>
-        <!-- /.row -->
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
-    @extends('layouts.footer')
+    @include('layouts.footer')
 </div>
-
 @section('footer-script')
-
 <script type="text/javascript">
     $("select[name='tahun']").on('change', function(){
 
@@ -114,9 +96,5 @@
         }
     });
 </script>
-
 @endsection
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
 @endsection

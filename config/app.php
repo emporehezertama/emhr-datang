@@ -180,6 +180,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
        // Intervention\Image\ImageServiceProvider::class
+       Mews\Captcha\CaptchaServiceProvider::class,
+       Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
     ],
 
     /*
@@ -233,6 +235,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         //'Image' => Intervention\Image\Facades\Image::class
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
     ],
 
 ];

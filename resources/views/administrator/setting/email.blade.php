@@ -20,7 +20,7 @@
                         <h3 class="m-t-0">General Email</h3><hr />
                         <div class="form-group">
                             <label class="col-md-6">Email No-Reply / Address</label>
-                            <label class="col-md-6">Name</label>
+                            <label class="col-md-6">Subject</label>
                             <div class="col-md-6">
                                 <input type="text" name="setting[mail_address]" class="form-control" placeholder="Email No-Reply Typing here .." value="{{ get_setting('mail_address') }}">
                             </div>

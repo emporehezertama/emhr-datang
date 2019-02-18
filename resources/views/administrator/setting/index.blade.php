@@ -54,11 +54,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">@lang('setting.struktur-organisasi')</label>
+                            <label class="col-md-6">@lang('setting.struktur-organisasi')</label>
+                            <label class="col-md-6">@lang('setting.login-with-captcha')</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="setting[struktur_organisasi]">
                                     <option value="1" {{ get_setting('struktur_organisasi') == 1 ? 'selected' : '' }}>Standar</option>
                                     <option value="3" {{ get_setting('struktur_organisasi') == 3 ? 'selected' : '' }}>Custom</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-control" name="setting[login_with_captcha]">
+                                    <option value="1" {{ get_setting('login_with_captcha') == 1 ? 'selected' : '' }}>None</option>
+                                    <option value="2" {{ get_setting('login_with_captcha') == 2 ? 'selected' : '' }}>Standar</option>
+                                    <option value="3" {{ get_setting('login_with_captcha') == 3 ? 'selected' : '' }}>Google reCaptcha</option>
                                 </select>
                             </div>
                         </div>

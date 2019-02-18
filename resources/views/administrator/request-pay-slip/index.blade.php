@@ -1,21 +1,13 @@
-@extends('layouts.karyawan')
+@extends('layouts.administrator')
 
 @section('title', 'Request Pay Slip')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-      
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Manage Request Pay Slip</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
@@ -23,15 +15,11 @@
                     <li class="active">Request Pay Slip</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage Request Pay Slip</h3>
-                    <br />
                     <div class="table-responsive">
                         <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
@@ -79,9 +67,7 @@
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
 @endsection
