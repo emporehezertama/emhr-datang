@@ -2,34 +2,20 @@
 
 @section('title', 'Karyawan')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Form Karyawan</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Employee</li>
-                </ol>
+                <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10 pull-right" onclick="document.getElementById('form-karyawan').submit()"><i class="fa fa-save"></i> Save Employee Data </button>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
     <div class="row">
-        <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
+        <form class="form-horizontal" id="form-karyawan" enctype="multipart/form-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
             <input type="hidden" name="_method" value="PUT">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
@@ -61,7 +47,6 @@
                     </ul>
 
                     <div class="tab-content">
-
                         @if(isset($payroll->salary))
                         <div role="tabpanel" class="tab-pane fade" id="payroll">
                             <h3 class="box-title m-b-0">Payroll</h3>
@@ -441,49 +426,61 @@
                         </div>
 
                         <div role="tabpanel" class="tab-pane fade active in" id="biodata">
-                            <h3 class="box-title m-b-0">Biodata</h3>
-                            <hr />
                             {{ csrf_field() }}
                             <div class="col-md-6" style="padding-left: 0">
                                 <div class="form-group">
+                                    <div class="col-md-12">
+                                        @if(!empty($data->foto))
+                                        <img src="{{ asset('storage/foto/'. $data->foto) }}" style="width: 200px;" />
+                                        @else
+                                        <img src="{{ asset('admin-css/images/user.png') }}" style="width: 200px;" />
+                                        @endif
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-info btn-xs" onclick="open_dialog_photo()"><i class="fa fa-upload"></i> Change Photo</button>
+                                        <input type="file" name="foto" class="form-control" style="display: none;" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-12">Name</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="name" style="text-transform: uppercase" class="form-control form-control-line " value="{{ $data->name }}"> </div>
+                                        <input type="text" name="name" style="text-transform: uppercase" class="form-control " value="{{ $data->name }}"> 
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Employee Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="employee_number" class="form-control form-control-line " value="{{ $data->employee_number }}"> </div>
+                                        <input type="text" name="employee_number" class="form-control " value="{{ $data->employee_number }}"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Absensi Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="absensi_number" class="form-control form-control-line " value="{{ $data->absensi_number }}"> </div>
+                                        <input type="text" name="absensi_number" class="form-control " value="{{ $data->absensi_number }}"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">NIK</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="nik" value="{{ $data->nik }}" class="form-control form-control-line  "> </div>
+                                        <input type="text" name="nik" value="{{ $data->nik }}" class="form-control"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Ext</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="ext" value="{{ $data->ext }}" class="form-control form-control-line "> </div>
+                                        <input type="text" name="ext" value="{{ $data->ext }}" class="form-control"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Place of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tempat_lahir" value="{{ $data->tempat_lahir }}" class="form-control form-control-line "> </div>
+                                        <input type="text" name="tempat_lahir" value="{{ $data->tempat_lahir }}" class="form-control"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Date of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control form-control-line datepicker"> </div>
+                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control datepicker"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Marital Status</label>
                                     <div class="col-md-10">
-                                        <select class="form-control form-control-line" name="marital_status">
+                                        <select class="form-control " name="marital_status">
                                             <option value="">- Marital Status -</option>
                                              <option value="Bujangan/Wanita" {{old('marital_status',$data->marital_status)=="Bujangan/Wanita"? 'selected':''}} >Single</option>
                                     <option value="Menikah" {{old('marital_status',$data->marital_status)=="Menikah"? 'selected':''}} >Married</option>
@@ -497,7 +494,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Gender</label>
                                     <div class="col-md-10">
-                                        <select class="form-control form-control-line" name="jenis_kelamin">
+                                        <select class="form-control " name="jenis_kelamin">
                                             <option value=""> - Gender - </option>
                                             @foreach(['Male', 'Female'] as $item)
                                                 <option {{ $data->jenis_kelamin == $item ? 'selected' : '' }}>{{ $item }}</option>
@@ -508,36 +505,36 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Blood Type</label>
                                     <div class="col-md-10">
-                                        <input type="text" class="form-control form-control-line " value="{{ $data->blood_type }}" name="blood_type">
+                                        <input type="text" class="form-control  " value="{{ $data->blood_type }}" name="blood_type">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">Email</label>
                                     <div class="col-md-10">
-                                        <input type="email" value="{{ $data->email }}" class="form-control form-control-line" name="email" id="example-email"> </div>
+                                        <input type="email" value="{{ $data->email }}" class="form-control " name="email" id="example-email"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Password</label>
                                     <div class="col-md-10">
-                                        <input type="password" name="password" class="form-control form-control-line" value="{{ $data->password }}">
+                                        <input type="password" name="password" class="form-control " value="{{ $data->password }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Confirm Password</label>
                                     <div class="col-md-10">
-                                        <input type="password" name="confirm" class="form-control form-control-line" value="{{ $data->password }}">
+                                        <input type="password" name="confirm" class="form-control " value="{{ $data->password }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Join Date</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="join_date" class="form-control form-control-line datepicker" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
+                                        <input type="text" name="join_date" class="form-control  datepicker" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Employee Status</label>
                                     <div class="col-md-10">
-                                        <select class="form-control form-control-line" name="organisasi_status">
+                                        <select class="form-control " name="organisasi_status">
                                             <option value="">- select - </option>
                                             @foreach(['Permanent', 'Contract'] as $item)
                                             <option {{ $data->organisasi_status == $item ? 'selected' : '' }}>{{ $item }}</option>
@@ -550,58 +547,58 @@
                                 <div class="form-group">
                                     <label class="col-md-12">NPWP Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="npwp_number" class="form-control form-control-line"  value="{{ $data->npwp_number }}">
+                                        <input type="text" name="npwp_number" class="form-control "  value="{{ $data->npwp_number }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">BPJS Employment Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="bpjs_number" value="{{ $data->bpjs_number }}" class="form-control form-control-line">
+                                        <input type="text" name="bpjs_number" value="{{ $data->bpjs_number }}" class="form-control ">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">BPJS Health Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="jamsostek_number" value="{{ $data->jamsostek_number }}" class="form-control form-control-line">
+                                        <input type="text" name="jamsostek_number" value="{{ $data->jamsostek_number }}" class="form-control ">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">ID Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="ktp_number" value="{{ $data->ktp_number }}" class="form-control form-control-line">
+                                        <input type="text" name="ktp_number" value="{{ $data->ktp_number }}" class="form-control ">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Passport Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="passport_number" value="{{ $data->passport_number }}" class="form-control form-control-line">
+                                        <input type="text" name="passport_number" value="{{ $data->passport_number }}" class="form-control ">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">KK Number</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="kk_number" class="form-control form-control-line" value="{{ $data->kk_number }}">
+                                        <input type="text" name="kk_number" class="form-control " value="{{ $data->kk_number }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Telephone</label>
                                     <div class="col-md-12">
-                                        <input type="number" value="{{ $data->telepon }}" name="telepon" class="form-control form-control-line"> </div>
+                                        <input type="number" value="{{ $data->telepon }}" name="telepon" class="form-control "> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mobile 1</label>
                                     <div class="col-md-12">
-                                        <input type="number" value="{{ $data->mobile_1 }}" name="mobile_1" class="form-control form-control-line "> </div>
+                                        <input type="number" value="{{ $data->mobile_1 }}" name="mobile_1" class="form-control  "> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mobile 2</label>
                                     <div class="col-md-12">
-                                        <input type="number" value="{{ $data->mobile_2 }}" name="mobile_2" class="form-control form-control-line"> </div>
+                                        <input type="number" value="{{ $data->mobile_2 }}" name="mobile_2" class="form-control "> </div>
                                 </div>
                                <div class="form-group">
                                     <label class="col-md-12">Religion</label>
                                     <div class="col-md-12">
-                                        <select class="form-control form-control-line" name="agama">
+                                        <select class="form-control " name="agama">
                                             <option value=""> - Religion - </option>
                                             @foreach(agama() as $item)
                                                 <option value="{{ $item }}" {{ $data->agama == $item ? 'selected' : '' }}> {{ $item }} </option>
@@ -612,28 +609,28 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Current Address</label>
                                     <div class="col-md-12">
-                                        <textarea class="form-control form-control-line" name="current_address">{{ $data->current_address }}</textarea>
+                                        <textarea class="form-control " name="current_address">{{ $data->current_address }}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">ID Addres</label>
                                     <div class="col-md-12">
-                                        <textarea class="form-control form-control-line" name="id_address">{{ $data->id_address }}</textarea>
+                                        <textarea class="form-control " name="id_address">{{ $data->id_address }}</textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="col-md-12">Foto</label>
                                     <div class="col-md-12">
-                                        <input type="file" name="foto" class="form-control form-control-line" />
+                                        <input type="file" name="foto" class="form-control " />
                                         @if(!empty($data->foto))
                                         <img src="{{ asset('storage/foto/'. $data->foto) }}" style="width: 200px;" />
                                         @endif
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <label class="col-md-12">Foto Ktp</label>
                                     <div class="col-md-12">
-                                        <input type="file" name="foto_ktp" class="form-control form-control-line" />
+                                        <input type="file" name="foto_ktp" class="form-control " />
                                         @if(!empty($data->foto_ktp))
                                         <img src="{{ asset('storage/fotoktp/'. $data->foto_ktp) }}" style="width: 200px;" />
                                         @endif
@@ -726,8 +723,6 @@
 
                     </div>
                     <hr />
-                    <a href="{{ route('administrator.karyawan.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
-                    <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save Employee Data </button>
                     <br style="clear: both;" />
                     <div class="clearfix"></div>
                 </div>
@@ -1080,10 +1075,14 @@
     <!-- Date Picker Plugin JavaScript -->
     <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
-
         var el_dependent;
         var el_education;
         var el_cuti;
+
+        function open_dialog_photo()
+        {
+            $("input[name='foto']").trigger('click');   
+        }
 
         $(".modal-terpakai, .modal-kuota").on("input", function(){
 

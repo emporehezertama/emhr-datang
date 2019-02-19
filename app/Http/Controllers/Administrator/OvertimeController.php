@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\OvertimeSheet;
-use App\OvertimeSheetForm;
+use App\Models\OvertimeSheet;
+use App\Models\OvertimeSheetForm;
 use App\User;
 
 class OvertimeController extends Controller

@@ -48,7 +48,47 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        $params['data'] = User::where('access_id', 2)->orderBy('id', 'DESC')->paginate(50);
+        $data = User::where('access_id', 2);
+        if(request())
+        {
+            if(!empty(request()->name))
+            {
+                $data = $data->where(function($table){
+                    $table->where('users.name', 'LIKE', request()->name)
+                            ->orWhere('users.nik', request()->name);
+                });
+            }
+
+            if(!empty(request()->employee_status))
+            {
+                $data = $data->where('users.organisasi_status', request()->employee_status);
+            }
+
+            if(!empty(request()->jabatan))
+            {   
+                if(request()->jabatan == 'Direktur')
+                {
+                    $data = $data->whereNull('users.empore_organisasi_staff_id')->whereNull('users.empore_organisasi_manager_id')->where('users.empore_organisasi_direktur', '<>', '');
+                }
+
+                if(request()->jabatan == 'Manager')
+                {
+                    $data = $data->whereNull('users.empore_organisasi_staff_id')->where('users.empore_organisasi_manager_id', '<>', '');
+                }
+
+                if(request()->jabatan == 'Staff')
+                {
+                    $data = $data->where('users.empore_organisasi_staff_id', '<>', '');
+                }
+            }
+
+            if(request()->action == 'download')
+            {
+                $this->downloadExcel($data->get());
+            }
+        }
+
+        $params['data'] = $data->orderBy('id', 'DESC')->paginate(50);
 
         return view('administrator.karyawan.index')->with($params);
     }
@@ -1375,13 +1415,11 @@ class KaryawanController extends Controller
         return redirect()->route('karyawan.dashboard');
     }
 
-    public function downloadExcel()
+    public function downloadExcel($data)
     {
-        $data       = User::where('access_id', 2)->orderBy('id', 'DESC')->get();
+        #$data       = User::where('access_id', 2)->orderBy('id', 'DESC')->get();
         $params = [];
-
-         $params = [];
-
+        
         foreach($data as $k =>  $item)
         {
             

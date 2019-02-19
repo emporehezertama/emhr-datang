@@ -8,18 +8,42 @@
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Employee</h4> 
-                <a href="{{ route('administrator.karyawan.downloadExcel') }}"><button type="button" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button></a>
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD EMPLOYEE</a>
-                <a class="btn btn-info btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> IMPORT</a>
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Employee</li>
-                </ol>
+                <form method="POST" action="" id="filter-form">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="action" value="view">
+                    <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-10 waves-effect waves-light"> <i class="fa fa-plus"></i> ADD EMPLOYEE</a>
+                    <a class="btn btn-info btn-sm pull-right m-l-10 hidden-xs waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> IMPORT</a>
+                    <a href="{{ route('administrator.karyawan.downloadExcel') }}" class="pull-right m-l-10"><button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button></a>
+                    <button type="button" id="filter_view" class="btn btn-default btn-sm pull-right">View in table <i class="fa fa-search-plus"></i></button>
+                    
+                    <div class="col-md-2 pull-right">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="jabatan">
+                                <option value="">- Position - </option>
+                                <option {{ (request() and request()->jabatan == 'Staff') ? 'selected' : '' }}>Staff</option>
+                                <option {{ (request() and request()->jabatan == 'Manager') ? 'selected' : '' }}>Manager</option>
+                                <option {{ (request() and request()->jabatan == 'Direktur') ? 'selected' : '' }}>Director</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="employee_status">
+                                <option value="">- Employee Status - </option>
+                                <option {{ (request() and request()->employee_status == 'Permanent') ? 'selected' : '' }}>Permanent</option>
+                                <option {{ (request() and request()->employee_status == 'Contract') ? 'selected' : '' }}>Contract</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <div class="form-group  m-b-0">
+                            <input type="text" name="name" class="form-control form-control-line" value="{{ (request() and request()->name) ? request()->name : '' }}" placeholder="Name / NIK Employee">
+                        </div>
+                    </div>
+                </form>
             </div>
-
-            <!-- /.col-lg-12 -->
         </div>
         <!-- .row -->
         <div class="row">
@@ -121,9 +145,7 @@
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
 
@@ -133,33 +155,30 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">Upload Contract Document</h4> </div>
-                    <form method="POST" id="form-upload-file-dokument" enctype="multipart/form-data" class="form-horizontal" action="{{ route('administrator.karyawan.upload-dokument-file') }}">
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-md-3">File (xls)</label>
-                            <div class="col-md-9">
-                                <input type="file" name="file" class="form-control" />
-                                <input type="hidden" name="user_id">
-                            </div>
+                <h4 class="modal-title" id="myModalLabel">Upload Contract Document</h4> </div>
+                <form method="POST" id="form-upload-file-dokument" enctype="multipart/form-data" class="form-horizontal" action="{{ route('administrator.karyawan.upload-dokument-file') }}">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-3">File (xls)</label>
+                        <div class="col-md-9">
+                            <input type="file" name="file" class="form-control" />
+                            <input type="hidden" name="user_id">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-info btn-sm">Upload File</button>
-                    </div>
-                </form>
-                <div style="text-align: center;display: none;" class="div-proses-upload">
-                    <h3>Proses upload harap menunggu !</h3>
-                    <h1 class=""><i class="fa fa-spin fa-spinner"></i></h1>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info btn-sm">Upload File</button>
+                </div>
+            </form>
+            <div style="text-align: center;display: none;" class="div-proses-upload">
+                <h3>Proses upload harap menunggu !</h3>
+                <h1 class=""><i class="fa fa-spin fa-spinner"></i></h1>
+            </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
-
 
 <!-- modal content education  -->
 <div id="modal_generate_dokument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -203,9 +222,7 @@
                     <h1 class=""><i class="fa fa-spin fa-spinner"></i></h1>
                 </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
 
 <!-- modal content education  -->
@@ -246,6 +263,17 @@
 <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript">
     
+    $("#filter_view").click(function(){
+        $("#filter-form input[name='action']").val('view');
+        $("#filter-form").submit();
+
+    });
+
+    var submit_filter_download = function(){
+        $("#filter-form input[name='action']").val('download');
+        $("#filter-form").submit();
+    }
+
     function confirm_loginas(name, url)
     {
         bootbox.confirm("Login sebagai "+ name +" ? ", function(result){
@@ -303,5 +331,4 @@
     })
 </script>
 @endsection
-
 @endsection

@@ -2,44 +2,24 @@
 
 @section('title', 'Overtime Sheet')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-  
-        
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Manage Overtime Sheet</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Overtime Sheet</li>
-                </ol>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-
-        <!-- .row -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage Overtime Sheet</h3>
-                    <hr />
-                    <form method="POST" action="{{ route('administrator.overtime.index') }}" id="filter-form">
-                        <p>Filter Form</p>
+                <form method="POST" action="{{ route('administrator.overtime.index') }}" id="filter-form">
+                        <!-- <p>Filter Form</p> -->
                         {{ csrf_field() }}
-                        <div class="col-md-1" style="padding-left:0;">
-                            <div class="form-group">
-                                <select class="form-control" name="jabatan">
+                        <div class="col-md-3  pull-right">
+                            <button type="button" id="filter_view" class="btn btn-default btn-sm">View in table <i class="fa fa-search-plus"></i></button>
+                            <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <div class="form-group  m-b-0">
+                                <select class="form-control form-control-line" name="jabatan">
                                     <option value="">- Position - </option>
                                     <option {{ (request() and request()->jabatan == 'Staff') ? 'selected' : '' }}>Staff</option>
                                     <option {{ (request() and request()->jabatan == 'Manager') ? 'selected' : '' }}>Manager</option>
@@ -47,9 +27,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2" style="padding-left:0;">
-                            <div class="form-group">
-                                <select class="form-control" name="employee_status">
+                        <div class="col-md-2  pull-right">
+                            <div class="form-group  m-b-0">
+                                <select class="form-control form-control-line" name="employee_status">
                                     <option value="">- Employee Status - </option>
                                     <option {{ (request() and request()->employee_status == 'Permanent') ? 'selected' : '' }}>Permanent</option>
                                     <option {{ (request() and request()->employee_status == 'Contract') ? 'selected' : '' }}>Contract</option>
@@ -57,12 +37,14 @@
                             </div>
                         </div>
                         <input type="hidden" name="action" value="view">
-                        <div class="col-md-3" style="padding-left:0;">
-                            <button type="button" id="filter_view" class="btn btn-default btn-sm">View in table <i class="fa fa-search-plus"></i></button>
-                            <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button>
-                        </div>
                         <div class="clearfix"></div>
                     </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 p-l-0 p-r-0">
+                <div class="white-box">
+                    
                     <div class="table-responsive">
                         <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>

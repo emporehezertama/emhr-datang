@@ -2,15 +2,7 @@
 
 @section('title', 'Leave / Permit Employee')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -23,7 +15,6 @@
                     <li class="active">Leave / Permit Employee</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
         <!-- .row -->
         <div class="row">
