@@ -263,7 +263,8 @@ function cek_cuti_direktur($status='approved')
 	}
 	elseif($status == 'null')
 	{
-		$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->count();		
+		//$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->count();	
+		$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->where('status' ,'<' ,3)->whereNull('approve_direktur')->count();	
 	}
 
 	return $cuti;
@@ -279,7 +280,8 @@ function cek_cuti_atasan($status='approved')
 {
 	if($status =='null')
 	{
-		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->whereNull('is_approved_atasan')->count();
+		//return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->whereNull('is_approved_atasan')->count();
+		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->where('status' ,'<' ,3)->whereNull('is_approved_atasan')->count();
 	}
 	elseif($status =='approved')
 	{

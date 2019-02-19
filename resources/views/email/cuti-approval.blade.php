@@ -27,6 +27,7 @@
 
 
 <div class="modal-body" id="modal_content_history_approval">
+	@if($data->approved_atasan_id !== NULL)
 	<div class="panel-body">
 		<div class="steamline" style="position: relative; border-left: 1px solid rgba(120,130,140,.13);margin-left: 20px;">
 			<div class="sl-item" style="border-bottom: 1px solid rgba(120,130,140,.13);margin: 20px 0;">
@@ -53,6 +54,7 @@
 			</div>
 		</div>
 	</div>
+	@endif
 
 	<div class="panel-body">
 		<div class="steamline" style="position: relative; border-left: 1px solid rgba(120,130,140,.13);margin-left: 20px;">

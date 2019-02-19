@@ -33,7 +33,7 @@
                     <h3 class="box-title m-b-0">Manage Approval Employee Leave</h3>
                     <br />
                     <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -59,28 +59,38 @@
                                     <td> 
                                         {{ isset($item->cuti) ? $item->cuti->jenis_cuti : '' }}</td>
                                     </td>
-                                    <td>{{ $item->total_cuti }} Hari</td>
+                                    <td>{{ $item->total_cuti }} Days</td>
                                     <td>{{ $item->keperluan }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>
                                         <a onclick="detail_approval_cuti({{ $item->id }})">
-                                            @if($item->is_approved_atasan === NULL)
-                                                <label class="btn btn-warning btn-xs">Waiting Approval</label>
-                                            @endif
-                                            
-                                            @if($item->is_approved_atasan === 0) 
-                                                <label class="btn btn-danger btn-xs">Reject</label>
-                                            @endif
+                                            @if($item->status == 1)
+                                                @if($item->is_approved_atasan === NULL)
+                                                    <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @endif
+                                                
+                                                @if($item->is_approved_atasan === 0) 
+                                                    <label class="btn btn-danger btn-xs">Rejected</label>
+                                                @endif
 
-                                            @if($item->is_approved_atasan == 1)
+                                                @if($item->is_approved_atasan == 1)
+                                                    <label class="btn btn-success btn-xs">Approved</label>
+                                                @endif
+                                            @elseif($item->status == 2)
                                                 <label class="btn btn-success btn-xs">Approved</label>
+                                            @elseif($item->status ==3)
+                                                <label class="btn btn-danger btn-xs">Rejected</label>
+                                            @elseif($item->status ==4)
+                                                <label class="btn btn-danger btn-xs">Cancelled</label>
                                             @endif
                                         </a>
                                     </td>
                                     <td>
-                                        @if($item->is_approved_atasan ===NULL)
-                                            <a href="{{ route('karyawan.approval.cuti-atasan.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> proces</button></a>
+                                        <a href="{{ route('karyawan.approval.cuti-atasan.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Detail</button></a>
+                                        @if($item->is_approved_atasan ===NULL and $item->status < 4)
+                                            <a href="{{ route('karyawan.approval.cuti-atasan.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Process</button></a>
                                         @endif
+
                                     </td>
                                 </tr>
                               @endif

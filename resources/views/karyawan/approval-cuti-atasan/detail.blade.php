@@ -63,7 +63,7 @@
                                 <label class="col-md-6">Leave Quota</label>
                                 <label class="col-md-3">Leave Taken</label>
                                 <label class="col-md-3">Leave Balance</label>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <input type="text" class="form-control kuota_cuti"  value="{{ $data->temp_kuota }}" readonly="true" />
                                 </div>
                                 <div class="col-md-3">
@@ -74,9 +74,16 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                @if($data->is_approved_atasan != NULL)
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="noted" placeholder="Note"></textarea>
+                                    <input type="text" readonly="true" class="form-control catatan_atasan" value="{{ $data->catatan_atasan }}">
                                 </div>
+                                @else
+                                <div class="col-md-12">
+                                    <textarea class="form-control noted" name="noted" placeholder="Note" ></textarea>
+                                </div>
+                                @endif
+                                
                             </div>
                             <div class="clearfix"></div>
                             <br />
@@ -117,7 +124,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Handphone</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <label class="col-md-6">Email</label>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control no_handphone" value="{{ $data->backup_karyawan->telepon }}">
@@ -134,9 +141,11 @@
                         <div class="clearfix"></div>
                         <br />
                         <div class="col-md-12">
-                            <a href="{{ route('karyawan.approval.cuti.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                            <a href="{{ route('karyawan.approval.cuti-atasan.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                             @if($data->is_approved_atasan ===NULL and $data->status < 4)
                             <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_approved"><i class="fa fa-save"></i> Approve</a>
                             <a class="btn btn-sm btn-danger waves-effect waves-light m-r-10" id="btn_tolak"><i class="fa fa-close"></i> Denied</a>
+                            @endif
                             <br style="clear: both;" />
                         </div>
                         <div class="clearfix"></div>
@@ -156,7 +165,7 @@
 @section('footer-script')
     <script type="text/javascript">
         $("#btn_approved").click(function(){
-            bootbox.confirm('Approve Cuti Karyawan ?', function(result){
+            bootbox.confirm('Approve the leave form ?', function(result){
 
                 $("input[name='status']").val(1);
                 if(result)
@@ -168,7 +177,7 @@
         });
 
         $("#btn_tolak").click(function(){
-            bootbox.confirm('Tolak Cuti Karyawan ?', function(result){
+            bootbox.confirm('Reject the leave form ?', function(result){
 
                 if(result)
                 {

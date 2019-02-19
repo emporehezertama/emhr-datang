@@ -20,7 +20,7 @@
                 @if(cek_approval('cuti_karyawan'))
                     <a href="{{ route('karyawan.cuti.create') }}" class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light" onclick=""> <i class="fa fa-plus"></i> ADD LEAVE</a>
                 @else
-                    <a class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light" onclick="bootbox.alert('Sorry, you cannot make this transaction as long as the previous transaction has not been completed approved')"> <i class="fa fa-plus"></i> ADD LEAVE</a>
+                    <a class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light" onclick="bootbox.alert('Sorry you can not apply this transaction before the previous transaction has been completely approved')"> <i class="fa fa-plus"></i> ADD LEAVE</a>
                 @endif
                 <ol class="breadcrumb hidden-xs hidden-sm">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
@@ -58,9 +58,34 @@
                                         <td>{{ $item->total_cuti }} Hari</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
-                                            <a onclick="detail_approval('cuti', {{ $item->id }})"> 
+                                            <!--
+                                            <a onclick="detail_approval({{ $item->id }})"> 
                                                 {!! status_cuti($item->status) !!}
-                                            </a>
+                                            </a>-->
+                                            <label onclick="detail_approval({{ $item->id }})" class="btn btn-default btn-xs"></label>
+                                            @if($item->status == 3)
+                                                @if($item->is_approved_atasan == 0)
+                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4> Reason</h4><hr /><p>{{ $item->catatan_atasan }}</p>')"><i class="fa fa-close"></i>Rejected by Manager</label>
+                                                @elseif($item->approve_direktur == 0)
+                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->approve_direktur_noted }}</p>')"><i class="fa fa-close"></i>Rejected by Director</label>
+                                                @endif 
+                                            @elseif($item->status == 4)
+                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancellation</label>
+                                            @else
+                                                @if($item->status == 1)
+                                                    @if(empty($item->approved_hrd))
+                                                        <label onclick="detail_approval({{ $item->id }})"class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                    @endif
+                                                    @if($item->approved_hrd == 1)
+                                                        <label onclick="detail_approval({{ $item->id }})"class="btn btn-success btn-xs">Approved</label>
+                                                    @endif
+                                                @endif
+                                                @if($item->status == 2)
+                                                    <label onclick="detail_approval({{ $item->id }})"class="btn btn-success btn-xs">Approved</label>
+                                                @endif
+
+                                            @endif
+
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
@@ -99,6 +124,80 @@
 
 @section('footer-script')
     <script type="text/javascript">
+
+        function detail_approval(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-history-approval-cuti') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+
+                    var el = "";
+                    if(data.data.jenis_karyawan == 'staff')
+                    {
+                        el = '<div class="panel-body">'+
+                                '<div class="steamline">'+
+                                    '<div class="sl-item">';
+
+                        if(data.data.is_approved_atasan == 1)
+                        {
+                            el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+                        }
+                        else if(data.data.is_approved_atasan == 0)
+                        {
+                            el += '<div class="sl-left bg-danger" title="Denied"> <i class="fa fa-close"></i></div>';
+                        }
+                        else if(data.data.is_approved_atasan === null)
+                        {
+                            el += '<div class="sl-left bg-warning"> <i class="fa fa-history"></i></div>';
+                        }
+                        
+                        el += '<div class="sl-right">'+
+                                            '<div><strong>Manager</strong> <br /><a href="#">'+ data.data.atasan +'</a> </div>'+
+                                            '<div class="desc">'+ (data.data.date_approved_atasan != null ? data.data.date_approved_atasan : '' ) +'<p>'+ (data.data.catatan_atasan != null ? data.data.catatan_atasan : '' )  +'</p></div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>';
+                    }
+                   
+                    el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+
+                    if(data.data.approve_direktur == 1)
+                    {
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+                    }
+                    else if(data.data.approve_direktur == 0)
+                    {
+                        el += '<div class="sl-left bg-danger" title="Denied"> <i class="fa fa-close"></i></div>';
+                    }
+                    else if(data.data.approve_direktur === null)
+                    {
+                        el += '<div class="sl-left bg-warning"> <i class="fa fa-history"></i></div>';
+                    }
+                                    
+
+                    el += '<div class="sl-right">'+
+                                        '<div><strong>Director</strong><br><a href="#">'+ data.data.direktur +'</a> </div>'+
+                                        '<div class="desc">'+ (data.data.approve_direktur_date !== null ?  data.data.approve_direktur_date : '' ) +'<p>'+ (data.data.approve_direktur_noted != null ? data.data.approve_direktur_noted : '' )  +'</p></div>'+
+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+
+
+                    $("#modal_content_history_approval").html(el);
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }   
+        /*
         function detail_approval(jenis_form, id)
         {
              $.ajax({
@@ -142,7 +241,7 @@
             });
 
             $("#modal_history_approval").modal('show');
-        }
+        }*/
     </script>
 @endsection
 

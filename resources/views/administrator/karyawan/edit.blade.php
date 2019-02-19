@@ -538,7 +538,7 @@
                                     <label class="col-md-12">Employee Status</label>
                                     <div class="col-md-10">
                                         <select class="form-control form-control-line" name="organisasi_status">
-                                            <option value="">- select - </option>
+                                            <option value="">- Select - </option>
                                             @foreach(['Permanent', 'Contract'] as $item)
                                             <option {{ $data->organisasi_status == $item ? 'selected' : '' }}>{{ $item }}</option>
                                             @endforeach
