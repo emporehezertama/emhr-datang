@@ -9,7 +9,7 @@ Route::group(['prefix' => 'karyawan', 'namespace'=>'Karyawan', 'middleware' => [
 	Route::resource('exit-clearance', 'ExitClearanceController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
 	Route::resource('exit-interview', 'ExitInterviewController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
 	Route::get('exit-inteview/detail/{id}',  'ExitInterviewController@detail')->name('karyawan.exit-interview.detail');
-	Route::resource('compassionate-reason', 'CompassionateReasonController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	#Route::resource('compassionate-reason', 'CompassionateReasonController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
 	Route::resource('training', 'TrainingController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
 	Route::get('training/biaya/{id}', 'TrainingController@biaya')->name('karyawan.training.biaya');
 	Route::get('training/detail/{id}', 'TrainingController@detailTraining')->name('karyawan.training.detail');

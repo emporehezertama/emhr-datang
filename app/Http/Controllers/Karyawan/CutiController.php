@@ -67,7 +67,7 @@ class CutiController extends Controller
         $data = CutiKaryawan::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('karyawan.cuti.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('karyawan.cuti.index')->with('message-sucess', 'Data successfully deleted');
     }
 
     /**
@@ -90,7 +90,10 @@ class CutiController extends Controller
 
         if(empty(\Auth::user()->empore_organisasi_staff_id) and !empty(\Auth::user()->empore_organisasi_manager_id))
         {
-            $data->is_approved_atasan = 1;
+            if(empty($request->atasan_user_id))
+            {
+                $data->is_approved_atasan = 1;
+            }
         }
 
         $data->jam_pulang_cepat    = $request->jam_pulang_cepat;
@@ -102,18 +105,42 @@ class CutiController extends Controller
         $data->temp_cuti_terpakai       = $request->temp_cuti_terpakai;
         $data->temp_sisa_cuti           = $request->temp_sisa_cuti;
         $data->save();
-
+/*
         $params['data']     = $data;
-        $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' mengajukan Payment Request butuh persetujuan Anda.</p>';
+        $params['text']     = '<p><strong>Dear Dear Sir/Madam '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Leave/Permit and currently waiting your approval.</p>';
 
         \Mail::send('email.cuti-approval', $params,
             function($message) use($data) {
                 $message->from('emporeht@gmail.com');
                 $message->to($data->atasan->email);
-                $message->subject('Empore - Pengajuan Cuti / Izin');
+                $message->subject('Empore - Submission of Leave / Permit');
             }
         );
+*/
+         $params['data']     = $data;
+        if($request->atasan_user_id != null) {
+            $params['text']     = '<p><strong> Dear Sir/Madam '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Leave/Permit and currently waiting your approval.</p>';
 
-        return redirect()->route('karyawan.cuti.index')->with('message-success', 'Data berhasil disimpan !');
+            \Mail::send('email.cuti-approval', $params,
+            function($message) use($data) {
+                $message->from('emporeht@gmail.com');
+                $message->to($data->atasan->email);
+                $message->subject('Empore - Submission of Leave / Permit');
+            }
+            );
+        } elseif($request->atasan_user_id == null){
+            $params['text']     = '<p><strong> Dear Sir/Madam '. $data->direktur->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Leave/Permit and currently waiting your approval.</p>';
+
+            \Mail::send('email.cuti-approval', $params,
+            function($message) use($data) {
+                $message->from('emporeht@gmail.com');
+                $message->to($data->direktur->email);
+                $message->subject('Empore - Submission of Leave / Permit');
+            }
+            );
+        }
+
+
+        return redirect()->route('karyawan.cuti.index')->with('message-success', 'Data saved successfully !');
     }
 }

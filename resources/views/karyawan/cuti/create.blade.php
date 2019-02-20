@@ -49,7 +49,7 @@
                         <div class="col-md-6" style="padding-left: 0;">
                             <div class="form-group">
                                 <label class="col-md-6">NIK / Employee Name</label>
-                                <label class="col-md-6">Telephone</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" value="{{ Auth::user()->nik .' / '. Auth::user()->name }}" readonly="true">
                                 </div>
@@ -65,8 +65,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-12">Leave Type</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="jenis_cuti" required>
+                               <div class="col-md-6">
+                                    <select class="form-control" name="jenis_cuti" id="jenis_cuti" required>
                                         <option value="">Choose Leave Type</option>
                                         @foreach(list_user_cuti() as $item)
                                         <option value="{{ $item->id }}" data-kuota="{{ get_kuota_cuti($item->id, \Auth::user()->id ) }}" data-cutiterpakai="{{ get_cuti_terpakai($item->id, \Auth::user()->id) }}" data-sisacuti="{{ get_cuti_user($item->id, \Auth::user()->id, 'sisa_cuti') }}" >{{ $item->jenis_cuti }}</option>
@@ -95,6 +95,7 @@
                                     <label class="btn btn-info btn-sm" id="history_cuti"><i class="fa fa-history"></i> History</label>
                                 </div>
                             </div>
+                            @if(!empty(\Auth::user()->empore_organisasi_staff_id) and !empty(\Auth::user()->empore_organisasi_manager_id))
                             <div class="form-group">
                                 <label class="col-md-12">
                                     Superior / Supervisor
@@ -112,7 +113,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Phone Number</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <label class="col-md-6">Email</label>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control no_handphone_atasan">
@@ -123,6 +124,7 @@
                             </div>
 
                             <div class="clearfix"></div>
+                            @endif
                             <br />
                         </div>
                         <div class="col-md-6">
@@ -160,7 +162,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Phone Number</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <label class="col-md-6">Email</label>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control no_handphone">
@@ -218,7 +220,8 @@
                            <td>{{ $no + 1 }}</td>
                            <td>{{ $item->tanggal_cuti_start }} - {{ $item->tanggal_cuti_end }}</td>
                            <td>{{ $item->cuti->jenis_cuti }}</td>
-                           <td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>
+                           <td>{{ $item->total_cuti}}</td>
+                           <!--<td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>-->
                            <td>{{ $item->keperluan }}</td>
                         </tr>
                         @endforeach
@@ -498,10 +501,14 @@
 
     $("#btn_submit_form").click(function(){
 
-        // Validasi data
-        if($("input[name='jenis_cuti']").val()== "" || $("input[name='backup_user_id']").val() == "" || $("textarea[name='keperluan']").val() == "" ||  $("input[name='tanggal_cuti_start']").val() == "" || $("input[name='tanggal_cuti_end']").val() == "" )
+        if($("input[name='backup_user_id']").val() == "" || $("textarea[name='keperluan']").val() == "" ||  $("input[name='tanggal_cuti_start']").val() == "" || $("input[name='tanggal_cuti_end']").val() == "" )
         {
             bootbox.alert("Leave data is incomplete !");
+            return false;
+        }
+
+        if ($("#jenis_cuti").val() === "") {
+            bootbox.alert("Leave Type is incomplete !");
             return false;
         }
 

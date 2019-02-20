@@ -138,9 +138,7 @@
                         <div class="clearfix"></div>
                         <br />
                         <div class="col-md-12">
-                            <a href="{{ route('karyawan.approval.cuti.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
-                            <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_approved"><i class="fa fa-save"></i> Approve</a>
-                            <a class="btn btn-sm btn-danger waves-effect waves-light m-r-10" id="btn_tolak"><i class="fa fa-close"></i> Denied</a>
+                            <a href="{{ route('administrator.cuti.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                             <br style="clear: both;" />
                         </div>
                         <div class="clearfix"></div>

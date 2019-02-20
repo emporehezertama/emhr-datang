@@ -15,7 +15,7 @@
                     <input type="hidden" name="action" value="view">
                     <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-10 waves-effect waves-light"> <i class="fa fa-plus"></i> ADD EMPLOYEE</a>
                     <a class="btn btn-info btn-sm pull-right m-l-10 hidden-xs waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> IMPORT</a>
-                    <a href="{{ route('administrator.karyawan.downloadExcel') }}" class="pull-right m-l-10"><button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button></a>
+                    <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm pull-right m-l-10">Download Excel <i class="fa fa-download"></i></button>
                     <button type="button" id="filter_view" class="btn btn-default btn-sm pull-right">View in table <i class="fa fa-search-plus"></i></button>
                     
                     <div class="col-md-2 pull-right">

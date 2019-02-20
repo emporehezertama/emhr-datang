@@ -77,26 +77,26 @@ class CutiController extends Controller
 
         foreach($data as $no =>  $item)
         {
-            $params[$no]['NO']               = $no+1;
-            $params[$no]['NIK']              = $item->user->nik;
-            $params[$no]['NAMA KARYAWAN']    = $item->user->name;
+            $params[$no]['NO']                  = $no+1;
+            $params[$no]['EMPLOYEE ID(NIK)']    = $item->user->nik;
+            $params[$no]['EMPLOYEE NAME']    = $item->user->name;
             $params[$no]['POSITION']         = empore_jabatan($item->user_id);
-            $params[$no]['TGL CUTI/IJIN AWAL']= date('d F Y', strtotime($item->tanggal_cuti_start));
-            $params[$no]['TGL CUTI/IJIN AKHIR']=date('d F Y', strtotime($item->tanggal_cuti_end));
-            $params[$no]['JENIS CUTI / IJIN']= isset($item->cuti->jenis_cuti) ? $item->cuti->jenis_cuti : '';
-            $params[$no]['LAMA CUTI / IJIN'] = $item->total_cuti;
-            $params[$no]['KEPERLUAN']        = $item->keperluan;
-            $params[$no]['SISA CUTI']        = get_cuti_user($item->jenis_cuti, $item->user_id, 'sisa_cuti'); //$item->user->cuti->sisa_cuti;
+            $params[$no]['START LEAVE']      = date('d F Y', strtotime($item->tanggal_cuti_start));
+            $params[$no]['END LEAVE']        =date('d F Y', strtotime($item->tanggal_cuti_end));
+            $params[$no]['LEAVE TYPE']= isset($item->cuti->jenis_cuti) ? $item->cuti->jenis_cuti : '';
+            $params[$no]['LEAVE DURATION'] = $item->total_cuti;
+            $params[$no]['PURPOSE']        = $item->keperluan;
+            $params[$no]['LEAVE BALANCE']        = get_cuti_user($item->jenis_cuti, $item->user_id, 'sisa_cuti'); //$item->user->cuti->sisa_cuti;
 
             $status = '';
             if($item->is_approved_atasan == ""){
-                $status = 'Waiting Approval Atasan';
+                $status = 'Waiting Approval Superior';
             }
             else
             {
                 if($item->approve_direktur == "" and $item->is_approved_atasan == 1 and $item->status != 4)
                 {
-                    $status = 'Waiting Approval Direktur';
+                    $status = 'Waiting Approval Director';
                 }
                 if($item->approve_direktur == 1)
                 {
@@ -113,9 +113,9 @@ class CutiController extends Controller
             }
 
             $params[$no]['STATUS']           = $status;
-            $params[$no]['TGL SUBMIT']       = date('d F Y', strtotime($item->created_at));
-            $params[$no]['TGL APPROVAL']     = date('d F Y', strtotime($item->approve_direktur_date));
-            $params[$no]['SUPERVISOR']       = $item->direktur->name;
+            $params[$no]['DATE SUBMITTED']       = date('d F Y', strtotime($item->created_at));
+            $params[$no]['DATE APPROVAL DIRECTOR']     = date('d F Y', strtotime($item->approve_direktur_date));
+            $params[$no]['DIRECTOR NAME']       = $item->direktur->name;
         }
 
         $styleHeader = [
@@ -198,7 +198,7 @@ class CutiController extends Controller
         $data->status           = 1; 
         $data->save();
 
-        return redirect()->route('administrator.cuti.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.cuti.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -213,7 +213,17 @@ class CutiController extends Controller
         $data->note_pembatalan = $request->note;
         $data->save(); 
 
-        return redirect()->route('administrator.cuti.index')->with('message-success', 'Cuti Berhasil dibatalkan');
+        $params['data']     = $data;
+        $params['text']     = '<p><strong>Dear Sir/Madam '. $data->user->name .'</strong>,</p> <p>  Submission of your Leave / Permit <strong style="color: red;">CANCELLED</strong>.</p>';
+            // send email
+            \Mail::send('email.cuti-approval', $params,
+                function($message) use($data) {
+                    $message->from('emporeht@gmail.com');
+                    $message->to($data->karyawan->email);
+                    $message->subject('Empore - Submission of Leave / Permit');
+                }
+            );   
+        return redirect()->route('administrator.cuti.index')->with('message-success', 'Leave Successfully canceled');
     }
 
     /**
@@ -226,7 +236,7 @@ class CutiController extends Controller
         $data = CutiKaryawan::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.cuti.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.cuti.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -239,7 +249,7 @@ class CutiController extends Controller
         $data = CutiKaryawan::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.cuti.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.cuti.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -259,7 +269,7 @@ class CutiController extends Controller
         $data->status           = 1; 
         $data->save();
 
-        return redirect()->route('administrator.cuti.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.cuti.index')->with('message-success', 'Data successfully saved !');
     }
 
     /**
@@ -300,13 +310,13 @@ class CutiController extends Controller
 
             // send email atasan
             $objDemo = new \stdClass();
-            $objDemo->content = '<p>Dear '. $cuti->user->name .'</p><p> Pengajuan Cuti anda ditolak.</p>' ;    
+            $objDemo->content = '<p>Dear '. $cuti->user->name .'</p><p> Your Leave submission is rejected.</p>' ;    
             
         }else{
             $status = 2;
             // send email atasan
             $objDemo = new \stdClass();
-            $objDemo->content = '<p>Dear '. $cuti->user->name .'</p><p> Pengajuan Cuti anda disetujui.</p>' ; 
+            $objDemo->content = '<p>Dear '. $cuti->user->name .'</p><p> Your leave submission is approved.</p>' ; 
 
             $user_cuti = UserCuti::where('user_id', $cuti->user_id)->where('cuti_id', $cuti->jenis_cuti)->first();
             
@@ -346,6 +356,6 @@ class CutiController extends Controller
         $cuti->is_personalia_id = \Auth::user()->id;
         $cuti->save();
 
-        return redirect()->route('administrator.cuti.index')->with('messages-success', 'Form Cuti Berhasil diproses !');
+        return redirect()->route('administrator.cuti.index')->with('messages-success', 'Leave Form Successfully processed!');
     }
 }

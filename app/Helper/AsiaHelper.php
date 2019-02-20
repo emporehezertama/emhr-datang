@@ -1239,6 +1239,7 @@ function status_payment_request($status)
  */
 function lama_hari($start, $end)
 {
+
 	$start_date = new DateTime($start);
 	$end_date = new DateTime($end);
 	$interval = $start_date->diff($end_date);

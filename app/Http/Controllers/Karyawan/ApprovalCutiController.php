@@ -62,25 +62,25 @@ class ApprovalCutiController extends Controller
             $status = 3;
             
             $params['atasan']   = $cuti->atasan;
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $cuti->user->name .'</strong>,</p> <p>  Pengajuan Cuti / Ijin anda <strong style="color: red;">DITOLAK</strong>.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $cuti->user->name .'</strong>,</p> <p>  Submission of your Leave / Permit <strong style="color: red;">REJECTED</strong>.</p>';
             // send email
             \Mail::send('email.cuti-approval', $params,
                 function($message) use($cuti) {
                     $message->from('emporeht@gmail.com');
                     $message->to($cuti->karyawan->email);
-                    $message->subject('Empore - Pengajuan Cuti / Izin');
+                    $message->subject('Empore - Submission of Leave / Permit');
                 }
             );   
         }else{
             $status = 2;
 
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $cuti->user->name .'</strong>,</p> <p>  Pengajuan Cuti / Ijin anda <strong style="color: green;">DISETUJUI</strong>.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $cuti->user->name .'</strong>,</p> <p>  Submission of your Leave / Permit <strong style="color: green;">APPROVED</strong>.</p>';
             // send email
             \Mail::send('email.cuti-approval', $params,
                 function($message) use($cuti) {
                     $message->from('emporeht@gmail.com');
                     $message->to($cuti->karyawan->email);
-                    $message->subject('Empore - Pengajuan Cuti / Izin');
+                    $message->subject('Empore - Submission of Leave / Permit');
                 }
             );  
 
@@ -118,7 +118,7 @@ class ApprovalCutiController extends Controller
         $cuti->is_personalia_id = \Auth::user()->id;
         $cuti->save();
 
-        return redirect()->route('karyawan.approval.cuti.index')->with('messages-success', 'Form Cuti Berhasil diproses !');
+        return redirect()->route('karyawan.approval.cuti.index')->with('messages-success', 'Leave Form Successfully processed !');
     }
 
     /**

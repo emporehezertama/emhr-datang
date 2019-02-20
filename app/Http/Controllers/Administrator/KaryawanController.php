@@ -28,6 +28,7 @@ use App\Models\EmporeOrganisasiStaff;
 use App\Models\Cabang;
 use App\Models\UserInventarisMobil;
 use App\Models\UserInventaris;
+use PHPExcel_Worksheet_Drawing;
 
 class KaryawanController extends Controller
 {
@@ -1854,11 +1855,48 @@ class KaryawanController extends Controller
             ''
         ];
 
-        return \Excel::create('Report-Employee',  function($excel) use($params, $styleHeader){
-              $excel->sheet('mysheet',  function($sheet) use($params){
-                $sheet->fromArray($params);
+        return \Excel::create('Report-Employee-'.date('d-m-Y'),  function($excel) use($params, $styleHeader){
+              $excel->sheet('Karyawan',  function($sheet) use($params){
+                
+                $sheet->cell('A1', function($cell) {
+                        $cell->setValue(get_setting('title'));
+                        $cell->setFontSize(16);
+                    })->mergeCells('A1:Z1');
+
+                $sheet->cell('A2', function($cell) {
+                        $cell->setValue(get_setting('description'));
+                    })->mergeCells('A2:Z2');
+
+                $sheet->setSize(array(
+                    'A1' => array(
+                        'height'    => 20
+                    ),
+                    'A2' => array(
+                        'height'    => 50
+                    ),
+                    'A5' => array(
+                        'height'    => 30
+                    ),
+                ));
+                
+                $sheet->cell('A5:EJ5', function($cell) {
+                        $cell->setFontSize(13);
+                        $cell->setBorder('solid', 'none', 'none', 'solid');
+                        $cell->setBackground('#EEEEEE');
+                        $cell->setFontWeight('bold');
+                    });
+
+                $sheet->fromArray($params, null, 'A5', true);
+                                    
+                #$objDrawing = new PHPExcel_Worksheet_Drawing;
+                #$objDrawing->setPath( public_path(get_setting('logo')) );
+                #$objDrawing->setCoordinates('A1');
+                #$objDrawing->setWorksheet($sheet);
+
               });
-            $excel->getActiveSheet()->getStyle('A1:EI1')->applyFromArray($styleHeader);
+
+            $excel->getActiveSheet()->getStyle('A5:EI1')->applyFromArray($styleHeader);
+
         })->download('xls');
     }
 }

@@ -48,32 +48,32 @@ class ApprovalCutiAtasanController extends Controller
         {
             $cuti->status = 3 ;
 
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $cuti->user->name .'</strong>,</p> <p>  Pengajuan Cuti / Ijin anda <strong style="color: red;">DITOLAK</strong>.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $cuti->user->name .'</strong>,</p> <p>  Submission of your Leave / Permit <strong style="color: red;">REJECTED</strong>.</p>';
 
             \Mail::send('email.cuti-approval', $params,
                 function($message) use($cuti) {
                     $message->from('emporeht@gmail.com');
                     $message->to($cuti->karyawan->email);
-                    $message->subject('Empore - Pengajuan Cuti / Izin');
+                    $message->subject('Empore - Submission of Leave / Permit');
                 }
             );
         }
         else
         {
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $cuti->direktur->name .'</strong>,</p> <p> '. $cuti->user->name .'  / '.  $cuti->user->nik .' mengajukan Cuti / Ijin butuh persetujuan Anda.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $cuti->direktur->name .'</strong>,</p> <p> '. $cuti->user->name .'  / '.  $cuti->user->nik .' applied for Leave/Permit and currently waiting your approval.</p>';
 
             \Mail::send('email.cuti-approval', $params,
                 function($message) use($cuti) {
                     $message->from('emporeht@gmail.com');
                     $message->to($cuti->direktur->email);
-                    $message->subject('Empore - Pengajuan Cuti / Izin');
+                    $message->subject('Empore - Submission of Leave / Permit');
                 }
             );
         }
 
         $cuti->save();
 
-        return redirect()->route('karyawan.approval.cuti-atasan.index')->with('message-success', 'Form Cuti Berhasil diproses !');
+        return redirect()->route('karyawan.approval.cuti-atasan.index')->with('message-success', 'Leave Form Successfully processed !');
     }
 
     /**

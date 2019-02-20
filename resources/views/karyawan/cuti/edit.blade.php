@@ -49,7 +49,7 @@
                         <div class="col-md-6" style="padding-left: 0;">
                             <div class="form-group">
                                 <label class="col-md-6">NIK / Employee Name</label>
-                                <label class="col-md-6">Telephone</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" value="{{ Auth::user()->nik .' / '. Auth::user()->name }}" readonly="true">
                                 </div>
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Phone Number</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <label class="col-md-6">Email</label>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control no_handphone" value="{{ $data->backup_karyawan->telepon }}">
@@ -182,7 +182,8 @@
                            <td>{{ $no + 1 }}</td>
                            <td>{{ $item->tanggal_cuti_start }} - {{ $item->tanggal_cuti_end }}</td>
                            <td>{{ $item->cuti->jenis_cuti }}</td>
-                           <td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>
+                           <td>{{ $item->total_cuti}}</td>
+                           <!--<td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>-->
                            <td>{{ $item->keperluan }}</td>
                         </tr>
                         @endforeach
