@@ -1858,40 +1858,48 @@ class KaryawanController extends Controller
         return \Excel::create('Report-Employee-'.date('d-m-Y'),  function($excel) use($params, $styleHeader){
               $excel->sheet('Karyawan',  function($sheet) use($params){
                 
-                $sheet->cell('A1', function($cell) {
-                        $cell->setValue(get_setting('title'));
-                        $cell->setFontSize(16);
-                    })->mergeCells('A1:Z1');
+                // $sheet->cell('B1', function($cell) {
+                //         $cell->setValue(get_setting('title'));
+                //         $cell->setFontSize(16);
+                //         $cell->setAlignment('center');
+                //     })->mergeCells('B1:Q1');
 
-                $sheet->cell('A2', function($cell) {
-                        $cell->setValue(get_setting('description'));
-                    })->mergeCells('A2:Z2');
+                // $sheet->cell('B2', function($cell) {
+                //         $cell->setValue(get_setting('description'))
+                //         ->setAlignment('center');
+                //     })->mergeCells('B2:Q2');
 
-                $sheet->setSize(array(
-                    'A1' => array(
-                        'height'    => 20
-                    ),
-                    'A2' => array(
-                        'height'    => 50
-                    ),
-                    'A5' => array(
-                        'height'    => 30
-                    ),
-                ));
+                // $sheet->setSize(array(
+                //     'A1' => array(
+                //         'height'    => 20
+                //     ),
+                //     'A2' => array(
+                //         'height'    => 30
+                //     ),
+                //     'A5' => [
+                //         'width' => 5,
+                //         'height' => 25
+                //     ]
+                // ));
                 
-                $sheet->cell('A5:EJ5', function($cell) {
-                        $cell->setFontSize(13);
-                        $cell->setBorder('solid', 'none', 'none', 'solid');
+                $sheet->cell('A1:EJ1', function($cell) {
+                        $cell->setFontSize(12);
                         $cell->setBackground('#EEEEEE');
                         $cell->setFontWeight('bold');
+                        $cell->setBorder('solid');
                     });
 
-                $sheet->fromArray($params, null, 'A5', true);
-                                    
-                #$objDrawing = new PHPExcel_Worksheet_Drawing;
-                #$objDrawing->setPath( public_path(get_setting('logo')) );
-                #$objDrawing->setCoordinates('A1');
-                #$objDrawing->setWorksheet($sheet);
+
+                $borderArray = array(
+                    'borders' => array(
+                        'outline' => array(
+                            'style' => \PHPExcel_Style_Border::BORDER_THICK,
+                            'color' => array('argb' => 'FFFF0000'),
+                        ),
+                    ),
+                );
+
+                $sheet->fromArray($params, null, 'A1', true);
 
               });
 

@@ -9,14 +9,11 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Form Karyawan</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Employee</li>
-                </ol>
+                <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10 pull-right" onclick="document.getElementById('form-karyawan').submit()"><i class="fa fa-save"></i> Save Employee Data </button>
             </div>
         </div>
     <div class="row">
-        <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.karyawan.store') }}" method="POST">
+        <form class="form-horizontal" enctype="multipart/form-data" id="form-karyawan" action="{{ route('administrator.karyawan.store') }}" method="POST">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
 
@@ -187,6 +184,20 @@
                             <br />
                             {{ csrf_field() }}
                             <div class="col-md-6" style="padding-left: 0">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        @if(!empty($data->foto))
+                                        <img src="{{ asset('storage/foto/'. $data->foto) }}" style="width: 200px;" />
+                                        @else
+                                        <img src="{{ asset('admin-css/images/user.png') }}" style="width: 200px;" />
+                                        @endif
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-info btn-xs" onclick="open_dialog_photo()"><i class="fa fa-upload"></i> Change Photo</button>
+                                        <input type="file" name="foto" class="form-control" style="display: none;" />
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="col-md-12">Name</label>
                                     <div class="col-md-10">
@@ -366,12 +377,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Foto</label>
-                                    <div class="col-md-10">
-                                        <input type="file" name="foto" class="form-control " />
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-md-12">Foto KTP</label>
                                     <div class="col-md-10">
                                         <input type="file" name="foto_ktp" class="form-control " />
@@ -428,8 +433,10 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('administrator.karyawan.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                    
+                    <!-- <a href="{{ route('administrator.karyawan.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
                     <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save Employee Data</button>
+                     -->
                     <br style="clear: both;" />
                     <div class="clearfix"></div>
                 </div>
@@ -743,6 +750,11 @@
     <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+        
+        function open_dialog_photo()
+        {
+            $("input[name='foto']").trigger('click');   
+        }
 
         $("select[name='empore_organisasi_direktur']").on('change', function(){
             var id  = $(this).val();
