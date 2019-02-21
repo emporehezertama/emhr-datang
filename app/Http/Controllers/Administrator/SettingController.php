@@ -148,4 +148,13 @@ class SettingController extends Controller
 
         return redirect()->route('administrator.setting.general')->with('message-success', 'Setting saved');
     }
+
+    /**
+     * Setting Backup
+     * @return view
+     */
+    public function backup()
+    {
+        return view('administrator.setting.backup');
+    }
 }

@@ -67,6 +67,9 @@
                         <div class="col-md-2">
                             <a href="{{ route('administrator.bank.index') }}"><i class="mdi mdi-bank fa-fw"></i><span class="hide-menu">Bank</span></a>
                         </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.backup') }}"><i class="mdi mdi-bank fa-fw"></i><span class="hide-menu">Backup App & Database</span></a>
+                        </div>
                         <div class="clearfix"></div><br />
                     </div>
                 </div>

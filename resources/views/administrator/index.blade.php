@@ -2,15 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-      
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -23,10 +15,7 @@
                     <li class="active">Home</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
-        <!-- .row -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="white-box" style="margin-bottom:10px;">

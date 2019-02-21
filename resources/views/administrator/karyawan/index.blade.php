@@ -16,7 +16,7 @@
                     <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-10 waves-effect waves-light"> <i class="fa fa-plus"></i> Add Employee</a>
                     <a class="btn btn-info btn-sm pull-right m-l-10 hidden-xs waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> Import</a>
                     <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm pull-right m-l-10">Download <i class="fa fa-download"></i></button>
-                    <button type="button" id="filter_view" class="btn btn-default btn-sm pull-right">View in table <i class="fa fa-search-plus"></i></button>
+                    <button type="button" id="filter_view" class="btn btn-default btn-sm pull-right"> <i class="fa fa-search-plus"></i></button>
                     
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
@@ -47,9 +47,14 @@
         </div>
         <!-- .row -->
         <div class="row">
+            @if(empty($_GET['table']) || $_GET['table'] == 'list')
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
                     <div class="table-responsive" style="overflow-y: unset;overflow-x: unset;">
+                        <div class="pull-right">
+                        <a href="{{ route('administrator.karyawan.index') }}?table=list" style="{{ (isset($_GET['table']) and $_GET['table'] == 'list') ? 'color: grey;' : '' }}"><i class="fa fa-list"></i></a>
+                        <a href="{{ route('administrator.karyawan.index') }}?table=grid" style="{{ (isset($_GET['table']) and $_GET['table'] == 'grid') ? 'color: grey;' : '' }}"><i class="fa fa-th-large"></i></a>
+                        </div><div class="clearfix"></div>
                         <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
@@ -144,6 +149,82 @@
                     </div>
                 </div>
             </div> 
+            @else
+                <div class="col-md-12 m-b-10">
+                    <div class="pull-right">
+                        <a href="{{ route('administrator.karyawan.index') }}?table=list" style="{{ (isset($_GET['table']) and $_GET['table'] == 'list') ? 'color: grey;' : '' }}"><i class="fa fa-list"></i></a>
+                        <a href="{{ route('administrator.karyawan.index') }}?table=grid" style="{{ (isset($_GET['table']) and $_GET['table'] == 'grid') ? 'color: grey;' : '' }}"><i class="fa fa-th-large"></i></a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                @foreach($data as $no => $item)
+                    <div class="col-md-4 col-sm-4">
+                        <div class="white-box" style="min-height: 241px;">
+                            <div class="row">
+                                <div class="btn-group m-r-10 pull-right">
+                                    <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle waves-effect waves-light">Action 
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul role="menu" class="dropdown-menu">
+                                        <li><a href="{{ route('administrator.karyawan.edit', ['id' => $item->id]) }}"><i class="fa fa-search-plus"></i> Detail</a></li>
+                                        <li>
+                                            <form action="{{ route('administrator.karyawan.destroy', $item->id) }}" method="post">
+                                                {{ csrf_field() }}
+                                                {{ method_field('DELETE') }}                                               
+                                                <a href="javascript:void(0)" onclick="confirm_delete('Delete this data ?', this)"><i class="ti-trash"></i> Delete</a>
+                                            </form>
+                                        </li>
+                                        <li><a href="{{ route('administrator.karyawan.print-profile', $item->id) }}" target="_blank"><i class="fa fa-print"></i> Print</a></li>                                        
+                                        @if(!empty($item->generate_kontrak_file))
+                                            <li><a href="{{ asset('/storage/file-kontrak/'. $item->id. '/'. $item->generate_kontrak_file) }}" target="_blank"><i class="fa fa-search-plus"></i> View Contract File</a> </li>
+                                        @endif
+
+                                        @if($item->is_generate_kontrak == "")
+                                        <li><a onclick="generate_file_document({{ $item->id }})"><i class="fa fa-file"></i> Generate Contract Document</a></li>
+                                        @endif
+                                        <li><a onclick="upload_file_dokument({{ $item->id }})"><i class="fa fa-upload"></i> Upload Contract File</a></li>
+                                        <li><a onclick="confirm_loginas('{{ $item->name }}','{{ route('administrator.karyawan.autologin', $item->id) }}')"><i class="fa fa-key"></i> Autologin</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 col-sm-4 text-center">
+                                    <a href="{{ route('administrator.karyawan.edit', $item->id) }}">
+                                        @if(empty($item->foto))
+                                            @if($item->jenis_kelamin == 'Male' || $item->jenis_kelamin == "")
+                                                <img src="{{ asset('images/user-man.png') }}" alt="{{ $item->title }}" class="img-circle img-responsive">
+                                            @else
+                                                <img src="{{ asset('images/user-woman.png') }}" alt="{{ $item->title }}" class="img-circle img-responsive">
+                                            @endif
+                                        @else
+                                            <img src="{{ asset('storage/foto/'.$item->foto) }}" alt="{{ $item->title }}" class="img-circle img-responsive">
+                                        @endif
+                                    </a><br />
+                                    <p><strong>{{ $item->nik }}</strong></p>
+                                </div>
+                                <div class="col-md-8 col-sm-8">
+                                    <h3 class="box-title m-b-0">{{ $item->name }}</h3> 
+                                    <small>
+                                    @if(!empty($item->empore_organisasi_staff_id))
+                                        {{ isset($item->empore_staff->name) ? $item->empore_staff->name : '' }}
+                                    @endif
+
+                                    @if(empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_manager_id))
+                                        {{ isset($item->empore_manager->name) ? $item->empore_manager->name : '' }}
+                                    @endif
+                                    </small>
+                                    <address>
+                                        {{ $item->current_address }}<br />
+                                        @if(!empty($item->telepon))
+                                            {{ $item->telepon }}<br />
+                                        @endif
+                                        <a href="mailto:{{ $item->email }}">{{ $item->email }}</a>
+                                    </address>
+                                    <p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
     @include('layouts.footer')
@@ -178,7 +259,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
 
 <!-- modal content education  -->
 <div id="modal_generate_dokument" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

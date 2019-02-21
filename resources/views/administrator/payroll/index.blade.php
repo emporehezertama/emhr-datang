@@ -2,83 +2,65 @@
 
 @section('title', 'Payroll')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-        
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row bg-title">
-            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Payroll</h4> 
-            </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a id="add-import-karyawan" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-file"></i> IMPORT PAYROLL</a>
-                <a href="{{ route('administrator.payroll.download') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-cloud-download"></i> DOWNLOAD TEMPLATE</a>
-                <a href="{{ route('administrator.payroll.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> CREATE PAYROLL</a>
-
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Payroll</li>
-                </ol>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-
-        <!-- .row -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="white-box">
-                    <h3 class="box-title m-b-0" style="float: left; margin-right: 10px;">Manage Payroll</h3>
-                    <label class="btn btn-warning btn-sm" id="calculate"><i class="fa fa-refresh"></i> Calculate Payroll</label>
-                    <hr />
+        <div class="row bg-title" style="overflow: inherit; ">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                <h4 class="page-title pull-left m-r-10">Payroll</h4>
+                <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form">
+                    {{ csrf_field() }}
+                    <div class="pull-right" style="padding-left:0;">
+                        <button type="button" id="filter_view" class="btn btn-default btn-sm"> <i class="fa fa-search-plus"></i></button>
+                        <div class="btn-group m-r-10">
+                            <button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light" type="button">Action 
+                                <i class="fa fa-gear"></i>
+                            </button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
+                                <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
+                                <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
+                                <li><a href="{{ route('administrator.payroll.download') }}"> <i class="fa fa-cloud-download"></i> Download</a></li>
+                                <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="is_calculate">
+                                <option value="">- Status -</option>
+                                <option value="0" {{ (request() and request()->is_calculate == '0') ? 'selected' : '' }}>No Calculated</option>
+                                <option value="1" {{ (request() and request()->is_calculate == '1') ? 'selected' : '' }}>Calculated</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="jabatan">
+                                <option value="">- Position - </option>
+                                <option {{ (request() and request()->jabatan == 'Staff') ? 'selected' : '' }}>Staff</option>
+                                <option {{ (request() and request()->jabatan == 'Manager') ? 'selected' : '' }}>Manager</option>
+                                <option {{ (request() and request()->jabatan == 'Direktur') ? 'selected' : '' }}>Director</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="employee_status">
+                                <option value="">- Employee Status - </option>
+                                <option {{ (request() and request()->employee_status == 'Permanent') ? 'selected' : '' }}>Permanent</option>
+                                <option {{ (request() and request()->employee_status == 'Contract') ? 'selected' : '' }}>Contract</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="action" value="view">
                     <div class="clearfix"></div>
-                    
-                    <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form">
-                        <p>Filter Form</p>
-                        {{ csrf_field() }}
-                        <div class="col-md-1" style="padding-left:0;">
-                            <div class="form-group">
-                                <select class="form-control" name="is_calculate">
-                                    <option value="">- Status -</option>
-                                    <option value="0" {{ (request() and request()->is_calculate == '0') ? 'selected' : '' }}>No Calculated</option>
-                                    <option value="1" {{ (request() and request()->is_calculate == '1') ? 'selected' : '' }}>Calculated</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-1" style="padding-left:0;">
-                            <div class="form-group">
-                                <select class="form-control" name="jabatan">
-                                    <option value="">- Position - </option>
-                                    <option {{ (request() and request()->jabatan == 'Staff') ? 'selected' : '' }}>Staff</option>
-                                    <option {{ (request() and request()->jabatan == 'Manager') ? 'selected' : '' }}>Manager</option>
-                                    <option {{ (request() and request()->jabatan == 'Direktur') ? 'selected' : '' }}>Director</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2" style="padding-left:0;">
-                            <div class="form-group">
-                                <select class="form-control" name="employee_status">
-                                    <option value="">- Employee Status - </option>
-                                    <option {{ (request() and request()->employee_status == 'Permanent') ? 'selected' : '' }}>Permanent</option>
-                                    <option {{ (request() and request()->employee_status == 'Contract') ? 'selected' : '' }}>Contract</option>
-                                </select>
-                            </div>
-                        </div>
-                        <input type="hidden" name="action" value="view">
-                        <div class="col-md-3" style="padding-left:0;">
-                            <button type="button" id="filter_view" class="btn btn-default btn-sm">View in table <i class="fa fa-search-plus"></i></button>
-                            <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm">Payroll Report<i class="fa fa-download"></i></button>
-                        </div>
-                        <div class="clearfix"></div>
-                    </form>
-
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 p-l-0 p-r-0">
+                <div class="white-box">
                     <div class="table-responsive">
                         <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
@@ -131,12 +113,9 @@
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
-
 <!-- modal content education  -->
 <div id="modal_import" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

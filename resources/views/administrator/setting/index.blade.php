@@ -121,6 +121,15 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Website Status</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="setting[app_debug]">
+                                    <option value="false" {{ get_setting('app_debug') == 'false' ? 'selected' : ''  }}>Production</option>
+                                    <option value="true" {{ get_setting('app_debug') == 'true' ? 'selected' : ''  }}>Development</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>                   

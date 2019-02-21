@@ -172,7 +172,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('setting/email', 'SettingController@email')->name('administrator.setting.email');
 	Route::get('organization-structure-custom', 'StructureOrganizationCustomController@index')->name('administrator.organization-structure-custom.index');
 	Route::get('organization-structure-custom/delete/{id}', 'StructureOrganizationCustomController@delete')->name('administrator.organization-structure-custom.delete');
-	
+	Route::get('setting/backup', 'SettingController@backup')->name('administrator.backup');
 	Route::post('setting/save','SettingController@save')->name('administrator.setting.save');
 	Route::post('setting/email-save', 'SettingController@emailSave')->name('administrator.setting.email-save');
 	Route::post('setting/email-test-send', 'SettingController@emailTestSend')->name('administrator.setting.email-test-send');

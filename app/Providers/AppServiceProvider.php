@@ -14,6 +14,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if(get_setting('app_debug') == 'false')
+        {
+            \Config::set('app.debug', false );    
+        }
+        else
+        {
+            \Config::set('app.debug', true );    
+        }
+
         \Config::set('mail.driver', get_setting('mail_driver'));
         \Config::set('mail.host', get_setting('mail_host'));
         \Config::set('mail.port', get_setting('mail_port'));

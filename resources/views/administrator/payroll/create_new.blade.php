@@ -2,15 +2,7 @@
 
 @section('title', 'Payroll')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -23,12 +15,11 @@
                     <li class="active">Payroll</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
         <!-- .row -->
         <div class="row">
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
-                <div class="col-md-12">
+                <div class="col-md-12 p-l-0 p-r-0">
                     <div class="white-box">
                         <h3 class="box-title m-b-0">Payroll</h3>
                         <hr />

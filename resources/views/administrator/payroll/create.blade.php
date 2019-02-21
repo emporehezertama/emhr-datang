@@ -2,15 +2,7 @@
 
 @section('title', 'Payroll')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -23,15 +15,58 @@
                     <li class="active">Payroll</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
-                <div class="col-md-12">
+               <!--  <div class="col-md-6 p-l-0">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Payroll</h3>
-                        <hr />
+                        <h3>Income</h3>
+                        <table class="table table-stripped" id="list_income">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="text" name="income[]" class="form-control" placeholder="Rp. ">
+                                    </th>
+                                    <th>
+                                        <input type="text" name="note[]" class="form-control" placeholder="Note">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Total Income Rp. </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="add_income()"><i class="fa fa-plus"></i> Add</a>
+                    </div>
+                </div>
+                <div class="col-md-6 p-l-0 p-r-0">
+                    <div class="white-box">
+                        <h3>Deduction</h3>
+                        <table class="table table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="text" class="form-control" placeholder="Rp. ">
+                                    </th>
+                                    <th>
+                                        <input type="text" class="form-control" placeholder="Note">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Total Deduction Rp. </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="add_deduction()"><i class="fa fa-plus"></i> Add</a>
+                    </div>
+                </div>
+                 -->
+                <div class="col-md-12 p-l-0 p-r-0">
+                    <div class="white-box">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -42,7 +77,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         {{ csrf_field() }}
                         <div class="col-md-6">
                             <div class="form-group">
@@ -301,13 +335,20 @@
     @extends('layouts.footer')
 </div>
 @section('footer-script')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 <script type="text/javascript">
     $("input[name='salary'], input[name='call_allow'], input[name='bonus'], input[name='ot_multiple_hours'],input[name='homebase_allowance'],input[name='laptop_allowance'],input[name='other_income'],input[name='medical_claim'],input[name='other_deduction'], input[name='transport_allowance']").on('input', function(){
         calculate();
     });
+
+    function add_income()
+    {
+        var el = "<tr>";
+            el += '<td><input type="text" name="income[]" class="form-control" placeholder="Rp. " /></td>';
+            el += '<td><input type="text" name="note[]" class="form-control" placeholder="Note" /></td>';
+            el += "</tr>";
+
+        $("#list_income").append(el);
+    }
 
     var marital_status = ""; 
 
@@ -422,8 +463,4 @@
     });
 </script>
 @endsection
-
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
 @endsection
