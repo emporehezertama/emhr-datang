@@ -5,7 +5,7 @@
 @section('content')
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row bg-title">
+        <div class="row bg-title" style="overflow: inherit;">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Employee</h4> 
             </div>
@@ -13,11 +13,33 @@
                 <form method="POST" action="" id="filter-form">
                     {{ csrf_field() }}
                     <input type="hidden" name="action" value="view">
-                    <a href="{{ route('administrator.karyawan.create') }}" class="btn btn-success btn-sm pull-right m-l-10 waves-effect waves-light"> <i class="fa fa-plus"></i> Add Employee</a>
-                    <a class="btn btn-info btn-sm pull-right m-l-10 hidden-xs waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> Import</a>
-                    <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm pull-right m-l-10">Download <i class="fa fa-download"></i></button>
-                    <button type="button" id="filter_view" class="btn btn-default btn-sm pull-right"> <i class="fa fa-search-plus"></i></button>
-                    
+                    <div class="btn-group pull-right">
+                        <a href="javascript:void(0)" title="Layout Table Employee Grid / Table" aria-expanded="false" data-toggle="dropdown" class="btn btn-default btn-sm btn-outline dropdown-toggle">
+                            @if(get_setting('layout_karyawan') == 'grid') 
+                                <i class="fa fa-th-large"></i>
+                            @else
+                                <i class="fa fa-list"></i>
+                            @endif
+                        </a>
+                        <ul role="menu" class="dropdown-menu" style="min-width: 10px;">
+                            @if(get_setting('layout_karyawan') == 'grid') 
+                            <li><a href="{{ route('administrator.karyawan.index') }}?layout_karyawan=list" class="pull-right" title="Table Data" style="{{ (get_setting('layout_karyawan') == 'list') ? 'color: grey;' : '' }} padding: 0px 10px;"><i class="fa fa-list"></i></a></li>
+                            @else
+                            <li><a href="{{ route('administrator.karyawan.index') }}?layout_karyawan=grid" class="pull-right" title="Grid Data" style="{{ (get_setting('layout_karyawan') == 'grid') ? 'color: grey;' : '' }} padding: 0px 10px;"><i class="fa fa-th-large"></i></a></li>
+                            @endif
+                        </ul>
+                    </div>
+                    <div class="btn-group m-l-10 m-r-10 pull-right">
+                        <a href="javascript:void(0)" aria-expanded="false" data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle btn-outline">Action 
+                            <i class="fa fa-gear"></i>
+                        </a>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ route('administrator.karyawan.create') }}"> <i class="fa fa-plus"></i> Add Employee</a></li>
+                            <li><a href="javascript:void(0)" id="add-import-karyawan"> <i class="fa fa-upload"></i> Import</a></li>
+                            <li><a onclick="submit_filter_download()"><i class="fa fa-download"></i> Download </a></li>
+                        </ul>
+                    </div>
+                    <button id="filter_view" class="btn btn-default btn-sm pull-right btn-outline"> <i class="fa fa-search-plus"></i></button>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="jabatan">
@@ -47,14 +69,10 @@
         </div>
         <!-- .row -->
         <div class="row">
-            @if(empty($_GET['table']) || $_GET['table'] == 'list')
+            @if(get_setting('layout_karyawan') == 'list')
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
                     <div class="table-responsive" style="overflow-y: unset;overflow-x: unset;">
-                        <div class="pull-right">
-                        <a href="{{ route('administrator.karyawan.index') }}?table=list" style="{{ (isset($_GET['table']) and $_GET['table'] == 'list') ? 'color: grey;' : '' }}"><i class="fa fa-list"></i></a>
-                        <a href="{{ route('administrator.karyawan.index') }}?table=grid" style="{{ (isset($_GET['table']) and $_GET['table'] == 'grid') ? 'color: grey;' : '' }}"><i class="fa fa-th-large"></i></a>
-                        </div><div class="clearfix"></div>
                         <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
@@ -150,13 +168,6 @@
                 </div>
             </div> 
             @else
-                <div class="col-md-12 m-b-10">
-                    <div class="pull-right">
-                        <a href="{{ route('administrator.karyawan.index') }}?table=list" style="{{ (isset($_GET['table']) and $_GET['table'] == 'list') ? 'color: grey;' : '' }}"><i class="fa fa-list"></i></a>
-                        <a href="{{ route('administrator.karyawan.index') }}?table=grid" style="{{ (isset($_GET['table']) and $_GET['table'] == 'grid') ? 'color: grey;' : '' }}"><i class="fa fa-th-large"></i></a>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
                 @foreach($data as $no => $item)
                     <div class="col-md-4 col-sm-4">
                         <div class="white-box" style="min-height: 241px;">
@@ -178,7 +189,6 @@
                                         @if(!empty($item->generate_kontrak_file))
                                             <li><a href="{{ asset('/storage/file-kontrak/'. $item->id. '/'. $item->generate_kontrak_file) }}" target="_blank"><i class="fa fa-search-plus"></i> View Contract File</a> </li>
                                         @endif
-
                                         @if($item->is_generate_kontrak == "")
                                         <li><a onclick="generate_file_document({{ $item->id }})"><i class="fa fa-file"></i> Generate Contract Document</a></li>
                                         @endif
@@ -214,9 +224,11 @@
                                     <address>
                                         {{ $item->current_address }}<br />
                                         @if(!empty($item->telepon))
-                                            {{ $item->telepon }}<br />
+                                            <i class="mdi mdi-phone"></i> {{ $item->telepon }}<br />
                                         @endif
-                                        <a href="mailto:{{ $item->email }}">{{ $item->email }}</a>
+                                        @if(!empty($item->email))
+                                            <i class="mdi mdi-email"></i> <a href="mailto:{{ $item->email }}">{{ $item->email }}</a>
+                                        @endif
                                     </address>
                                     <p></p>
                                 </div>

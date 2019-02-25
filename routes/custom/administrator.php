@@ -5,7 +5,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	
 	Route::resource('karyawan', 'KaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('department', 'DepartmentController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	#Route::resource('jabatan', 'JabatanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('provinsi', 'ProvinsiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('kabupaten', 'KabupatenController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('kecamatan', 'KecamatanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -16,8 +15,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::resource('payment-request', 'PaymentRequestController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('exit-clearance', 'ExitClearanceController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('exit-interview', 'ExitInterviewController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	#Route::resource('compassionate-reason', 'CompassionateReasonController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	#Route::resource('medical-reimbursement', 'MedicalReimbursementController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('directorate', 'DirectorateController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('division', 'DivisionController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('section', 'SectionController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -29,7 +26,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::resource('program-studi', 'ProgramStudiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('jurusan', 'JurusanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('sekolah', 'SekolahController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	#Route::resource('payment-request-setting', 'PaymentRequestSettingController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('alasan-pengunduran-diri', 'AlasanPengunduranDiriSettingController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::get('training/detail/{id}',  'TrainingController@detail')->name('administrator.training.detail');
 	Route::post('training/proses',  'TrainingController@proses')->name('administrator.training.proses');
@@ -71,7 +67,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('karyawan/downloadExcel','KaryawanController@downloadExcel')->name('administrator.karyawan.downloadExcel');
 	Route::post('karyawan', 'KaryawanController@index')->name('administrator.karyawan.index');
 	Route::post('karyawan/store', 'KaryawanController@store')->name('administrator.karyawan.store');
-
 	Route::get('absensi/index', 'AbsensiController@index')->name('administrator.absensi.index');
 	Route::get('absensi/import', 'AbsensiController@import')->name('administrator.absensi.import');
 	Route::post('absensi/temp-import', 'AbsensiController@tempImport')->name('administrator.absensi.temp-import');
@@ -107,6 +102,8 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('payroll-setting/edit-pph/{id}', 'PayrollSettingController@editPPH')->name('administrator.payroll-setting.edit-pph');
 	Route::post('payroll-setting/store-pph', 'PayrollSettingController@storePPH')->name('administrator.payroll-setting.store-pph');
 	Route::post('payroll-setting/update-pph/{id}', 'PayrollSettingController@updatePPH')->name('administrator.payroll-setting.update-pph');
+	Route::post('payroll-setting/store-deductions', 'PayrollSettingController@storeDeductions')->name('administrator.payroll-setting.store-deductions');
+	Route::post('payroll-setting/store-earnings', 'PayrollSettingController@storeEarnings')->name('administrator.payroll-setting.store-earnings');
 	Route::get('payroll-setting/delete-pph/{id}', 'PayrollSettingController@deletePPH')->name('administrator.payroll-setting.delete-pph');
 	Route::get('payroll-setting/delete-others/{id}', 'PayrollSettingController@deleteOthers')->name('administrator.payroll-setting.delete-others');
 	Route::get('payroll-setting/add-others', 'PayrollSettingController@addOthers')->name('administrator.payroll-setting.add-others');
@@ -172,7 +169,8 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('setting/email', 'SettingController@email')->name('administrator.setting.email');
 	Route::get('organization-structure-custom', 'StructureOrganizationCustomController@index')->name('administrator.organization-structure-custom.index');
 	Route::get('organization-structure-custom/delete/{id}', 'StructureOrganizationCustomController@delete')->name('administrator.organization-structure-custom.delete');
-	Route::get('setting/backup', 'SettingController@backup')->name('administrator.backup');
+	Route::get('setting/backup', 'SettingController@backup')->name('administrator.setting.backup');
+	Route::post('setting/backup-save', 'SettingController@backupSave')->name('administrator.setting.backup-save');
 	Route::post('setting/save','SettingController@save')->name('administrator.setting.save');
 	Route::post('setting/email-save', 'SettingController@emailSave')->name('administrator.setting.email-save');
 	Route::post('setting/email-test-send', 'SettingController@emailTestSend')->name('administrator.setting.email-test-send');

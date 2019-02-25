@@ -18,17 +18,21 @@
         </div>
         <div class="row">
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
-               <!--  <div class="col-md-6 p-l-0">
+               <div class="col-md-6 p-l-0">
                     <div class="white-box">
-                        <h3>Income</h3>
+                        <h3>Earning</h3>
                         <table class="table table-stripped" id="list_income">
                             <thead>
                                 <tr>
                                     <th>
-                                        <input type="text" name="income[]" class="form-control" placeholder="Rp. ">
+                                        <select class="form-control" name="earning[]">
+                                            @foreach(get_earnings() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                            @endforeach
+                                        </select>
                                     </th>
                                     <th>
-                                        <input type="text" name="note[]" class="form-control" placeholder="Note">
+                                        <input type="text" name="earnings_nominal[]" class="form-control" placeholder="Rp. ">
                                     </th>
                                 </tr>
                             </thead>
@@ -41,6 +45,7 @@
                         <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="add_income()"><i class="fa fa-plus"></i> Add</a>
                     </div>
                 </div>
+
                 <div class="col-md-6 p-l-0 p-r-0">
                     <div class="white-box">
                         <h3>Deduction</h3>
@@ -48,10 +53,14 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <input type="text" class="form-control" placeholder="Rp. ">
+                                        <select name="deductions[]" class="form-control">
+                                        @foreach(get_deductions() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->title }}</option>
+                                        @endforeach
+                                    </select>
                                     </th>
                                     <th>
-                                        <input type="text" class="form-control" placeholder="Note">
+                                        <input type="text" name="deductions_nominal[]" class="form-control" placeholder="Rp. ">
                                     </th>
                                 </tr>
                             </thead>
@@ -64,7 +73,7 @@
                         <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="add_deduction()"><i class="fa fa-plus"></i> Add</a>
                     </div>
                 </div>
-                 -->
+                 
                 <div class="col-md-12 p-l-0 p-r-0">
                     <div class="white-box">
                         @if (count($errors) > 0)

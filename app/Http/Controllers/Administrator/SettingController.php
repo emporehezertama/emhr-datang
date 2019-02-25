@@ -157,4 +157,29 @@ class SettingController extends Controller
     {
         return view('administrator.setting.backup');
     }
+
+    /**
+     * Backup Save
+     * @param  Request $request
+     * @return redirect     
+     */
+    public function backupSave(Request $request)
+    {
+        if($request->setting)
+        {
+            foreach($request->setting as $key => $value)
+            {
+                $setting = Setting::where('key', $key)->first();
+                if(!$setting)
+                {
+                    $setting = new Setting();
+                    $setting->key = $key;
+                }
+                $setting->value = $value;
+                $setting->save();
+            }
+        }
+
+        return redirect()->route('administrator.setting.backup')->with('message-success', 'Setting saved');
+    }
 }

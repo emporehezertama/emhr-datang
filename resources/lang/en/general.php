@@ -1,5 +1,6 @@
 <?php
 
 return [
-	'add' => 'Tambah'
+	'add' => 'Tambah',
+	'message-data-saved-success' => 'Data saved successfully'
 ];

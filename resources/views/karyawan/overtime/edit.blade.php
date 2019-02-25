@@ -2,30 +2,19 @@
 
 @section('title', 'Overtime Sheet')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Form Overtime Sheet</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Overtime Sheet</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('karyawan.approval.overtime.proses') }}" id="form-overtime" method="POST">
                 <div class="col-md-12">
@@ -42,9 +31,7 @@
                                 </ul>
                             </div>
                         @endif
-
                         {{ csrf_field() }}
-                        
                         <div class="form-group">
                             <label class="col-md-12">NIK / Employee Name</label>
                             <div class="col-md-6">
@@ -69,6 +56,7 @@
                                         <th>START</th>
                                         <th>END</th>
                                         <th>TOTAL OVERTIME (HOUR'S)</th>
+                                        <th>OVERTIME CALCULATED</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -81,15 +69,14 @@
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->awal }}" /></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->akhir }}" /></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->total_lembur }}" /></td>
+                                        <td><input type="text" readonly="true" class="form-control" value="{{ $item->overtime_calculated }}" /></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
-
                         <input type="hidden" name="status" value="0" />
                         <input type="hidden" name="id" value="{{ $data->id }}">
-
                         <div class="clearfix"></div>
                         <br />
                         <a href="{{ route('karyawan.overtime.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
@@ -98,41 +85,29 @@
                 </div>    
             </form>                    
         </div>
-        <!-- /.row -->
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
-    @extends('layouts.footer')
+    @include('layouts.footer')
 </div>
 @section('footer-script')
 <script type="text/javascript">
     $("#btn_approved").click(function(){
         bootbox.confirm('Approve Overtime Karyawan ?', function(result){
-
             $("input[name='status']").val(1);
             if(result)
             {
                 $('#form-overtime').submit();
             }
-
         });
     });
 
     $("#btn_tolak").click(function(){
         bootbox.confirm('Tolak Overtime Karyawan ?', function(result){
-
             if(result)
             {
                 $('#form-overtime').submit();
             }
-
         });
     });
 </script>
-
-
 @endsection
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
 @endsection

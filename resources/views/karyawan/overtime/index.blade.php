@@ -2,38 +2,23 @@
 
 @section('title', 'Overtime Sheet')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title hidden-xs hidden-sm">Dashboard</h4> 
+                <h4 class="page-title hidden-xs hidden-sm">Manage Overtime</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 @if(cek_approval('overtime_sheet'))
                 <a href="{{ route('karyawan.overtime.create') }}" class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light"> <i class="fa fa-plus"></i> ADD OVERTIME</a>
                 @endif
-                <ol class="breadcrumb hidden-xs hidden-sm">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Overtime Sheet</li>
-                </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage Overtime</h3>
-                    <br />
                     <div class="table-responsive">
                         <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
@@ -65,9 +50,7 @@
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
 <!-- sample modal content -->
@@ -79,21 +62,14 @@
                 <h4 class="modal-title" id="myModalLabel">DETAIL OVERTIME</h4>
             </div>
             <div class="modal-body">
-                <form method="POST" class="form_ahli_waris" action="">
-                    
-                 
-                </form>
+                <form method="POST" class="form_ahli_waris" action=""> </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Close</button>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
-
 @section('footer-script')
 <script type="text/javascript">
     function modal_detail_overtime(id)
@@ -102,5 +78,4 @@
     }
 </script>
 @endsection
-
 @endsection

@@ -698,14 +698,12 @@
     <script src="{{ asset('admin-css/plugins/bower_components/calendar/dist/cal-init.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/toast-master/js/jquery.toast.js') }}"></script>
     <script src="{{ asset('js/jquery.priceformat.min.js') }}"></script>
-
     <!-- Custom Theme JavaScript -->
     <script src="{{ asset('admin-css/js/custom.min.js') }}"></script>
     <script src="{{ asset('admin-css/js/dashboard1.js') }}?time=<?=date('His')?>"></script>
     <!-- Custom tab JavaScript -->
     <script src="{{ asset('admin-css/js/cbpFWTabs.js') }}"></script>
     <script src="{{ asset('js/bootbox.min.js') }}"></script>
-
     <!-- start - This is for export functionality only -->
     <script src="{{ asset('admin-css/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
@@ -715,9 +713,9 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-
+    <link rel="stylesheet" href="{{ asset('admin-css/plugins/bower_components/jquery-ui/jquery-ui.css') }}">
+    <script src="{{ asset('admin-css/plugins/bower_components/jquery-ui/jquery-ui.js') }}"></script>
     <script src="{{ asset('js/general.js?v='. date('His')) }}"></script>
-
     @if(Auth::user()->is_reset_first_password === null)
         <div class="modal fade" id="modal_reset_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
             <div class="modal-dialog" role="document">

@@ -13,20 +13,43 @@
             </div>
         </div>
         <div class="row">
-            <form class="form-horizontal" id="form-setting" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.email-save') }}" method="POST">
+            <form class="form-horizontal" id="form-setting" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.backup-save') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="col-md-6 p-l-0">
                     <div class="white-box">
                         <div class="form-group">
-                            <label class="col-md-2">Schedule</label>
-                            <div class="col-md-6">
-                                <label><input type="radio" value="0" name="setting[schedule]" checked /> None</label><br />
-                                <label><input type="radio" value="1" name="setting[schedule]" /> Every Minute</label><br />
-                                <label><input type="radio" value="2" name="setting[schedule]" /> Hourly</label><br />
-                                <label><input type="radio" value="3" name="setting[schedule]" /> Nightly</label><br />
-                                <label><input type="radio" value="4" name="setting[schedule]" /> Weekly</label><br />
-                                <label><input type="radio" value="5" name="setting[schedule]" /> Monthly</label><br />
-                                <label><input type="radio" value="6" name="setting[schedule]" /> Custom</label>
+                            <label class="col-md-5">Email Notifikasi</label>
+                            <label class="col-md-5">Backup Type</label>
+                            <div class="col-md-5">
+                                <input type="email" class="form-control" name="setting[backup_mail]" value="{{ get_setting('backup_mail') }}" />
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-control" name="setting[backup_type]">
+                                    <option value="0"> - Select Type Backup - </option>
+                                    <option value="1" {{ get_setting('backup_type') == 1 ? 'selected' : '' }}>All App & Database</option>
+                                    <option value="2" {{ get_setting('backup_type') == 2 ? 'selected' : '' }}>Database Only</option>
+                                    <option value="3" {{ get_setting('backup_type') == 3 ? 'selected' : '' }}>Apps Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="form-group">
+                            <label class="col-md-5">Backup Path</label><div class="clearfix"></div>
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" name="setting[backup_path]" value="{{ get_setting('backup_path') }}" />
+                            </div>
+                        </div>
+                        -->
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label class="m-r-20">Schedule Backup</label>
+                                <label class="m-r-10"><input type="radio" value="0" name="setting[schedule]" {{ get_setting('schedule') == 0 ? 'checked' : '' }} /> None</label>
+                                <label class="m-r-10"><input type="radio" value="1" name="setting[schedule]" {{ get_setting('schedule') == 1 ? 'checked' : '' }} /> Every Minute</label>
+                                <label class="m-r-10"><input type="radio" value="2" name="setting[schedule]" {{ get_setting('schedule') == 2 ? 'checked' : '' }} /> Hourly</label>
+                                <label class="m-r-10"><input type="radio" value="3" name="setting[schedule]" {{ get_setting('schedule') == 3 ? 'checked' : '' }} /> Nightly</label>
+                                <label class="m-r-10"><input type="radio" value="4" name="setting[schedule]" {{ get_setting('schedule') == 4 ? 'checked' : '' }} /> Weekly</label>
+                                <label class="m-r-10"><input type="radio" value="5" name="setting[schedule]" {{ get_setting('schedule') == 5 ? 'checked' : '' }} /> Monthly</label>
+                                <!-- <label><input type="radio" value="6" name="setting[schedule]" {{ get_setting('schedule') == 6 ? 'checked' : '' }} /> Custom</label> -->
                             </div>
                         </div>
                     </div>

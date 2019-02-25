@@ -1,6 +1,24 @@
 <?php
 
 /**
+ * Get Earnings
+ * @return objects
+ */
+function get_earnings()
+{
+	return \App\Models\PayrollEarnings::all();
+}
+
+/**
+ * Get Deductions
+ * @return objects
+ */
+function get_deductions()
+{
+	return \App\Models\PayrollDeductions::all();
+}
+
+/**
  * Times Zone
  * @return array
  */

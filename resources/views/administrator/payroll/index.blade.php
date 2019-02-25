@@ -11,17 +11,17 @@
                 <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form">
                     {{ csrf_field() }}
                     <div class="pull-right" style="padding-left:0;">
-                        <button type="button" id="filter_view" class="btn btn-default btn-sm"> <i class="fa fa-search-plus"></i></button>
+                        <button type="button" id="filter_view" class="btn btn-default btn-sm btn-outline"> <i class="fa fa-search-plus"></i></button>
                         <div class="btn-group m-r-10">
-                            <button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light" type="button">Action 
+                            <button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle waves-effect waves-light btn-outline" type="button">Action 
                                 <i class="fa fa-gear"></i>
                             </button>
                             <ul role="menu" class="dropdown-menu">
+                                <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
-                                <li><a href="{{ route('administrator.payroll.download') }}"> <i class="fa fa-cloud-download"></i> Download</a></li>
-                                <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
+                                <li><a href="{{ route('administrator.payroll.download') }}"> <i class="fa fa-file"></i> Download Template</a></li>
                             </ul>
                         </div>
                     </div>

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\PayrollPtkp;
 use App\Models\PayrollPPH;
 use App\Models\PayrollOthers;
+use App\Models\PayrollEarnings;
+use App\Models\PayrollDeductions;
 
 class PayrollSettingController extends Controller
 {   
@@ -25,6 +27,8 @@ class PayrollSettingController extends Controller
         $params['ptkp']     = PayrollPtkp::all();
         $params['pph']      = PayrollPPH::all();
         $params['others']   = PayrollOthers::all();
+        $params['earnings'] = PayrollEarnings::all();
+        $params['deductions']= PayrollDeductions::all();
 
         return view('administrator.payroll-setting.index')->with($params);
     }
@@ -204,5 +208,31 @@ class PayrollSettingController extends Controller
         $data->save();
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'Data berhasil disimpan');
+    }
+
+    /**
+     * Store Earnings
+     * @return redirect
+     */
+    public function storeEarnings(Request $request)
+    {
+        $data           = new PayrollEarnings();
+        $data->title    = $request->title;
+        $data->save();
+
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));
+    }
+
+    /**
+     * Store Deductions
+     * @return redirect
+     */
+    public function storeDeductions(Request $request)
+    {
+        $data           = new PayrollDeductions();
+        $data->title    = $request->title;
+        $data->save();
+
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));
     }
 }

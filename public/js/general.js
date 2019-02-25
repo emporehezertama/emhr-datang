@@ -36,6 +36,20 @@ $('#data_table3').DataTable({
     ]
 });
 
+$('.data_table').each(function(){
+
+    $(this).DataTable({
+        dom: 'Bfrtip',
+        searching: false,
+        pageLength: 30,
+        bPaginate: false,
+        bInfo: false,
+        buttons: [
+            
+        ]
+    });
+});
+
 /**
  * [numberWithComma description]
  * @param  {[type]} x [description]
@@ -71,38 +85,6 @@ $("#data_table_no_pagging").DataTable({
         
     ]
 });
-
-/*
-function confirm_delete(msg, el)
-{
-    swal({
-        title: "Are you sure?",
-        text: "You will not be able to recover this imaginary file!",
-        icon: "warning",
-        showCancelButton: true,
-        buttons: {
-            cancel: {
-                text: "No, cancel!",
-                value: null,
-                visible: true,
-                className: "btn-warning",
-                closeModal: true,
-            },
-            confirm: {
-                text: "Yes, delete it!",
-                value: true,
-                visible: true,
-                className: "",
-                closeModal: false
-            }
-        }
-    }).then(isConfirm => {
-        if (isConfirm) {
-            $(el).parent().submit();
-        }
-    });
-}
-*/
 
 function _confirm(msg)
 {

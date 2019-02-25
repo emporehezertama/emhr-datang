@@ -23,9 +23,42 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')
-        //          ->hourly();
+    {   
+        $command_backup = 'backup:run';
+
+        if(get_setting('backup_type') == 1)
+        {
+            $command_backup = 'backup:run';
+        }
+        if(get_setting('backup_type') == 2)
+        {
+            $command_backup = 'backup:run --only-db';
+        }
+        if(get_setting('backup_type') == 3)
+        {
+            $command_backup = 'backup:run --only-files';
+        }
+
+        switch (get_setting('schedule')) {
+            case 1:
+                $schedule->command()->everyMinute();;
+                break;
+            case 2:
+                $schedule->command('backup:run --only-db')->hourly();;
+                break;
+            case 3:
+                $schedule->command('backup:run --only-db')->daily();;
+                break;
+            case 4:
+                $schedule->command('backup:run --only-db')->weekly();;
+                break;
+            case 5:
+                $schedule->command('backup:run --only-db')->monthly();;
+                break;
+            default:
+                # code...
+                break;
+        }
     }
 
     /**

@@ -2,36 +2,23 @@
 
 @section('title', 'Overtime Sheet')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Form Overtime Sheet</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Overtime Sheet</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
             <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('karyawan.overtime.store') }}" method="POST">
-                <div class="col-md-12">
+                <div class="col-md-12 p-l-0 p-r-0">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Form Overtime Sheet</h3>
-                        <hr />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -42,9 +29,8 @@
                                 </ul>
                             </div>
                         @endif
-
                         {{ csrf_field() }}
-                        <div class="col-md-6">
+                        <div class="col-md-6 m-b-0">
                             <div class="form-group">
                                 <label class="col-md-6">NIK / Employee Name</label>
                                 <label class="col-md-6">Position</label>
@@ -69,18 +55,20 @@
                                             <th>START</th>
                                             <th>END</th>
                                             <th>TOTAL OVERTIME (HOUR'S)</th>
+                                            <th>OVERTIME CALCULATED</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-content-lembur">
                                         <tr>
                                             <td>1</td>
-                                            <td><input type="text" name="tanggal[]" class="form-control datepicker"></td>
+                                            <td><input type="text" name="tanggal[]" class="form-control datepicker date_overtime"></td>
                                             <td><input type="text" name="description[]" class="form-control"></td>
                                             <td><input type="text" name="awal[]" class="form-control time-picker awal" /></td>
                                             <td><input type="text" name="akhir[]" class="form-control time-picker akhir" /></td>
                                             <td><input type="text" name="total_lembur[]" class="form-control total_lembur" readonly="true" /></td>
-                                            <td><a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i> Delete</a></td>
+                                            <td><input type="text" name="overtime_calculated[]" class="form-control overtime_calculated" readonly="true" /></td>
+                                            <td><a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -125,21 +113,14 @@
                 </div>
             </form>
         </div>
-        <!-- /.row -->
-        <!-- ============================================================== -->
     </div>
     <!-- /.container-fluid -->
-    @extends('layouts.footer')
+    @include('layouts.footer')
 </div>
 @section('footer-script')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 <link href="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css') }}" rel="stylesheet">
-<!-- Clock Plugin JavaScript -->
 <script src="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
 <script type="text/javascript">
-
     var list_atasan = [];
 
     @foreach(empore_get_atasan_langsung() as $item)
@@ -242,7 +223,8 @@
             html += '<td><input type="text" name="awal[]" class="form-control time-picker awal" /></td>';
             html += '<td><input type="text" name="akhir[]" class="form-control time-picker akhir" /></td>';
             html += '<td><input type="text" name="total_lembur[]" class="form-control total_lembur" readonly="true" /></td>';
-            html += '<td><a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i> hapus</a></td>';
+            html += '<td><input type="text" name="overtime_calculated[]" class="form-control overtime_calculated" readonly="true" /></td>';
+            html += '<td><a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i></a></td>';
             html += '</tr>';
 
         $('.table-content-lembur').append(html);
@@ -289,7 +271,9 @@
                 } else {
                     a = 0;
                 }
+
                 minutes = minutes.toString().length<2?'0'+minutes:minutes;
+                
                 if(minutes<0){
                     hours--;
                     minutes = 60 + minutes;
@@ -298,6 +282,32 @@
                 hours = hours.toString().length<2?'0'+hours:hours;
 
                 $(this).parent().parent().find('.total_lembur').val(hours-a+ ':' + minutes);
+
+                var date = $(this).parent().parent().find('.date_overtime').val();
+                    date = new Date(date);
+
+                var total_lembur = hours-a;
+                var total_overtime_calculated = 0;
+
+                // jika tanggal masuk hari libur
+                if(date.getDay() == 6 || date.getDay() == 0)
+                {
+                    //$('.overtime_calculated').val( total_lembur * 1.5 );   
+                }
+                else
+                {
+                    if(total_lembur < 2 )
+                    {
+                        total_overtime_calculated = 1 * 1.5;                        
+                    }
+                    else if(total_lembur >= 2)
+                    {
+                        total_overtime_calculated = total_lembur * 2 + 1.5;                        
+
+                    }
+
+                    $('.overtime_calculated').val( total_overtime_calculated );                       
+                }
             });
         });
     }

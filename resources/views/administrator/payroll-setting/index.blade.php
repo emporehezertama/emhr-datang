@@ -2,48 +2,109 @@
 
 @section('title', 'Setting Payroll')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-  
-        
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Setting Payroll</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Setting Payroll</li>
-                </ol>
+                
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
-                <div class="white-box">
-
-                     <ul class="nav customtab nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#pph" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> PPH</span></a></li>
+            <div class="col-md-12 p-l-0 p-r-0">
+                <div class="white-box p-l-1 p-r-1">
+                     <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab" aria-expanded="true"> General</a></li>
+                        <li role="presentation"><a href="#pph" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> PPH</span></a></li>
                         <li role="presentation" class=""><a href="#ptkp" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs"> PTKP</span></a></li>
                         <li role="presentation" class=""><a href="#others" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs"> Others</span></a></li>
                     </ul>
-
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade active in" id="pph">
+                        <div role="tabpanel" class="tab-pane fade active in" id="general">
+                            <div class="col-md-12">
+                               
+                                <form method="POST" action="" class="form-horizontal">
+                                    <div class="col-md-6 p-l-0">
+                                        <div class="form-group">
+                                            <label class="col-md-4">Type Payroll</label>
+                                            <div class="col-md-3">
+                                                <select class="form-control" name="setting[type_payroll]">
+                                                    <option value="1">Payroll Gross</option>
+                                                    <option value="2">Payroll Net</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Ketengakerjaan </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_ketenagakerjaan]" class="form-control" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Kesehatan </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_kesehatan]" class="form-control" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div><div class="clearfix"></div>
+                            
+                            <div class="col-md-6" style="border: 1px solid #eee;width: 49%;">
+                                <h3>Earnings</h3>
+                                <table class="table table-stripped data_table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px;">No</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($earnings as $key => $item)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $item->title }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                <a href="" class="btn btn-info btn-xs pull-right" data-toggle="modal" data-target=".modal-add-earnings"><i class="fa fa-plus"></i></a>
+                            </div>
+                            <div class="col-md-6 pull-right" style="margin-left:1%;border: 1px solid #eee;width: 49%;">
+                                <h3>Deductions</h3>
+                                <table class="table table-stripped data_table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 50px">No</th>
+                                            <th>Title</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($deductions as $key => $item)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>{{ $item->title }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                <a href="" class="btn btn-info btn-xs pull-right" data-toggle="modal" data-target=".modal-add-deductions"><i class="fa fa-plus"></i></a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="pph">
                             <h3 class="box-title m-b-0">Setting PPH 21</h3>
                             <a href="{{ route('administrator.payroll-setting.add-pph') }}" class="btn btn-info btn-sm" style="position: absolute;z-index: 99999;"><i class="fa fa-plus"></i> ADD PPH 21 SETTING</a>
-                          
                             <div class="table-responsive">
                                 <table id="data_table_no_copy" class="display nowrap" cellspacing="0" width="100%">
                                     <thead>
@@ -105,8 +166,7 @@
                                 </table>
                             </div>
                         </div>
-
-                         <div role="tabpanel" class="tab-pane fade" id="others">
+                        <div role="tabpanel" class="tab-pane fade" id="others">
                             <h3 class="box-title m-b-0">Others Setting</h3>
                             <a href="{{ route('administrator.payroll-setting.add-others') }}" class="btn btn-info btn-sm" style="position: absolute;z-index: 99999;"><i class="fa fa-plus"></i> ADD OTHERS SETTING</a>
                             <div class="table-responsive">
@@ -136,14 +196,61 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
+</div>
+
+<div class="modal fade modal-add-deductions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Deductions</h4> </div>
+                <form method="POST" id="form-upload" enctype="multipart/form-data" class="form-horizontal frm-modal-education" action="{{ route('administrator.payroll-setting.store-deductions') }}">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-3">Title</label>
+                        <div class="col-md-9">
+                            <input type="text" name="title" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-save"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-add-earnings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Earnings</h4> </div>
+                <form method="POST" id="form-upload" enctype="multipart/form-data" class="form-horizontal frm-modal-education" action="{{ route('administrator.payroll-setting.store-earnings') }}">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-2">Title</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="title" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button type="submit" class="btn btn-info btn-sm" id="btn_import"><i class="fa fa-save"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <!-- modal content education  -->
@@ -182,9 +289,7 @@
                 <h1 class=""><i class="fa fa-spin fa-spinner"></i></h1>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
 
 @section('footer-script')
