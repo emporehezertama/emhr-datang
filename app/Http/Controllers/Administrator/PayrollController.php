@@ -13,6 +13,8 @@ use App\Models\Bank;
 use App\Models\PayrollHistory;
 use App\Models\PayrollOthers;
 use App\Models\PayrollPtkp;
+use App\Models\PayrollEarningsEmployee;
+use App\Models\PayrollDeductionsEmployee;
 
 class PayrollController extends Controller
 {   
@@ -195,125 +197,69 @@ class PayrollController extends Controller
     {
         $temp = new Payroll();
         
-         if((!isset($request->salary) || empty($request->salary)) && (!isset($request->salary) || empty($request->salary))) {
-             return redirect()->route('administrator.payroll.create')->with('message-error', 'Employee Name & Actual Salary can not empty');
+         if((!isset($request->salary) || empty($request->salary)) && (!isset($request->salary) || empty($request->salary)) || empty($request->user_id)) {
+             return redirect()->route('administrator.payroll.create')->with('message-error', 'Employee Name or Actual Salary can not empty');
 
         } else{
 
-            if(!isset($request->basic_salary) || empty($request->basic_salary)) $request->basic_salary = 0;
             if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
-            if(!isset($request->call_allow) || empty($request->call_allow)) $request->call_allow = 0;
-            if(!isset($request->bonus) || empty($request->bonus)) $request->bonus = 0;
-            if(!isset($request->transport_allowance) || empty($request->transport_allowance)) $request->transport_allowance = 0;
-            if(!isset($request->homebase_allowance) || empty($request->homebase_allowance)) $request->homebase_allowance = 0;
-            if(!isset($request->laptop_allowance) || empty($request->laptop_allowance)) $request->laptop_allowance = 0;
-            if(!isset($request->ot_normal_hours) || empty($request->ot_normal_hours)) $request->ot_normal_hours = 0;
-            if(!isset($request->ot_multiple_hours) || empty($request->ot_multiple_hours)) $request->ot_multiple_hours = 0;
-            if(!isset($request->other_income) || empty($request->other_income)) $request->other_income = 0;
-            if(!isset($request->medical_claim) || empty($request->medical_claim)) $request->medical_claim = 0;
-            if(!isset($request->overtime_claim) || empty($request->overtime_claim)) $request->overtime_claim = 0;
-            if(!isset($request->other_deduction) || empty($request->other_deduction)) $request->other_deduction = 0;
-            if(!isset($request->gross_income) || empty($request->gross_income)) $request->gross_income = 0;
-            if(!isset($request->burden_allow) || empty($request->burden_allow)) $request->burden_allow = 0;
             if(!isset($request->bpjs_ketenagakerjaan) || empty($request->bpjs_ketenagakerjaan)) $request->bpjs_ketenagakerjaan = 0;
             if(!isset($request->bpjs_kesehatan) || empty($request->bpjs_kesehatan)) $request->bpjs_kesehatan = 0;
             if(!isset($request->bpjs_pensiun) || empty($request->bpjs_pensiun)) $request->bpjs_pensiun = 0;
             if(!isset($request->bpjs_ketenagakerjaan2) || empty($request->bpjs_ketenagakerjaan2)) $request->bpjs_ketenagakerjaan2 = 0;
             if(!isset($request->bpjs_kesehatan2) || empty($request->bpjs_kesehatan2)) $request->bpjs_kesehatan2 = 0;
             if(!isset($request->bpjs_pensiun2) || empty($request->bpjs_pensiun2)) $request->bpjs_pensiun2 = 0;
-
-            if(!isset($request->total_deduction) || empty($request->total_deduction)) $request->total_deduction = 0;
-            if(!isset($request->net_yearly_income) || empty($request->net_yearly_income)) $request->net_yearly_income = 0;
-            if(!isset($request->untaxable_income) || empty($request->untaxable_income)) $request->untaxable_income = 0;
-            if(!isset($request->taxable_yearly_income) || empty($request->taxable_yearly_income)) $request->taxable_yearly_income = 0;
-            if(!isset($request->income_tax_calculation_5) || empty($request->income_tax_calculation_5)) $request->income_tax_calculation_5 = 0;
-            if(!isset($request->income_tax_calculation_15) || empty($request->income_tax_calculation_15)) $request->income_tax_calculation_15 = 0;                                                        
-            if(!isset($request->income_tax_calculation_25) || empty($request->income_tax_calculation_25)) $request->income_tax_calculation_25 = 0;
-            if(!isset($request->income_tax_calculation_30) || empty($request->income_tax_calculation_30)) $request->income_tax_calculation_30 = 0;
-            if(!isset($request->yearly_income_tax) || empty($request->yearly_income_tax)) $request->yearly_income_tax = 0;
-            if(!isset($request->monthly_income_tax) || empty($request->monthly_income_tax)) $request->monthly_income_tax = 0;
-            if(!isset($request->gross_income_per_month) || empty($request->gross_income_per_month)) $request->gross_income_per_month = 0;
-            if(!isset($request->less) || empty($request->less)) $request->less = 0;
             if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
             
            
             $temp->user_id              = $request->user_id;
-            $temp->basic_salary         = str_replace(',', '', $request->basic_salary);
             $temp->salary               = str_replace(',', '', $request->salary);
-            $temp->call_allow           = str_replace(',', '',$request->call_allow);
-            $temp->bonus                = str_replace(',', '', $request->bonus);
-            $temp->gross_income         = str_replace(',', '', $request->gross_income); 
-            $temp->burden_allow         = str_replace(',', '', $request->burden_allow);
-            $temp->total_deduction      = str_replace(',', '', $request->total_deduction);
-            $temp->net_yearly_income    = str_replace(',', '', $request->net_yearly_income);
-            $temp->untaxable_income     = str_replace(',', '', $request->untaxable_income);
-            $temp->taxable_yearly_income        = str_replace(',', '', $request->taxable_yearly_income);
-            $temp->income_tax_calculation_5     = str_replace(',', '', $request->income_tax_calculation_5); 
-            $temp->income_tax_calculation_15    = str_replace(',', '', $request->income_tax_calculation_15); 
-            $temp->income_tax_calculation_25    = str_replace(',', '', $request->income_tax_calculation_25); 
-            $temp->income_tax_calculation_30    = str_replace(',', '', $request->income_tax_calculation_30); 
-            $temp->yearly_income_tax            = str_replace(',', '', $request->yearly_income_tax);
-            $temp->monthly_income_tax           = str_replace(',', '', $request->monthly_income_tax);
-            $temp->less                         = str_replace(',', '', $request->less);
             $temp->thp                          = str_replace(',', '', $request->thp);
             $temp->is_calculate                 = 1;
-            $temp->transport_allowance              = str_replace(',', '', $request->transport_allowance);
-            $temp->homebase_allowance               = str_replace(',', '',$request->homebase_allowance);
-            $temp->laptop_allowance                 = str_replace(',', '',$request->laptop_allowance);
-            $temp->ot_normal_hours                  = str_replace(',', '',$request->ot_normal_hours);
-            $temp->ot_multiple_hours                = str_replace(',', '',$request->ot_multiple_hours);
-            $temp->other_income                     = str_replace(',', '',$request->other_income);
-            $temp->remark_other_income              = $request->remark_other_income;
-            $temp->medical_claim                    = str_replace(',', '',$request->medical_claim);
-            $temp->remark                           = $request->remark;
-            $temp->other_deduction                  = str_replace(',', '',$request->other_deduction);
-            $temp->remark_other_deduction           = $request->remark_other_deduction;
-            $temp->gross_income_per_month           = str_replace(',', '',$request->gross_income_per_month);
-            $temp->overtime_claim                   = str_replace(',', '',$request->overtime_claim);
             $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
             $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
             $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
             $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
             $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
             $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
+            $temp->total_deduction                  = $request->total_deduction;
+            $temp->total_earnings                   = $request->total_earnings;
             $temp->save();
             $payroll_id = $temp->id;
+
+            // save earnings
+            if(isset($request->earning))
+            {
+                foreach($request->earning as $key => $value)
+                {
+                    $earning                        = new PayrollEarningsEmployee();
+                    $earning->payroll_id            = $payroll_id;
+                    $earning->payroll_earning_id    = $value;
+                    $earning->nominal               = $request->earning_nominal[$key]; 
+                    $earning->save();
+                }
+            }
+            // save deductions
+            if(isset($request->deduction))
+            {
+                foreach($request->deduction as $key => $value)
+                {
+                    $deduction                        = new PayrollDeductionsEmployee();
+                    $deduction->payroll_id            = $payroll_id;
+                    $deduction->payroll_deduction_id    = $value;
+                    $deduction->nominal               = $request->deduction_nominal[$key]; 
+                    $deduction->save();
+                }
+            }
+
 
             // Insert History
             $temp = new PayrollHistory();
             $temp->payroll_id            = $payroll_id;
             $temp->user_id              = $request->user_id;
-            $temp->basic_salary         = str_replace(',', '', $request->basic_salary);
             $temp->salary               = str_replace(',', '', $request->salary);
-            $temp->call_allow           = str_replace(',', '',$request->call_allow);
-            $temp->bonus                = str_replace(',', '', $request->bonus);
             $temp->gross_income         = str_replace(',', '', $request->gross_income); 
-            $temp->burden_allow         = str_replace(',', '', $request->burden_allow);
-            $temp->total_deduction      = str_replace(',', '', $request->total_deduction);
-            $temp->net_yearly_income    = str_replace(',', '', $request->net_yearly_income);
-            $temp->untaxable_income     = str_replace(',', '', $request->untaxable_income);
-            $temp->taxable_yearly_income        = str_replace(',', '', $request->taxable_yearly_income);
-            $temp->income_tax_calculation_5     = str_replace(',', '', $request->income_tax_calculation_5); 
-            $temp->income_tax_calculation_15    = str_replace(',', '', $request->income_tax_calculation_15); 
-            $temp->income_tax_calculation_25    = str_replace(',', '', $request->income_tax_calculation_25); 
-            $temp->income_tax_calculation_30    = str_replace(',', '', $request->income_tax_calculation_30); 
-            $temp->yearly_income_tax            = str_replace(',', '', $request->yearly_income_tax);
-            $temp->monthly_income_tax           = str_replace(',', '', $request->monthly_income_tax);
-            $temp->less                         = str_replace(',', '', $request->less);
             $temp->thp                          = str_replace(',', '', $request->thp);
-            $temp->transport_allowance              = str_replace(',', '', $request->transport_allowance);
-            $temp->homebase_allowance               = str_replace(',', '',$request->homebase_allowance);
-            $temp->laptop_allowance                 = str_replace(',', '',$request->laptop_allowance);
-            $temp->ot_normal_hours                  = str_replace(',', '',$request->ot_normal_hours);
-            $temp->ot_multiple_hours                = str_replace(',', '',$request->ot_multiple_hours);
-            $temp->other_income                     = str_replace(',', '',$request->other_income);
-            $temp->remark_other_income              = $request->remark_other_income;
-            $temp->medical_claim                    = str_replace(',', '',$request->medical_claim);
-            $temp->remark                           = $request->remark;
-            $temp->other_deduction                  = str_replace(',', '',$request->other_deduction);
-            $temp->remark_other_deduction           = $request->remark_other_deduction;
-            $temp->gross_income_per_month           = str_replace(',', '',$request->gross_income_per_month);
-            $temp->overtime_claim                   = str_replace(',', '',$request->overtime_claim);
             $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
             $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
             $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);

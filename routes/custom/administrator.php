@@ -2,7 +2,6 @@
 
 Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middleware' => ['auth', 'access:1']], function(){
 	Route::get('/', 'IndexController@index')->name('administrator.dashboard');
-	
 	Route::resource('karyawan', 'KaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('department', 'DepartmentController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('provinsi', 'ProvinsiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -110,8 +109,11 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('payroll-setting/edit-others/{id}', 'PayrollSettingController@editOthers')->name('administrator.payroll-setting.edit-others');
 	Route::post('payroll-setting/update-others/{id}', 'PayrollSettingController@updateOthers')->name('administrator.payroll-setting.update-others');
 	Route::get('payroll-setting/edit-ptkp/{id}', 'PayrollSettingController@editPtkp')->name('administrator.payroll-setting.edit-ptkp');
+	Route::get('payroll-setting/delete-earnings/{id}', 'PayrollSettingController@deleteEarnings')->name('administrator.payroll-setting.delete-earnings');
+	Route::get('payroll-setting/delete-deductions/{id}', 'PayrollSettingController@deleteDeductions')->name('administrator.payroll-setting.delete-deductions');
 	Route::post('payroll-setting/update-ptkp/{id}', 'PayrollSettingController@updatePtkp')->name('administrator.payroll-setting.update-ptkp');
 	Route::post('payroll-setting/store-others', 'PayrollSettingController@storeOthers')->name('administrator.payroll-setting.store-others');
+	Route::post('payroll-setting/store-general', 'PayrollSettingController@storeGeneral')->name('administrator.payroll-setting.store-general');
 	Route::get('payroll/calculate', 'PayrollController@calculate')->name('administrator.payroll.calculate');
 	Route::get('payroll/detail/{id}', 'PayrollController@detail')->name('administrator.payroll.detail');
 	Route::get('payrollnet/calculate', 'PayrollNetController@calculate')->name('administrator.payrollnet.calculate');

@@ -22,7 +22,6 @@
                 <a id="add-import-karyawan" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-file"></i> IMPORT PAYROLL</a>
                 <a href="{{ route('administrator.payrollgross.download') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-cloud-download"></i> DOWNLOAD TEMPLATE</a>
                 <a href="{{ route('administrator.payrollgross.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> CREATE PAYROLL</a>
-
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Payroll</li>

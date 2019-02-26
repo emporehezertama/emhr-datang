@@ -10,7 +10,7 @@
                 <h4 class="page-title">Setting Payroll</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                
+                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="document.getElementById('form-setting').submit()"><i class="fa fa-save"></i> Save Setting </button>
             </div>
         </div>
         <!-- .row -->
@@ -26,32 +26,61 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="general">
                             <div class="col-md-12">
-                               
-                                <form method="POST" action="" class="form-horizontal">
+                                <form method="POST" id="form-setting" action="{{ route('administrator.payroll-setting.store-general') }}" class="form-horizontal">
+                                    {{ csrf_field() }}
                                     <div class="col-md-6 p-l-0">
                                         <div class="form-group">
-                                            <label class="col-md-4">Type Payroll</label>
-                                            <div class="col-md-3">
-                                                <select class="form-control" name="setting[type_payroll]">
-                                                    <option value="1">Payroll Gross</option>
-                                                    <option value="2">Payroll Net</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">BPJS Ketengakerjaan </label>
+                                            <label class="col-md-4">BPJS Ketengakerjaan (Company) </label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
-                                                    <input type="number" name="setting[bpjs_ketenagakerjaan]" class="form-control" />
+                                                    <input type="number" name="setting[bpjs_ketenagakerjaan_company]" value="{{ get_setting('bpjs_ketenagakerjaan_company') }}" class="form-control" />
                                                     <span class="input-group-addon" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-4">BPJS Kesehatan </label>
+                                            <label class="col-md-4">BPJS Kesehatan  (Company)</label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
-                                                    <input type="number" name="setting[bpjs_kesehatan]" class="form-control" />
+                                                    <input type="number" name="setting[bpjs_kesehatan_company]" value="{{ get_setting('bpjs_kesehatan_company') }}" class="form-control" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Pensiun  (Company) </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_pensiun_company]" class="form-control" value="{{ get_setting('bpjs_pensiun_company') }}" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                         <div class="form-group">
+                                            <label class="col-md-4">BPJS Ketengakerjaan (Employee) </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_ketenagakerjaan_employee]" class="form-control" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Kesehatan  (Employee)</label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_kesehatan_employee]" class="form-control" value="{{ get_setting('bpjs_kesehatan_employee') }}" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Pensiun  (Employee) </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_pensiun_employee]" class="form-control" value="{{ get_setting('bpjs_pensiun_employee') }}" />
                                                     <span class="input-group-addon" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
@@ -59,7 +88,7 @@
                                     </div>
                                 </form>
                             </div><div class="clearfix"></div>
-                            
+    
                             <div class="col-md-6" style="border: 1px solid #eee;width: 49%;">
                                 <h3>Earnings</h3>
                                 <table class="table table-stripped data_table">
@@ -67,6 +96,7 @@
                                         <tr>
                                             <th style="width: 50px;">No</th>
                                             <th>Title</th>
+                                            <th style="width: 10px;"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -74,6 +104,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->title }}</td>
+                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-earnings', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -87,6 +118,7 @@
                                         <tr>
                                             <th style="width: 50px">No</th>
                                             <th>Title</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -94,6 +126,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->title }}</td>
+                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-deductions', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>

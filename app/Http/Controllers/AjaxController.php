@@ -272,7 +272,11 @@ class AjaxController extends Controller
         return response()->json($bulan);
     }
 
-   
+    /**
+     * Calcualte Payroll
+     * @param  Request $request
+     * @return json
+     */
     public function getCalculatePayroll(Request $request)
     {
         $biaya_jabatan  = PayrollOthers::where('id', 1)->first()->value;
@@ -283,15 +287,16 @@ class AjaxController extends Controller
         $params = [];
         if($request->ajax())
         {
-            $bpjs_ketenagakerjaan_persen = 4.24;
-            $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
-            $bpjs_ketenagakerjaan2_persen = 2;
-            $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
+            $request->salary = replace_idr($request->salary);
+
+            $bpjs_ketenagakerjaan_company = ($request->salary * get_setting('bpjs_ketenagakerjaan_company') / 100);
+            $bpjs_ketenagakerjaan_employee = get_setting('bpjs_ketenagakerjaan_employee');
+            $bpjs_ketenagakerjaan_employee = ($request->salary * get_setting('bpjs_ketenagakerjaan_employee') / 100);
 
             $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
-            $bpjs_kesehatan_persen  = 4;
-            $bpjs_kesehatan2_persen = 1;
+            $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
+            $bpjs_kesehatan2_persen = get_setting('bpjs_kesehatan_employee');
 
             if($request->salary <= $bpjs_kesehatan_batas)
             {
@@ -313,8 +318,8 @@ class AjaxController extends Controller
 
             $bpjs_pensiun         = 0;
             $bpjs_pensiun2        = 0;
-            $bpjs_pensiun_persen  = 2;
-            $bpjs_pensiun2_persen = 1;
+            $bpjs_pensiun_persen  = get_setting('bpjs_pensiun_company');
+            $bpjs_pensiun2_persen = get_setting('bpjs_pensiun_employee');
 
             if($request->salary <= $bpjs_pensiunan_batas)
             {
@@ -334,14 +339,36 @@ class AjaxController extends Controller
                 $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
             }
 
-            $overtime_claim = $request->ot_multiple_hours / 173 * $request->salary;
-            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan + $bpjs_pensiun;
-            $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2;
+            #$overtime_claim = $request->ot_multiple_hours / 173 * $request->salary;
+            $bpjspenambahan = $bpjs_ketenagakerjaan_company + $bpjs_kesehatan + $bpjs_pensiun;
+            $bpjspengurangan = $bpjs_ketenagakerjaan_employee + $bpjs_kesehatan2 + $bpjs_pensiun2;
 
-            $gross_income = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan) * 12 + $request->bonus;
+            # $gross_income = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan) * 12 + $request->bonus;
+            $gross_income = $request->salary;
 
-            $gross_income2 = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
+            if(isset($request->earnings))
+            {
+                foreach($request->earnings as $item)
+                {   
+                    $gross_income += replace_idr($item);
+                }
+            }
 
+            $gross_income = $gross_income * 12;
+
+            # $gross_income2 = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
+
+            $gross_income2 = $request->salary;
+
+            if(isset($request->earnings))
+            {
+                foreach($request->earnings as $item)
+                {   
+                    $gross_income2 += replace_idr($item);
+                }
+            }
+
+            $gross_income2 = ($gross_income2 + $bpjspenambahan) - $bpjspengurangan ;
 
             // burdern allowance
             $burden_allow = 5 * $gross_income2 / 100;
@@ -431,15 +458,30 @@ class AjaxController extends Controller
 
             $less               = $bpjspengurangan + $monthly_income_tax; 
 
-             $gross_thp = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $request->other_income + $overtime_claim + $request->other_income+ $request->medical_claim+ $request->bonus);
+            #$gross_thp = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $request->other_income + $overtime_claim + $request->other_income+ $request->medical_claim+ $request->bonus);
+            $gross_thp = $request->salary;
+            if(isset($request->earnings))
+            {
+                foreach($request->earnings as $item)
+                {   
+                    $gross_thp += replace_idr($item);
+                }
+            }
 
-            $thp                = $gross_thp - $less - $request->other_deduction;
-
+            #$thp                = $gross_thp - $less - $request->other_deduction;
+            $thp                = $gross_thp - $less;
+            if(isset($request->deductions))
+            {
+                foreach($request->deductions as $item)
+                {   
+                    $thp -= replace_idr($item);
+                }
+            }
 
             $params['gross_income']         = number_format($gross_income); 
             $params['burden_allow']         = number_format($burden_allow);
-            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
-            $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan2);
+            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan_company);
+            $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan_employee);
             $params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
             $params['bpjs_kesehatan2']        = number_format($bpjs_kesehatan2);
             $params['bpjs_pensiun']         = number_format($bpjs_pensiun);
@@ -454,10 +496,12 @@ class AjaxController extends Controller
             $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
             $params['yearly_income_tax']            = number_format($yearly_income_tax);
             $params['monthly_income_tax']           = number_format($monthly_income_tax);
-            $params['gross_income_per_month']                 = number_format($gross_income_per_month);
+            $params['gross_income_per_month']       = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
             $params['thp']                          = number_format($thp);
-            $params['overtime_claim']               = number_format($overtime_claim);
+            $params['sallary']                      = $request->sallary;
+            $params['pph21']                        = number_format($monthly_income_tax);
+            #$params['overtime_claim']               = number_format($overtime_claim);
         }
         
         return response()->json($params);
@@ -828,6 +872,7 @@ public function getCalculatePayrollGross(Request $request)
             $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
             $params['yearly_income_tax']            = number_format($yearly_income_tax);
             $params['monthly_income_tax']           = number_format($monthly_income_tax);
+            $params['pph21']                        = number_format($monthly_income_tax);
             $params['gross_income_per_month']                 = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
             $params['thp']                          = number_format($thp);
@@ -1716,6 +1761,36 @@ public function getCalculatePayrollGross(Request $request)
         if($request->ajax())
         {
             $data = User::where('id', $request->id)->first();
+
+            if(empty($data->foto))
+            {
+                if($data->jenis_kelamin == 'Male' || $data->jenis_kelamin == "")
+                {
+                    $data->foto = asset('images/user-man.png');
+                }
+                else
+                {
+                    $data->foto = asset('images/user-woman.png');
+                }
+            }
+            else
+            {
+                if(\File::exists('storage/foto/'.$data->foto))
+                {
+                    $data->foto = asset('storage/foto/'.$data->foto);                                    
+                }
+                else
+                {
+                    if($data->jenis_kelamin == 'Male' || $data->jenis_kelamin == "")
+                    {
+                        $data->foto = asset('images/user-man.png');
+                    }
+                    else
+                    {
+                        $data->foto = asset('images/user-woman.png');
+                    }
+                }
+            }
 
             $data->department_name  = isset($data->department) ? $data->department->name : '';
             $data->cabang_name      = isset($data->cabang->name) ? $data->cabang->name : '';

@@ -16,36 +16,15 @@
                 <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Workflow Monitoring<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
-                <li>
-                    <a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.medical_reimbursement')</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.exit-interview.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance </span>
-                    </a>
-                </li>
-                 <li>
-                    <a href="{{ route('administrator.training.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Training & Business Trip</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Gross</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.request-pay-slipnet.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Net</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.request-pay-slipgross.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Net/Gross</span></a>
-                </li>
+                <li><a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
+                <li><a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
+                <li><a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.medical_reimbursement')</span></a></li>
+                <li><a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
+                <li><a href="{{ route('administrator.exit-interview.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance </span></a></li>
+                <li><a href="{{ route('administrator.training.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a></li>
+                <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Gross</span></a></li>
+                <li><a href="{{ route('administrator.request-pay-slipnet.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Net</span></a></li>
+                <li><a href="{{ route('administrator.request-pay-slipgross.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Net/Gross</span></a></li>
             </ul>
         </li>
 
@@ -81,35 +60,15 @@
                 <i class="mdi mdi-newspaper fa-fw"></i> <span class="hide-menu">News List / Memo<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
-                <li>
-                    <a href="{{ route('administrator.news.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">News</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.internal-memo.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Internal Memo</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.peraturan-perusahaan.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Product Information</span></a>
-                </li>
+                <li><a href="{{ route('administrator.news.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">News</span></a></li>
+                <li><a href="{{ route('administrator.internal-memo.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Internal Memo</span></a></li>
+                <li><a href="{{ route('administrator.peraturan-perusahaan.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Product Information</span></a></li>
             </ul>
         </li>
         <li>
-            <a href="javascript:void(0)">
-                <i class="mdi mdi-newspaper fa-fw"></i> <span class="hide-menu">Payroll<span class="fa arrow"></span></span>
+            <a href="{{ route('administrator.payroll.index') }}">
+                <i class="mdi mdi-newspaper fa-fw"></i> <span class="hide-menu">Payroll</span>
             </a>
-            <ul class="nav nav-second-level">
-                <li>
-                    <a href="{{ route('administrator.payroll.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Payroll Gross</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.payrollnet.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Payroll Net</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.payrollgross.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Payroll Net/Gross</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('administrator.payroll-setting.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Setting Payroll</span></a>
-                </li>
-            </ul>
         </li>
         <li>
             <a href="javascript:void(0)">

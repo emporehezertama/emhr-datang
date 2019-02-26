@@ -1,21 +1,18 @@
 <?php
 
 /**
- * Get Earnings
- * @return objects
+ * Replace IDR
+ * @return string
  */
-function get_earnings()
+function replace_idr($nominal)
 {
-	return \App\Models\PayrollEarnings::all();
-}
+	if($nominal == "") return 0;
+	
+	$nominal = str_replace('Rp. ','', $nominal);
+    $nominal = str_replace('.', '', $nominal);
+    $nominal = str_replace(',', '', $nominal);
 
-/**
- * Get Deductions
- * @return objects
- */
-function get_deductions()
-{
-	return \App\Models\PayrollDeductions::all();
+    return $nominal;
 }
 
 /**

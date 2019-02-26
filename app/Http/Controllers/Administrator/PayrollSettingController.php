@@ -9,6 +9,7 @@ use App\Models\PayrollPPH;
 use App\Models\PayrollOthers;
 use App\Models\PayrollEarnings;
 use App\Models\PayrollDeductions;
+use App\Models\Setting;
 
 class PayrollSettingController extends Controller
 {   
@@ -232,6 +233,61 @@ class PayrollSettingController extends Controller
         $data           = new PayrollDeductions();
         $data->title    = $request->title;
         $data->save();
+
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));
+    }
+
+    /**
+     * Delete Earnings
+     * @param  integer $id
+     * @return redirect
+     */
+    public function deleteEarnings($id)
+    {
+        $data = PayrollEarnings::where('id', $id)->first();
+        if($data)
+        {
+            $data->delete();
+        }
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-deleted'));
+    }
+
+    /**
+     * Delete Deductions
+     * @param  integer $id
+     * @return redirect
+     */
+    public function deleteDeductions($id)
+    {
+        $data = PayrollDeductions::where('id', $id)->first();
+        if($data)
+        {
+            $data->delete();
+        }
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-deleted'));
+    }
+
+    /**
+     * Store General
+     * @param  Request $request
+     * @return redirect
+     */
+    public function storeGeneral(Request $request)
+    {
+        if($request->setting)
+        {
+            foreach($request->setting as $key => $value)
+            {
+                $setting = Setting::where('key', $key)->first();
+                if(!$setting)
+                {
+                    $setting = new Setting();
+                    $setting->key = $key;
+                }
+                $setting->value = $value;
+                $setting->save();
+            }
+        }
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));
     }

@@ -21,7 +21,6 @@
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
-                                <li><a href="{{ route('administrator.payroll.download') }}"> <i class="fa fa-file"></i> Download Template</a></li>
                             </ul>
                         </div>
                     </div>
@@ -66,11 +65,9 @@
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
-                                    <th>NIK</th>
-                                    <th>NAME</th>
-                                    <th>SALARY</th>
-                                    <th>BASIC SALLARY</th>
-                                    <th>LESS: TAX, PENSION & JAMSOSTEK (MONTHLY)</th>
+                                    <th>NIK / NAME</th>
+                                    <th>EARNINGS</th>
+                                    <th>DEDUCTIONS</th>
                                     <th>TAKE HOME PAY</th>
                                     <th>STATUS</th>
                                     <th>#</th>
@@ -85,10 +82,8 @@
 			                            <tr>
 			                                <td>{{ $i }}</td>
 			                                <td>{{ $item->user->nik or '' }}</td>
-			                                <td>{{ $item->user->name or '' }}</td>
-			                                <td>{{ number_format($item->salary) }}</td>
-			                                <td>{{ number_format($item->basic_salary) }}</td>
-			                                <td>{{ number_format($item->less) }}</td>
+                                            <td>{{ number_format($item->salary + $item->total_earnings) }}</td>
+			                                <td>{{ number_format($item->total_deductions) }}</td>
 			                                <td>{{ number_format($item->thp) }}</td>
 			                                <td>
 			                                    @if($item->is_calculate == 0)
@@ -132,6 +127,7 @@
                                 <input type="file" name="file" class="form-control" />
                             </div>
                         </div>
+                        <a href="{{ route('administrator.payroll.download') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>

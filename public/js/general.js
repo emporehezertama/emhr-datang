@@ -1,4 +1,7 @@
- $('#data_table_no_copy').DataTable({
+// init
+price_format();
+
+$('#data_table_no_copy').DataTable({
     dom: 'Bfrtip',
      buttons: []
 });
@@ -59,13 +62,20 @@ function numberWithComma(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-$('.price_format').priceFormat({
-    prefix: '',
-    centsSeparator: '.',
-    thousandsSeparator: ',',
-    clearOnEmpty: true,
-    centsLimit : 0
-});
+function numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function price_format()
+{
+  $('.price_format').priceFormat({
+      prefix: '',
+      centsSeparator: '.',
+      thousandsSeparator: '.',
+      clearOnEmpty: true,
+      centsLimit : 0
+  });
+}
 
 $("#data_table_no_search").DataTable({
     dom: 'Bfrtip',
@@ -86,38 +96,34 @@ $("#data_table_no_pagging").DataTable({
     ]
 });
 
-function _confirm(msg)
+function _confirm(msg, url)
 {
-    swal({
-        title: "Are you sure?",
-        text: msg,
-        icon: "warning",
-        showCancelButton: true,
-        buttons: {
-            cancel: {
-                text: "No, cancel!",
-                value: null,
-                visible: true,
-                className: "btn-warning",
-                closeModal: true,
-            },
-            confirm: {
-                text: "Yes, publish it!",
-                value: true,
-                visible: true,
-                className: "",
-                closeModal: false
-            }
-        }
-    }).then(isConfirm => {
-        if (isConfirm) {
-            document.location = url;
-        }
-    });
+  if(msg == "") return false;
 
-    return false;
+  bootbox.confirm({
+    title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+    message: msg,
+    closeButton: false,
+    buttons: {
+        confirm: {
+            label: '<i class="fa fa-trash"></i> Yes',
+            className: 'btn btn-sm btn-danger'
+        },
+        cancel: {
+            label: '<i class="fa fa-close"></i> No',
+            className: 'btn btn-sm btn-default btn-outline'
+        }
+    },
+    callback: function (result) {
+      if(result)
+      { 
+        document.location = url;
+      }
+    }
+  });
+
+  return false;
 }
-
 
 
 

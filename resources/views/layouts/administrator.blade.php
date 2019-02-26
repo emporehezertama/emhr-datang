@@ -6,36 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    
     @if(get_setting('favicon') != "")
     <link rel="icon" type="image/png" sizes="16x16" href="{{ get_setting('favicon') }}">
     @endif
-
     <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Bootstrap Core CSS -->
     <link href="{{ asset('admin-css/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Menu CSS -->
     <link href="{{ asset('admin-css/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css') }}" rel="stylesheet">
-    <!-- toast CSS -->
     <link href="{{ asset('admin-css/plugins/bower_components/toast-master/css/jquery.toast.css') }}" rel="stylesheet">
-    <!-- morris CSS -->
     <link href="{{ asset('admin-css/plugins/bower_components/morrisjs/morris.css') }}" rel="stylesheet">
-    <!-- chartist CSS -->
     <link href="{{ asset('admin-css/plugins/bower_components/chartist-js/dist/chartist.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin-css/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css') }}" rel="stylesheet">
-    <!-- Calendar CSS -->
     <link href="{{ asset('admin-css/plugins/bower_components/calendar/dist/fullcalendar.css') }}" rel="stylesheet" />
-    <!-- animation CSS -->
     <link href="{{ asset('admin-css/css/animate.css') }}" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="{{ asset('admin-css/css/style.css') }}?time=<?=date('His')?>" rel="stylesheet">
-    <!-- color CSS -->
     <link href="{{ asset('admin-css/css/colors/green.css?v=2') }}" id="theme" rel="stylesheet">
-    
     <link href="{{ asset('admin-css/plugins/bower_components/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
-    
     <?php 
          $chek_url = @$_SERVER['HTTP_HOST'];
          if (strpos($chek_url, '.local') == false) {
@@ -81,18 +68,12 @@
         @endif
     </style>
 </head>
-
 <body class="fix-header">
-
-     <!-- ============================================================== -->
-    <!-- Preloader -->
-    <!-- ============================================================== -->
     <div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
             <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
         </svg>
     </div>
-     
     <!-- ============================================================== -->
     <!-- Wrapper -->
     <!-- ============================================================== -->
@@ -160,22 +141,19 @@
         <!-- ============================================================== -->
         <!-- End Left Sidebar -->
         <!-- ============================================================== -->
-        
         @yield('content')
-
     <!-- modal status exit -->
     <div id="modal_status_exit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">History Approval</h4> </div>
-                    <div class="modal-body" id="modal_content_status_exit">
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
-                    </div>
+                    <h4 class="modal-title" id="myModalLabel">History Approval</h4> 
+                </div>
+                <div class="modal-body" id="modal_content_status_exit"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                </div>
             </div>
             <!-- /.modal-content -->
         </div>
