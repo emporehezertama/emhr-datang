@@ -1,40 +1,22 @@
 @extends('layouts.administrator')
 
-@section('title', 'Payroll Karyawan')
-
-@section('sidebar')
-
-@endsection
+@section('title', 'Payroll')
 
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Form Payroll Karyawan</h4> </div>
+                <h4 class="page-title">Employee Payroll </h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Payroll Karyawan</li>
-                </ol>
+                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.payroll.update', $data->id) }}" method="POST">
-                <input type="hidden" name="_method" value="PUT">
-                
-                <div class="col-md-12">
-                    <div class="white-box">
-                        <h3 class="box-title m-b-0">Payroll Karyawan</h3>
-                        <hr />
-                        @if (count($errors) > 0)
+            <form class="form-horizontal" id="form-payroll" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
+               <div class="col-md-4 p-l-0">
+                    <div class="white-box" style="min-height: 440px;">
+                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
                                 <ul>
@@ -44,353 +26,356 @@
                                 </ul>
                             </div>
                         @endif
-
                         {{ csrf_field() }}
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <img src="{{ asset('images/user-man.png') }}" class="img-circle img-responsive td-foto">
+                        </div>
+                        <div class="col-md-8 m-t-30">
                             <div class="form-group">
-                                <label class="col-md-3">NIK / Name</label>
-                                <div class="col-md-6">
-                                   <input type="text" value="{{ $data->user->nik .' - '. $data->user->name }}" class="form-control autocomplete-karyawan">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Basic Salary</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="basic_salary" value="{{ number_format($data->basic_salary) }}" class="form-control price_format" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Actual Salary</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="salary" value="{{ $data->salary }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Call Allowance</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="call_allow" value="{{ $data->call_allow }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Yearly Bonus, THR or others     </label>
-                                <div class="col-md-6">
-                                   <input type="text" name="bonus" value="{{ $data->bonus }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Transport Allowance</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="transport_allowance"  value="{{ number_format($data->transport_allowance) }}" class="form-control  price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Homebase Allowance</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="homebase_allowance" value="{{ $data->homebase_allowance }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Laptop Allowance</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="laptop_allowance" value="{{ $data->laptop_allowance }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">OT Normal Hours</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="ot_normal_hours" value="{{ $data->ot_normal_hours }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">OT Multiple Hours</label>
-                                <div class="col-md-6">
-                                   <input type="number" name="ot_multiple_hours" value="{{ $data->ot_multiple_hours }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Other Income</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="other_income" value="{{ $data->other_income }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Remark Other Income</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="remark_other_income" value="{{ $data->remark_other_income }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Medical Claim</label>
-                                <div class="col-md-6">
-                                   <input  type="text" name="medical_claim" value="{{ $data->medical_claim }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Overtime Claim</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="overtime_claim" readonly="true" value="{{ number_format($data->ot_multiple_hours / 173 * $data->salary) }}" class="form-control overtime_claim">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Remark</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="remark" value="{{ $data->remark }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Other Deduction</label>
-                                <div class="col-md-6">
-                                   <input  type="text" name="other_deduction" value="{{ $data->other_deduction }}" class="form-control price_format">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Remark Other Deduction</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="remark_other_deduction" value="{{ $data->remark_other_deduction }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Gross Income Per Year </label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="gross_income" value="{{ number_format($data->gross_income) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Burden Allowance (Monthly)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="burden_allow" value="{{ number_format($data->burden_allow) }}" class="form-control">
+                                <label class="col-md-12">NIK / Name</label>
+                                <div class="col-md-12">
+                                   <input type="text" value="" class="form-control autocomplete-karyawan" placeholder="Select Employee..">
+                                   <input type="hidden" name="user_id">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            
-                            <div class="form-group">
-                                <label class="col-md-3">BPJS Ketengakerjaan 4.24%</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="bpjs_ketenagakerjaan" value="{{ number_format($data->bpjs_ketenagakerjaan) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">BPJS Kesehatan (4%)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="bpjs_kesehatan" value="{{ number_format($data->bpjs_kesehatan) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">BPJS Pensiun 2%</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="bpjs_pensiun" value="{{ number_format($data->bpjs_pensiun) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">BPJS Ketengakerjaan 2%</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="bpjs_ketenagakerjaan2" value="{{ number_format($data->bpjs_ketenagakerjaan2) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">BPJS Kesehatan (1%)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="bpjs_kesehatan2" value="{{ number_format($data->bpjs_kesehatan2) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">BPJS Pensiun 1%</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="bpjs_pensiun2" value="{{ number_format($data->bpjs_pensiun2) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Total Deduction ( Burden + BPJS )</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="total_deduction" value="{{ number_format($data->total_deduction) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">NET Yearly Income  ( 2 - 5 )    </label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="net_yearly_income" value="{{ number_format($data->net_yearly_income) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Untaxable Income </label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="untaxable_income" value="{{ number_format($data->untaxable_income) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Taxable Yearly Income  ( 6 - 7)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="taxable_yearly_income" value="{{ number_format($data->taxable_yearly_income) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">5%    ( 0-50 million)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="income_tax_calculation_5" value="{{ number_format($data->income_tax_calculation_5) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">15%  ( 50 - 250 million)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="income_tax_calculation_15" value="{{ number_format($data->income_tax_calculation_15) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">25%  ( 250-500 million)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="income_tax_calculation_25" value="{{ number_format($data->income_tax_calculation_25) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">30%  ( > 500 million)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="income_tax_calculation_30" value="{{ number_format($data->income_tax_calculation_30) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Yearly Income Tax</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="yearly_income_tax" value="{{ number_format($data->yearly_income_tax) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Monthly Income Tax / PPh21 </label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="monthly_income_tax" value="{{ number_format($data->monthly_income_tax) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">GROSS INCOME PER MONTH</label>
-                                <div class="col-md-6">
-                                   <input type="text" name="gross_income_per_month" readonly="true" value="{{ number_format($data->gross_income_per_month) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Less : Tax, BPJS (Monthly)</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="less" value="{{ number_format($data->less) }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3">Take Home Pay</label>
-                                <div class="col-md-6">
-                                   <input type="text" readonly="true" name="thp" value="{{ number_format($data->thp) }}" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" value="{{ $data->user_id }}" name="user_id">
-                         
                         <div class="clearfix"></div>
-                        <br />
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <a href="{{ route('administrator.payroll.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
-                                <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save </button>
-                                <br style="clear: both;" />
-                            </div>
-                        </div>
+                        <table class="table table-stripped m-t-20">
+                            <tr>
+                                <th style="width: 50%;">Email</th>
+                                <th>:</th>
+                                <th style="width: 50%;" class="td-email">{{ $data->user->email }} </th>
+                            </tr>
+                            <tr>
+                                <th>Telepon</th>
+                                <th>:</th>
+                                <th class="td-telepon">{{ $data->user->telepon }}</th>
+                            </tr>
+                            <tr>
+                                <th>Monthly Income Tax / PPh21</th>
+                                <th>:</th>
+                                <th class="td-pph21"></th>
+                            </tr>
+                            <tr>
+                                <th>Take Home Pay</th>
+                                <th>:</th>
+                                <th class="td-thp"></th>
+                            </tr>
+                        </table>
+                    </div>
+               </div>
+               <div class="col-md-4 p-l-0" style="max-height: 460px; overflow-x: scroll;">
+                    <div class="white-box p-t-10 m-b-0">
+                        <h3>Earning</h3>
+                        <table class="table table-stripped" id="list_earnings">
+                            <thead>
+                                <tr>
+                                    <td style="vertical-align: middle;">BPJS Ketenagakerjaan</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_company') }}" class="form-control" />
+                                            <span class="input-group-addon" id="basic-addon2">%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">BPJS Kesehatan</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" readonly="true" value="{{ get_setting('bpjs_kesehatan_company') }}" class="form-control" />
+                                            <span class="input-group-addon" id="basic-addon2">%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">BPJS Pensiun</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" readonly="true" value="{{ get_setting('bpjs_pensiun_company') }}" class="form-control" />
+                                            <span class="input-group-addon" id="basic-addon2">%</span>
+                                        </div>
+                                    </td> 
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">Sallary</td>
+                                    <td><input type="text" class="form-control price_format calculate" name="salary" value="{{ $data->salary }}" placeholder="Rp. " /></td> 
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Total Income Rp. </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a href="javascript:void(0)" class="btn btn-info btn-xs pull-right" onclick="add_income()"><i class="fa fa-plus"></i></a>
                         <div class="clearfix"></div>
                     </div>
-                </div>    
+                </div>
+
+                <div class="col-md-4 p-l-0 p-r-0" style="overflow-x: scroll;max-height: 460px; ">
+                    <div class="white-box p-t-10 m-b-0" style="min-height: 440px;">
+                        <h3>Deduction</h3>
+                        <table class="table table-stripped" id="list_deductions">
+                            <thead>
+                                <tr>
+                                    <td style="vertical-align: middle;">BPJS Ketenagakerjaan</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" class="form-control" />
+                                            <span class="input-group-addon" id="basic-addon2">%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">BPJS Kesehatan</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" readonly="true" value="{{ get_setting('bpjs_kesehatan_employee') }}" class="form-control" />
+                                            <span class="input-group-addon" id="basic-addon2">%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">BPJS Pensiun</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" class="form-control" />
+                                            <span class="input-group-addon" id="basic-addon2">%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Total Deduction Rp. </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a href="javascript:void(0)" class="btn btn-info btn-xs pull-right" onclick="add_deduction()"><i class="fa fa-plus"></i></a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <input type="hidden" name="bpjs_ketenagakerjaan" />
+                <input type="hidden" name="bpjs_kesehatan" />
+                <input type="hidden" name="bpjs_pensiun" />
+                <input type="hidden" name="bpjs_ketenagakerjaan2" />
+                <input type="hidden" name="bpjs_kesehatan2" />
+                <input type="hidden" name="bpjs_pensiun2" />
+                <input type="hidden" name="total_deductions" />
+                <input type="hidden" name="total_earnings" />
+                <input type="hidden" name="thp" />
+                <input type="hidden" name="pph21" />
             </form>                    
         </div>
         <!-- /.row -->
         <!-- ============================================================== -->
     </div>
     <!-- /.container-fluid -->
-    @extends('layouts.footer')
+    @include('layouts.footer')
 </div>
 @section('footer-script')
 <script type="text/javascript">
+    
+    function form_submit()
+    {
+        if($("input[name='user_id']").val() == "" || $("input[name='salary']").val() == "")
+        {
+            _alert("@lang('payroll.message-employee-cannot-empty')");
+            return false;
+        }
 
-    $("input[name='salary'], input[name='call_allow'], input[name='bonus'], input[name='ot_multiple_hours'],input[name='homebase_allowance'],input[name='laptop_allowance'],input[name='other_income'],input[name='medical_claim'], input[name='other_deduction'],input[name='transport_allowance']").on('input', function(){
+        $("#form-payroll").submit();
+    }
+
+    function init_calculate()
+    {   
+        $('.calculate').each(function(){
+
+            $(this).on('input', function(){
+                calculate();
+            });
+        });
+    }
+
+    init_calculate();
+
+    var json_earnings = [];
+    @foreach(get_earnings() as $item)
+        json_earnings[{{ $item->id }}] = ({'id' : {{ $item->id }}, 'title' : '{{ $item->title }}'});
+    @endforeach
+
+    var json_deductions = [];
+    @foreach(get_deductions() as $item)
+        json_deductions[{{ $item->id }}] = ({'id' : {{ $item->id }}, 'title' : '{{ $item->title }}'});
+    @endforeach
+
+    function add_income()
+    {
+        $("select[name='earning[]']").each(function(k,v){
+            //json_earnings.splice($(v).val(),1 );
+        });
+
+        var el = "<tr>";
+            el += '<td>';
+
+            el += '<select class="form-control" name="earning[]">';
+            $(json_earnings).each(function(k,v){
+                if(v !== null && typeof v === 'object')
+                {
+                    el += '<option value="'+ v.id +'" data-title="'+ v.title +'">'+ v.title +'</option>';
+                }
+            });
+            el += '</select>';
+
+            el +='</td>';
+            el += '<td><input type="text" name="earning_nominal[]" class="form-control calculate price_format" placeholder="Rp. " /></td>';
+            el += '<td style="vertical-align: middle"><a href="javascript:void(0)" onclick="remove_item(this)"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>';
+            el += "</tr>";
+
+        $("#list_earnings").append(el);
+        
+        init_calculate();
+        price_format();
+    }
+
+    function add_deduction()
+    {
+        $("select[name='earning[]']").each(function(k,v){
+            //json_earnings.splice($(v).val(),1 );
+        });
+
+        var el = "<tr>";
+            el += '<td>';
+
+            el += '<select class="form-control" name="deductions[]">';
+            $(json_deductions).each(function(k,v){
+                if(v !== null && typeof v === 'object')
+                {
+                    el += '<option value="'+ v.id +'" data-title="'+ v.title +'">'+ v.title +'</option>';
+                }
+            });
+            el += '</select>';
+
+            el +='</td>';
+            el += '<td><input type="text" name="deduction_nominal[]" class="form-control calculate price_format" placeholder="Rp. " /></td>';
+            el += '<td style="vertical-align: middle"><a href="javascript:void(0)" onclick="remove_item(this)"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>';
+            el += "</tr>";
+
+        $("#list_deductions").append(el);
+
+        init_calculate();
+        price_format();
+    }
+
+    function remove_item(el)
+    {
+        var obj = $(el).parent().parent();
+     
+        $(el).parent().parent().remove();
+
         calculate();
-    });
+    }
+
+    var marital_status = ""; 
 
     function calculate()
     {
-        var salary      = $("input[name='salary']").val();
-        var call_allow  = $("input[name='call_allow']").val();
-        var bonus       = $("input[name='bonus']").val();
-        var ot_multiple_hours   = $("input[name='ot_multiple_hours']").val();
-        var homebase_allowance  = $("input[name='homebase_allowance']").val();
-        var laptop_allowance    = $("input[name='laptop_allowance']").val();
-        var other_income        = $("input[name='other_income']").val();
-        var medical_claim       = $("input[name='medical_claim']").val();
-        var marital_status = '{{ $data->user->marital_status }}';
-        var transport_allowance  = $("input[name='transport_allowance']").val();
-        var other_deduction  = $("input[name='other_deduction']").val();
+        var earnings = [];
+        var deductions = [];
 
-        salary =  salary.replace(',','');
-        salary =  salary.replace(',','');
-        call_allow =  call_allow.replace(',','');
-        call_allow =  call_allow.replace(',','');
-        bonus =  bonus.replace(',','');
-        bonus =  bonus.replace(',','');
-        ot_multiple_hours =  ot_multiple_hours.replace(',','');
-        ot_multiple_hours =  ot_multiple_hours.replace(',','');
-        homebase_allowance =  homebase_allowance.replace(',','');
-        homebase_allowance =  homebase_allowance.replace(',','');
-        laptop_allowance =  laptop_allowance.replace(',','');
-        laptop_allowance =  laptop_allowance.replace(',','');
-        other_income =  other_income.replace(',','');
-        other_income =  other_income.replace(',','');
-        medical_claim =  medical_claim.replace(',','');
-        medical_claim =  medical_claim.replace(',','');
-        transport_allowance = transport_allowance.replace(',','');
-        transport_allowance = transport_allowance.replace(',','');
-        other_deduction = other_deduction.replace(',','');
-        other_deduction = other_deduction.replace(',','');
-        
+        $("input[name='earning_nominal[]']").each(function(index, item){
+            earnings.push($(this).val());
+        });
+        $("input[name='deduction_nominal[]']").each(function(index, item){
+            deductions.push($(this).val());
+        });
+
+        var sum_earnings = $("input[name='earning_nominal[]']").toArray().reduce(function(sum,element) {
+                            element = element.value;
+                            return sum + Number(element.split('.').join(''));
+                         }, 0);
+        var sum_deductions = $("input[name='deduction_nominal[]']").toArray().reduce(function(sum,element) {
+                            element = element.value;
+                            return sum + Number(element.split('.').join(''));
+                         }, 0);
+
+        $("input[name='total_earnings']").val(sum_earnings);
+        $("input[name='total_deductions']").val(sum_deductions);
 
         $.ajax({
             url: "{{ route('ajax.get-calculate-payroll') }}",
             method : 'POST',
             data: {
-                'salary': salary.replace(',',''), 'call_allow' : call_allow.replace(',',''), 'marital_status' : marital_status.replace(',',''), 'bonus': bonus.replace(',',''),
-                'ot_multiple_hours' : ot_multiple_hours.replace(',',''),
-                 '_token' : $("meta[name='csrf-token']").attr('content'),
-                 'homebase_allowance' : homebase_allowance.replace(',',''),
-                 'laptop_allowance' : laptop_allowance.replace(',',''),
-                 'other_income' : other_income.replace(',',''),
-                 'medical_claim' : medical_claim.replace(',',''),
-                 'other_deduction' : other_deduction.replace(',',''),
-                 'transport_allowance' : transport_allowance
+                earnings, 
+                deductions,
+                salary : $("input[name='salary']").val(),
+                marital_status : marital_status,
+                '_token' : $("meta[name='csrf-token']").attr('content')
             },
             success: function( data ) {
-                console.log(data);
-                $("input[name='gross_income_per_month']").val(data.gross_income_per_month);
-                $("input[name='burden_allow']").val(data.burden_allow);
-                $("input[name='gross_income']").val(data.gross_income);
-                $("input[name='income_tax_calculation_5']").val(data.income_tax_calculation_5);
-                $("input[name='income_tax_calculation_15']").val(data.income_tax_calculation_15);
-                $("input[name='income_tax_calculation_25']").val(data.income_tax_calculation_25);
-                $("input[name='income_tax_calculation_30']").val(data.income_tax_calculation_30);
-               // $("input[name='jamsostek_result']").val(data.jamsostek_result);
+                $('.td-thp').html(numberWithDot(data.thp));
+                $('.td-pph21').html(data.pph21);
                 $("input[name='bpjs_ketenagakerjaan']").val(data.bpjs_ketenagakerjaan);
                 $("input[name='bpjs_ketenagakerjaan2']").val(data.bpjs_ketenagakerjaan2);
                 $("input[name='bpjs_kesehatan']").val(data.bpjs_kesehatan);
                 $("input[name='bpjs_kesehatan2']").val(data.bpjs_kesehatan2);
                 $("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
-               // $("input[name='jkk_result']").val(data.jkk_result);
-                $("input[name='less']").val(data.less);
-                $("input[name='monthly_income_tax']").val(data.monthly_income_tax);
-                $("input[name='net_yearly_income']").val(data.net_yearly_income);
-                $("input[name='taxable_yearly_income']").val(data.taxable_yearly_income);
                 $("input[name='thp']").val(data.thp);
-                $("input[name='total_deduction']").val(data.total_deduction);
-                $("input[name='untaxable_income']").val(data.untaxable_income);
-                $("input[name='yearly_income_tax']").val(data.yearly_income_tax);
-                $("input[name='overtime_claim']").val(data.overtime_claim);
+                $("input[name='pph21']").val(data.pph21);
             }
-        });
+        })
     }
+
+    $(".autocomplete-karyawan" ).autocomplete({
+        minLength:0,
+        limit: 25,
+        source: function( request, response ) {
+            $.ajax({
+              url: "{{ route('ajax.get-karyawan-payroll') }}",
+              method : 'POST',
+              data: {
+                'name': request.term,'_token' : $("meta[name='csrf-token']").attr('content')
+              },
+              success: function( data ) {
+                response( data );
+              }
+            });
+        },
+        select: function( event, ui ) {
+            $("input[name='user_id']").val(ui.item.id);
+
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-karyawan-by-id') }}',
+                data: {'id' : ui.item.id, '_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    marital_status = data.data.marital_status;  
+
+                    $('.td-foto').attr('src', data.data.foto);
+                    if(data.data.email != null)
+                    {
+                        $('.td-email').html(data.data.email);
+                    }
+                    else
+                    {
+                        $('.td-email').html("");   
+                    }
+                    if(data.data.telepon != null)
+                    {
+                        $('.td-telepon').html(data.data.telepon);                        
+                    }
+                    else
+                    {
+                        $('.td-telepon').html('');                        
+                    }
+                }
+            });
+        }
+    }).on('focus', function () {
+            $(this).autocomplete("search", "");
+    });
 </script>
 @endsection
-
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
 @endsection

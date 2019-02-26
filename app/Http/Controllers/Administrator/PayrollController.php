@@ -198,7 +198,7 @@ class PayrollController extends Controller
         $temp = new Payroll();
         
          if((!isset($request->salary) || empty($request->salary)) && (!isset($request->salary) || empty($request->salary)) || empty($request->user_id)) {
-             return redirect()->route('administrator.payroll.create')->with('message-error', 'Employee Name or Actual Salary can not empty');
+             return redirect()->route('administrator.payroll.create')->with('message-error', __('payroll.message-employee-cannot-empty'));
 
         } else{
 
@@ -211,19 +211,19 @@ class PayrollController extends Controller
             if(!isset($request->bpjs_pensiun2) || empty($request->bpjs_pensiun2)) $request->bpjs_pensiun2 = 0;
             if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
             
-           
-            $temp->user_id              = $request->user_id;
-            $temp->salary               = str_replace(',', '', $request->salary);
-            $temp->thp                          = str_replace(',', '', $request->thp);
-            $temp->is_calculate                 = 1;
+            $temp->user_id                          = $request->user_id;
+            $temp->salary                           = str_replace(',', '', $request->salary);
+            $temp->thp                              = str_replace(',', '', $request->thp);
+            $temp->is_calculate                     = 1;
             $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
             $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
             $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
             $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
             $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
             $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
-            $temp->total_deduction                  = $request->total_deduction;
+            $temp->total_deduction                  = $request->total_deductions;
             $temp->total_earnings                   = $request->total_earnings;
+            $temp->pph21                            = $request->pph21;
             $temp->save();
             $payroll_id = $temp->id;
 

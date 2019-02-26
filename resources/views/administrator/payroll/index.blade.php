@@ -65,7 +65,8 @@
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
-                                    <th>NIK / NAME</th>
+                                    <th>NIK</th>
+                                    <th>NAME</th>
                                     <th>EARNINGS</th>
                                     <th>DEDUCTIONS</th>
                                     <th>TAKE HOME PAY</th>
@@ -81,9 +82,10 @@
 	                            	@if(isset($item->user))
 			                            <tr>
 			                                <td>{{ $i }}</td>
-			                                <td>{{ $item->user->nik or '' }}</td>
+                                            <td>{{ $item->user->nik }}</td>
+			                                <td>{{ $item->user->name }}</td>
                                             <td>{{ number_format($item->salary + $item->total_earnings) }}</td>
-			                                <td>{{ number_format($item->total_deductions) }}</td>
+			                                <td>{{ number_format($item->total_deduction) }}</td>
 			                                <td>{{ number_format($item->thp) }}</td>
 			                                <td>
 			                                    @if($item->is_calculate == 0)
@@ -111,6 +113,7 @@
     </div>
     @include('layouts.footer')
 </div>
+
 <!-- modal content education  -->
 <div id="modal_import" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

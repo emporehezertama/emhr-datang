@@ -9,7 +9,7 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Employee Payroll </h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="document.getElementById('form-payroll').submit()"><i class="fa fa-save"></i> Save Data </button>
+                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
             </div>
         </div>
         <div class="row">
@@ -163,6 +163,8 @@
                 <input type="hidden" name="bpjs_pensiun2" />
                 <input type="hidden" name="total_deductions" />
                 <input type="hidden" name="total_earnings" />
+                <input type="hidden" name="thp" />
+                <input type="hidden" name="pph21" />
             </form>                    
         </div>
         <!-- /.row -->
@@ -173,6 +175,17 @@
 </div>
 @section('footer-script')
 <script type="text/javascript">
+    
+    function form_submit()
+    {
+        if($("input[name='user_id']").val() == "" || $("input[name='salary']").val() == "")
+        {
+            _alert("@lang('payroll.message-employee-cannot-empty')");
+            return false;
+        }
+
+        $("#form-payroll").submit();
+    }
 
     function init_calculate()
     {   
@@ -308,6 +321,8 @@
                 $("input[name='bpjs_kesehatan2']").val(data.bpjs_kesehatan2);
                 $("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
+                $("input[name='thp']").val(data.thp);
+                $("input[name='pph21']").val(data.pph21);
             }
         })
     }
