@@ -15,6 +15,7 @@ class AddColumnPayroll extends Migration
     {
         Schema::table('payroll', function (Blueprint $table) {
             $table->integer('pph21')->nullable();
+            $table->integer('total_earnings')->nullable();
         });
     }
 
