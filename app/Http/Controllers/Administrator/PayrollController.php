@@ -102,7 +102,7 @@ class PayrollController extends Controller
             // earnings
             foreach(PayrollEarnings::all() as $i)
             {   
-                $earning = PayrollEarningsEmployee::where('payroll_id', $i->id)->where('payroll_earning_id', $i->id)->first();
+                $earning = PayrollEarningsEmployee::where('payroll_id', $item->id)->where('payroll_earning_id', $i->id)->first();
                 if($earning) 
                 {
                     $earning = number_format($earning->nominal);
@@ -116,7 +116,7 @@ class PayrollController extends Controller
             // earnings
             foreach(PayrollDeductions::all() as $i)
             {   
-                $deduction = PayrollDeductionsEmployee::where('payroll_id', $i->id)->where('payroll_deduction_id', $i->id)->first();
+                $deduction = PayrollDeductionsEmployee::where('payroll_id', $item->id)->where('payroll_deduction_id', $i->id)->first();
                 if($deduction) 
                 {
                     $deduction = number_format($deduction->nominal);
@@ -312,15 +312,59 @@ class PayrollController extends Controller
         if(!isset($request->total_deduction) || empty($request->total_deduction)) $request->total_deduction = 0;
         if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
 
-        $temp->salary               = str_replace(',', '', $request->salary);
-        $temp->thp                          = str_replace(',', '', $request->thp);
-        $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
-        $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
-        $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
-        $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
-        $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
-        $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
+        $temp->salary                           = replace_idr($request->salary);
+        $temp->thp                              = replace_idr($request->thp);
+        $temp->bpjs_ketenagakerjaan             = replace_idr($request->bpjs_ketenagakerjaan);
+        $temp->bpjs_kesehatan                   = replace_idr($request->bpjs_kesehatan);
+        $temp->bpjs_pensiun                     = replace_idr($request->bpjs_pensiun);
+        $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
+        $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
+        $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
+        $temp->total_deduction                  = $request->total_deductions;
+        $temp->total_earnings                   = $request->total_earnings;
+        $temp->pph21                            = replace_idr($request->pph21);
+        $temp->bpjs_ketenagakerjaan_company     = replace_idr($request->bpjs_ketenagakerjaan_company);
+        $temp->bpjs_kesehatan_company           = replace_idr($request->bpjs_kesehatan_company);
+        $temp->bpjs_pensiun_company             = replace_idr($request->bpjs_pensiun_company);
+        $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
+        $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
+        $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
+
         $temp->save(); 
+
+        // save earnings
+        if(isset($request->earning))
+        {
+            foreach($request->earning as $key => $value)
+            {
+                $earning = PayrollEarningsEmployee::where('payroll_id', $temp->id)->where('payroll_earning_id', $value)->first();
+                if(!$earning)
+                {
+                    $earning                        = new PayrollEarningsEmployee();
+                    $earning->payroll_id            = $temp->id;
+                    $earning->payroll_earning_id    = $value;
+                }
+                $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
+                $earning->save();
+            }
+        }
+        // save deductions
+        if(isset($request->deduction))
+        {
+            foreach($request->deduction as $key => $value)
+            {
+                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $temp->id)->where('payroll_deduction_id', $value)->first();
+                if(!$deduction)
+                {
+                    $deduction                        = new PayrollDeductionsEmployee();
+                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_deduction_id  = $value;
+                }
+                
+                $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
+                $deduction->save();
+            }
+        }
         
         $temp = new PayrollHistory();
         $temp->payroll_id            = $id;
@@ -336,7 +380,7 @@ class PayrollController extends Controller
         $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
         $temp->save();
 
-        return redirect()->route('administrator.payroll.index')->with('message-success', 'Data successfully saved !');
+        return redirect()->route('administrator.payroll.detail', $id)->with('message-success', __('general.message-data-saved-success'));
     }
 
     /**
@@ -364,7 +408,7 @@ class PayrollController extends Controller
                 
                 foreach(PayrollEarnings::all() as $item)
                 {   
-                    $earning = PayrollEarningsEmployee::where('payroll_id', $item->id)->where('payroll_earning_id', $item->id)->first();
+                    $earning = PayrollEarningsEmployee::where('payroll_id', $payroll->id)->where('payroll_earning_id', $item->id)->first();
                     if($earning) 
                     {
                         $earning = number_format($earning->nominal);
@@ -378,7 +422,7 @@ class PayrollController extends Controller
                 // earnings
                 foreach(PayrollDeductions::all() as $item)
                 {   
-                    $deduction = PayrollDeductionsEmployee::where('payroll_id', $item->id)->where('payroll_deduction_id', $item->id)->first();
+                    $deduction = PayrollDeductionsEmployee::where('payroll_id', $payroll->id)->where('payroll_deduction_id', $item->id)->first();
                     if($deduction) 
                     {
                         $deduction = number_format($deduction->nominal);
@@ -430,6 +474,13 @@ class PayrollController extends Controller
      */
     public function calculate()
     {
+        $this->init_calculate();
+
+        return redirect()->route('administrator.payroll.index')->with('message-success', 'Data Payroll successfully calculated !');
+    }
+
+    public function init_calculate()
+    {
         $data = Payroll::all();
 
         $biaya_jabatan = PayrollOthers::where('id', 1)->first()->value;
@@ -437,14 +488,12 @@ class PayrollController extends Controller
 
         foreach($data as $item)
         {
-            $temp = Payroll::where('id', $item->id)->first();
-            $ptkp = PayrollPtkp::where('id', 1)->first();
-            $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
-            $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
-
-            $bpjs_ketenagakerjaan = ($item->salary * get_setting('bpjs_ketenagakerjaan_company') / 100);
-            $bpjs_ketenagakerjaan2 = ($item->salary * get_setting('bpjs_ketenagakerjaan_employee') / 100);
-
+            $temp                   = Payroll::where('id', $item->id)->first();
+            $ptkp                   = PayrollPtkp::where('id', 1)->first();
+            $bpjs_pensiunan_batas   = PayrollOthers::where('id', 3)->first()->value;
+            $bpjs_kesehatan_batas   = PayrollOthers::where('id', 4)->first()->value;
+            $bpjs_ketenagakerjaan   = ($item->salary * get_setting('bpjs_ketenagakerjaan_company') / 100);
+            $bpjs_ketenagakerjaan2  = ($item->salary * get_setting('bpjs_ketenagakerjaan_employee') / 100);
             $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
             $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
@@ -623,8 +672,9 @@ class PayrollController extends Controller
             if(!isset($bpjs_kesehatan2) || empty($bpjs_kesehatan2)) $bpjs_kesehatan2 = 0;
             if(!isset($bpjs_pensiun2) || empty($bpjs_pensiun2)) $bpjs_pensiun2 = 0;
             
-            $temp->total_deduction              = $total_deduction + $deductions; 
-            $temp->total_earnings               = $gross_thp;
+            #$temp->total_deduction              = $total_deduction + $deductions; 
+            $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2; 
+            $temp->total_earnings               = $item->salary + $bpjs_ketenagakerjaan + $bpjs_kesehatan + $bpjs_pensiun;
             $temp->thp                          = $thp;
             $temp->pph21                        = $monthly_income_tax;
             $temp->is_calculate                 = 1;
@@ -658,8 +708,6 @@ class PayrollController extends Controller
             $temp->bpjs_pensiun2                = $bpjs_pensiun2;
             $temp->save();
         }
-
-        return redirect()->route('administrator.payroll.index')->with('message-success', 'Data Payroll successfully calculated !');
     }
 
     /**
@@ -715,7 +763,7 @@ class PayrollController extends Controller
                     {
                         $is_calculate   = 0;
                     }
-                    $payroll->salary        = $row[3];
+                    $payroll->salary        = replace_idr($row[3]);
                     $payroll->is_calculate  = $is_calculate;
                     $payroll->save();
 
@@ -729,7 +777,7 @@ class PayrollController extends Controller
                                 $earning                        = new PayrollEarningsEmployee();
                                 $earning->payroll_earning_id    = $item->id;
                                 $earning->payroll_id            = $payroll->id;
-                                $earning->nominal               = $row[$count_row];
+                                $earning->nominal               = replace_idr($row[$count_row]);
                                 $earning->save();
                             }
                             $count_row++;
@@ -742,7 +790,7 @@ class PayrollController extends Controller
                                 $earning                        = new PayrollDeductionsEmployee();
                                 $earning->payroll_deduction_id  = $item->id;
                                 $earning->payroll_id            = $payroll->id;
-                                $earning->nominal               = $row[$count_row];
+                                $earning->nominal               = replace_idr($row[$count_row]);
                                 $earning->save();
                             }
                             $count_row++;
@@ -762,7 +810,7 @@ class PayrollController extends Controller
                                    $earning->payroll_earning_id = $i->id;
                                 }
 
-                                $earning->nominal = $row[$count_row];
+                                $earning->nominal = replace_idr($row[$count_row]);
                                 $earning->save();
 
                             }
@@ -782,7 +830,7 @@ class PayrollController extends Controller
                                    $earning->payroll_deduction_id = $i->id;
                                 }
                                 
-                                $earning->nominal = $row[$count_row];
+                                $earning->nominal = replace_idr($row[$count_row]);
                                 $earning->save();
 
                             }
@@ -794,5 +842,46 @@ class PayrollController extends Controller
 
             return redirect()->route('administrator.payroll.index')->with('messages-success', 'Data Payroll successfully import !');
         }
+    }
+
+    /**
+     * Delete Payroll Earning
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function deleteEarningPayroll($id)
+    {
+        $data = PayrollEarningsEmployee::where('id', $id)->first();
+        if($data)
+        {
+            $payroll_id = $data->payroll_id;
+
+            $data->delete();
+        }
+
+        $this->init_calculate();
+
+        return redirect()->route('administrator.payroll.detail', $payroll_id);
+    }
+
+
+    /**
+     * Delete Payroll Deduction
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function deleteDeductionPayroll($id)
+    {
+        $data = PayrollDeductionsEmployee::where('id', $id)->first();
+        if($data)
+        {
+            $payroll_id = $data->payroll_id;
+
+            $data->delete();
+        }
+
+        $this->init_calculate();
+
+        return redirect()->route('administrator.payroll.detail', $payroll_id);
     }
 }

@@ -316,8 +316,6 @@ class AjaxController extends Controller
                 $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
             }
 
-            $bpjs_pensiun         = 0;
-            $bpjs_pensiun2        = 0;
             $bpjs_pensiun_persen  = get_setting('bpjs_pensiun_company');
             $bpjs_pensiun2_persen = get_setting('bpjs_pensiun_employee');
 
@@ -345,30 +343,18 @@ class AjaxController extends Controller
 
             # $gross_income = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan) * 12 + $request->bonus;
             $gross_income = $request->salary;
-
+            $earnings = 0;
             if(isset($request->earnings))
             {
                 foreach($request->earnings as $item)
                 {   
-                    $gross_income += replace_idr($item);
+                    $earnings += replace_idr($item);
                 }
             }
 
-            $gross_income = $gross_income * 12;
+            $gross_income = ($gross_income + $earnings) * 12;
 
-            # $gross_income2 = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
-
-            $gross_income2 = $request->salary;
-
-            if(isset($request->earnings))
-            {
-                foreach($request->earnings as $item)
-                {   
-                    $gross_income2 += replace_idr($item);
-                }
-            }
-
-            $gross_income2 = ($gross_income2 + $bpjspenambahan) - $bpjspengurangan ;
+            $gross_income2 = ($request->salary + $earnings + $bpjspenambahan) - $bpjspengurangan ;
 
             // burdern allowance
             $burden_allow = 5 * $gross_income2 / 100;
@@ -459,24 +445,20 @@ class AjaxController extends Controller
             $less               = $bpjspengurangan + $monthly_income_tax; 
 
             #$gross_thp = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $request->other_income + $overtime_claim + $request->other_income+ $request->medical_claim+ $request->bonus);
-            $gross_thp = $request->salary;
-            if(isset($request->earnings))
-            {
-                foreach($request->earnings as $item)
-                {   
-                    $gross_thp += replace_idr($item);
-                }
-            }
-
+            $gross_thp = $request->salary + $earnings;
+           
             #$thp                = $gross_thp - $less - $request->other_deduction;
             $thp                = $gross_thp - $less;
+            $deductions = 0;
             if(isset($request->deductions))
             {
                 foreach($request->deductions as $item)
                 {   
-                    $thp -= replace_idr($item);
+                    $deductions += replace_idr($item);
                 }
             }
+
+            $thp = $thp - $deductions;
 
             $params['gross_income']         = number_format($gross_income); 
             $params['burden_allow']         = number_format($burden_allow);
@@ -499,9 +481,10 @@ class AjaxController extends Controller
             $params['gross_income_per_month']       = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
             $params['thp']                          = number_format($thp);
-            $params['sallary']                      = $request->sallary;
+            $params['salary']                       = $request->salary;
             $params['pph21']                        = number_format($monthly_income_tax);
-            #$params['overtime_claim']               = number_format($overtime_claim);
+            $params['earnings']                     = $earnings;
+            $params['deductions']                   = $deductions + $total_deduction;
         }
         
         return response()->json($params);

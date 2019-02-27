@@ -84,7 +84,7 @@
 			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
 			                                <td>{{ $item->user->name }}</td>
-                                            <td>{{ number_format($item->salary + $item->total_earnings) }}</td>
+                                            <td>{{ number_format($item->total_earnings) }}</td>
 			                                <td>{{ number_format($item->total_deduction) }}</td>
 			                                <td>{{ number_format($item->thp) }}</td>
 			                                <td>

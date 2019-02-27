@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Administrator Routing
+ */
 Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middleware' => ['auth', 'access:1']], function(){
 	Route::get('/', 'IndexController@index')->name('administrator.dashboard');
 	Route::resource('karyawan', 'KaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -88,6 +91,8 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::resource('payrollgross', 'PayrollGrossController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::get('payroll/import', 'PayrollController@import')->name('administrator.payroll.import');
 	Route::get('payroll/download', 'PayrollController@download')->name('administrator.payroll.download');
+	Route::get('payroll/delete-earning-payroll/{id}', 'PayrollController@deleteEarningPayroll')->name('administrator.payroll.delete-earning-payroll');
+	Route::get('payroll/delete-deduction-payroll/{id}', 'PayrollController@deleteDeductionPayroll')->name('administrator.payroll.delete-deduction-payroll');
 	Route::post('payroll/temp-import', 'PayrollController@tempImport')->name('administrator.payroll.temp-import');
 	Route::get('payrollnet/import', 'PayrollNetController@import')->name('administrator.payrollnet.import');
 	Route::get('payrollnet/download', 'PayrollNetController@download')->name('administrator.payrollnet.download');

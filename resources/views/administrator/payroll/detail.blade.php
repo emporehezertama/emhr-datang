@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="row">
-            <form class="form-horizontal" id="form-payroll" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
+            <form class="form-horizontal" id="form-payroll" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.payroll.update', $data->id) }}" method="POST">
                <div class="col-md-4 p-l-0">
                     <div class="white-box" style="min-height: 440px;">
                          @if (count($errors) > 0)
@@ -35,7 +35,7 @@
                                 <label class="col-md-12">NIK / Name</label>
                                 <div class="col-md-12">
                                    <input type="text" class="form-control autocomplete-karyawan" value="{{ $data->user->nik }} - {{ $data->user->name }}" placeholder="Select Employee..">
-                                   <input type="hidden" name="user_id">
+                                   <input type="hidden" name="user_id" value="{{ $data->user_id }}">
                                 </div>
                             </div>
                         </div>
@@ -129,8 +129,11 @@
                                         @if(isset($item->payrollEarnings->title))
                                             <tr>
                                                 <td style="vertical-align: middle;">{{ $item->payrollEarnings->title }}</td>
-                                                <td><input type="text" class="form-control" value="{{ number_format($item->nominal) }}" /></td>
-                                                <td style="vertical-align: middle;"><a href="javascript:void(0)" onclick="remove_item(this)"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
+                                                <td>
+                                                    <input type="hidden" name="earning[]" value="{{ $item->payrollEarnings->id }}" /> 
+                                                    <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($item->nominal) }}" />
+                                                </td>
+                                                <td style="vertical-align: middle;"><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll.delete-earning-payroll', $item->id) }}')"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
                                             </tr>
                                         @endif
                                     @endforeach
@@ -209,8 +212,11 @@
                                         @if(isset($item->payrollDeductions->title))
                                             <tr>
                                                 <td style="vertical-align: middle;">{{ $item->payrollDeductions->title }}</td>
-                                                <td><input type="text" class="form-control" value="{{ number_format($item->nominal) }}" /></td>
-                                                <td style="vertical-align: middle;"><a href="javascript:void(0)" onclick="remove_item(this)"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
+                                                <td>
+                                                    <input type="hidden" name="deduction[]" value="{{ $item->payrollDeductions->id }}" />
+                                                    <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ number_format($item->nominal) }}" />
+                                                </td>
+                                                <td style="vertical-align: middle;"><a href="javascript:void(0)"  onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll.delete-deduction-payroll', $item->id) }}')"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
                                             </tr>
                                         @endif
                                     @endforeach
@@ -227,16 +233,17 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
-                <input type="hidden" name="bpjs_ketenagakerjaan" />
-                <input type="hidden" name="bpjs_kesehatan" />
-                <input type="hidden" name="bpjs_pensiun" />
-                <input type="hidden" name="bpjs_ketenagakerjaan2" />
-                <input type="hidden" name="bpjs_kesehatan2" />
-                <input type="hidden" name="bpjs_pensiun2" />
-                <input type="hidden" name="total_deductions" />
-                <input type="hidden" name="total_earnings" />
-                <input type="hidden" name="thp" />
-                <input type="hidden" name="pph21" />
+                <input type="hidden" name="bpjs_ketenagakerjaan" value="{{ $data->bpjs_ketenagakerjaan }}" />
+                <input type="hidden" name="bpjs_kesehatan" value="{{ $data->bpjs_kesehatan }}" />
+                <input type="hidden" name="bpjs_pensiun" value="{{ $data->bpjs_pensiun }}" />
+                <input type="hidden" name="bpjs_ketenagakerjaan2" value="{{ $data->bpjs_ketenagakerjaan2 }}" />
+                <input type="hidden" name="bpjs_kesehatan2" value="{{ $data->bpjs_kesehatan2 }}" />
+                <input type="hidden" name="bpjs_pensiun2" value="{{ $data->bpjs_pensiun2 }}" />
+                <input type="hidden" name="total_deductions" value="{{ $data->total_deduction }}" />
+                <input type="hidden" name="total_earnings" value="{{ $data->total_earnings }}" />
+                <input type="hidden" name="thp" value="{{ $data->thp }}" />
+                <input type="hidden" name="pph21" value="{{ $data->pph21 }}" />
+                <input type="hidden" name="_method" value="PUT">
             </form>                    
         </div>
         <!-- /.row -->
@@ -283,10 +290,6 @@
 
     function add_income()
     {
-        $("select[name='earning[]']").each(function(k,v){
-            //json_earnings.splice($(v).val(),1 );
-        });
-
         var el = "<tr>";
             el += '<td>';
 
@@ -312,10 +315,6 @@
 
     function add_deduction()
     {
-        $("select[name='earning[]']").each(function(k,v){
-            //json_earnings.splice($(v).val(),1 );
-        });
-
         var el = "<tr>";
             el += '<td>';
 
@@ -339,7 +338,7 @@
         price_format();
     }
 
-    function remove_item(el)
+    function remove_item(el, submit=false)
     {
         var obj = $(el).parent().parent();
         
@@ -354,6 +353,7 @@
     {
         var earnings = [];
         var deductions = [];
+        var salary = $("input[name='salary']").val();
 
         $("input[name='earning_nominal[]']").each(function(index, item){
             earnings.push($(this).val());
@@ -377,7 +377,7 @@
             data: {
                 earnings, 
                 deductions,
-                salary : $("input[name='salary']").val(),
+                salary : salary,
                 marital_status : marital_status,
                 '_token' : $("meta[name='csrf-token']").attr('content')
             },
@@ -393,7 +393,7 @@
                 $("input[name='thp']").val(data.thp);
                 $("input[name='pph21']").val(data.pph21);
 
-                sum_earnings = sum_earnings + parseInt(data.bpjs_ketenagakerjaan.split(',').join('')) + parseInt(data.bpjs_kesehatan.split(',').join('')) + parseInt(data.bpjs_pensiun.split(',').join(''));
+                sum_earnings = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(data.bpjs_ketenagakerjaan.split(',').join('')) + parseInt(data.bpjs_kesehatan.split(',').join('')) + parseInt(data.bpjs_pensiun.split(',').join(''));
                 sum_deductions = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);

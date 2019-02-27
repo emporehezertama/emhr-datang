@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="row">
-            <form class="form-horizontal" id="form-payroll" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
+            <form class="form-horizontal" id="form-payroll" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.payroll.store') }}" method="POST">
                <div class="col-md-4 p-l-0">
                     <div class="white-box" style="min-height: 440px;">
                          @if (count($errors) > 0)
@@ -331,6 +331,7 @@
     {
         var earnings = [];
         var deductions = [];
+        var salary = $("input[name='salary']").val();
 
         $("input[name='earning_nominal[]']").each(function(index, item){
             earnings.push($(this).val());
@@ -355,7 +356,7 @@
             data: {
                 earnings, 
                 deductions,
-                salary : $("input[name='salary']").val(),
+                salary : salary,
                 marital_status : marital_status,
                 '_token' : $("meta[name='csrf-token']").attr('content')
             },
@@ -378,8 +379,8 @@
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
                 
-                sum_earnings = parseInt($("input[name='salary']").val()) +  sum_earnings + parseInt(data.bpjs_ketenagakerjaan.split(',').join('')) + parseInt(data.bpjs_kesehatan.split(',').join('')) + parseInt(data.bpjs_pensiun.split(',').join(''));
-                sum_deductions = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
+                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(data.bpjs_ketenagakerjaan.split(',').join('')) + parseInt(data.bpjs_kesehatan.split(',').join('')) + parseInt(data.bpjs_pensiun.split(',').join(''));
+                sum_deductions  = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);
                 $("input[name='total_deductions']").val(sum_deductions);
