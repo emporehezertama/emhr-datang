@@ -15,6 +15,8 @@ use App\Models\PayrollOthers;
 use App\Models\PayrollPtkp;
 use App\Models\PayrollEarningsEmployee;
 use App\Models\PayrollDeductionsEmployee;
+use App\Models\PayrollEarnings;
+use App\Models\PayrollDeductions;
 
 class PayrollController extends Controller
 {   
@@ -95,49 +97,61 @@ class PayrollController extends Controller
             $params[$k]['Position']         = empore_jabatan($item->user_id);
             $params[$k]['Joint Date']       = $item->user->join_date;
             $params[$k]['Resign Date']      = $item->user->resign_date;
-            $params[$k]['Basic Salary']                         = $item->basic_salary;
-            $params[$k]['Actual Salary']                        = $item->salary;
-            $params[$k]['Call Allowance']                       = $item->call_allow;
-            $params[$k]['Transport Allowance']                  = $item->transport_allowance;
-            $params[$k]['Homebase Allowance']                   = $item->homebase_allowance;
-            $params[$k]['Laptop Allowance']                     = $item->laptop_allowance;
-            $params[$k]['OT Normal Hours']                      = $item->ot_normal_hours;
-            $params[$k]['OT Multiple Hours']                    = $item->ot_multiple_hours;
-            $params[$k]['Overtime Claim']                       = $item->overtime_claim ;
-            $params[$k]['Other Income']                         = $item->other_income;
-            $params[$k]['Remark Other Income']                  = $item->remark_other_income;
-            $params[$k]['Medical Claim']                        = $item->medical_claim;
-            $params[$k]['Remark Medical']                       = $item->remark;
-            $params[$k]['Yearly Bonus, THR or others']          = $item->bonus;
-            $params[$k]['Other Deduction']                      = $item->other_deduction;
-            $params[$k]['RemarkOther Deduction']                = $item->remark_other_deduction;
-            $params[$k]['Gross Income Per Year']                = $item->gross_income;
-            $params[$k]['Burden Allowance (Monthly)']           = $item->burden_allow;
-            $params[$k]['BPJS Ketengakerjaan 4.24 %']           = $item->bpjs_ketenagakerjaan;
-            $params[$k]['BPJS Kesehatan (4%)']                  = $item->bpjs_kesehatan;
-            $params[$k]['BPJS Pensiun 2%']                      = $item->bpjs_pensiun;
-            $params[$k]['BPJS Ketenagakerjaan 2% ']             = $item->bpjs_ketenagakerjaan2;
-            $params[$k]['BPJS Dana Pensiun (1%)']               = $item->bpjs_pensiun2;
-            $params[$k]['BPJS Kesehatan (1%)']                  = $item->bpjs_kesehatan2;
-            $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
-            $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
-            $params[$k]['Monthly Income Tax / PPh21']           = $item->monthly_income_tax;
-            $params[$k]['GROSS INCOME PER MONTH']               = $item->gross_income_per_month;
-            $params[$k]['Less : Tax, BPJS (Monthly)']           = $item->less;
-            $params[$k]['Take Home Pay'] = $item->thp;
-            $params[$k]['Acc No']                               = $item->user->nomor_rekening;
-            $params[$k]['Acc Name']                             = $item->user->nama_rekening;
-            $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
-            $params[$k]['Amount']                               = $item->user->nomor_rekening;
-        }
+            $params[$k]['Salary']           = $item->salary;
+            
+            // earnings
+            foreach(PayrollEarnings::all() as $i)
+            {   
+                $earning = PayrollEarningsEmployee::where('payroll_id', $i->id)->where('payroll_earning_id', $i->id)->first();
+                if($earning) 
+                {
+                    $earning = number_format($earning->nominal);
+                }
+                else
+                    $earning = 0;
 
+                $params[$k][$i->title] = $earning;
+            }
+
+            // earnings
+            foreach(PayrollDeductions::all() as $i)
+            {   
+                $deduction = PayrollDeductionsEmployee::where('payroll_id', $i->id)->where('payroll_deduction_id', $i->id)->first();
+                if($deduction) 
+                {
+                    $deduction = number_format($deduction->nominal);
+                }
+                else
+                    $deduction = 0;
+
+                $params[$k][$i->title] = $deduction;
+            }
+
+            $params[$k]['BPJS Ketengakerjaan 4.24 %']           = $item->bpjs_ketenagakerjaan_company;
+            $params[$k]['BPJS Kesehatan (4%)']                  = $item->bpjs_kesehatan_company;
+            $params[$k]['BPJS Pensiun 2%']                      = $item->bpjs_pensiun_company;
+            $params[$k]['BPJS Ketenagakerjaan 2% ']             = $item->bpjs_ketenagakerjaan_employee;
+            $params[$k]['BPJS Dana Pensiun (1%)']               = $item->bpjs_pensiun_employee;
+            $params[$k]['BPJS Kesehatan (1%)']                  = $item->bpjs_kesehatan_employee;
+            $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
+            $params[$k]['Total Earnings']                       = $item->total_earnings;
+            #$params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
+            #$params[$k]['Monthly Income Tax / PPh21']           = $item->pph21;
+            #$params[$k]['GROSS INCOME PER MONTH']               = $item->gross_income_per_month;
+            #$params[$k]['Less : Tax, BPJS (Monthly)']           = $item->less;
+            $params[$k]['Take Home Pay']                        = $item->thp;
+            $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
+            $params[$k]['Acc Name']                             = isset($item->user->nama_rekening) ? $item->user->nama_rekening : '';
+            $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
+            $params[$k]['Amount']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
+        }
 
         $styleHeader = [
             'font' => [
                 'bold' => true,
             ],
             'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
             ],
             'borders' => [
                 'allBorders' => [
@@ -158,9 +172,9 @@ class PayrollController extends Controller
             ''
         ];
 
-        return \Excel::create('Report-Payroll',  function($excel) use($params, $styleHeader){
+        return \Excel::create('Report-Payroll-'.date('Y-m-d'),  function($excel) use($params, $styleHeader){
 
-              $excel->sheet('mysheet',  function($sheet) use($params){
+              $excel->sheet('Payroll',  function($sheet) use($params){
 
                 $sheet->fromArray($params);
                 
@@ -197,10 +211,10 @@ class PayrollController extends Controller
     {
         $temp = new Payroll();
         
-         if((!isset($request->salary) || empty($request->salary)) && (!isset($request->salary) || empty($request->salary)) || empty($request->user_id)) {
+        if((!isset($request->salary) || empty($request->salary)) && (!isset($request->salary) || empty($request->salary)) || empty($request->user_id)) {
              return redirect()->route('administrator.payroll.create')->with('message-error', __('payroll.message-employee-cannot-empty'));
 
-        } else{
+        }else{
 
             if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
             if(!isset($request->bpjs_ketenagakerjaan) || empty($request->bpjs_ketenagakerjaan)) $request->bpjs_ketenagakerjaan = 0;
@@ -212,18 +226,24 @@ class PayrollController extends Controller
             if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
             
             $temp->user_id                          = $request->user_id;
-            $temp->salary                           = str_replace(',', '', $request->salary);
-            $temp->thp                              = str_replace(',', '', $request->thp);
+            $temp->salary                           = replace_idr($request->salary);
+            $temp->thp                              = replace_idr($request->thp);
             $temp->is_calculate                     = 1;
-            $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
-            $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
-            $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
-            $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
-            $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
-            $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
+            $temp->bpjs_ketenagakerjaan             = replace_idr($request->bpjs_ketenagakerjaan);
+            $temp->bpjs_kesehatan                   = replace_idr($request->bpjs_kesehatan);
+            $temp->bpjs_pensiun                     = replace_idr($request->bpjs_pensiun);
+            $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
+            $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
+            $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
             $temp->total_deduction                  = $request->total_deductions;
             $temp->total_earnings                   = $request->total_earnings;
-            $temp->pph21                            = $request->pph21;
+            $temp->pph21                            = replace_idr($request->pph21);
+            $temp->bpjs_ketenagakerjaan_company             = replace_idr($request->bpjs_ketenagakerjaan_company);
+            $temp->bpjs_kesehatan_company                   = replace_idr($request->bpjs_kesehatan_company);
+            $temp->bpjs_pensiun_company                     = replace_idr($request->bpjs_pensiun_company);
+            $temp->bpjs_ketenagakerjaan_employee             = replace_idr($request->bpjs_ketenagakerjaan_employee);
+            $temp->bpjs_kesehatan_employee                   = replace_idr($request->bpjs_kesehatan_employee);
+            $temp->bpjs_pensiun_employee                     = replace_idr($request->bpjs_pensiun_employee);
             $temp->save();
             $payroll_id = $temp->id;
 
@@ -235,7 +255,7 @@ class PayrollController extends Controller
                     $earning                        = new PayrollEarningsEmployee();
                     $earning->payroll_id            = $payroll_id;
                     $earning->payroll_earning_id    = $value;
-                    $earning->nominal               = $request->earning_nominal[$key]; 
+                    $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
                     $earning->save();
                 }
             }
@@ -246,12 +266,11 @@ class PayrollController extends Controller
                 {
                     $deduction                        = new PayrollDeductionsEmployee();
                     $deduction->payroll_id            = $payroll_id;
-                    $deduction->payroll_deduction_id    = $value;
-                    $deduction->nominal               = $request->deduction_nominal[$key]; 
+                    $deduction->payroll_deduction_id  = $value;
+                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
                     $deduction->save();
                 }
             }
-
 
             // Insert History
             $temp = new PayrollHistory();
@@ -283,122 +302,39 @@ class PayrollController extends Controller
     {
         $temp = Payroll::where('id', $id)->first();
 
-        if(!isset($request->basic_salary) || empty($request->basic_salary)) $request->basic_salary = 0;
-            if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
-            if(!isset($request->call_allow) || empty($request->call_allow)) $request->call_allow = 0;
-            if(!isset($request->bonus) || empty($request->bonus)) $request->bonus = 0;
-            if(!isset($request->transport_allowance) || empty($request->transport_allowance)) $request->transport_allowance = 0;
-            if(!isset($request->homebase_allowance) || empty($request->homebase_allowance)) $request->homebase_allowance = 0;
-            if(!isset($request->laptop_allowance) || empty($request->laptop_allowance)) $request->laptop_allowance = 0;
-            if(!isset($request->ot_normal_hours) || empty($request->ot_normal_hours)) $request->ot_normal_hours = 0;
-            if(!isset($request->ot_multiple_hours) || empty($request->ot_multiple_hours)) $request->ot_multiple_hours = 0;
-            if(!isset($request->other_income) || empty($request->other_income)) $request->other_income = 0;
-            if(!isset($request->medical_claim) || empty($request->medical_claim)) $request->medical_claim = 0;
-            if(!isset($request->overtime_claim) || empty($request->overtime_claim)) $request->overtime_claim = 0;
-            if(!isset($request->other_deduction) || empty($request->other_deduction)) $request->other_deduction = 0;
-            if(!isset($request->gross_income) || empty($request->gross_income)) $request->gross_income = 0;
-            if(!isset($request->burden_allow) || empty($request->burden_allow)) $request->burden_allow = 0;
-            if(!isset($request->bpjs_ketenagakerjaan) || empty($request->bpjs_ketenagakerjaan)) $request->bpjs_ketenagakerjaan = 0;
-            if(!isset($request->bpjs_kesehatan) || empty($request->bpjs_kesehatan)) $request->bpjs_kesehatan = 0;
-            if(!isset($request->bpjs_pensiun) || empty($request->bpjs_pensiun)) $request->bpjs_pensiun = 0;
-            if(!isset($request->bpjs_ketenagakerjaan2) || empty($request->bpjs_ketenagakerjaan2)) $request->bpjs_ketenagakerjaan2 = 0;
-            if(!isset($request->bpjs_kesehatan2) || empty($request->bpjs_kesehatan2)) $request->bpjs_kesehatan2 = 0;
-            if(!isset($request->bpjs_pensiun2) || empty($request->bpjs_pensiun2)) $request->bpjs_pensiun2 = 0;
+        if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
+        if(!isset($request->bpjs_ketenagakerjaan) || empty($request->bpjs_ketenagakerjaan)) $request->bpjs_ketenagakerjaan = 0;
+        if(!isset($request->bpjs_kesehatan) || empty($request->bpjs_kesehatan)) $request->bpjs_kesehatan = 0;
+        if(!isset($request->bpjs_pensiun) || empty($request->bpjs_pensiun)) $request->bpjs_pensiun = 0;
+        if(!isset($request->bpjs_ketenagakerjaan2) || empty($request->bpjs_ketenagakerjaan2)) $request->bpjs_ketenagakerjaan2 = 0;
+        if(!isset($request->bpjs_kesehatan2) || empty($request->bpjs_kesehatan2)) $request->bpjs_kesehatan2 = 0;
+        if(!isset($request->bpjs_pensiun2) || empty($request->bpjs_pensiun2)) $request->bpjs_pensiun2 = 0;
+        if(!isset($request->total_deduction) || empty($request->total_deduction)) $request->total_deduction = 0;
+        if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
 
-            if(!isset($request->total_deduction) || empty($request->total_deduction)) $request->total_deduction = 0;
-            if(!isset($request->net_yearly_income) || empty($request->net_yearly_income)) $request->net_yearly_income = 0;
-            if(!isset($request->untaxable_income) || empty($request->untaxable_income)) $request->untaxable_income = 0;
-            if(!isset($request->taxable_yearly_income) || empty($request->taxable_yearly_income)) $request->taxable_yearly_income = 0;
-            if(!isset($request->income_tax_calculation_5) || empty($request->income_tax_calculation_5)) $request->income_tax_calculation_5 = 0;
-            if(!isset($request->income_tax_calculation_15) || empty($request->income_tax_calculation_15)) $request->income_tax_calculation_15 = 0;                                                        
-            if(!isset($request->income_tax_calculation_25) || empty($request->income_tax_calculation_25)) $request->income_tax_calculation_25 = 0;
-            if(!isset($request->income_tax_calculation_30) || empty($request->income_tax_calculation_30)) $request->income_tax_calculation_30 = 0;
-            if(!isset($request->yearly_income_tax) || empty($request->yearly_income_tax)) $request->yearly_income_tax = 0;
-            if(!isset($request->monthly_income_tax) || empty($request->monthly_income_tax)) $request->monthly_income_tax = 0;
-            if(!isset($request->gross_income_per_month) || empty($request->gross_income_per_month)) $request->gross_income_per_month = 0;
-            if(!isset($request->less) || empty($request->less)) $request->less = 0;
-            if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
-
-            $temp->basic_salary         = str_replace(',', '', $request->basic_salary);
-            $temp->salary               = str_replace(',', '', $request->salary);
-            $temp->call_allow           = str_replace(',', '',$request->call_allow);
-            $temp->bonus                = str_replace(',', '', $request->bonus);
-            $temp->gross_income         = str_replace(',', '', $request->gross_income); 
-            $temp->burden_allow         = str_replace(',', '', $request->burden_allow);
-            $temp->total_deduction      = str_replace(',', '', $request->total_deduction);
-            $temp->net_yearly_income    = str_replace(',', '', $request->net_yearly_income);
-            $temp->untaxable_income     = str_replace(',', '', $request->untaxable_income);
-            $temp->taxable_yearly_income        = str_replace(',', '', $request->taxable_yearly_income);
-            $temp->income_tax_calculation_5     = str_replace(',', '', $request->income_tax_calculation_5); 
-            $temp->income_tax_calculation_15    = str_replace(',', '', $request->income_tax_calculation_15); 
-            $temp->income_tax_calculation_25    = str_replace(',', '', $request->income_tax_calculation_25); 
-            $temp->income_tax_calculation_30    = str_replace(',', '', $request->income_tax_calculation_30); 
-            $temp->yearly_income_tax            = str_replace(',', '', $request->yearly_income_tax);
-            $temp->monthly_income_tax           = str_replace(',', '', $request->monthly_income_tax);
-            $temp->less                         = str_replace(',', '', $request->less);
-            $temp->thp                          = str_replace(',', '', $request->thp);
-            $temp->transport_allowance              = str_replace(',', '', $request->transport_allowance);
-            $temp->homebase_allowance               = str_replace(',', '',$request->homebase_allowance);
-            $temp->laptop_allowance                 = str_replace(',', '',$request->laptop_allowance);
-            $temp->ot_normal_hours                  = str_replace(',', '',$request->ot_normal_hours);
-            $temp->ot_multiple_hours                = str_replace(',', '',$request->ot_multiple_hours);
-            $temp->other_income                     = str_replace(',', '',$request->other_income);
-            $temp->remark_other_income              = $request->remark_other_income;
-            $temp->medical_claim                    = str_replace(',', '',$request->medical_claim);
-            $temp->remark                           = $request->remark;
-            $temp->other_deduction                  = str_replace(',', '',$request->other_deduction);
-            $temp->remark_other_deduction           = $request->remark_other_deduction;
-            $temp->gross_income_per_month           = str_replace(',', '',$request->gross_income_per_month);
-            $temp->overtime_claim                   = str_replace(',', '',$request->overtime_claim);
-            $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
-            $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
-            $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
-            $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
-            $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
-            $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
-            $temp->save(); 
-
-            $temp = new PayrollHistory();
-            $temp->payroll_id            = $id;
-            $temp->user_id              = $request->user_id;
-            $temp->basic_salary         = str_replace(',', '', $request->basic_salary);
-            $temp->salary               = str_replace(',', '', $request->salary);
-            $temp->call_allow           = str_replace(',', '',$request->call_allow);
-            $temp->bonus                = str_replace(',', '', $request->bonus);
-            $temp->gross_income         = str_replace(',', '', $request->gross_income); 
-            $temp->burden_allow         = str_replace(',', '', $request->burden_allow);
-            $temp->total_deduction      = str_replace(',', '', $request->total_deduction);
-            $temp->net_yearly_income    = str_replace(',', '', $request->net_yearly_income);
-            $temp->untaxable_income     = str_replace(',', '', $request->untaxable_income);
-            $temp->taxable_yearly_income        = str_replace(',', '', $request->taxable_yearly_income);
-            $temp->income_tax_calculation_5     = str_replace(',', '', $request->income_tax_calculation_5); 
-            $temp->income_tax_calculation_15    = str_replace(',', '', $request->income_tax_calculation_15); 
-            $temp->income_tax_calculation_25    = str_replace(',', '', $request->income_tax_calculation_25); 
-            $temp->income_tax_calculation_30    = str_replace(',', '', $request->income_tax_calculation_30); 
-            $temp->yearly_income_tax            = str_replace(',', '', $request->yearly_income_tax);
-            $temp->monthly_income_tax           = str_replace(',', '', $request->monthly_income_tax);
-            $temp->less                         = str_replace(',', '', $request->less);
-            $temp->thp                          = str_replace(',', '', $request->thp);
-            $temp->transport_allowance              = str_replace(',', '', $request->transport_allowance);
-            $temp->homebase_allowance               = str_replace(',', '',$request->homebase_allowance);
-            $temp->laptop_allowance                 = str_replace(',', '',$request->laptop_allowance);
-            $temp->ot_normal_hours                  = str_replace(',', '',$request->ot_normal_hours);
-            $temp->ot_multiple_hours                = str_replace(',', '',$request->ot_multiple_hours);
-            $temp->other_income                     = str_replace(',', '',$request->other_income);
-            $temp->remark_other_income              = $request->remark_other_income;
-            $temp->medical_claim                    = str_replace(',', '',$request->medical_claim);
-            $temp->remark                           = $request->remark;
-            $temp->other_deduction                  = str_replace(',', '',$request->other_deduction);
-            $temp->remark_other_deduction           = $request->remark_other_deduction;
-            $temp->gross_income_per_month           = str_replace(',', '',$request->gross_income_per_month);
-            $temp->overtime_claim                   = str_replace(',', '',$request->overtime_claim);
-            $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
-            $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
-            $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
-            $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
-            $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
-            $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
-            $temp->save();
+        $temp->salary               = str_replace(',', '', $request->salary);
+        $temp->thp                          = str_replace(',', '', $request->thp);
+        $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
+        $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
+        $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
+        $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
+        $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
+        $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
+        $temp->save(); 
+        
+        $temp = new PayrollHistory();
+        $temp->payroll_id            = $id;
+        $temp->user_id              = $request->user_id;
+        $temp->salary               = str_replace(',', '', $request->salary);
+        $temp->total_deduction      = str_replace(',', '', $request->total_deduction);
+        $temp->thp                          = str_replace(',', '', $request->thp);
+        $temp->bpjs_ketenagakerjaan             = str_replace(',', '',$request->bpjs_ketenagakerjaan);
+        $temp->bpjs_kesehatan                   = str_replace(',', '',$request->bpjs_kesehatan);
+        $temp->bpjs_pensiun                     = str_replace(',', '',$request->bpjs_pensiun);
+        $temp->bpjs_ketenagakerjaan2            = str_replace(',', '',$request->bpjs_ketenagakerjaan2);
+        $temp->bpjs_kesehatan2                  = str_replace(',', '',$request->bpjs_kesehatan2);
+        $temp->bpjs_pensiun2                    = str_replace(',', '',$request->bpjs_pensiun2);
+        $temp->save();
 
         return redirect()->route('administrator.payroll.index')->with('message-success', 'Data successfully saved !');
     }
@@ -424,47 +360,53 @@ class PayrollController extends Controller
 
             if($payroll)
             {
-                $params[$k]['Basic Salary']                     = $payroll->basic_salary;
-                $params[$k]['Actual Salary']                    = $payroll->salary;
-                $params[$k]['Call Allowance']                   = $payroll->call_allow;
-                $params[$k]['Yearly Bonus, THR or others']      = $payroll->bonus;
-                $params[$k]['Transport Allowance']              = $payroll->transport_allowance;
-                $params[$k]['Homebase Allowance']               = $payroll->homebase_allowance;
-                $params[$k]['Laptop Allowance']                 = $payroll->laptop_allowance;
-                $params[$k]['OT Normal Hours']                  = $payroll->ot_normal_hours;
-                $params[$k]['OT Multiple Hours']                = $payroll->ot_multiple_hours;
-                $params[$k]['Other Income']                     = $payroll->other_income;
-                $params[$k]['Remark Other Income']              = $payroll->remark_other_income;
-                $params[$k]['Medical Claim']                    = $payroll->medical_claim;
-                $params[$k]['Remark']                           = $payroll->remark;
-                $params[$k]['PPh21']                            = $payroll->monthly_income_tax;
-                $params[$k]['Other Deduction']                  = $payroll->other_deduction;
-                $params[$k]['RemarkOther Deduction']            = $payroll->remark_other_deduction;
+                $params[$k]['Salary']                    = $payroll->salary;
+                
+                foreach(PayrollEarnings::all() as $item)
+                {   
+                    $earning = PayrollEarningsEmployee::where('payroll_id', $item->id)->where('payroll_earning_id', $item->id)->first();
+                    if($earning) 
+                    {
+                        $earning = number_format($earning->nominal);
+                    }
+                    else
+                        $earning = 0;
+
+                    $params[$k][$item->title] = $earning;
+                }
+
+                // earnings
+                foreach(PayrollDeductions::all() as $item)
+                {   
+                    $deduction = PayrollDeductionsEmployee::where('payroll_id', $item->id)->where('payroll_deduction_id', $item->id)->first();
+                    if($deduction) 
+                    {
+                        $deduction = number_format($deduction->nominal);
+                    }
+                    else
+                        $deduction = 0;
+
+                    $params[$k][$item->title] = $deduction;
+                }
             }
             else
             {
-                $params[$k]['Basic Salary']                     = 0;
-                $params[$k]['Actual Salary']                    = 0;
-                $params[$k]['% JKK (Accident) + JK (Death)']    = 0;
-                $params[$k]['Call Allowance']                   = 0;
-                $params[$k]['Yearly Bonus, THR or others']      = 0;
-                $params[$k]['Transport Allowance']              = "";
-                $params[$k]['Homebase Allowance']               = "";
-                $params[$k]['Laptop Allowance']                 = "";
-                $params[$k]['OT Normal Hours']                  = "";
-                $params[$k]['OT Multiple Hours']                = "";
-                $params[$k]['Other Income']                     = "";
-                $params[$k]['Remark Other Income']              = "";
-                $params[$k]['Medical Claim']                    = "";
-                $params[$k]['Remark']                           = "";
-                $params[$k]['PPh21']                            = "";
-                $params[$k]['Other Deduction']                  = "";
-                $params[$k]['RemarkOther Deduction']            = "";
+                $params[$k]['Salary']                     = 0;
+                foreach(PayrollEarnings::all() as $item)
+                {   
+                    $params[$k][$item->title] = 0;
+                }
+
+                // earnings
+                foreach(PayrollDeductions::all() as $item)
+                {   
+                    $params[$k][$item->title] = 0;
+                }
             }
         }
 
-        return \Excel::create('datapayroll',  function($excel) use($params){
-              $excel->sheet('mysheet',  function($sheet) use($params){
+        return \Excel::create('Payroll-Template-'. date('Y-m-d'),  function($excel) use($params){
+              $excel->sheet('Payroll',  function($sheet) use($params){
                 $sheet->fromArray($params);
               });
         })->download('xls');
@@ -500,15 +442,13 @@ class PayrollController extends Controller
             $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
             $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
 
-            $bpjs_ketenagakerjaan_persen = 4.24;
-            $bpjs_ketenagakerjaan = ($item->salary * $bpjs_ketenagakerjaan_persen / 100);
-            $bpjs_ketenagakerjaan2_persen = 2;
-            $bpjs_ketenagakerjaan2 = ($item->salary * $bpjs_ketenagakerjaan2_persen / 100);
+            $bpjs_ketenagakerjaan = ($item->salary * get_setting('bpjs_ketenagakerjaan_company') / 100);
+            $bpjs_ketenagakerjaan2 = ($item->salary * get_setting('bpjs_ketenagakerjaan_employee') / 100);
 
             $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
-            $bpjs_kesehatan_persen  = 4;
-            $bpjs_kesehatan2_persen = 1;
+            $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
+            $bpjs_kesehatan2_persen = get_setting('bpjs_kesehatan_employee');
 
             if($item->salary <= $bpjs_kesehatan_batas)
             {
@@ -528,10 +468,8 @@ class PayrollController extends Controller
                 $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
             }
 
-            $bpjs_pensiun         = 0;
-            $bpjs_pensiun2        = 0;
-            $bpjs_pensiun_persen  = 2;
-            $bpjs_pensiun2_persen = 1;
+            $bpjs_pensiun_persen  = get_setting('bpjs_pensiun_company');
+            $bpjs_pensiun2_persen = get_setting('bpjs_pensiun_employee');
 
             if($item->salary <= $bpjs_pensiunan_batas)
             {
@@ -551,18 +489,43 @@ class PayrollController extends Controller
                 $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
             }
 
-            $overtime_claim = $item->ot_multiple_hours / 173 * $item->salary;
-            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan + $bpjs_pensiun;
-            $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2;
+            $bpjspenambahan     = $bpjs_ketenagakerjaan + $bpjs_kesehatan + $bpjs_pensiun;
+            $bpjspengurangan    = $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2;
 
-            $gross_income = ($item->salary + $item->call_allow + $item->transport_allowance + $item->homebase_allowance + $item->laptop_allowance + $overtime_claim + $bpjspenambahan) * 12 + $item->bonus;
+            $gross_income = $item->salary + $bpjspenambahan;
+            
+            $earnings = 0;
+            if(isset($item->payrollEarningsEmployee))
+            {
+                foreach($item->payrollEarningsEmployee as $i)
+                {
+                    if(isset($i->payrollEarnings->title))
+                    {
+                        $earnings += $i->nominal;
+                    }
+                }
+            }
 
-            $gross_income2 = ($item->salary + $item->call_allow + $item->transport_allowance + $item->homebase_allowance + $item->laptop_allowance + $overtime_claim + $bpjspenambahan + $item->bonus) - $bpjspengurangan;
+            $deductions = 0;
+            if(isset($item->payrollDeductionsEmployee))
+            {
+                foreach($item->payrollDeductionsEmployee as $i)
+                {
+                    if(isset($i->payrollDeductions->title))
+                    {
+                        $deductions += $i->nominal;
+                    }
+                }
+            }
 
+            $gross_income2 = $earnings;
+            $gross_income2 = $gross_income2 - $bpjspengurangan;
 
-           // burdern allowance
-            $burden_allow = 5 * $gross_income2 / 100;
-            $biaya_jabatan_bulan = $biaya_jabatan / 12;
+            $gross_income = $gross_income + $earnings * 12;
+
+            // burdern allowance
+            $burden_allow           = 5 * $gross_income2 / 100;
+            $biaya_jabatan_bulan    = $biaya_jabatan / 12;
             if($burden_allow > $biaya_jabatan_bulan)
             {
                 $burden_allow = $biaya_jabatan_bulan;
@@ -571,12 +534,10 @@ class PayrollController extends Controller
             $total_deduction = ($bpjspengurangan * 12) + ($burden_allow*12);
             $net_yearly_income          = $gross_income - $total_deduction;
             $untaxable_income = 0;
-
-            
             
             if(empty($item->user)) continue;
-            if(empty($item->salary))continue;
 
+            if(empty($item->salary))continue;
 
             if($item->user->marital_status == 'Bujangan/Wanita')
             {
@@ -645,116 +606,50 @@ class PayrollController extends Controller
                 $income_tax_calculation_30 = 0.35 * ($taxable_yearly_income - 500000000);
             }
 
-           $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax = $yearly_income_tax / 12;
-            $gross_income_per_month       = $gross_income / 12;
+            $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
+            $monthly_income_tax             = $yearly_income_tax / 12;
+            $gross_income_per_month         = $gross_income / 12;
 
             $less               = $bpjspengurangan + $monthly_income_tax; 
+            $gross_thp          = $item->salary + $earnings;
+            $thp                = $gross_thp - $less;
 
-             $gross_thp = ($item->salary + $item->call_allow + $item->transport_allowance + $item->homebase_allowance + $item->laptop_allowance + $item->other_income + $overtime_claim + $item->other_income+ $item->medical_claim+ $item->bonus);
-
-            $thp                = $gross_thp - $less - $item->other_deduction;
-
-        if(!isset($item->basic_salary) || empty($item->basic_salary)) $item->basic_salary = 0;
-        if(!isset($item->salary) || empty($item->salary)) $item->salary = 0;
-        if(!isset($item->call_allow) || empty($item->call_allow)) $item->call_allow = 0;
-        if(!isset($item->bonus) || empty($item->bonus)) $item->bonus = 0;
-        if(!isset($gross_income) || empty($gross_income)) $gross_income = 0;
-        if(!isset($burden_allow) || empty($burden_allow)) $burden_allow = 0;
-        if(!isset($total_deduction) || empty($total_deduction)) $total_deduction = 0;
-        if(!isset($net_yearly_income) || empty($net_yearly_income)) $net_yearly_income = 0;
-        if(!isset($untaxable_income) || empty($untaxable_income)) $untaxable_income = 0;
-        if(!isset($taxable_yearly_income) || empty($taxable_yearly_income)) $taxable_yearly_income = 0;
-        if(!isset($income_tax_calculation_5) || empty($income_tax_calculation_5)) $income_tax_calculation_5 = 0;
-        if(!isset($income_tax_calculation_15) || empty($income_tax_calculation_15)) $income_tax_calculation_15 = 0;
-        if(!isset($income_tax_calculation_25) || empty($income_tax_calculation_25)) $income_tax_calculation_25 = 0;
-        if(!isset($income_tax_calculation_30) || empty($income_tax_calculation_30)) $income_tax_calculation_30 = 0;
-        if(!isset($yearly_income_tax) || empty($yearly_income_tax)) $yearly_income_tax = 0;
-        if(!isset($monthly_income_tax) || empty($monthly_income_tax)) $monthly_income_tax = 0;
-        if(!isset($less) || empty($less)) $less = 0;
-        if(!isset($thp) || empty($thp)) $thp = 0;
-
-        if(!isset($item->transport_allowance) || empty($item->transport_allowance)) $item->transport_allowance = 0;
-        if(!isset($item->homebase_allowance) || empty($item->homebase_allowance)) $item->homebase_allowance = 0;
-        if(!isset($item->laptop_allowance) || empty($item->laptop_allowance)) $item->laptop_allowance = 0;
-        if(!isset($item->ot_normal_hours) || empty($item->ot_normal_hours)) $item->ot_normal_hours = 0;
-        if(!isset($item->ot_multiple_hours) || empty($item->ot_multiple_hours)) $item->ot_multiple_hours = 0;
-        if(!isset($item->other_income) || empty($item->other_income)) $item->other_income = 0;
-        if(!isset($item->medical_claim) || empty($item->medical_claim)) $item->medical_claim = 0;
-        if(!isset($item->other_deduction) || empty($item->other_deduction)) $item->other_deduction = 0;
-        if(!isset($gross_income_per_month) || empty($gross_income_per_month)) $gross_income_per_month = 0;
-        if(!isset($overtime_claim) || empty($overtime_claim)) $overtime_claim = 0;
-        if(!isset($bpjs_ketenagakerjaan) || empty($bpjs_ketenagakerjaan)) $bpjs_ketenagakerjaan = 0;
-        if(!isset($bpjs_kesehatan) || empty($bpjs_kesehatan)) $bpjs_kesehatan = 0;
-        if(!isset($bpjs_pensiun) || empty($bpjs_pensiun)) $bpjs_pensiun = 0;
-        if(!isset($bpjs_ketenagakerjaan2) || empty($bpjs_ketenagakerjaan2)) $bpjs_ketenagakerjaan2 = 0;
-        if(!isset($bpjs_kesehatan2) || empty($bpjs_kesehatan2)) $bpjs_kesehatan2 = 0;
-        if(!isset($bpjs_pensiun2) || empty($bpjs_pensiun2)) $bpjs_pensiun2 = 0;
-        if(!isset($remark_other_income) || empty($remark_other_income)) $remark_other_income = "";
-        
-
-            $temp->gross_income         = $gross_income; 
-            $temp->burden_allow         = $burden_allow;
-            $temp->total_deduction      = $total_deduction;
-            $temp->net_yearly_income    = $net_yearly_income;
-            $temp->untaxable_income     = $untaxable_income;
-            $temp->taxable_yearly_income        = $taxable_yearly_income;
-            $temp->income_tax_calculation_5     = $income_tax_calculation_5; 
-            $temp->income_tax_calculation_15    = $income_tax_calculation_15; 
-            $temp->income_tax_calculation_25    = $income_tax_calculation_25; 
-            $temp->income_tax_calculation_30    = $income_tax_calculation_30; 
-            $temp->yearly_income_tax            = $yearly_income_tax;
-            $temp->monthly_income_tax           = $monthly_income_tax;
-            $temp->gross_income_per_month       = $gross_income_per_month;
-            $temp->less                         = $less;
+            if(!isset($item->salary) || empty($item->salary)) $item->salary = 0;
+            if(!isset($thp) || empty($thp)) $thp = 0;
+            if(!isset($bpjs_ketenagakerjaan) || empty($bpjs_ketenagakerjaan)) $bpjs_ketenagakerjaan = 0;
+            if(!isset($bpjs_kesehatan) || empty($bpjs_kesehatan)) $bpjs_kesehatan = 0;
+            if(!isset($bpjs_pensiun) || empty($bpjs_pensiun)) $bpjs_pensiun = 0;
+            if(!isset($bpjs_ketenagakerjaan2) || empty($bpjs_ketenagakerjaan2)) $bpjs_ketenagakerjaan2 = 0;
+            if(!isset($bpjs_kesehatan2) || empty($bpjs_kesehatan2)) $bpjs_kesehatan2 = 0;
+            if(!isset($bpjs_pensiun2) || empty($bpjs_pensiun2)) $bpjs_pensiun2 = 0;
+            
+            $temp->total_deduction              = $total_deduction + $deductions; 
+            $temp->total_earnings               = $gross_thp;
             $temp->thp                          = $thp;
+            $temp->pph21                        = $monthly_income_tax;
             $temp->is_calculate                 = 1;
-            $temp->overtime_claim               = $overtime_claim;
-            $temp->bpjs_ketenagakerjaan         = $bpjs_ketenagakerjaan;
-            $temp->bpjs_kesehatan               = $bpjs_kesehatan;
-            $temp->bpjs_pensiun                 = $bpjs_pensiun;
-            $temp->bpjs_ketenagakerjaan2        = $bpjs_ketenagakerjaan2;
-            $temp->bpjs_kesehatan2              = $bpjs_kesehatan2;
-            $temp->bpjs_pensiun2                = $bpjs_pensiun2;
-            $temp->save();
+            $temp->bpjs_ketenagakerjaan_company = $bpjs_ketenagakerjaan;
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan;
+            $temp->bpjs_pensiun_company         = $bpjs_pensiun;
+            $temp->bpjs_ketenagakerjaan_employee= $bpjs_ketenagakerjaan2;
+            $temp->bpjs_kesehatan_employee      = $bpjs_kesehatan2;
+            $temp->bpjs_pensiun_employee        = $bpjs_pensiun2;
+            $temp->bpjs_ketenagakerjaan         = get_setting('bpjs_ketenagakerjaan_company');
+            $temp->bpjs_kesehatan               = get_setting('bpjs_kesehatan_company');
+            $temp->bpjs_pensiun                 = get_setting('bpjs_pensiun_company');
+            $temp->bpjs_ketenagakerjaan2        = get_setting('bpjs_ketenagakerjaan_employee');
+            $temp->bpjs_kesehatan2              = get_setting('bpjs_kesehatan_employee');
+            $temp->bpjs_pensiun2                = get_setting('bpjs_pensiun_employee');
+            $temp->save(); 
 
             $user_id        = $temp->user_id;
             $payroll_id     = $temp->id;
 
-            $temp = new PayrollHistory();
-            $temp->payroll_id            = $payroll_id;
-            $temp->user_id              = $user_id;
-            $temp->salary               = str_replace(',', '', $item->salary);
-            $temp->call_allow           = $item->call_allow;
-            $temp->bonus                = str_replace(',', '', $item->bonus);
-            $temp->gross_income         = str_replace(',', '', $gross_income); 
-            $temp->burden_allow         = str_replace(',', '', $burden_allow);
-            $temp->total_deduction      = str_replace(',', '', $total_deduction);
-            $temp->net_yearly_income    = str_replace(',', '', $net_yearly_income);
-            $temp->untaxable_income     = str_replace(',', '', $untaxable_income);
-            $temp->taxable_yearly_income        = str_replace(',', '', $taxable_yearly_income);
-            $temp->income_tax_calculation_5     = str_replace(',', '', $income_tax_calculation_5); 
-            $temp->income_tax_calculation_15    = str_replace(',', '', $income_tax_calculation_15); 
-            $temp->income_tax_calculation_25    = str_replace(',', '', $income_tax_calculation_25); 
-            $temp->income_tax_calculation_30    = str_replace(',', '', $income_tax_calculation_30); 
-            $temp->yearly_income_tax            = str_replace(',', '', $yearly_income_tax);
-            $temp->monthly_income_tax           = str_replace(',', '', $monthly_income_tax);
-            $temp->basic_salary                 = str_replace(',', '', $item->basic_salary);
-            $temp->less                         = str_replace(',', '', $less);
-            $temp->thp                          = str_replace(',', '', $thp);
-            $temp->overtime_claim               = $overtime_claim;
-            $temp->transport_allowance              = str_replace(',', '',$item->transport_allowance);
-            $temp->homebase_allowance               = str_replace(',', '',$item->homebase_allowance);
-            $temp->laptop_allowance                 = str_replace(',', '',$item->laptop_allowance);
-            $temp->ot_normal_hours                  = str_replace(',', '',$item->ot_normal_hours);
-            $temp->ot_multiple_hours                = str_replace(',', '',$item->ot_multiple_hours);
-            $temp->other_income                     = str_replace(',', '',$item->other_income);
-            $temp->remark_other_income              = $item->remark_other_income;
-            $temp->medical_claim                    = str_replace(',', '',$item->medical_claim);
-            $temp->remark                           = $item->remark;
-            $temp->other_deduction                  = str_replace(',', '',$item->other_deduction);
-            $temp->remark_other_deduction           = $item->remark_other_deduction;
-            $temp->gross_income_per_month           = str_replace(',', '',$item->gross_income_per_month);
+            $temp                               = new PayrollHistory();
+            $temp->payroll_id                   = $payroll_id;
+            $temp->user_id                      = $user_id;
+            $temp->salary                       = replace_idr($item->salary);
+            $temp->thp                          = replace_idr($thp);
             $temp->bpjs_ketenagakerjaan         = $bpjs_ketenagakerjaan;
             $temp->bpjs_kesehatan               = $bpjs_kesehatan;
             $temp->bpjs_pensiun                 = $bpjs_pensiun;
@@ -795,37 +690,23 @@ class PayrollController extends Controller
             // delete all table temp
             foreach($rows as $key => $row)
             {
+                $count_row = 4;
             	if($key ==0) continue;
 
                 $nik                    = $row[1];
-                $basic_salary           = $row[3]; 
-                $actual_salary          = $row[4]; 
-                $call_allow             = $row[5];
-                $bonus                  = $row[6];
-                $transport_allowance        = $row[7];
-                $homebase_allowance         = $row[8];
-                $laptop_allowance           = $row[9];
-                $ot_normal_hours            = $row[10];
-                $ot_multiple_hours          = $row[11];
-                $other_income               = $row[12];
-                $remark_other_income        = $row[13];
-                $medical_claim              = $row[14];
-                $remark                     = $row[15];
-                $monthly_income_tax         = $row[16];
-                $other_deduction            = $row[17];
-                $remark_other_deduction     = $row[18];
-
                 // cek user 
                 $user = User::where('nik', $nik)->first();
                 if($user)
                 {   
                     // cek exit payrol user
                     $payroll = Payroll::where('user_id', $user->id)->first();
+                    $new = 0;
                     if(!$payroll)
                     {
                         $payroll            = new Payroll();
                         $payroll->user_id   = $user->id;
                         $payroll->is_calculate  = 0;
+                        $new = 1;
                     }
 
                     $is_calculate = 1;
@@ -834,43 +715,80 @@ class PayrollController extends Controller
                     {
                         $is_calculate   = 0;
                     }
-                    if($payroll->salary != $actual_salary) 
-                    {
-                        $is_calculate   = 0;
-                        $payroll->salary= $actual_salary;
-                    }
-
-                    if($payroll->basic_salary != $basic_salary) 
-                    {
-                        $is_calculate   = 0;
-                        $payroll->basic_salary= $basic_salary;
-                    }
-
-                    if($payroll->call_allow != $call_allow) 
-                    {
-                        $is_calculate       = 0;
-                        $payroll->call_allow= $call_allow;
-                    }
-
-                    if($payroll->bonus != $bonus) 
-                    {
-                        $is_calculate   = 0;
-                        $payroll->bonus = $bonus;
-                    }
-                    
-                    $payroll->is_calculate               = $is_calculate;
-                    $payroll->transport_allowance        = $transport_allowance;
-                    $payroll->homebase_allowance         = $homebase_allowance;
-                    $payroll->laptop_allowance           = $laptop_allowance;
-                    $payroll->ot_normal_hours            = $ot_normal_hours;
-                    $payroll->ot_multiple_hours          = $ot_multiple_hours;
-                    $payroll->remark_other_income        = $remark_other_income;
-                    $payroll->medical_claim              = $medical_claim;
-                    $payroll->remark                     = $remark;
-                    $payroll->monthly_income_tax         = $monthly_income_tax;
-                    $payroll->other_deduction            = $other_deduction;
-                    $payroll->remark_other_deduction     = $remark_other_deduction;
+                    $payroll->salary        = $row[3];
+                    $payroll->is_calculate  = $is_calculate;
                     $payroll->save();
+
+                    // jika payroll belum ada insert baru
+                    if($new==1)
+                    {
+                        foreach(PayrollEarnings::all() as $item)
+                        {   
+                            if(!empty($row[$count_row]))
+                            {
+                                $earning                        = new PayrollEarningsEmployee();
+                                $earning->payroll_earning_id    = $item->id;
+                                $earning->payroll_id            = $payroll->id;
+                                $earning->nominal               = $row[$count_row];
+                                $earning->save();
+                            }
+                            $count_row++;
+                        }
+
+                        foreach(PayrollDeductions::all() as $item)
+                        {   
+                            if(!empty($row[$count_row]))
+                            {
+                                $earning                        = new PayrollDeductionsEmployee();
+                                $earning->payroll_deduction_id  = $item->id;
+                                $earning->payroll_id            = $payroll->id;
+                                $earning->nominal               = $row[$count_row];
+                                $earning->save();
+                            }
+                            $count_row++;
+                        }
+                    }
+                    if($new==0)
+                    {
+                        foreach(PayrollEarnings::all() as $i)
+                        {   
+                            if(!empty($row[$count_row]))
+                            {
+                                $earning = PayrollEarningsEmployee::where('payroll_id', $payroll->id)->where('payroll_earning_id', $i->id)->first();
+                                if(!$earning) 
+                                {
+                                   $earning = new PayrollEarningsEmployee(); 
+                                   $earning->payroll_id = $payroll->id;
+                                   $earning->payroll_earning_id = $i->id;
+                                }
+
+                                $earning->nominal = $row[$count_row];
+                                $earning->save();
+
+                            }
+                            $count_row++;
+                        }
+
+                        // earnings
+                        foreach(PayrollDeductions::all() as $i)
+                        {   
+                            if(!empty($row[$count_row]))
+                            {
+                                $earning = PayrollDeductionsEmployee::where('payroll_id', $payroll->id)->where('payroll_deduction_id', $i->id)->first();
+                                if(!$earning) 
+                                {
+                                   $earning = new PayrollDeductionsEmployee(); 
+                                   $earning->payroll_id = $payroll->id;
+                                   $earning->payroll_deduction_id = $i->id;
+                                }
+                                
+                                $earning->nominal = $row[$count_row];
+                                $earning->save();
+
+                            }
+                            $count_row++;
+                        }
+                    }
                 }
 	        }
 

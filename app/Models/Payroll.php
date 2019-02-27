@@ -16,4 +16,22 @@ class Payroll extends Model
     {
     	return $this->hasOne('\App\User', 'id', 'user_id');
     }
+
+    /**
+     * Earnings
+     * @return object
+     */
+    public function payrollEarningsEmployee()
+    {
+    	return $this->hasMany('App\Models\PayrollEarningsEmployee', 'payroll_id', 'id');
+    }
+
+    /**
+     * Deductions
+     * @return object
+     */
+    public function payrollDeductionsEmployee()
+    {
+    	return $this->hasMany('App\Models\PayrollDeductionsEmployee', 'payroll_id', 'id');
+    }
 }
