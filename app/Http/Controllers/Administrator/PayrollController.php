@@ -574,7 +574,7 @@ class PayrollController extends Controller
                 }
             }
 
-            $gross_income = ($item->salary + $earnings + $bpjspenambahan) * 12 + $request->bonus;
+            $gross_income = ($item->salary + $earnings + $bpjspenambahan) * 12 + $item->bonus;
 
             $gross_income2 = ($item->salary + $earnings + $bpjspenambahan + $item->bonus) - $bpjspengurangan;
 
