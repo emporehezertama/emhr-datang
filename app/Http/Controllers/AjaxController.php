@@ -460,7 +460,9 @@ class AjaxController extends Controller
                 }
             }
             
-            $thp                = $gross_thp - $less - $deductions;
+            #$thp                = $gross_thp - $less - $deductions;
+            
+            $thp = ($request->salary + $request->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
 
             $params['gross_income']         = number_format($gross_income); 
             $params['burden_allow']         = number_format($burden_allow);

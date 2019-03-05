@@ -307,7 +307,7 @@
         var earnings    = [];
         var deductions  = [];
         var salary      = $("input[name='salary']").val();
-        var bonus       = $("input[name='bonus']").val();
+        var bonus       = $("input[name='bonus']").val() == "" ? 0 : $("input[name='bonus']").val();
 
         $("input[name='earning_nominal[]']").each(function(index, item){
             earnings.push($(this).val());
@@ -352,8 +352,8 @@
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
 
-                sum_earnings = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus.split('.').join(''));
-                sum_deductions = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
+                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus.split('.').join(''));
+                sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);
                 $("input[name='total_deductions']").val(sum_deductions);

@@ -337,7 +337,7 @@
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
                 $("input[name='thp']").val(data.thp);
                 $("input[name='pph21']").val(data.monthly_income_tax);
-                
+
                 $('.bpjs_ketenagakerjaan_company').val(data.bpjs_ketenagakerjaan);
                 $('.bpjs_kesehatan_company').val(data.bpjs_kesehatan);
                 $('.bpjs_pensiun_company').val(data.bpjs_pensiun);
@@ -347,7 +347,7 @@
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
                 
                 sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus);
-                sum_deductions  = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
+                sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);
                 $("input[name='total_deductions']").val(sum_deductions);
