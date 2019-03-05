@@ -257,6 +257,7 @@ function get_cuti_user($cuti_id, $user_id, $field)
 {
 	$cuti = \App\Models\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();
 
+	$jenis_cuti = \App\Models\Cuti::where('id', $cuti_id)->first();
 	if($cuti){
 		if(isset($cuti->$field))
 		{
@@ -264,7 +265,8 @@ function get_cuti_user($cuti_id, $user_id, $field)
 		}
 	}
 	else
-		return 0;
+		return $jenis_cuti->kuota;
+
 }
 
 /**

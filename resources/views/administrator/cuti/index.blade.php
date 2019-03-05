@@ -91,18 +91,16 @@
                                                 <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancellation</label>
                                             @else
                                                 @if($item->status == 1)
-                                                    <a onclick="detail_approval_cuti('cuti', {{ $item->id }})"> 
                                                     @if(empty($item->approved_hrd))
-                                                        <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                        <label  onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</label>
                                                     @endif
                                                     @if($item->approved_hrd == 1)
-                                                        <label class="btn btn-success btn-xs">Approved</label>
+                                                        <label  onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
                                                     @endif
                                                 @endif
                                                 @if($item->status == 2)
-                                                    <label class="btn btn-success btn-xs">Approved</label>
+                                                    <label  onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
                                                 @endif
-                                            </a>
                                             @endif
                                             <!--
                                                 <a onclick="detail_approval_cuti('cuti', {{ $item->id }})"> 

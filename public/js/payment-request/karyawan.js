@@ -96,11 +96,11 @@ $('#submit_payment').click(function(){
     // validate form 
     if(!atasan || !tujuan || !jenis_transaksi || !payment_method || !validate_form)
     {
-        bootbox.alert('Form harus dilengkapi semua !');
+        bootbox.alert('Form must be completed!');
         return false;
     }
 
-    bootbox.confirm("Apakah anda ingin Proses Payment Request ini ?", function(result) {
+    bootbox.confirm("Do you want process this Payment Request?", function(result) {
         if(result)
         {
             $("#form_payment").submit();

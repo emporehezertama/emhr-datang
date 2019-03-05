@@ -369,7 +369,7 @@
 
     function confirm_loginas(name, url)
     {
-        bootbox.confirm("Login sebagai "+ name +" ? ", function(result){
+        bootbox.confirm("Login as "+ name +" ? ", function(result){
 
             if(result)
             {

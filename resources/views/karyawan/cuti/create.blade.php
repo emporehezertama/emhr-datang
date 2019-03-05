@@ -207,12 +207,13 @@
                                <th>LEAVE TYPE</th>
                                <th>LEAVE DURATION</th>
                                <th>PURPOSE</th>
+                               <th>STATUS</th>
                            </tr>
                        </thead> 
                        <tbody>
                         @foreach(list_cuti_user(Auth::user()->id) as $no => $item)
                         
-                        @if($item->status == 1 || $item->status == 3)
+                        @if($item->status == 1)
                             @continue
                         @endif
 
@@ -223,6 +224,7 @@
                            <td>{{ $item->total_cuti}}</td>
                            <!--<td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>-->
                            <td>{{ $item->keperluan }}</td>
+                           <td>{{$item->status}}</td>
                         </tr>
                         @endforeach
                         </tbody>

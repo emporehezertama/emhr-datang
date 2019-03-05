@@ -54,6 +54,8 @@ class ApprovalCutiController extends Controller
         $cuti->approve_direktur         = $request->status;
         $cuti->approve_direktur_noted   = $request->noted;
         $cuti->approve_direktur_date    = date('Y-m-d H:i:s');
+        $cuti->temp_sisa_cuti           = $cuti->temp_sisa_cuti - $cuti->total_cuti;
+        $cuti->temp_cuti_terpakai       = $cuti->total_cuti + $cuti->temp_cuti_terpakai;
         
         $params['data']     = $cuti;
 

@@ -63,7 +63,7 @@
                                 <label class="col-md-6">Position</label>
                                 <label class="col-md-6">Division / Departement</label>
                                 <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control jabatan" value="{{ $data->karyawan->nama_jabatan }}">
+                                    <input type="text" readonly="true" class="form-control jabatan" value="{{ empore_jabatan($item->user_id) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control department" value="{{ isset($data->karyawan->department->name) ? $data->karyawan->department->name ; '' }}">

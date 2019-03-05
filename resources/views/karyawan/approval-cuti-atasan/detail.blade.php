@@ -91,11 +91,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="col-md-12">Date of Leave</label>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <input type="text" class="form-control datepicker" value="{{ $data->tanggal_cuti_start }}" readonly="true" />
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5 p-l-0">
                                     <input type="text" class="form-control datepicker" value="{{ $data->tanggal_cuti_end }}" readonly="true">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" value="{{ $data->total_cuti }} Day's" readonly="true">
                                 </div>
                             </div>
                             <div class="form-group">

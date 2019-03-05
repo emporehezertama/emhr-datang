@@ -15,7 +15,7 @@
 		</tr>
 		<tr>
 			<th style="text-align: left;">Leave/Permit Duration </th>
-			<th style="text-align: left;"> : {{ $data->total_cuti }} Hari</th>
+			<th style="text-align: left;"> : {{ $data->total_cuti }} Day's</th>
 		</tr>
 		<tr>
 			<th style="text-align: left;">Purpose </th>

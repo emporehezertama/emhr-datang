@@ -35,7 +35,7 @@
                     <h3 class="box-title m-b-0">Manage Approval Payment Request</h3>
                     <br />
                     <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -61,6 +61,7 @@
                                         <td>{{ $item->transaction_type }}</td>
                                         <td>{{ $item->payment_method }}</td>
                                         <td>
+                                            <!--
                                             <a onclick="status_approval_payment_request({{ $item->id }})"> 
                                                 @if($item->is_approved_atasan === NULL)
                                                     <label class="btn btn-warning btn-xs">Waiting Approval</label>
@@ -72,15 +73,37 @@
                                                     <label class="btn btn-danger btn-xs">Reject</label>
                                                 @endif
                                             </a>
+-->
+                                            @if($item->status == 1)
+                                                @if($item->is_approved_atasan === NULL)
+                                                    <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @endif
+                                                
+                                                @if($item->is_approved_atasan === 0) 
+                                                    <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-danger btn-xs">Rejected</label>
+                                                @endif
+
+                                                @if($item->is_approved_atasan == 1)
+                                                    <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
+                                                @endif
+                                            @elseif($item->status == 2)
+                                                <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
+                                            @elseif($item->status ==3)
+                                                <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-danger btn-xs">Rejected</label>
+                                            @elseif($item->status ==4)
+                                                 <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancelled</label>
+                                            @endif
+
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>
-                                            @if(!cek_status_approval_user(Auth::user()->id, 'payment_request', $item->id))
+                                            @if(!cek_status_approval_user(Auth::user()->id, 'payment_request', $item->id)  and $item->status < 4)
                                                 <a href="{{ route('karyawan.approval.payment-request-atasan.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">proses <i class="fa fa-arrow-right"></i></button></a>
                                             @else
                                                 <a href="{{ route('karyawan.approval.payment-request-atasan.detail', ['id' => $item->id]) }}"> <button class="btn btn-default btn-xs m-r-5">detail <i class="fa fa-search-plus"></i></button></a>
                                             @endif
                                         </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>
