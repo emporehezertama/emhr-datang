@@ -127,6 +127,7 @@ class PayrollController extends Controller
                 $params[$k][$i->title] = $deduction;
             }
 
+            $params[$k]['Monthly Income Tax / PPh21']                                                           = $item->pph21;
             $params[$k]['BPJS Jaminan Kecelakaan Kerja (JKK) (Company) '. get_setting('bpjs_jkk_company').'%']  = $item->salary *  get_setting('bpjs_jkk_company') / 100;
             $params[$k]['BPJS Jaminan Kematian (JKM) (Company) '. get_setting('bpjs_jkm_company').'%']          = $item->salary *  get_setting('bpjs_jkm_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Company) '. get_setting('bpjs_jht_company').'%']          = $item->salary *  get_setting('bpjs_jht_company') / 100;
@@ -139,7 +140,6 @@ class PayrollController extends Controller
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Total Earnings']                       = $item->total_earnings;
             $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
-            #$params[$k]['Monthly Income Tax / PPh21']           = $item->pph21;
             #$params[$k]['GROSS INCOME PER MONTH']               = $item->gross_income_per_month;
             #$params[$k]['Less : Tax, BPJS (Monthly)']           = $item->less;
             $params[$k]['Take Home Pay']                        = $item->thp;
