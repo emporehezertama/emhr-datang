@@ -138,7 +138,7 @@ class PayrollController extends Controller
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Total Earnings']                       = $item->total_earnings;
-            #$params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
+            $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
             #$params[$k]['Monthly Income Tax / PPh21']           = $item->pph21;
             #$params[$k]['GROSS INCOME PER MONTH']               = $item->gross_income_per_month;
             #$params[$k]['Less : Tax, BPJS (Monthly)']           = $item->less;
@@ -705,6 +705,7 @@ class PayrollController extends Controller
             #$temp->bpjs_kesehatan_employee      = get_setting('bpjs_kesehatan_employee');
             $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
             $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+            $temp->yearly_income_tax            = $yearly_income_tax;   
             $temp->save(); 
 
             $user_id        = $temp->user_id;
