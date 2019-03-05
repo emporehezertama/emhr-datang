@@ -306,7 +306,7 @@ class AjaxController extends Controller
             {
                 $bpjs_kesehatan     = ($request->salary * $bpjs_kesehatan_persen / 100); 
             }
-            else
+            else 
             {
                 $bpjs_kesehatan     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_persen / 100);
             }

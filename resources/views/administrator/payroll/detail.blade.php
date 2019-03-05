@@ -105,11 +105,11 @@
                         <table class="table table-stripped" id="list_deductions">
                             <thead>
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Ketenagakerjaan</td>
+                                    <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td colspan="2">
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" class="form-control" />
+                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_jaminan_jht_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
                                         </div>
@@ -143,14 +143,14 @@
                                     <td colspan="2">
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" class="form-control" />
+                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_pensiun_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
                                         </div>
                                         <div class="col-md-8 p-r-0 p-l-0">
                                             <div class="input-group">
                                                 <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" readonly="true" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}" class="form-control bpjs_ketenagakerjaan_employee" />
+                                                <input type="text" readonly="true" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
                                             </div>
                                         </div>
                                     </td>
@@ -347,6 +347,10 @@
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
                 $("input[name='thp']").val(data.thp);
                 $("input[name='pph21']").val(data.monthly_income_tax);
+
+                $('.bpjs_ketenagakerjaan_employee').val(data.bpjs_ketenagakerjaan2);
+                $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
+                $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
 
                 sum_earnings = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus.split('.').join(''));
                 sum_deductions = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))

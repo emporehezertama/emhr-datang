@@ -337,6 +337,7 @@
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
                 $("input[name='thp']").val(data.thp);
                 $("input[name='pph21']").val(data.monthly_income_tax);
+                
                 $('.bpjs_ketenagakerjaan_company').val(data.bpjs_ketenagakerjaan);
                 $('.bpjs_kesehatan_company').val(data.bpjs_kesehatan);
                 $('.bpjs_pensiun_company').val(data.bpjs_pensiun);
