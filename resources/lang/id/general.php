@@ -4,5 +4,6 @@ return [
 	'add' => 'Tambah',
 	'message-data-saved-success' => 'Data berhasil disimpan',
 	'confirm-message-delete' => 'Hapus data ?',
-	'message-data-deleted' => 'Data berhasil hapus'
+	'message-data-deleted' => 'Data berhasil hapus',
+	'name' => 'Nama'
 ];

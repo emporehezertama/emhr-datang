@@ -78,7 +78,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>NIK</th>
-                                    <th>NAME</th>
+                                    <th>@lang('general.name')</th>
                                     <th>GENDER</th>
                                     <th>TELEPHONE</th>
                                     <th>EMAIL</th>
