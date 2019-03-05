@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnPayroll extends Migration
+class AddColumnPayroll6 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddColumnPayroll extends Migration
     public function up()
     {
         Schema::table('payroll', function (Blueprint $table) {
-            $table->integer('pph21')->nullable();
-            $table->integer('total_earnings')->nullable();
+            $table->integer('bonus')->nullable();
         });
     }
 

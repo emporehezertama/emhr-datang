@@ -52,11 +52,6 @@
                                 <th class="td-telepon"></th>
                             </tr>
                             <tr>
-                                <th>Monthly Income Tax / PPh21</th>
-                                <th>:</th>
-                                <th class="td-pph21"></th>
-                            </tr>
-                            <tr>
                                 <th>Take Home Pay</th>
                                 <th>:</th>
                                 <th class="td-thp"></th>
@@ -69,60 +64,19 @@
                         <h3>Earning</h3>
                         <table class="table table-stripped" id="list_earnings">
                             <thead>
+                                <input type="hidden" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_company') }}" class="form-control" />
+                                <input type="hidden" readonly="true" name="bpjs_ketenagakerjaan_company" class="form-control bpjs_ketenagakerjaan_company" />
+                                <input type="hidden" readonly="true" value="{{ get_setting('bpjs_kesehatan_company') }}" class="form-control" />
+                                <input type="hidden" readonly="true" name="bpjs_kesehatan_company" class="form-control bpjs_kesehatan_company" />
+                                <input type="hidden" readonly="true" value="{{ get_setting('bpjs_pensiun_company') }}" class="form-control" />
+                                <input type="hidden" readonly="true" name="bpjs_pensiun_company" class="form-control bpjs_pensiun_company" />
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Ketenagakerjaan</td>
-                                    <td>
-                                        <div class="col-md-4 p-l-0">
-                                            <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_company') }}" class="form-control" />
-                                                <span class="input-group-addon" id="basic-addon2">%</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" readonly="true" name="bpjs_ketenagakerjaan_company" class="form-control bpjs_ketenagakerjaan_company" />
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Kesehatan</td>
-                                    <td>
-                                        <div class="col-md-4 p-l-0">
-                                            <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_kesehatan_company') }}" class="form-control" />
-                                                <span class="input-group-addon" id="basic-addon2">%</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" readonly="true" name="bpjs_kesehatan_company" class="form-control bpjs_kesehatan_company" />
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Pensiun</td>
-                                    <td>
-                                        <div class="col-md-4 p-l-0">
-                                            <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_pensiun_company') }}" class="form-control" />
-                                                <span class="input-group-addon" id="basic-addon2">%</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" readonly="true" name="bpjs_pensiun_company" class="form-control bpjs_pensiun_company" />
-                                            </div>
-                                        </div>
-                                    </td> 
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">Sallary</td>
+                                    <td style="vertical-align: middle;">Salary</td>
                                     <td><input type="text" class="form-control price_format calculate" name="salary" placeholder="Rp. " /></td> 
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">Bonus / THR</td>
+                                    <td><input type="text" class="form-control price_format calculate" name="bonus" placeholder="Rp. " /></td> 
                                 </tr>
                             </thead>
                             <tfoot>
@@ -143,11 +97,11 @@
                         <table class="table table-stripped" id="list_deductions">
                             <thead>
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Ketenagakerjaan</td>
+                                    <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td>
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" class="form-control" />
+                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_jaminan_jht_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
                                         </div>
@@ -195,6 +149,11 @@
                                 </tr>
                             </thead>
                             <tfoot>
+                                <tr>
+                                    <th>Monthly Income Tax / PPh21</th>
+                                    <th>:</th>
+                                    <th class="td-pph21"></th>
+                                </tr>
                                 <tr>
                                     <th>Total Deduction</th>
                                     <th class="total_deductions"></th>
@@ -329,9 +288,15 @@
 
     function calculate()
     {
-        var earnings = [];
-        var deductions = [];
-        var salary = $("input[name='salary']").val();
+        var earnings    = [];
+        var deductions  = [];
+        var salary      = $("input[name='salary']").val();
+        var bonus       = $("input[name='bonus']").val();
+
+        if(salary == "")
+        {
+            return false;
+        }
 
         $("input[name='earning_nominal[]']").each(function(index, item){
             earnings.push($(this).val());
@@ -358,11 +323,12 @@
                 deductions,
                 salary : salary,
                 marital_status : marital_status,
+                bonus : bonus,
                 '_token' : $("meta[name='csrf-token']").attr('content')
             },
             success: function( data ) {
                 $('.td-thp').html(numberWithDot(data.thp));
-                $('.td-pph21').html(data.pph21);
+                $('.td-pph21').html(data.monthly_income_tax);
                 $("input[name='bpjs_ketenagakerjaan']").val(data.bpjs_ketenagakerjaan);
                 $("input[name='bpjs_ketenagakerjaan2']").val(data.bpjs_ketenagakerjaan2);
                 $("input[name='bpjs_kesehatan']").val(data.bpjs_kesehatan);
@@ -370,7 +336,7 @@
                 $("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
                 $("input[name='thp']").val(data.thp);
-                $("input[name='pph21']").val(data.pph21);
+                $("input[name='pph21']").val(data.monthly_income_tax);
                 $('.bpjs_ketenagakerjaan_company').val(data.bpjs_ketenagakerjaan);
                 $('.bpjs_kesehatan_company').val(data.bpjs_kesehatan);
                 $('.bpjs_pensiun_company').val(data.bpjs_pensiun);
@@ -379,7 +345,7 @@
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
                 
-                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(data.bpjs_ketenagakerjaan.split(',').join('')) + parseInt(data.bpjs_kesehatan.split(',').join('')) + parseInt(data.bpjs_pensiun.split(',').join(''));
+                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus);
                 sum_deductions  = sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);

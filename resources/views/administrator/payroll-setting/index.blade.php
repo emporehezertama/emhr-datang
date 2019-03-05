@@ -30,19 +30,28 @@
                                     {{ csrf_field() }}
                                     <div class="col-md-6 p-l-0">
                                         <div class="form-group">
-                                            <label class="col-md-4">BPJS Ketengakerjaan (Company) </label>
+                                            <label class="col-md-4">BPJS Jaminan Kecelakaan Kerja (JKK)  (Company) </label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
-                                                    <input type="number" name="setting[bpjs_ketenagakerjaan_company]" value="{{ get_setting('bpjs_ketenagakerjaan_company') }}" class="form-control" />
+                                                    <input type="number" name="setting[bpjs_jkk_company]" value="{{ get_setting('bpjs_jkk_company') }}" class="form-control" />
                                                     <span class="input-group-addon" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-4">BPJS Kesehatan  (Company)</label>
+                                            <label class="col-md-4">BPJS Jaminan Kematian (JKM)  (Company) </label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
-                                                    <input type="number" name="setting[bpjs_kesehatan_company]" value="{{ get_setting('bpjs_kesehatan_company') }}" class="form-control" />
+                                                    <input type="number" name="setting[bpjs_jkm_company]" value="{{ get_setting('bpjs_jkm_company') }}" class="form-control" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Jaminan Hari Tua (JHT)  (Company) </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_jht_company]" value="{{ get_setting('bpjs_jht_company') }}" class="form-control" />
                                                     <span class="input-group-addon" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
@@ -56,13 +65,31 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                         <div class="form-group">
-                                            <label class="col-md-4">BPJS Ketengakerjaan (Employee) </label>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Kesehatan  (Company)</label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
-                                                    <input type="number" name="setting[bpjs_ketenagakerjaan_employee]" class="form-control" value="{{ get_setting('bpjs_ketenagakerjaan_employee') }}" />
+                                                    <input type="number" name="setting[bpjs_kesehatan_company]" value="{{ get_setting('bpjs_kesehatan_company') }}" class="form-control" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Jaminan Hari Tua (JHT) (Employee) </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_jaminan_jht_employee]" class="form-control" value="{{ get_setting('bpjs_jaminan_jht_employee') }}" />
+                                                    <span class="input-group-addon" id="basic-addon2">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4">BPJS Jaminan Pensiun (JP) (Employee) </label>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="number" name="setting[bpjs_jaminan_jp_employee]" class="form-control" value="{{ get_setting('bpjs_jaminan_jp_employee') }}" />
                                                     <span class="input-group-addon" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
@@ -72,15 +99,6 @@
                                             <div class="col-md-3">
                                                 <div class="input-group">
                                                     <input type="number" name="setting[bpjs_kesehatan_employee]" class="form-control" value="{{ get_setting('bpjs_kesehatan_employee') }}" />
-                                                    <span class="input-group-addon" id="basic-addon2">%</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">BPJS Pensiun  (Employee) </label>
-                                            <div class="col-md-3">
-                                                <div class="input-group">
-                                                    <input type="number" name="setting[bpjs_pensiun_employee]" class="form-control" value="{{ get_setting('bpjs_pensiun_employee') }}" />
                                                     <span class="input-group-addon" id="basic-addon2">%</span>
                                                 </div>
                                             </div>
