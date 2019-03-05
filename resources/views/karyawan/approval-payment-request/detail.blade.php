@@ -121,8 +121,8 @@
                                         <td>{{ number_format($item->estimation_cost) }}</td>
                                         <td>{{ number_format($item->amount) }}</td>
                                         <td>
-                                            <input type="text" {{ $data->approve_direktur === NULL ? '' : 'readonly="true"' }} name="nominal_approve[{{ $item->id }}]" class="form-control nominal_approve" value="{{ $item->nominal_approved }}" placeholder="Nominal Approve">
-                                            <textarea {{ $data->approve_direktur === NULL ? '' : 'readonly="true"' }}  name="note[{{ $item->id }}]" placeholder="Catatan" class="form-control">{{ $item->note }}</textarea>
+                                            <input type="text" name="nominal_approve[{{ $item->id }}]" {{ $data->approve_direktur === NULL ? '' : 'readonly="true"' }}  class="form-control nominal_approve" value="{{ $item->nominal_approved }}" placeholder="Nominal Approve">
+                                            <textarea name="note[{{ $item->id }}]" {{ $data->approve_direktur === NULL ? '' : 'readonly="true"' }}  placeholder="Catatan" class="form-control">{{ $item->note }}</textarea>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -239,7 +239,7 @@
     }
 
     $("#btn_approved").click(function(){
-        bootbox.confirm('Approve Payment Request Karyawan ?', function(result){
+        bootbox.confirm('Approve Employee Payment Request ?', function(result){
 
             $("input[name='status']").val(1);
             if(result)
@@ -251,7 +251,7 @@
     });
 
     $("#btn_tolak").click(function(){
-        bootbox.confirm('Tolak Payment Request Karyawan ?', function(result){
+        bootbox.confirm('Reject Employee Payment Request ?', function(result){
 
             if(result)
             {

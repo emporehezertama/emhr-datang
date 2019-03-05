@@ -114,7 +114,7 @@
                                         <td>{{ number_format($item->estimation_cost) }}</td>
                                         <td>{{ number_format($item->amount) }}</td>
                                         <td>
-                                            <input type="text" {{ $data->is_approved_atasan !== NULL ? 'readonly="true"' : '' }} name="nominal_approve[{{ $item->id }}]" class="form-control nominal_approve" placeholder="Nominal Approve" value="{{ $item->nominal_approved }}">
+                                            <input type="text" name="nominal_approve[{{ $item->id }}]" {{ $data->is_approved_atasan !== NULL ? 'readonly="true"' : '' }}  class="form-control nominal_approve" placeholder="Nominal Approve" value="{{ $item->nominal_approved }}">
                                             <textarea name="note[{{ $item->id }}]" {{ $data->is_approved_atasan !== NULL ? 'readonly="true"' : '' }} placeholder="Note" class="form-control">{{ $item->note }}</textarea>
                                         </td>
                                     </tr>
@@ -135,9 +135,9 @@
                         <input type="hidden" name="status" value="0" />
                         <input type="hidden" name="id" value="{{ $data->id }}">
 
-                        <a href="{{ route('karyawan.approval.payment_request.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="{{ route('karyawan.approval.payment-request-atasan.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                         
-                        @if($data->is_approved_atasan === NULL)
+                        @if($data->is_approved_atasan === NULL and $data->status < 4)
                         <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_approved"><i class="fa fa-check"></i> Approved Payment Request</a>
                         <a class="btn btn-sm btn-danger waves-effect waves-light m-r-10" id="btn_tolak"><i class="fa fa-close"></i> Denied Payment Request</a>
                         @endif
@@ -234,7 +234,7 @@
     }
 
     $("#btn_approved").click(function(){
-        bootbox.confirm('Approve Payment Request Karyawan ?', function(result){
+        bootbox.confirm('Approve Employee Payment Request?', function(result){
 
             $("input[name='status']").val(1);
             if(result)
@@ -246,7 +246,7 @@
     });
 
     $("#btn_tolak").click(function(){
-        bootbox.confirm('Tolak Payment Request Karyawan ?', function(result){
+        bootbox.confirm('Reject Employee Payment Request ?', function(result){
 
             if(result)
             {

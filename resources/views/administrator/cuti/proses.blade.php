@@ -54,14 +54,11 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Position</label>
-                                <label class="col-md-6">Division / Departement</label>
+                                <label class="col-md-12">Position</label>
                                 <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control jabatan" value="{{ isset($data->karyawan->organisasiposition->name) ? $data->karyawan->organisasiposition->name : '' }}">
+                                    <input type="text" readonly="true" class="form-control jabatan" value="{{empore_jabatan($data->user_id)}}">
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control department" value="{{ isset($data->karyawan->department) ? $data->karyawan->department->name : '' }}">
-                                </div>
+                                
                             </div>
                             <div class="form-group">
                                 <label class="col-md-6">Leave Quota</label>
@@ -70,7 +67,7 @@
                                     <input type="text" class="form-control" readonly="true" value="{{ $data->cuti->kuota }}" />
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" readonly="true" value="{{ $data->karyawan->cuti_yang_terpakai == "" ? 0 : $data->karyawan->cuti_yang_terpakai }}" />
+                                    <input type="text" class="form-control" readonly="true" value="{{ $data->temp_cuti_terpakai == "" ? 0 : $data->temp_cuti_terpakai }}" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -84,11 +81,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="col-md-12">Date of Leave/Permit</label>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <input type="text" class="form-control datepicker" value="{{ $data->tanggal_cuti_start }}" readonly="true" />
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5 p-l-0">
                                     <input type="text" class="form-control datepicker" value="{{ $data->tanggal_cuti_end }}" readonly="true">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" class="form-control" value="{{ $data->total_cuti }} Day's" readonly="true">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -111,17 +111,15 @@
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="col-md-6">Position</label>
-                                <label class="col-md-6">Division / Departement</label>
+                                <label class="col-md-12">Position</label>
                                 <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control" value="{{ isset($data->backup_karyawan->organisasiposition->name) ? $data->backup_karyawan->organisasiposition->name : '' }}">
+
+                                    <input type="text" readonly="true" class="form-control" value="{{ empore_jabatan($data->backup_karyawan->id) }}">
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control" value="{{ isset($data->backup_karyawan->department->name) ? $data->backup_karyawan->department->name : '' }}">
-                                </div>
+                                
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Handphone</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <label class="col-md-6">Email</label>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control no_handphone" value="{{ $data->backup_karyawan->telepon }}">

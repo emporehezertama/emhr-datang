@@ -59,7 +59,10 @@
                                         <td>{{ $item->transaction_type }}</td>
                                         <td>{{ $item->payment_method }}</td>
                                         <td>
-                                            <a onclick="status_approval_payment_request({{ $item->id }})">
+                                            @if($item->status == 4)
+                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancelled</label>
+                                            @else
+                                                <a onclick="status_approval_payment_request({{ $item->id }})">
                                                 @if($item->status == 1)
                                                     <label class="btn btn-warning btn-xs">Waiting Approval</label>
                                                 @endif
@@ -67,9 +70,11 @@
                                                     <label class="btn btn-success btn-xs">Approved</label>
                                                 @endif
                                                 @if($item->status == 3)
-                                                    <label class="btn btn-danger btn-xs">Reject</label>
+                                                    <label class="btn btn-danger btn-xs">Rejected</label>
                                                 @endif
-                                            </a>
+                                                </a>
+                                            @endif
+
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>

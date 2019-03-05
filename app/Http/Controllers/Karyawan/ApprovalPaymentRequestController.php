@@ -62,13 +62,13 @@ class ApprovalPaymentRequestController extends Controller
         {
             $status = 2;
 
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->user->name .'</strong>,</p> <p>  Pengajuan Payment Request anda <strong style="color: green;">DISETUJUI</strong>.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $data->user->name .'</strong>,</p> <p>  Submission of your Payment Request <strong style="color: green;">APPROVED</strong>.</p>';
 
             \Mail::send('email.payment-request-approval', $params,
                 function($message) use($data) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Empore - Pengajuan Payment Request');
+                    $message->subject('Empore - Payment Request');
                 }
             );
         }
@@ -76,13 +76,13 @@ class ApprovalPaymentRequestController extends Controller
         {
             $status = 3;
             
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->user->name .'</strong>,</p> <p>  Pengajuan Payment Request anda <strong style="color: red;">DITOLAK</strong>.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $data->user->name .'</strong>,</p> <p>  Submission of your Payment Request <strong style="color: red;">REJECTED</strong>.</p>';
 
             \Mail::send('email.payment-request-approval', $params,
                 function($message) use($data) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Empore - Pengajuan Payment Request');
+                    $message->subject('Empore - Payment Request');
                 }
             );
         }
@@ -90,7 +90,7 @@ class ApprovalPaymentRequestController extends Controller
         $data->status = $status;
         $data->save();
 
-        return redirect()->route('karyawan.approval.payment_request.index')->with('message-success', 'Form Payment Request Berhasil diproses !');
+        return redirect()->route('karyawan.approval.payment_request.index')->with('message-success', 'Form Payment Request Successfully Processed !');
     }
 
     /**

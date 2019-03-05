@@ -93,11 +93,11 @@ function empore_jabatan($id)
 	if($user)
 	{
 		if(!empty($user->empore_organisasi_staff_id)):
-            return 'Staff '.$user->empore_staff->name;
+            return 'Staff - '.$user->empore_staff->name;
         endif;
 
         if(empty($user->empore_organisasi_staff_id) and !empty($user->empore_organisasi_manager_id)):
-            return 'Manager '.$user->empore_manager->name;
+            return 'Manager - '.$user->empore_manager->name;
         endif;
 
         if(empty($user->empore_organisasi_staff_id) and empty($user->empore_organisasi_manager_id) and !empty($user->empore_organisasi_direktur)):

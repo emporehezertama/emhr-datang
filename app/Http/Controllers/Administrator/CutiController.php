@@ -86,7 +86,7 @@ class CutiController extends Controller
             $params[$no]['LEAVE TYPE']= isset($item->cuti->jenis_cuti) ? $item->cuti->jenis_cuti : '';
             $params[$no]['LEAVE DURATION'] = $item->total_cuti;
             $params[$no]['PURPOSE']        = $item->keperluan;
-            $params[$no]['LEAVE BALANCE']        = get_cuti_user($item->jenis_cuti, $item->user_id, 'sisa_cuti'); //$item->user->cuti->sisa_cuti;
+            $params[$no]['LEAVE BALANCE']   = $item->temp_sisa_cuti;//get_cuti_user($item->jenis_cuti, $item->user_id, 'sisa_cuti'); //$item->user->cuti->sisa_cuti;
 
             $status = '';
             if($item->is_approved_atasan == ""){
@@ -114,7 +114,16 @@ class CutiController extends Controller
 
             $params[$no]['STATUS']           = $status;
             $params[$no]['DATE SUBMITTED']       = date('d F Y', strtotime($item->created_at));
-            $params[$no]['DATE APPROVAL DIRECTOR']     = date('d F Y', strtotime($item->approve_direktur_date));
+           
+            $dateTemp ='';
+
+            if(!empty($item->approve_direktur_date)){
+                $dateTemp = date('d F Y', strtotime($item->approve_direktur_date));
+            }else{
+                $dateTemp ='';
+            }
+            $params[$no]['DATE APPROVAL DIRECTOR']     = $dateTemp;
+
             $params[$no]['DIRECTOR NAME']       = $item->direktur->name;
         }
 

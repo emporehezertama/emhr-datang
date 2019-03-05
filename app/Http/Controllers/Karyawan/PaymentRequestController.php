@@ -71,7 +71,7 @@ class PaymentRequestController extends Controller
         $data       = PaymentRequest::where('id', $id)->first();
         $data->save();
 
-        return redirect()->route('karyawan.payment-request.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('karyawan.payment-request.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -84,7 +84,7 @@ class PaymentRequestController extends Controller
         $data = PaymentRequest::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('karyawan.payment-request.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('karyawan.payment-request.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -179,16 +179,16 @@ class PaymentRequestController extends Controller
         }
 
         $params['data']     = $data;
-        $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' mengajukan Payment Request butuh persetujuan Anda.</p>';
+        $params['text']     = '<p><strong>Dear Sir/Madam '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Payment Request and currently waiting your approval.</p>';
 
         \Mail::send('email.payment-request-approval', $params,
             function($message) use($data) {
                 $message->from('emporeht@gmail.com');
                 $message->to($data->atasan->email);
-                $message->subject('Empore - Pengajuan Payment Request');
+                $message->subject('Empore - Payment Request');
             }
         );
 
-        return redirect()->route('karyawan.payment-request.index')->with('message-success', 'Payment Request berhasil di proses');
+        return redirect()->route('karyawan.payment-request.index')->with('message-success', 'Payment Request successfully processed');
     }
 }

@@ -116,13 +116,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-6">Phone Number</label>
+                                    <label class="col-md-6">Mobile Number</label>
                                     <label class="col-md-6">Email</label>
                                     <div class="col-md-6">
-                                        <input type="text" readonly="true" class="form-control no_handphone_atasan">
+                                        <input type="text" value="{{ $data->atasan->telepon }}" readonly="true" class="form-control no_handphone_atasan">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" readonly="true" class="form-control email_atasan">
+                                        <input type="text" value="{{ $data->atasan->email }}" readonly="true" class="form-control email_atasan">
                                     </div>
                                 </div>
                             </div>

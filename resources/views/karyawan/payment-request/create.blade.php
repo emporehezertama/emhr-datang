@@ -55,7 +55,7 @@
                                 <label class="col-md-6">To : Accounting Department</label>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-12">Tujuan / Purpose</label>
+                                <label class="col-md-12">Purpose</label>
                                 <div class="col-md-10">
                                     <textarea class="form-control" name="tujuan"></textarea>
                                 </div>
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-6">Phone Number</label>
+                                    <label class="col-md-6">Mobile Number</label>
                                     <label class="col-md-6">Email</label>
                                     <div class="col-md-6">
                                         <input type="text" readonly="true" class="form-control no_handphone_atasan">
@@ -151,9 +151,9 @@
                                             <div class="col-md-10" style="padding-left:0;">
                                                 <select name="type[]" class="form-control input" onchange="select_type_(this)">
                                                     <option value=""> - none - </option>
-                                                    <option>Parkir</option>
-                                                    <option>Bensin</option>
-                                                    <option>Tol</option>
+                                                    <option>Parking</option>
+                                                    <option>Gasoline</option>
+                                                    <option>Toll</option>
                                                     <option>Overtime Transport</option>
                                                     <option>Others</option>
                                                 </select>

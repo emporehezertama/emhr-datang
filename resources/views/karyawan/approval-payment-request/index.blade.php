@@ -34,7 +34,7 @@
                     <h3 class="box-title m-b-0">Manage Approval Payment Request</h3>
                     <br />
                     <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -60,6 +60,7 @@
                                         <td>{{ $item->transaction_type }}</td>
                                         <td>{{ $item->payment_method }}</td>
                                         <td>
+                                            <!--
                                             <a onclick="status_approval_payment_request({{ $item->id }})"> 
                                                 @if($item->approve_direktur === NULL)
                                                     <label class="btn btn-warning btn-xs">Waiting Approval</label>
@@ -71,10 +72,32 @@
                                                     <label class="btn btn-danger btn-xs">Reject</label>
                                                 @endif
                                             </a>
+-->
+                                            @if($item->status == 1)
+                                            @if($item->is_approved_atasan == NULL)
+                                                <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-default btn-xs">Waiting Approval</label>
+                                            @endif
+                                            @if($item->is_approved_atasan ==1 and $item->approve_direktur === NULL)
+                                                <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</label>
+                                            @endif
+                                            @if($item->approve_direktur === 0) 
+                                                <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-danger btn-xs">Rejected</label>
+                                            @endif
+                                            @if($item->approve_direktur == 1) 
+                                                <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
+                                            @endif
+                                        @elseif($item->status == 2)
+                                            <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
+                                        @elseif($item->status ==3)
+                                            <label onclick="status_approval_payment_request({{ $item->id }})" class="btn btn-danger btn-xs">Rejected</label>
+                                        @elseif($item->status ==4)
+                                            <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancelled</label>
+                                        @endif
+
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>
-                                            @if($item->approve_direktur === NULL)
+                                            @if($item->approve_direktur === NULL and $item->status < 3)
                                                 <a href="{{ route('karyawan.approval.payment_request.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">process <i class="fa fa-arrow-right"></i></button></a>
                                             @else
                                                 <a href="{{ route('karyawan.approval.payment_request.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">detail <i class="fa fa-search-plus"></i></button></a>
