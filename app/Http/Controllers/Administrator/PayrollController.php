@@ -701,7 +701,7 @@ class PayrollController extends Controller
             $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-            $temp->bpjs_kesehatan_employee      = get_setting('bpjs_kesehatan_employee');
+            #$temp->bpjs_kesehatan_employee      = get_setting('bpjs_kesehatan_employee');
             $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
             $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
             $temp->save(); 
