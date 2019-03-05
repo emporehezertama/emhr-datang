@@ -687,7 +687,7 @@ class PayrollController extends Controller
             if(!isset($thp) || empty($thp)) $thp = 0;
             
             #$temp->total_deduction              = $total_deduction + $deductions; 
-            $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2; 
+            $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax; 
             $temp->total_earnings               = $item->salary + $item->bonus + $earnings;
             $temp->thp                          = $thp;
             $temp->pph21                        = $monthly_income_tax;
