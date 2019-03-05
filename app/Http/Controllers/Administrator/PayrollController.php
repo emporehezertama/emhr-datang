@@ -691,6 +691,10 @@ class PayrollController extends Controller
             $temp->thp                          = $thp;
             $temp->pph21                        = $monthly_income_tax;
             $temp->is_calculate                 = 1;
+
+            $temp->bpjs_ketenagakerjaan_employee    = $bpjs_ketenagakerjaan2;
+            $temp->bpjs_kesehatan_employee          = $bpjs_kesehatan2;
+            $temp->bpjs_pensiun_employee            = $bpjs_pensiun2;
             
             $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
             $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
