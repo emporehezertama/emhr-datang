@@ -681,7 +681,7 @@ class PayrollController extends Controller
             }
             
             #$thp                = $gross_thp - $less - $deductions;
-            $thp = ($request->salary + $request->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
+            $thp = ($item->salary + $item->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
 
             if(!isset($item->salary) || empty($item->salary)) $item->salary = 0;
             if(!isset($thp) || empty($thp)) $thp = 0;
