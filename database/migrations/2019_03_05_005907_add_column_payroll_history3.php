@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnPayroll8 extends Migration
+class AddColumnPayrollHistory3 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnPayroll8 extends Migration
      */
     public function up()
     {
-        Schema::table('payroll', function (Blueprint $table) {
-            //
+        Schema::table('payroll_history', function (Blueprint $table) {
+            $table->integer('pph21')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddColumnPayroll8 extends Migration
      */
     public function down()
     {
-        Schema::table('payroll', function (Blueprint $table) {
+        Schema::table('payroll_history', function (Blueprint $table) {
             //
         });
     }

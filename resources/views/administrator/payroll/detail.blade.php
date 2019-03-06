@@ -65,7 +65,7 @@
                         <table class="table table-stripped" id="list_earnings">
                             <thead>
                                 <tr>
-                                    <td style="vertical-align: middle;">Sallary</td>
+                                    <td style="vertical-align: middle;">Salary</td>
                                     <td colspan="2"><input type="text" class="form-control price_format calculate" name="salary" placeholder="Rp. " value="{{ number_format($data->salary) }}" /></td> 
                                 </tr>
                                 <tr>

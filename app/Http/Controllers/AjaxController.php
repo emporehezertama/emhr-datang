@@ -295,8 +295,6 @@ class AjaxController extends Controller
             $bpjs_ketenagakerjaan2_persen = get_setting('bpjs_jaminan_jht_employee');
             $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
-            $params['$bpjs_ketenagakerjaan'] = $bpjs_ketenagakerjaan;
-
             $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
             $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
@@ -343,8 +341,6 @@ class AjaxController extends Controller
                 $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
             }
 
-            $params['$bpjs_kesehatan'] = $bpjs_kesehatan;
-
             $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
             $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
 
@@ -362,7 +358,7 @@ class AjaxController extends Controller
             $gross_income2 = ($request->salary + $earnings + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
 
             // burdern allowance
-            $burden_allow = 5 * $gross_income2 / 100;
+            $burden_allow = 5 *  ($request->salary + $earnings + $bpjspenambahan + $request->bonus) / 100;
             $biaya_jabatan_bulan = $biaya_jabatan / 12;
             if($burden_allow > $biaya_jabatan_bulan)
             {

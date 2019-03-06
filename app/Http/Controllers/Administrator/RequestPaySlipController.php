@@ -84,7 +84,8 @@ class RequestPaySlipController extends Controller
         $params['tahun']        = $request->tahun;
 
         $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);
-
+        echo $view;exit;
+        die;
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
 

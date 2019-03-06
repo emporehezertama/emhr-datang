@@ -14,7 +14,9 @@ use App\Models\PayrollHistory;
 use App\Models\PayrollOthers;
 use App\Models\PayrollPtkp;
 use App\Models\PayrollEarningsEmployee;
+use App\Models\PayrollEarningsEmployeeHistory;
 use App\Models\PayrollDeductionsEmployee;
+use App\Models\PayrollDeductionsEmployeeHistory;
 use App\Models\PayrollEarnings;
 use App\Models\PayrollDeductions;
 
@@ -98,6 +100,7 @@ class PayrollController extends Controller
             $params[$k]['Joint Date']       = $item->user->join_date;
             $params[$k]['Resign Date']      = $item->user->resign_date;
             $params[$k]['Salary']           = $item->salary;
+            $params[$k]['Bonus / THR']      = $item->bonus;
             
             // earnings
             foreach(PayrollEarnings::all() as $i)
@@ -134,7 +137,7 @@ class PayrollController extends Controller
             $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->salary *  get_setting('bpjs_pensiun_company') / 100;
             $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->salary *  get_setting('bpjs_jaminan_jht_employee') / 100;
-            $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->salary *  get_setting('bpjs_jaminan_jp_employee') / 100;
+            $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
             $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
@@ -218,7 +221,6 @@ class PayrollController extends Controller
              return redirect()->route('administrator.payroll.create')->with('message-error', __('payroll.message-employee-cannot-empty'));
 
         }else{
-
             if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
             if(!isset($request->bpjs_ketenagakerjaan) || empty($request->bpjs_ketenagakerjaan)) $request->bpjs_ketenagakerjaan = 0;
             if(!isset($request->bpjs_kesehatan) || empty($request->bpjs_kesehatan)) $request->bpjs_kesehatan = 0;
@@ -329,7 +331,6 @@ class PayrollController extends Controller
         $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
         $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
         $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
-
         $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
         $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
         $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
@@ -337,8 +338,7 @@ class PayrollController extends Controller
         $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
-
-        $temp->bonus                                     = replace_idr($request->bonus);
+        $temp->bonus                        = replace_idr($request->bonus);
         $temp->save(); 
 
         // save earnings
@@ -389,7 +389,38 @@ class PayrollController extends Controller
         $temp->bpjs_kesehatan_employee      = get_setting('bpjs_kesehatan_employee');
         $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+        $temp->pph21                        = replace_idr($request->pph21);
         $temp->save();
+
+        if(isset($request->earning))
+        {
+            foreach($request->earning as $key => $value)
+            {
+                $earning                        = new PayrollEarningsEmployeeHistory();
+                $earning->payroll_id            = $temp->id;
+                $earning->payroll_earning_id    = $value;
+                $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
+                $earning->save();
+            }
+        }
+
+        // save deductions
+        if(isset($request->deduction))
+        {
+            foreach($request->deduction as $key => $value)
+            {
+                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $temp->id)->where('payroll_deduction_id', $value)->first();
+                if(!$deduction)
+                {
+                    $deduction                        = new PayrollDeductionsEmployee();
+                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_deduction_id  = $value;
+                }
+                
+                $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
+                $deduction->save();
+            }
+        }
 
         return redirect()->route('administrator.payroll.detail', $id)->with('message-success', __('general.message-data-saved-success'));
     }

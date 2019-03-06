@@ -114,7 +114,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Kesehatan</td>
+                                    <td style="vertical-align: middle;">BPJS Kesehatan (Employee)</td>
                                     <td>
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">
@@ -131,7 +131,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Pensiun</td>
+                                    <td style="vertical-align: middle;">BPJS Pensiun (Employee)</td>
                                     <td>
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">
@@ -151,7 +151,6 @@
                             <tfoot>
                                 <tr>
                                     <th>Monthly Income Tax / PPh21</th>
-                                    <th>:</th>
                                     <th class="td-pph21"></th>
                                 </tr>
                                 <tr>
@@ -291,7 +290,7 @@
         var earnings    = [];
         var deductions  = [];
         var salary      = $("input[name='salary']").val();
-        var bonus       = $("input[name='bonus']").val();
+        var bonus       = $("input[name='bonus']").val() == "" ? 0 : $("input[name='bonus']").val();
 
         if(salary == "")
         {
@@ -345,8 +344,8 @@
                 $('.bpjs_ketenagakerjaan_employee').val(data.bpjs_ketenagakerjaan2);
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
-                
-                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus);
+
+                sum_earnings    = parseInt(sum_earnings) + parseInt(salary.split('.').join('')) + parseInt(bonus);
                 sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);
