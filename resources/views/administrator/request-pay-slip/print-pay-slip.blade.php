@@ -55,7 +55,18 @@
 						<td>Bonus / THR</td>
 						<td style="text-align: right;">{{ number_format($item->bonus) }}</td>
 					</tr>
-
+					@foreach(payrollEarningsEmployeeHistory($item->id) as $i)
+                        @if(isset($i->payrollEarnings->title))
+                          <tr>
+                          	<td>
+                          		{{ $i->payrollEarnings->title }}
+                          	</td>
+                          	<td style="text-align: right;">
+                          		{{ number_format($i->nominal) }}
+                          	</td>
+                          </tr>
+                        @endif
+                    @endforeach
 				</table>
 			</td>
 			<td style="width: 50%;vertical-align: top;">
@@ -80,6 +91,18 @@
 						<td>PPH21</td>
 						<td style="text-align: right;">{{ number_format($item->pph21) }}</td>
 					</tr>
+					@foreach(payrollDeductionsEmployeeHistory($item->id) as $i)
+                        @if(isset($i->payrollDeductions->title))
+                          <tr>
+                          	<td>
+                          		{{ $i->payrollDeductions->title }}
+                          	</td>
+                          	<td style="text-align: right;">
+                          		{{ number_format($i->nominal) }}
+                          	</td>
+                          </tr>
+                        @endif
+                    @endforeach
 				</table>
 			</td>
 		</tr>
