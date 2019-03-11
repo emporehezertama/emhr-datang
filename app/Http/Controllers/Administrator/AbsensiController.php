@@ -152,7 +152,11 @@ class AbsensiController extends Controller
             	$temp 				= new AbsensiItemTemp();
 
             	// cek absensi yang sama dengan no karyawa dan tanggal yang sama
-            	$absensiCek = AbsensiItem::where('emp_no', $row[0])->where('date', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]))->first();
+                $date = str_replace("'", '', $row[5]);
+                //$date = empty($row[5]) ?  "" : \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]);
+                
+
+            	$absensiCek = AbsensiItem::where('emp_no', $row[0])->where('date', $date)->first();
             	
             	if($absensiCek) $temp->absensi_item_id = $absensiCek->id;
 
@@ -161,7 +165,7 @@ class AbsensiController extends Controller
             	$temp->no 			= $row[2];
             	$temp->name 		= $row[3];
             	$temp->auto_assign 	= $row[4];
-            	$temp->date 		= \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]);
+            	$temp->date 		= $date;
             	$temp->timetable 	= $row[6];
             	$temp->on_dutty 	= $row[7];
             	$temp->off_dutty 	= $row[8];

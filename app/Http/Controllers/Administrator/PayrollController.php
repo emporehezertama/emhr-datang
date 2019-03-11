@@ -442,6 +442,7 @@ class PayrollController extends Controller
             $params[$k]['NO']           = $k+1;
             $params[$k]['NIK']          = $i->nik;
             $params[$k]['Nama']         = $i->name;
+            $params[$k]['Bonus / THR']  = $payroll->bonus;
 
             if($payroll)
             {

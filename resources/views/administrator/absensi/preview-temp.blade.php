@@ -70,10 +70,9 @@
                             </thead>
                             <tbody>
                             @foreach($data as $no => $item)
-                                <tr style="background: yellow;">
+                                <tr>
                                     <td>{{ $no + 1 }}</td>
                                     <td>
-                                        
                                         {{ $item->emp_no }}
                                         
                                         @if(!empty($item->absensi_item_id))

@@ -76,6 +76,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('absensi/import-all', 'AbsensiController@importAll')->name('administrator.absensi.import-all');
 	Route::get('absensi/deletenew/{id}', 'AbsensiController@deleteNew')->name('administrator.absensi.deletenew');
 	Route::get('absensi/deleteold/{id}', 'AbsensiController@deleteOld')->name('administrator.absensi.deleteold');
+	Route::get('absensi/detail/{id}', 'AbsensiController@detail')->name('administrator.absensi.detail');
 	Route::post('cuti/batal', 'CutiController@batal')->name('administrator.cuti.batal');
 	Route::post('training/batal', 'TrainingController@batal')->name('administrator.training.batal');
 	Route::get('cuti/proses/{id}', 'CutiController@proses')->name('administrator.cuti.proses');

@@ -44,7 +44,15 @@
                                     <th>MANAGE</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                            @foreach($data as $key => $item)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $item->tanggal_upload }}</td>
+                                <td><a href="{{ route('administrator.absensi.detail', $item->id) }}" class="btn btn-default btn-xs">detail</a></td>
+                            </tr>
+                            @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>

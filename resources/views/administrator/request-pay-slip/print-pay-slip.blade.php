@@ -107,13 +107,10 @@
 			</td>
 		</tr>
 	</table>
-
 	@if($total == 0)
-
 	@elseif(($k+1) != $total)
 		<div style="page-break-before:always"></div>
 	@endif
-
 	@endforeach
 </body>
 </html>
