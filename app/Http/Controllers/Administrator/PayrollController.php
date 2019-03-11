@@ -812,7 +812,7 @@ class PayrollController extends Controller
             // delete all table temp
             foreach($rows as $key => $row)
             {
-                $count_row = 4;
+                $count_row = 5;
             	if($key ==0) continue;
 
                 $nik                    = $row[1];
@@ -838,6 +838,7 @@ class PayrollController extends Controller
                         $is_calculate   = 0;
                     }
                     $payroll->salary        = replace_idr($row[3]);
+                    $payroll->bonus        = replace_idr($row[4]);
                     $payroll->is_calculate  = $is_calculate;
                     $payroll->save();
 

@@ -52,6 +52,17 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-md-2 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="month">
+                                <option value="">- Month - </option>
+                                @foreach(month_name() as $item)
+                                
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <input type="hidden" name="action" value="view">
                     <div class="clearfix"></div>
                 </form>
