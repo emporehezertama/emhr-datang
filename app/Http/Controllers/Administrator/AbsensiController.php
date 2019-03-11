@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiItem;
-use App\Models\User;
+use App\User;
 use App\Models\Absensi;
 
 class AbsensiController extends Controller
@@ -29,6 +29,18 @@ class AbsensiController extends Controller
     }
 
     /**
+     * Detail
+     * @param  $id
+     * @return view
+     */
+    public function detail($id)
+    {
+        $data = AbsensiItem::where('absensi_id', $id)->get();
+
+        return view('administrator.absensi.detail')->with(['data' => $data]);
+    }
+
+    /**
      * [importAll description]
      * @return [type] [description]
      */
@@ -44,7 +56,7 @@ class AbsensiController extends Controller
         {
             $temp       = new AbsensiItem();
 
-            $user       = User::where('employee_number', $v->emp_no)->where('absensi_number', $v->ac_no)->first();
+            $user       = User::where('nik', $v->emp_no)->first();
             
             if($user) $temp->user_id = $user->id;
 

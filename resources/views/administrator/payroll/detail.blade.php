@@ -122,7 +122,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Kesehatan</td>
+                                    <td style="vertical-align: middle;">BPJS Kesehatan (Employee)</td>
                                     <td colspan="2">
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">
@@ -139,7 +139,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;">BPJS Pensiun</td>
+                                    <td style="vertical-align: middle;">BPJS Pensiun (Employee)</td>
                                     <td colspan="2">
                                         <div class="col-md-4 p-l-0">
                                             <div class="input-group">

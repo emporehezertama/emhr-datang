@@ -37,6 +37,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Attendence
+     * @return objects
+     */
+    public function absensiItem()
+    {
+        return $this->hasMany('App\Models\AbsensiItem', 'user_id', 'id');
+
+    }
+
+    /**
      * [empore_staff description]
      * @return [type] [description]
      */

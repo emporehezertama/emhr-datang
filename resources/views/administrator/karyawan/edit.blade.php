@@ -68,18 +68,30 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
                                                 <th>Date</th>
                                                 <th>Day</th>
                                                 <th>Planned Sign In</th>
                                                 <th>Planned Sign Out</th>
                                             </tr>
                                         </thead>
+                                        <tbody class="no-padding-td">
+                                            @if(isset($data->absensiItem))
+                                                @foreach($data->absensiItem as $item)
+                                                <tr>
+                                                    <td>{{ $item->date }}</td>
+                                                    <td>{{ $item->timetable }}</td>
+                                                    <td>{{ $item->on_dutty }}</td>
+                                                    <td>{{ $item->off_dutty }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
                                     </table>
                                 </div>
 
                                 <div role="tabpanel" class="tab-pane fade" id="attendance_calculation">
-                                    <div class="col-md-4">
+
+                                    <div class="col-md-4 b-all" style="width: 38%;margin-right: 0.5%;">
                                         <h3>Overtime</h3>
                                         <table class="table table-bordered">
                                             <thead>
@@ -90,12 +102,29 @@
                                             </thead>
                                         </table>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 b-all m-l-0" style="width: 38%; margin-left:0;">
                                         <h3>Absensi</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No Of Overtime</th>
+                                                    <th>Total Overtime</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 b-all m-l-0" style="width: 38%; margin-left:0;">
                                         <h3>Daily Attendance</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No Of Overtime</th>
+                                                    <th>Total Overtime</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
                                     </div>
+                                    <div class="clearfix"></div> 
                                 </div>
                             </div>
 
@@ -1110,6 +1139,10 @@
 
 @section('footer-script')
     <style type="text/css">
+        .no-padding-td td {
+            padding-top:2px !important;
+            padding-bottom:2px !important;
+        }
         .staff-branch-select, .head-branch-select {
             display: none;
         }

@@ -2,33 +2,25 @@
 
 @section('title', 'Employee Attendance')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Attendance</h4> 
             </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                <a href="{{ route('administrator.absensi.import-all') }}" onclick="return confirm('Proses semua data ini?')" class="btn btn-info btn-sm">Process All Data</a>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <ol class="breadcrumb">
+                    <li><a href="javascript:void(0)">Dashboard</a></li>
+                    <li class="active">Attendance</li>
+                </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
 
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Preview Attendance Import</h3>
-                    <br />
                     <div class="table-responsive">
                         <table class="table table-bordered" cellspacing="0" width="100%">
                             <thead>
@@ -68,15 +60,7 @@
                             @foreach($data as $no => $item)
                                 <tr>
                                     <td>{{ $no + 1 }}</td>
-                                    <td>
-                                        {{ $item->emp_no }}
-                                        
-                                        @if(!empty($item->absensi_item_id))
-                                            <a href="{{ route('administrator.absensi.deletenew', $item->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('Hapus data yang baru ?')"><i class="fa fa-trash"></i> Delete New Data</a>
-                                            <a href="{{ route('administrator.absensi.deleteold', $item->absensi_item_id) }}" class="btn btn-danger btn-xs" onclick="return confirm('Hapus data yang lama ?')"><i class="fa fa-trash"></i> Delete Old Data</a>
-                                        @endif
-
-                                    </td>
+                                    <td>{{ $item->emp_no }}</td>
                                     <td>{{ $item->ac_no }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->auto_assign }}</td>
