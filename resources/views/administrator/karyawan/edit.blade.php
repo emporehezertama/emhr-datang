@@ -27,7 +27,7 @@
                             </ul>
                         </div>
                     @endif
-                    <ul class="nav customtab nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#biodata" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Biodata</span></a></li>
 
                         <li role="presentation" class=""><a href="#dependent" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Dependent</span></a></li>
@@ -44,9 +44,62 @@
                         @if(isset($payroll->salary))
                         <li role="presentation" class=""><a href="#payroll" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Payroll</span></a></li>
                         @endif
+                        <li role="presentation" class=""><a href="#attendance" aria-controls="attendance" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Attendance</span></a></li>
                     </ul>
 
                     <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade" id="attendance">
+                            <form class="form-control">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="date" placeholder="Period" />
+                                    </div>
+                                    <div class="col-md-2 p-l-0">
+                                        <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-search-plus"></i> </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <ul class="nav customtab nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#attendance_sheet" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Attendance Sheet</span></a></li>
+                                <li role="presentation" class=""><a href="#attendance_calculation" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Calculation Attendance Data</span></a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="attendance_sheet">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Day</th>
+                                                <th>Planned Sign In</th>
+                                                <th>Planned Sign Out</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane fade" id="attendance_calculation">
+                                    <div class="col-md-4">
+                                        <h3>Overtime</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No Of Overtime</th>
+                                                    <th>Total Overtime</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h3>Absensi</h3>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h3>Daily Attendance</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         @if(isset($payroll->salary))
                         <div role="tabpanel" class="tab-pane fade" id="payroll">
                             <h3 class="box-title m-b-0">Payroll</h3>

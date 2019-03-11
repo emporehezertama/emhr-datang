@@ -8,6 +8,15 @@ class PayrollHistory extends Model
 {
     protected $table = 'payroll_history';
 
+    /**
+     * [user description]
+     * @return [type] [description]
+     */
+    public function user()
+    {
+        return $this->hasOne('\App\User', 'id', 'user_id');
+    }
+    
      /**
      * Earnings
      * @return object

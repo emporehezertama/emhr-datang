@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiItem;
 use App\Models\User;
+use App\Models\Absensi;
 
 class AbsensiController extends Controller
 {   
@@ -21,8 +22,10 @@ class AbsensiController extends Controller
      * @return [type] [description]
      */
     public function index()
-    {
-        return view('administrator.absensi.index');
+    {   
+        $data = Absensi::all();
+        
+        return view('administrator.absensi.index')->with(['data' => $data]);
     }
 
     /**
@@ -33,7 +36,7 @@ class AbsensiController extends Controller
     {
         $data = AbsensiItemTemp::all();
 
-        $absensi                    = new \App\Absensi();
+        $absensi                    = new Absensi();
         $absensi->tanggal_upload    = date('Y-m-d');
         $absensi->save();
 

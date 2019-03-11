@@ -1,6 +1,21 @@
 <?php
 
 /**
+ * Month name
+ * @return array
+ */
+function month_name()
+{
+	$months = [];
+	for ($i = 1; $i <= 12; $i++) {
+	    $timestamp = mktime(0, 0, 0, $i, 1);
+	    $months[date('n', $timestamp)] = date('F', $timestamp);
+	}
+
+	return $months;
+}
+
+/**
  * Replace IDR
  * @return string
  */

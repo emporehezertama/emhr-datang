@@ -38,6 +38,17 @@ class PayrollController extends Controller
 
         if(request())
         {
+            if(!empty(request()->month))
+            {
+                if(request()->month != date('m'))
+                {
+                    $result = PayrollHistory::select('payroll_history.*')
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->whereMonth('payroll_history.created_at', '=', request()->month)
+                                                ->orderBy('payroll_history.id', 'DESC');
+                }
+            }
+
             if(!empty(request()->is_calculate))
             {
                 $result = $result->where('is_calculate', request()->is_calculate );
@@ -73,7 +84,7 @@ class PayrollController extends Controller
         }
 
         $params['data'] = $result->get();
-
+        
         return view('administrator.payroll.index')->with($params);
     } 
 
@@ -134,7 +145,7 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Kecelakaan Kerja (JKK) (Company) '. get_setting('bpjs_jkk_company').'%']  = $item->salary *  get_setting('bpjs_jkk_company') / 100;
             $params[$k]['BPJS Jaminan Kematian (JKM) (Company) '. get_setting('bpjs_jkm_company').'%']          = $item->salary *  get_setting('bpjs_jkm_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Company) '. get_setting('bpjs_jht_company').'%']          = $item->salary *  get_setting('bpjs_jht_company') / 100;
-            $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->salary *  get_setting('bpjs_pensiun_company') / 100;
+            $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->bpjs_pensiun_company;
             $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->salary *  get_setting('bpjs_jaminan_jht_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
