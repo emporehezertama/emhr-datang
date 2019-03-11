@@ -281,7 +281,7 @@ function cek_cuti_direktur($status='approved')
 	elseif($status == 'null')
 	{
 		//$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->count();	
-		$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->where('status' ,'<' ,3)->whereNull('approve_direktur')->count();	
+		$cuti = \App\Models\CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->where('status' ,'<' ,3)->where('is_approved_atasan',1)->whereNull('approve_direktur')->count();	
 	}
 
 	return $cuti;

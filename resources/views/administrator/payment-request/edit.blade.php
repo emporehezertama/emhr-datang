@@ -61,6 +61,7 @@
                                     <textarea class="form-control" name="tujuan" readonly="true">{{ $data->tujuan }}</textarea>
                                 </div>
                             </div>
+                            <!--
                             <div class="form-group">
                                 <label class="col-md-12">Trancation Type</label>
                                 <div class="col-md-12">
@@ -68,6 +69,7 @@
                                     <label style="font-weight: normal;"><input type="radio" name="transaction_type" {{ $data->transaction_type == 'Payment' ? 'checked="true"' : '' }}  value="Payment" /> Payment</label>
                                 </div>
                             </div>
+                            -->
                             <hr />
                             <div class="form-group">
                                 <label class="col-md-12">Payment Method</label>
@@ -116,13 +118,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-6">Handphone</label>
+                                    <label class="col-md-6">Mobile Number</label>
                                     <label class="col-md-6">Email</label>
                                     <div class="col-md-6">
-                                        <input type="text" readonly="true" class="form-control no_handphone_atasan">
+                                        <input type="text" value="{{$data->atasan->telepon}}" readonly="true" class="form-control no_handphone_atasan">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" readonly="true" class="form-control email_atasan">
+                                        <input type="text" value="{{$data->atasan->email}}" readonly="true" class="form-control email_atasan">
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +183,7 @@
                         <div class="clearfix"></div>
                         <br />
                     
-                        <a href="{{ route('karyawan.payment-request.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="{{ route('administrator.payment-request.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                         <br style="clear: both;" />
                         <div class="clearfix"></div>
                     </div>

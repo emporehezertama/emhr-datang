@@ -169,6 +169,7 @@
                                <th>LEAVE TYPE</th>
                                <th>LEAVE DURATION</th>
                                <th>PURPOSE</th>
+                               <th>STATUS</th>
                            </tr>
                        </thead> 
                        <tbody>
@@ -185,6 +186,17 @@
                            <td>{{ $item->total_cuti}}</td>
                            <!--<td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>-->
                            <td>{{ $item->keperluan }}</td>
+                           <td>
+                                @if($item->status == 3)
+                                    Rejected
+                                @elseif($item->status == 4)
+                                    Cancelled
+                                @elseif($item->status == 1)
+                                    Waiting Approval
+                                @elseif($item->status == 2)
+                                    Approved
+                                @endif
+                           </td>
                         </tr>
                         @endforeach
                         </tbody>

@@ -52,19 +52,10 @@
                                     <input type="text" class="form-control" value="{{ $data->user->nik .' - '. $data->user->name  }}" readonly="true" />
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control jabatan" value="{{ isset($data->user->organisasiposition->name) ? $data->user->organisasiposition->name : '' }}">
+                                    <input type="text" readonly="true" class="form-control jabatan" value="{{ empore_jabatan($data->user_id) }}">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-6">Department</label>
-                                <label class="col-md-6">Job Rule</label>
-                                <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control department" value="{{ isset($data->user->department->name) ? $data->user->department->name : '' }}">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" readonly="true" class="form-control" value="{{ $data->user->organisasi_job_role }}" >
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="clearfix"></div>

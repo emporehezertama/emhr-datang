@@ -80,28 +80,20 @@
                                         <td>{{ $item->total_cuti }}</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
-                                            <label onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-default btn-xs"></label>
+                                            <a onclick="detail_approval_cuti('cuti', {{ $item->id }})">
+                                            {!! status_cuti($item->status) !!}
+                                            <!--
                                             @if($item->status == 3)
-                                                @if($item->is_approved_atasan == 0)
-                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4> Reason</h4><hr /><p>{{ $item->catatan_atasan }}</p>')"><i class="fa fa-close"></i>Rejected by Manager</label>
-                                                @elseif($item->approve_direktur == 0)
-                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->approve_direktur_noted }}</p>')"><i class="fa fa-close"></i>Rejected by Director</label>
-                                                @endif 
+                                                <label class="btn btn-danger btn-xs"><i class="fa fa-close"></i>Rejected</label>
                                             @elseif($item->status == 4)
-                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancellation</label>
-                                            @else
-                                                @if($item->status == 1)
-                                                    @if(empty($item->approved_hrd))
-                                                        <label  onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</label>
-                                                    @endif
-                                                    @if($item->approved_hrd == 1)
-                                                        <label  onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
-                                                    @endif
-                                                @endif
-                                                @if($item->status == 2)
-                                                    <label  onclick="detail_approval_cuti('cuti', {{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
-                                                @endif
+                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancelled</label>
+                                            @elseif($item->status == 1)
+                                                <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                            @elseif($item->status == 2)
+                                                <label class="btn btn-success btn-xs">Approved</label>
                                             @endif
+                                            -->
+                                        </a>
                                             <!--
                                                 <a onclick="detail_approval_cuti('cuti', {{ $item->id }})"> 
                                                 @if($item->is_approved_atasan == "")
@@ -124,12 +116,15 @@
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
+                                            <!--
                                             @if($item->status == 1)
                                             <a onclick="batalkan_pengajuan('{{ $item->id }}')" class="btn btn-danger btn-xs"><i class="fa fa-close"></i> Cancel Leave/Permit</a>
                                             @endif
+                                            -->
                                             <a href="{{ route('administrator.cuti.proses', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-arrow-right"></i> Detail</a>
-                                            
+                                            <!--
                                             <a href="{{ route('administrator.cuti.delete', $item->id) }}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                                            -->
                                         </td>
                                     </tr>
                                     @php ($i++)

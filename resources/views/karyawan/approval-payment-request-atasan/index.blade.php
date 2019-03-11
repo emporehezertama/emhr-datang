@@ -43,7 +43,7 @@
                                     <th>NAME</th>
                                     <th>TO</th>
                                     <th>PURPOSE</th>
-                                    <th>TRANSACTION TYPE</th>
+                                    <!--<th>TRANSACTION TYPE</th>-->
                                     <th>PAYMENT METHOD</th>
                                     <th>STATUS</th>
                                     <th>CREATED</th>
@@ -58,7 +58,7 @@
                                         <td>{{ $item->user->name }}</td>
                                         <td>Accounting Department</td>
                                         <td>{{ $item->tujuan }}</td>
-                                        <td>{{ $item->transaction_type }}</td>
+                                        <!--<td>{{ $item->transaction_type }}</td>-->
                                         <td>{{ $item->payment_method }}</td>
                                         <td>
                                             <!--

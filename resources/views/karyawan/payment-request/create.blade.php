@@ -1,4 +1,4 @@
-@extends('layouts.administrator')
+@extends('layouts.karyawan')
 
 @section('title', 'Payment Request')
 
@@ -60,6 +60,7 @@
                                     <textarea class="form-control" name="tujuan"></textarea>
                                 </div>
                             </div>
+                            <!--
                             <div class="form-group">
                                 <label class="col-md-12">Trancation Type</label>
                                 <div class="col-md-12">
@@ -67,6 +68,7 @@
                                     <label style="font-weight: normal;"><input type="radio" name="transaction_type" value="Payment" /> Payment</label>
                                 </div>
                             </div>
+                            -->
                             <hr />
                             <div class="form-group">
                                 <label class="col-md-12">Payment Method</label>
@@ -99,6 +101,7 @@
                         </div>
                         <div class="clearfix"></div>
                         <hr />
+                        @if(!empty(\Auth::user()->empore_organisasi_staff_id) and !empty(\Auth::user()->empore_organisasi_manager_id))
                         <div class="col-md-6" style="padding-left: 0;">
                             <h4><b>Approval</b></h4>
                             <div class="col-md-12" style="border: 1px solid #eee; padding: 15px">
@@ -127,6 +130,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         <div class="clearfix"></div>
                         <hr />
                         <div class="table-responsive">
@@ -137,7 +141,7 @@
                                         <th>TYPE</th>
                                         <th>DESCRIPTION</th>
                                         <th>QUANTITY</th>
-                                        <th>ESTIMATION COST</th>
+                                        <!--<th>ESTIMATION COST</th>-->
                                         <th>AMOUNT</th>
                                         <th>AMOUNT APPROVED</th>
                                         <th>RECEIPT TRANSACTION</th>
@@ -167,9 +171,11 @@
                                         <td>
                                             <input type="number" name="quantity[]" value="1" class="form-control input">
                                         </td>
+                                        <!--
                                         <td>
                                             <input type="number" name="estimation_cost[]" class="form-control estimation ">
                                         </td>
+                                        -->
                                         <td>
                                             <input type="number" name="amount[]" class="form-control amount">
                                         </td>
@@ -342,7 +348,6 @@
     }).on('focus', function () {
             $(this).autocomplete("search", "");
     });
-
 
 </script>
 <script src="{{ asset('js/payment-request/karyawan.js') }}?v={{ date('ymdhis') }}"></script>

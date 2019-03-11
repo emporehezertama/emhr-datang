@@ -105,11 +105,11 @@ class CutiController extends Controller
             }
             if($item->status == 4)
             {
-                $status = 'Canceled';
+                $status = 'Cancelled';
             }
             if($item->status == 3)
             {
-                $status = 'Reject';
+                $status = 'Rejected';
             }
 
             $params[$no]['STATUS']           = $status;
@@ -122,6 +122,19 @@ class CutiController extends Controller
             }else{
                 $dateTemp ='';
             }
+
+            $dateManTemp ='';
+
+            if(!empty($item->date_approved_atasan)){
+                $dateManTemp = date('d F Y', strtotime($item->date_approved_atasan));
+            }else{
+                $dateManTemp ='';
+            }
+
+            $params[$no]['DATE APPROVAL MANAGER']     = $dateManTemp;
+
+            $params[$no]['MANAGER NAME']       = isset($item->manager->name) ? $item->manager->name: '';
+
             $params[$no]['DATE APPROVAL DIRECTOR']     = $dateTemp;
 
             $params[$no]['DIRECTOR NAME']       = $item->direktur->name;

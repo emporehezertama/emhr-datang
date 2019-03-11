@@ -31,8 +31,7 @@
                 <input type="hidden" name="_method" value="PUT">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Form Medical Reimbursement</h3>
-                        <hr />
+                        
                         <br />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -152,7 +151,7 @@
                         <br />
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="{{ route('administrator.overtime.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                                <a href="{{ route('administrator.medical.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                                 <br style="clear: both;" />
                             </div>
                         </div>

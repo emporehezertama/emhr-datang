@@ -30,8 +30,7 @@
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('karyawan.medical.store') }}" id="form-medical" method="POST"  autocomplete="off">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Form Medical Reimbursement</h3>
-                        <hr />
+                        
                         <br />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -157,7 +156,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-6">Handphone</label>
+                                <label class="col-md-6">Mobile Number</label>
                                 <label class="col-md-6">Email</label>
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control no_handphone_atasan">
@@ -171,7 +170,7 @@
                         <br />
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="{{ route('administrator.overtime.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                <a href="{{ route('karyawan.medical.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
                                 <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_submit"><i class="fa fa-save"></i> Submit Medical Reimbursement</a>
                                 <br style="clear: both;" />
                             </div>
@@ -239,7 +238,7 @@
     $("#btn_submit").click(function(){
 
         if(!validate_form){
-            bootbox.alert('Form must be filled ?');
+            bootbox.alert('Form not completed. Please check and resubmit.');
 
             return false;
         }

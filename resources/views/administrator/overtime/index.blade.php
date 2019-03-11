@@ -67,7 +67,7 @@
                                         <td>{{ empore_jabatan($item->user_id) }}</td>
                                         <td> 
                                             @if($item->status == 1)
-                                                <a  onclick="status_approval_overtime({{ $item->id }})" class="btn btn-warning btn-xs">Proses</a>
+                                                <a  onclick="status_approval_overtime({{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</a>
                                             @endif
                                             @if($item->status == 2)
                                                 <a  onclick="status_approval_overtime({{ $item->id }})" class="btn btn-success btn-xs">Approved</a>
@@ -77,11 +77,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($item->is_approved_atasan == "")
-                                                <a href="{{ route('administrator.overtime.edit', $item->id) }}" class="btn btn-info btn-xs">proses <i class="fa fa-arrow-right"></i></a>
-                                            @else
-                                                <a href="{{ route('administrator.overtime.edit', $item->id) }}" class="btn btn-default btn-xs">detail <i class="fa fa-search-plus"></i></a>
-                                            @endif
+                                            <a href="{{ route('administrator.overtime.edit', $item->id) }}" class="btn btn-default btn-xs">detail <i class="fa fa-search-plus"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

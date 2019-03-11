@@ -108,7 +108,10 @@ class PaymentRequestController extends Controller
         
         if(empty(\Auth::user()->empore_organisasi_staff_id) and !empty(\Auth::user()->empore_organisasi_manager_id))
         {
-            $data->is_approved_atasan = 1;
+            if(empty($request->approved_atasan_id))
+            {
+                $data->is_approved_atasan = 1;
+            }
         }
 
         $data->save();

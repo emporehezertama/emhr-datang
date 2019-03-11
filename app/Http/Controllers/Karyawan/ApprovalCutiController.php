@@ -28,7 +28,7 @@ class ApprovalCutiController extends Controller
      */
     public function index()
     {
-        $params['data'] = CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)
+        $params['data'] = CutiKaryawan::where('approve_direktur_id', \Auth::user()->id)->where('is_approved_atasan',1)
                                                 ->orderBy('id', 'DESC')
                                                 ->get();
 
@@ -54,8 +54,6 @@ class ApprovalCutiController extends Controller
         $cuti->approve_direktur         = $request->status;
         $cuti->approve_direktur_noted   = $request->noted;
         $cuti->approve_direktur_date    = date('Y-m-d H:i:s');
-        $cuti->temp_sisa_cuti           = $cuti->temp_sisa_cuti - $cuti->total_cuti;
-        $cuti->temp_cuti_terpakai       = $cuti->total_cuti + $cuti->temp_cuti_terpakai;
         
         $params['data']     = $cuti;
 
@@ -114,6 +112,8 @@ class ApprovalCutiController extends Controller
                     $user_cuti->save();
                 }
             }
+            $cuti->temp_sisa_cuti           = $cuti->temp_sisa_cuti - $cuti->total_cuti;
+            $cuti->temp_cuti_terpakai       = $cuti->total_cuti + $cuti->temp_cuti_terpakai;
         }
 
         $cuti->status = $status;

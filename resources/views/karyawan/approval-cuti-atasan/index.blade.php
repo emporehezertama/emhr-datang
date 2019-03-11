@@ -63,7 +63,12 @@
                                     <td>{{ $item->keperluan }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>
-                                            @if($item->status == 1)
+                                        <a onclick="detail_approval_cuti({{ $item->id }})" >
+                                            {!! status_cuti($item->status) !!}
+                                            </a>
+
+                                        <!--
+                                        @if($item->status == 1)
                                                 @if($item->is_approved_atasan === NULL)
                                                     <label onclick="detail_approval_cuti({{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</label>
                                                 @endif
@@ -82,7 +87,7 @@
                                             @elseif($item->status ==4)
                                                  <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancelled</label>
                                             @endif
-                                        
+                                        -->
                                     </td>
                                     <td>
                                         <a href="{{ route('karyawan.approval.cuti-atasan.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Detail</button></a>

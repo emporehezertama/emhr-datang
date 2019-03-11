@@ -216,7 +216,6 @@
                         @if($item->status == 1)
                             @continue
                         @endif
-
                         <tr>
                            <td>{{ $no + 1 }}</td>
                            <td>{{ $item->tanggal_cuti_start }} - {{ $item->tanggal_cuti_end }}</td>
@@ -224,7 +223,17 @@
                            <td>{{ $item->total_cuti}}</td>
                            <!--<td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>-->
                            <td>{{ $item->keperluan }}</td>
-                           <td>{{$item->status}}</td>
+                           <td>
+                                @if($item->status == 3)
+                                    Rejected
+                                @elseif($item->status == 4)
+                                    Cancelled
+                                @elseif($item->status == 1)
+                                    Waiting Approval
+                                @elseif($item->status == 2)
+                                    Approved
+                                @endif
+                           </td>
                         </tr>
                         @endforeach
                         </tbody>
@@ -551,7 +560,7 @@
             if(this.id == 'from'){
               var dateMin = $('#from').datepicker("getDate");
               var rMin = new Date(dateMin.getFullYear(), dateMin.getMonth(),dateMin.getDate()); // Min Date = Selected + 1d
-              var rMax = new Date(dateMin.getFullYear(), dateMin.getMonth(),dateMin.getDate() + 31); // Max Date = Selected + 31d
+              var rMax = new Date(dateMin.getFullYear(), dateMin.getMonth(),dateMin.getDate() + 100); // Max Date = Selected + 31d
               $('#to').datepicker("option","minDate",rMin);
               $('#to').datepicker("option","maxDate",rMax);                    
             }

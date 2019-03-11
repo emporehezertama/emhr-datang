@@ -35,7 +35,7 @@
                     <h3 class="box-title m-b-0">Medical Reimbursement</h3>
                     <br />
                     <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -54,13 +54,33 @@
                                         <td>{{ $item->user->name }}</td>
                                         <td>{{ date('d F Y', strtotime($item->tanggal_pengajuan)) }}</td>
                                         <td>
+                                            <!--
                                             <a onclick="status_approval_medical({{ $item->id }})"> 
                                             @if($item->is_approved_atasan === NULL)
                                                 <label class="btn btn-warning btn-xs">Waiting Approval</label>
                                             @else 
                                                 <label class="btn btn-success btn-xs">Approved</label>
                                             @endif
-                                            </a>                                        
+                                            </a>     
+                                            -->
+                                            @if($item->status == 1)
+                                                @if($item->is_approved_atasan === NULL)
+                                                    <label onclick="status_approval_medical({{ $item->id }})" class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @endif
+                                                
+                                                @if($item->is_approved_atasan === 0) 
+                                                    <label onclick="status_approval_medical({{ $item->id }})" class="btn btn-danger btn-xs">Rejected</label>
+                                                @endif
+
+                                                @if($item->is_approved_atasan == 1)
+                                                    <label onclick="status_approval_medical({{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
+                                                @endif
+                                            @elseif($item->status == 2)
+                                                <label onclick="status_approval_medical({{ $item->id }})" class="btn btn-success btn-xs">Approved</label>
+                                            @elseif($item->status ==3)
+                                                <label onclick="status_approval_medical({{ $item->id }})" class="btn btn-danger btn-xs">Rejected</label>
+                                            @endif
+
                                         </td>
                                         <td>
                                             @if($item->is_approved_atasan === NULL)

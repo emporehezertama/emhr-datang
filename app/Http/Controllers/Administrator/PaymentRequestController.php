@@ -100,7 +100,7 @@ class PaymentRequestController extends Controller
         $data       = PaymentRequest::where('id', $id)->first();
         $data->save();
 
-        return redirect()->route('administrator.payment-request.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.payment-request.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -113,7 +113,7 @@ class PaymentRequestController extends Controller
         $data = PaymentRequest::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.payment-request.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.payment-request.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -128,7 +128,7 @@ class PaymentRequestController extends Controller
         $data->status = 4;
         $data->save();
 
-        return redirect()->route('administrator.payment-request.index')->with('messages-success', 'Payment Request Berhasil di batalkan !');
+        return redirect()->route('administrator.payment-request.index')->with('messages-success', 'Payment Request successfully rejected !');
     }
 
     /**
@@ -161,7 +161,7 @@ class PaymentRequestController extends Controller
             $form->save();
         }
 
-        return redirect()->route('administrator.payment-request.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.payment-request.index')->with('message-success', 'Data successfully saved!');
     }
 
     /**
@@ -188,12 +188,12 @@ class PaymentRequestController extends Controller
         {
             $params[$no]['NO']               = $no+1;
             $params[$no]['NIK']              = $item->user->nik;
-            $params[$no]['NAMA KARYAWAN']    = $item->user->name;
+            $params[$no]['NAME']    = $item->user->name;
             $params[$no]['POSITION']         = empore_jabatan($item->user_id);
-            $params[$no]['TGL PENGAJUAN']    = date('d F Y', strtotime($item->created_at));
-            $params[$no]['TUJUAN']           = $item->tujuan;
-            $params[$no]['JENIS TRANSAKSI']  = $item->transaction_type;
-            $params[$no]['CARA PEMBAYARAN']  = $item->payment_method;
+            $params[$no]['DATE REQUEST']    = date('d F Y', strtotime($item->created_at));
+            $params[$no]['PURPOSE']           = $item->tujuan;
+            $params[$no]['TRANSACTION TYPE']  = $item->transaction_type;
+            $params[$no]['PAYMENT METHOD']  = $item->payment_method;
 
             $total=0;
             foreach($item->payment_request_form as $type => $form)
@@ -217,8 +217,8 @@ class PaymentRequestController extends Controller
                 $params[$no]['AMOUNT '.($v+1)]           = "-";
                 $params[$no]['AMOUNT APPROVED '.($v+1)]  = "-";
             }
-            $params[$no]['TGL APPROVAL']     = $item->approve_direktur_date !== NULL ? date('d F Y', strtotime($item->approve_direktur_date)) : '';
-            $params[$no]['SUPERVISOR']       = isset($item->direktur->name) ? $item->direktur->name : "";
+            $params[$no]['DATE APPROVAL']     = $item->approve_direktur_date !== NULL ? date('d F Y', strtotime($item->approve_direktur_date)) : '';
+            $params[$no]['DIRECTOR NAME']       = isset($item->direktur->name) ? $item->direktur->name : "";
         }
 
         $styleHeader = [

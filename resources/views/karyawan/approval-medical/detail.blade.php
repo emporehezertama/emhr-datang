@@ -31,8 +31,6 @@
 
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Form Medical Reimbursement</h3>
-                        <hr />
                         <br />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -159,7 +157,7 @@
                         <div class="col-md-12">
                             <a href="{{ route('karyawan.approval.medical.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                             @if($data->is_approved_atasan == 1)
-                                @if($data->approve_direktur === NULL)
+                                @if($data->approve_direktur === NULL  and $data->status < 3)
                                     <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_approved"><i class="fa fa-save"></i> Approve</a>
                                     <a class="btn btn-sm btn-danger waves-effect waves-light m-r-10" id="btn_tolak"><i class="fa fa-close"></i> Denied</a>
                                 @endif
@@ -197,7 +195,7 @@
     });
 
     $("#btn_approved").click(function(){
-        bootbox.confirm('Approve Medical Reimbursement Karyawan ?', function(result){
+        bootbox.confirm('Approve Employee Medical Reimbursement?', function(result){
 
             $("input[name='status']").val(1);
             if(result)
@@ -208,7 +206,7 @@
     });
 
     $("#btn_tolak").click(function(){
-        bootbox.confirm('Tolak Medical Reimbursement Karyawan ?', function(result){
+        bootbox.confirm('Reject Employee Medical Reimbursement?', function(result){
 
             if(result)
             {

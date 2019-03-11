@@ -180,7 +180,7 @@ function approval_count_medical($status='all', $jabatan='direktur')
 	{
 		if($status =='null')
 		{
-			return \App\Models\MedicalReimbursement::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->count();
+			return \App\Models\MedicalReimbursement::where('approve_direktur_id', \Auth::user()->id)->whereNull('approve_direktur')->where('status' ,'<' ,3)->count();
 		}
 		elseif($status =='approved')
 		{
@@ -199,7 +199,7 @@ function approval_count_medical($status='all', $jabatan='direktur')
 	{
 		if($status =='null')
 		{
-			return \App\Models\MedicalReimbursement::where('approved_atasan_id', \Auth::user()->id)->whereNull('is_approved_atasan')->count();
+			return \App\Models\MedicalReimbursement::where('approved_atasan_id', \Auth::user()->id)->whereNull('is_approved_atasan')->where('status' ,'<' ,3)->count();
 		}
 		elseif($status =='approved')
 		{

@@ -67,7 +67,7 @@
                                     <th>TO</th>
                                     <th>FROM</th>
                                     <th>PURPOSE</th>
-                                    <th>TRANSACTION TYPE</th>
+                                    <!--<th>TRANSACTION TYPE</th>-->
                                     <th>PAYMENT METHOD</th>
                                     <th>TOTAL AMOUNT</th>
                                     <th>STATUS</th>
@@ -83,7 +83,7 @@
                                         <td>Accounting Department</td>
                                         <td>{{ $item->user->nik }} / {{ $item->user->name }}</td>
                                         <td>{{ $item->tujuan }}</td>
-                                        <td>{{ $item->transaction_type }}</td>
+                                        <!--<td>{{ $item->transaction_type }}</td>-->
                                         <td>{{ $item->payment_method }}</td>
                                         <td>{{ number_format(sum_payment_request_price($item->id)) }}</td>
                                         <td>
@@ -93,9 +93,12 @@
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>
+                                            <!--
                                             @if($item->status == 1)
                                             <a onclick="batalkan_pengajuan({{ $item->id }})" class="btn btn-danger btn-xs"><i class="fa fa-close"></i> Cancel Payment Request</a>
+
                                             @endif
+                                            -->
                                             <a href="{{ route('administrator.payment-request.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                         </td>
                                     </tr>

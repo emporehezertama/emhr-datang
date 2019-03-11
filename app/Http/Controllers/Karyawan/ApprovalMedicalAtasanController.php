@@ -47,25 +47,25 @@ class ApprovalMedicalAtasanController extends Controller
         {
             $data->status = 3 ;
 
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->user->name .'</strong>,</p> <p>  Pengajuan Medical Reimbursement anda <strong style="color: red;">DITOLAK</strong>.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $data->user->name .'</strong>,</p> <p> Submission of your Medical Reimbursement <strong style="color: red;">REJECTED</strong>.</p>';
 
             \Mail::send('email.medical-approval', $params,
                 function($message) use($data) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Empore - Pengajuan Medical Reimbursement');
+                    $message->subject('Empore - Medical Reimbursement');
                 }
             );
         }
         else
         {
-            $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->direktur->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' mengajukan Medical Reimbursement butuh persetujuan Anda.</p>';
+            $params['text']     = '<p><strong>Dear Sir/Madam '. $data->direktur->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Medical Reimbursement and currently waiting your approval.</p>';
 
             \Mail::send('email.medical-approval', $params,
                 function($message) use($data) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->direktur->email);
-                    $message->subject('Empore - Pengajuan Medical Reimbursement');
+                    $message->subject('Empore - Medical Reimbursement');
                 }
             );
         }
@@ -80,7 +80,7 @@ class ApprovalMedicalAtasanController extends Controller
             $form->save();
         }
 
-        return redirect()->route('karyawan.approval.medical-atasan.index')->with('message-success', 'Form Medical Reimbursement Berhasil diproses !');
+        return redirect()->route('karyawan.approval.medical-atasan.index')->with('message-success', 'Form Medical Reimbursement successfully process !');
     }
 
     /**

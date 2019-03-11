@@ -70,7 +70,7 @@ class OvertimeController extends Controller
         $form->tanggal      = $request->tanggal;
         $form->save();
 
-        return redirect()->route('karyawan.overtime.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('karyawan.overtime.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -83,7 +83,7 @@ class OvertimeController extends Controller
         $data = OvertimeSheet::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('karyawan.overtima.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('karyawan.overtima.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -117,7 +117,7 @@ class OvertimeController extends Controller
         }
 
         $params['data']     = $data;
-        $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' mengajukan Overtime butuh persetujuan Anda.</p>';
+        $params['text']     = '<p><strong>Dear Sir/Madam '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Overtime and currently waiting your approval.</p>';
 
         \Mail::send('email.overtime-approval', $params,
             function($message) use($data) {
@@ -127,6 +127,6 @@ class OvertimeController extends Controller
             }
         );
 
-        return redirect()->route('karyawan.overtime.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('karyawan.overtime.index')->with('message-success', 'Data successfully saved!');
     }
 }

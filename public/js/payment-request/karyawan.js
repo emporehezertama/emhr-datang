@@ -146,7 +146,7 @@ function select_type_(el)
   if($(el).val() == 'Overtime Transport')
   {
       $("#modal_overtime").modal("show");
-  }else if($(el).val() == 'Bensin')
+  }else if($(el).val() == 'Gasoline')
   {
       $("#modal_bensin").modal("show");
   }else {

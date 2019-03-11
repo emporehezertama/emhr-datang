@@ -61,4 +61,8 @@ class CutiKaryawan extends Model
     {
         return $this->hasOne('\App\User', 'id', 'approve_direktur_id');
     }
+    public function manager()
+    {
+        return $this->hasOne('\App\User', 'id', 'approved_atasan_id');
+    }
 }

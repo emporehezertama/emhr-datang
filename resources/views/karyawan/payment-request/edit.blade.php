@@ -1,4 +1,4 @@
-@extends('layouts.administrator')
+@extends('layouts.karyawan')
 
 @section('title', 'Payment Request')
 
@@ -61,6 +61,7 @@
                                     <textarea class="form-control" name="tujuan" readonly="true">{{ $data->tujuan }}</textarea>
                                 </div>
                             </div>
+                            <!--
                             <div class="form-group">
                                 <label class="col-md-12">Trancation Type</label>
                                 <div class="col-md-12">
@@ -68,6 +69,7 @@
                                     <label style="font-weight: normal;"><input type="radio" name="transaction_type" {{ $data->transaction_type == 'Payment' ? 'checked="true"' : '' }}  value="Payment" /> Payment</label>
                                 </div>
                             </div>
+                            -->
                             <hr />
                             <div class="form-group">
                                 <label class="col-md-12">Payment Method</label>

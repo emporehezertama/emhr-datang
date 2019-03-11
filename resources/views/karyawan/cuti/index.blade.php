@@ -58,34 +58,21 @@
                                         <td>{{ $item->total_cuti }} Hari</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
-                                            <!--
-                                            <a onclick="detail_approval({{ $item->id }})"> 
-                                                {!! status_cuti($item->status) !!}
-                                            </a>-->
-                                            <label onclick="detail_approval({{ $item->id }})" class="btn btn-default btn-xs"></label>
+                                            <a onclick="detail_approval({{ $item->id }})">
+                                            {!! status_cuti($item->status) !!}
+                                            </a>
+                                        <!--
                                             @if($item->status == 3)
-                                                @if($item->is_approved_atasan == 0)
-                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4> Reason</h4><hr /><p>{{ $item->catatan_atasan }}</p>')"><i class="fa fa-close"></i>Rejected by Manager</label>
-                                                @elseif($item->approve_direktur == 0)
-                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->approve_direktur_noted }}</p>')"><i class="fa fa-close"></i>Rejected by Director</label>
-                                                @endif 
+                                                <label class="btn btn-danger btn-xs" onclick="detail_approval({{ $item->id }})"><i class="fa fa-close"></i>Rejected</label>
                                             @elseif($item->status == 4)
-                                                <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancellation</label>
-                                            @else
-                                                @if($item->status == 1)
-                                                    @if(empty($item->approved_hrd))
-                                                        <label onclick="detail_approval({{ $item->id }})"class="btn btn-warning btn-xs">Waiting Approval</label>
-                                                    @endif
-                                                    @if($item->approved_hrd == 1)
-                                                        <label onclick="detail_approval({{ $item->id }})"class="btn btn-success btn-xs">Approved</label>
-                                                    @endif
-                                                @endif
-                                                @if($item->status == 2)
+                                                <label class="btn btn-danger btn-xs" onclick="detail_approval({{ $item->id }})"><i class="fa fa-close"></i>Cancelled</label>
+                                            @elseif($item->status == 1)
+                                                <label onclick="detail_approval({{ $item->id }})"class="btn btn-warning btn-xs">Waiting Approval</label>
+                                            @if($item->status == 2)
                                                     <label onclick="detail_approval({{ $item->id }})"class="btn btn-success btn-xs">Approved</label>
                                                 @endif
-
                                             @endif
-
+                                            -->
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>

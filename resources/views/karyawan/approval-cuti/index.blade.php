@@ -61,6 +61,10 @@
                                     <td>{{ $item->keperluan }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>
+                                         <a onclick="detail_approval_cuti({{ $item->id }})">
+                                            {!! status_cuti($item->status) !!}
+                                            </a>
+                                         <!--   
                                         @if($item->status == 1)
                                             @if($item->is_approved_atasan == NULL)
                                                 <label onclick="detail_approval_cuti({{ $item->id }})" class="btn btn-default btn-xs">Waiting Approval</label>
@@ -81,6 +85,7 @@
                                         @elseif($item->status ==4)
                                             <label class="btn btn-danger btn-xs" onclick="bootbox.alert('<h4>Reason</h4><hr /><p>{{ $item->note_pembatalan }}</p>')"><i class="fa fa-close"></i>Cancelled</label>
                                         @endif
+                                        -->
                                     </td>
                                     <td>
                                         @if($item->is_approved_atasan ==1 and $item->approve_direktur === NULL and $item->status < 3)

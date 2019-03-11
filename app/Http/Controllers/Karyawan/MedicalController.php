@@ -82,7 +82,7 @@ class MedicalController extends Controller
             $form->save();
         }
 
-        return redirect()->route('karyawan.medical.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('karyawan.medical.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -97,7 +97,7 @@ class MedicalController extends Controller
 
         MedicalReimbursementForm::where('medical_reimbursement_id', $id)->delete();
 
-        return redirect()->route('karyawan.medical.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('karyawan.medical.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -149,16 +149,16 @@ class MedicalController extends Controller
         }
 
         $params['data']     = $data;
-        $params['text']     = '<p><strong>Dear Bapak/Ibu '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' mengajukan Medical Reimbursement butuh persetujuan Anda.</p>';
+        $params['text']     = '<p><strong>Dear Sir/Madam '. $data->atasan->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Medical Reimbursement and currently waiting your approval.</p>';
 
         \Mail::send('email.medical-approval', $params,
             function($message) use($data) {
                 $message->from('emporeht@gmail.com');
                 $message->to($data->atasan->email);
-                $message->subject('Empore - Pengajuan Medical Reimbursement');
+                $message->subject('Empore - Medical Reimbursement');
             }
         );
 
-        return redirect()->route('karyawan.medical.index')->with('message-success', 'Anda berhasil mengajukan Medical Reimbursement !');
+        return redirect()->route('karyawan.medical.index')->with('message-success', 'You have successfully submitted Medical Reimbursement !');
     }
 }

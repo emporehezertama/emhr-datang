@@ -49,6 +49,7 @@
                                     <textarea class="form-control" name="tujuan" readonly="true">{{ $data->tujuan }}</textarea>
                                 </div>
                             </div>
+                            <!--
                             <div class="form-group">
                                 <label class="col-md-12">Trancation Type</label>
                                 <div class="col-md-12">
@@ -56,6 +57,7 @@
                                     <label style="font-weight: normal;"><input type="radio" name="transaction_type" value="Payment" {{ $data->transaction_type == 'Payment' ? 'checked' : '' }} /> Payment</label>
                                 </div>
                             </div>
+                            -->
                             <hr />
                             <div class="form-group">
                                 <label class="col-md-12">Payment Method</label>
@@ -82,7 +84,7 @@
                             <div class="form-group">
                                 <label class="col-md-12">Name Of Bank</label>
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" readonly="true" value="{{ $data->user->bank->name }}" />
+                                    <input type="text" class="form-control" readonly="true" value="{{ isset($data->user->bank->name) }}" />
                                 </div>
                             </div>
                         </div>
