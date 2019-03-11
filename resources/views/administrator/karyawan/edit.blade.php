@@ -72,6 +72,11 @@
                                                 <th>Day</th>
                                                 <th>Planned Sign In</th>
                                                 <th>Planned Sign Out</th>
+                                                <th>Sign In</th>
+                                                <th>Sign Out</th>
+                                                <th>Different Time</th>
+                                                <th>Late Sign In</th>
+                                                <th>Early Sign Out</th>
                                             </tr>
                                         </thead>
                                         <tbody class="no-padding-td">
@@ -82,6 +87,11 @@
                                                     <td>{{ $item->timetable }}</td>
                                                     <td>{{ $item->on_dutty }}</td>
                                                     <td>{{ $item->off_dutty }}</td>
+                                                    <td>{{ $item->clock_in }}</td>
+                                                    <td>{{ $item->clock_out }}</td>
+                                                    <td>{{ $item->work_time }}</td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 @endforeach
                                             @endif
