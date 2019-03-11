@@ -442,11 +442,11 @@ class PayrollController extends Controller
             $params[$k]['NO']           = $k+1;
             $params[$k]['NIK']          = $i->nik;
             $params[$k]['Nama']         = $i->name;
-            $params[$k]['Bonus / THR']  = $payroll->bonus;
 
             if($payroll)
             {
                 $params[$k]['Salary']                    = $payroll->salary;
+                $params[$k]['Bonus / THR']  = $payroll->bonus;
                 
                 foreach(PayrollEarnings::all() as $item)
                 {   
@@ -478,6 +478,8 @@ class PayrollController extends Controller
             else
             {
                 $params[$k]['Salary']                     = 0;
+                $params[$k]['Bonus / THR']                = 0;
+
                 foreach(PayrollEarnings::all() as $item)
                 {   
                     $params[$k][$item->title] = 0;
