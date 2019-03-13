@@ -103,14 +103,13 @@ class RequestPaySlipController extends Controller
         
         if($data->user->email != "")
         { 
-            \Mail::send('administrator.request-pay-slip.print-pay-slip', $params,
-                function($message) use($file, $data) {
+            \Mail::send('administrator.request-pay-slip.email-pay-slip', $params,
+                function($message) use($file, $data, $bulan) {
                     $message->from('info@system.com');
-                    //$message->to('doni.enginer@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Request Pay-Slip');
+                    $message->subject('Request Pay-Slip Bulan ('. implode('/', $bulan) .')');
                     $message->attach($file, array(
-                            'as' => 'Payslip-'. $data->user->nik .'.pdf', 
+                            'as' => 'Payslip-'. $data->user->nik .'('. implode('/', $bulan) .').pdf', 
                             'mime' => 'application/pdf')
                     );
                     $message->setBody('');
@@ -119,7 +118,7 @@ class RequestPaySlipController extends Controller
         }
         
         $data->note     = $request->note;
-        $data->status   = 2;
+        #$data->status   = 2;
         $data->save();
 
         return redirect()->route('administrator.request-pay-slip.index')->with('message-success', 'Request Pay Slip berhasil diproses');

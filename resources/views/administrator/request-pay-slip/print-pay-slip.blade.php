@@ -41,7 +41,7 @@
 	<strong>IDR Portion</strong>
 	<table style="width: 100%">
 		<tr>
-			<td style="width: 50%;vertical-align: top;">
+			<td style="width: 49%;vertical-align: top;">
 				<table style="width: 100%;" class="border">
 					<tr>
 						<th style="padding-bottom: 15px;padding-top: 15px;">Income Description</th>
@@ -69,7 +69,8 @@
                     @endforeach
 				</table>
 			</td>
-			<td style="width: 50%;vertical-align: top;">
+			<td>&nbsp;</td>
+			<td style="width: 49%;vertical-align: top;">
 				<table style="width: 100%;" class="border">
 					<tr>
 						<th style="padding-bottom: 15px;padding-top: 15px;">Deduction Description</th>
@@ -107,6 +108,36 @@
 			</td>
 		</tr>
 	</table>
+
+	<table style="width: 50%;">
+		<tr>
+			<th style="border-bottom: 1px solid black;"></th>
+			<th style="border-bottom: 1px solid black;">IDR Portion</th>
+		</tr>
+		<tr>
+			<th>Take Home Pay </th>
+			<th> : {{ number_format($item->thp) }}</th>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th>Bank Transfer Details</th>
+		</tr>
+		<tr>
+			<td>Bank</td>
+			<td> : {{ isset($data->user->bank->name) ? $data->user->bank->name : '' }}</td>
+		</tr>
+		<tr>
+			<td>A/C no</td>
+			<td> : {{ isset($data->user->nomor_rekening) ? $data->user->nomor_rekening : '' }}</td>
+		</tr>
+		<tr>
+			<td>Account name</td>
+			<td> : {{ isset($data->user->nama_rekening) ? $data->user->nama_rekening : '' }}</td>
+		</tr>
+	</table>
+	
 	@if($total == 0)
 	@elseif(($k+1) != $total)
 		<div style="page-break-before:always"></div>
