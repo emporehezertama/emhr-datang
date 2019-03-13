@@ -66,7 +66,7 @@
                                 <select class="form-control" name="setting[login_with_captcha]">
                                     <option value="1" {{ get_setting('login_with_captcha') == 1 ? 'selected' : '' }}>None</option>
                                     <option value="2" {{ get_setting('login_with_captcha') == 2 ? 'selected' : '' }}>Standar</option>
-                                    <option value="3" {{ get_setting('login_with_captcha') == 3 ? 'selected' : '' }}>Google reCaptcha</option>
+                                    <!-- <option value="3" {{ get_setting('login_with_captcha') == 3 ? 'selected' : '' }}>Google reCaptcha</option> -->
                                 </select>
                             </div>
                         </div>

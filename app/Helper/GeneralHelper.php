@@ -88,6 +88,20 @@ function list_language()
 }
 
 /**
+ * Update Setting
+ */
+function update_setting($key, $value)
+{
+	$setting = \App\Models\Setting::where('key', $key)->first();
+
+	if($setting)
+	{
+		$setting->value = $value;
+		$setting->save();
+	}
+}
+
+/**
  * Get Setting
  * @param  $key
  * @return string

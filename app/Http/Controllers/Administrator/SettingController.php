@@ -156,9 +156,33 @@ class SettingController extends Controller
      */
     public function backup()
     {
-        $params['files'] = Storage::allFiles(env('APP_NAME'));
-
+        $params['data'] = Storage::allFiles(env('APP_NAME'));
+        
         return view('administrator.setting.backup')->with($params);
+    }
+
+    /**
+     * Backup Delete
+     * @param  Request $request
+     * @return void
+     */
+    public function backupDelete(Request $request)
+    {
+        $file = storage_path() .'/app/'. $request->file;
+        #unlink($file);
+        $result = Storage::delete( $request->file );
+
+        return redirect()->route('administrator.setting.backup')->with('message-success','Files deleted.');
+    }
+
+    /**
+     * Backup Delete
+     * @param  Request $request
+     * @return void
+     */
+    public function backupGet(Request $request)
+    {
+        return Storage::download( $request->file );
     }
 
     /**

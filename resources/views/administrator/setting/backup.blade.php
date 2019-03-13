@@ -43,90 +43,56 @@
                                     <label class="m-r-10"><input type="radio" value="4" name="setting[schedule]" {{ get_setting('schedule') == 4 ? 'checked' : '' }} /> Weekly</label>
                                     <label class="m-r-10"><input type="radio" value="5" name="setting[schedule]" {{ get_setting('schedule') == 5 ? 'checked' : '' }} /> Monthly</label>
                                     <div class="">
-                                        <input type="text" class="form-control datepicker" name="setting[schedule_custom_date]" placeholder="Custom Date">
+                                        <input type="text" class="form-control datepicker" name="setting[schedule_custom_date]" value="{{ get_setting('schedule_custom_date') }}" placeholder="Custom Date">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 p-l-0">
-                    <div class="white-box">
-                        <table class="table table-stripped">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Used Storage</th>
-                                    <th>#</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+            </form>
+            <div class="col-md-6 p-l-0">
+                <div class="white-box">
+                    <table class="table table-stripped">
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Date</th>
+                                <th>Used Storage</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @php(rsort($data))
+                        @foreach($data as $item)
+                        <tr>
+                            <td>
+                                <form method="POST" action="{{ route('administrator.setting.backup-get') }}">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="file" value="{{ $item }}">
+                                    <a href="javascript:void(0)" class="text-danger" onclick="confirm_delete('Download File ?', this)">
+                                        <i class="fa fa-download"></i> {{ $item }}
+                                    </a>
+                                </form>
+                            </td>
+                            <td>{{ date('d F Y H:i:s', Storage::lastModified($item)) }}</td>
+                            <td>{{ floor(Storage::size($item) / 1000000) }} Mb</td>
+                            <td>
+                                <form method="POST" action="{{ route('administrator.setting.backup-delete') }}">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="file" value="{{ $item }}">
+                                    <a href="javascript:void(0)" class="text-danger" onclick="confirm_delete('Delete Files ?', this)"><i class="fa fa-trash"></i>
+                                    </a>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            </form>      
+            </div>  
         </div>
     </div>
     @include('layouts.footer')
 </div>
-@section('js')
-<style type="text/css">
-    .colorPickSelectorheader_color, .colorPickSelectormenu_color{
-          border-radius: 5px;
-          width: 36px;
-          height: 36px;
-          cursor: pointer;
-          -webkit-transition: all linear .2s;
-          -moz-transition: all linear .2s;
-          -ms-transition: all linear .2s;
-          -o-transition: all linear .2s;
-          transition: all linear .2s;
-          border: 1px solid #eee;
-        }
-
-</style>
-<link rel="stylesheet" href="{{ asset('js/colorpicker/src/colorPick.css') }}">
-<script src="{{ asset('js/colorpicker/src/colorPick.js') }}"></script>
-<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
-<script type="text/javascript">
-    CKEDITOR.replace( 'ckeditor' );
-    CKEDITOR.replace( 'ckeditor_testing' );
-
-    $(".colorPickSelectorheader_color").colorPick({
-        'initialColor' : '{{ empty(get_setting('header_color')) ? '#bd332b' : get_setting('header_color') }}',
-        'onColorSelected': function(){
-            $('.navbar-header').css({ backgroundColor: this.color });
-            $(".header_color").val(this.color);
-
-            this.element.css({'backgroundColor': this.color, 'color': this.color});
-        }
-    });
-
-    $(".colorPickSelectormenu_color").colorPick({
-        'initialColor' : '{{ empty(get_setting('menu_color')) ? '#bd332b' : get_setting('menu_color') }}',
-        'onColorSelected': function(){
-            $('#side-menu > li > a.active').css({ backgroundColor: this.color });
-            $(".menu_color").val(this.color);
-
-            this.element.css({'backgroundColor': this.color, 'color': this.color});
-            $('.navbar-header').css("border-top", '5px solid '+ this.color );
-        }
-    });
-
-
-    $(".header_color").on("input",function(){
-        var warna  = $(this).val();
-
-        $('.navbar-header').css({ backgroundColor: warna});
-    });
-
-    $(".menu_color").on("input",function(){
-        var warna  = $(this).val();
-
-        $('#side-menu > li > a.active').css("background-color",  warna);
-        $('.navbar-header').css("border-top", '5px solid '+ warna );
-
-    });
-</script>
-@endsection
 @endsection

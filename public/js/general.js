@@ -3,7 +3,7 @@ price_format();
 
 
 jQuery('.datepicker').datepicker({
-    format: 'yyyy-mm-dd',
+    dateFormat: 'yy/mm/dd',
 });
 
 $('#data_table_no_copy').DataTable({
