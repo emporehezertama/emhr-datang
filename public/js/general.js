@@ -1,6 +1,11 @@
 // init
 price_format();
 
+
+jQuery('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+});
+
 $('#data_table_no_copy').DataTable({
     dom: 'Bfrtip',
      buttons: []

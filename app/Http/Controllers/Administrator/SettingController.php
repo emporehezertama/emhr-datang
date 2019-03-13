@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use Storage;
 
 class SettingController extends Controller
 {   
@@ -155,7 +156,9 @@ class SettingController extends Controller
      */
     public function backup()
     {
-        return view('administrator.setting.backup');
+        $params['files'] = Storage::allFiles(env('APP_NAME'));
+
+        return view('administrator.setting.backup')->with($params);
     }
 
     /**
