@@ -118,7 +118,7 @@ class RequestPaySlipController extends Controller
         }
         
         $data->note     = $request->note;
-        #$data->status   = 2;
+        $data->status   = 2;
         $data->save();
 
         return redirect()->route('administrator.request-pay-slip.index')->with('message-success', 'Request Pay Slip berhasil diproses');
