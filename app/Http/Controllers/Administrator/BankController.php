@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bank;
 
 class BankController extends Controller
-{
+{ 
     /**
      * Create a new controller instance.
      *

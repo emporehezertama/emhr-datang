@@ -11,7 +11,6 @@ use App\Models\Absensi;
 
 class AbsensiController extends Controller
 {   
-
 	public function __construct(\Maatwebsite\Excel\Excel $excel)
 	{
 	    $this->excel = $excel;
