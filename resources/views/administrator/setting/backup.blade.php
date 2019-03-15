@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="row">
-            <form class="form-horizontal" id="form-setting" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.backup-save') }}" method="POST">
+            <form class="form-horizontal" id="form-setting" autocomplete="off" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.backup-save') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="col-md-6 p-l-0">
                     <div class="white-box">
