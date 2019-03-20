@@ -195,7 +195,7 @@ class PayrollController extends Controller
 
                 $sheet->fromArray($params);
                 
-              });
+            });
 
             $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
 
@@ -753,7 +753,7 @@ class PayrollController extends Controller
             $temp->payroll_id                   = $payroll_id;
             $temp->user_id                      = $user_id;
             $temp->salary                       = replace_idr($item->salary);
-            $temp->thp                          = replace_idr($thp);
+            $temp->thp                          = $thp;
             $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
             $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
             $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
