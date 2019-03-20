@@ -146,10 +146,10 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Kematian (JKM) (Company) '. get_setting('bpjs_jkm_company').'%']          = $item->salary *  get_setting('bpjs_jkm_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Company) '. get_setting('bpjs_jht_company').'%']          = $item->salary *  get_setting('bpjs_jht_company') / 100;
             $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->bpjs_pensiun_company;
-            $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->salary *  get_setting('bpjs_kesehatan_company') / 100;
+            $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->bpjs_kesehatan_company; //$item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->salary *  get_setting('bpjs_jaminan_jht_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
-            $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
+            $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Total Earnings']                       = $item->total_earnings;
@@ -350,7 +350,6 @@ class PayrollController extends Controller
         $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
         $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
-        $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
         $temp->bonus                        = replace_idr($request->bonus);
         $temp->save(); 
 
@@ -402,7 +401,7 @@ class PayrollController extends Controller
         $history->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $history->bpjs_kesehatan_employee      = $temp->bpjs_kesehatan_employee;
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
-        $history->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+        $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
         $history->save();
 
@@ -743,7 +742,7 @@ class PayrollController extends Controller
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2; //get_setting('bpjs_kesehatan_company');
             $temp->yearly_income_tax            = $yearly_income_tax;   
             $temp->save(); 
 
@@ -766,7 +765,7 @@ class PayrollController extends Controller
             $temp->bpjs_pensiun_employee        = $item->bpjs_pensiun_employee;
 
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2;//get_setting('bpjs_kesehatan_company');
             $temp->save();
 
             if(isset($item->payrollDeductionsEmployee))
