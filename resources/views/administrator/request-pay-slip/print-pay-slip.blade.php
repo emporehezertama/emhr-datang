@@ -50,8 +50,8 @@
 						<th style="text-align: right; width: 25%;">Amount</th>
 					</tr>
 					<tr>
-						<td>Salary</td>
-						<td style="text-align: right;">{{ number_format($item->salary) }}</td>
+						<td style="width: 25%;">Salary</td>
+						<td style="text-align: right;width: 25%;">{{ number_format($item->salary) }}</td>
 					</tr>
 					@if($item->bonus > 0)
 					<tr>
