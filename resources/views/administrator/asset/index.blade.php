@@ -83,6 +83,11 @@
                                     </thead>
                                     <tbody>
                                         @foreach($data as $no => $item)
+                                          @if(!isset($item->user->name))
+                                          {{ delete_asset_item($item->id) }}
+                                          <?php continue; ?>
+                                          @endif  
+                                          
                                           @if(isset($item->asset_type->name) and strtoupper($item->asset_type->name) =='MOBIL')
                                             <tr>
                                                 <td class="text-center">{{ $no+1 }}</td>   
@@ -120,6 +125,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div class="col-m-6 pull-left text-left">Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries</div>
+                                <div class="col-md-6 pull-right text-right">{{ $data->appends($_GET)->render() }}</div><div class="clearfix"></div>
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="asset">

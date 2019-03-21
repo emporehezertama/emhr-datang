@@ -1,4 +1,25 @@
 <?php
+/**
+ * Delete Item Asset
+ * @return void
+ */
+function delete_asset_item($id)
+{
+	$asset = \App\Models\Asset::where('id', $id)->first();
+	if($asset)
+	{
+		$asset->delete();
+	}
+
+	$history = \App\Models\AssetTracking::where('asset_id', $id)->first();
+	if($history)
+	{
+		$history->delete();
+	}
+
+	return;
+}
+
 
 /**
  * Month name

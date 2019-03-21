@@ -781,33 +781,11 @@
         </script>
     @endif
 
-    <script type="text/javascript">
-        $('#data_table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-        
+    <script type="text/javascript"> 
         $(".myadmin-alert .closed").click(function(event) {
             $(this).parents(".myadmin-alert").fadeToggle(350);
             return false;
         });
-
-        $('#data_table2').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-        $('#data_table3').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
     </script>
 
     @yield('footer-script')

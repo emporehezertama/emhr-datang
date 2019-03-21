@@ -26,7 +26,7 @@ class NewsController extends Controller
     public function index()
     {
         //$params['data'] = \App\News::where('status', 1)->orderBy('id', 'DESC')->get();
-        $params['data'] = News::orderBy('id', 'DESC')->get();
+        $params['data'] = News::orderBy('id', 'DESC')->paginate(50);
 
         return view('administrator.news.index')->with($params);
     }

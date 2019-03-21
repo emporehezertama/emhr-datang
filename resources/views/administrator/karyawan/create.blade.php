@@ -467,6 +467,7 @@
                             <div class="col-md-12">
                                 <select class="form-control modal-hubungan">
                                     <option value="">Choose Relationship</option>
+                                    <!-- <option>Spouse</option> -->
                                     <option value="Suami">Husband</option>
                                     <option value="Istri">Wife</option>
                                     <option value="Ayah Kandung">Father</option>

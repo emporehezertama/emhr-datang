@@ -69,6 +69,10 @@
                             </thead>
                             <tbody>
                                 @foreach($data as $no => $item)
+                                    @if(!isset($item->asset->asset_number))
+                                        {{ $item->delete() }}
+                                        <?php continue; ?>
+                                    @endif
                                     <tr>
                                         <td class="text-center">{{ $no+1 }}</td>   
                                         <td>{{ $item->asset->asset_number }}</td>

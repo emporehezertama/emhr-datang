@@ -26,7 +26,7 @@ class RequestPaySlipController extends Controller
      */
     public function index()
     {
-        $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->paginate(50);
 
         return view('administrator.request-pay-slip.index')->with($params);
     }
@@ -78,7 +78,7 @@ class RequestPaySlipController extends Controller
         }
 
         $params['total']        = $total;
-        $params['dataArray']    = $dataArray;//\App\PayrollHistory::whereIn('id', $whereIn)->get();
+        $params['dataArray']    = $dataArray;
         $params['data']         = $data;
         $params['bulan']        = $bulan;
         $params['tahun']        = $request->tahun;
