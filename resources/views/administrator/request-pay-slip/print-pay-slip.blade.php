@@ -34,7 +34,9 @@
 		</tr>
 		<tr>
 			<th>Position Title</th>
-			<th colspan="2"> : {{ empore_jabatan($data->user->id) }}</th>
+			<th> : {{ empore_jabatan($data->user->id) }}</th>
+			<th>BPJS Karyawan Number</th>
+			<th> : {{ $data->user->bpjs_number }}</th>
 		</tr>
 	</table>
 	<br />
@@ -44,17 +46,19 @@
 			<td style="width: 49%;vertical-align: top;">
 				<table style="width: 100%;" class="border">
 					<tr>
-						<th style="padding-bottom: 15px;padding-top: 15px;">Income Description</th>
-						<th style="text-align: right;">Amount</th>
+						<th style="padding-bottom: 15px;padding-top: 15px; width: 25%;">Income Description</th>
+						<th style="text-align: right; width: 25%;">Amount</th>
 					</tr>
 					<tr>
 						<td>Salary</td>
 						<td style="text-align: right;">{{ number_format($item->salary) }}</td>
 					</tr>
+					@if($item->bonus > 0)
 					<tr>
 						<td>Bonus / THR</td>
 						<td style="text-align: right;">{{ number_format($item->bonus) }}</td>
 					</tr>
+					@endif
 					@foreach(payrollEarningsEmployeeHistory($item->id) as $i)
                         @if(isset($i->payrollEarnings->title))
                           <tr>
