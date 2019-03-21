@@ -21,10 +21,10 @@
 	<br />
 	<table style="width: 100%;">
 		<tr>
-			<th>EMPORE ID</th>
-			<th> : {{ $data->user->nik }}</th>
-			<th>Status</th>
-			<th> : {{ $data->user->organisasi_status }}</th>
+			<th style="width: 25%;">EMPORE ID</th>
+			<th style="width: 25%;"> : {{ $data->user->nik }}</th>
+			<th style="width: 25%;">Status</th>
+			<th style="width: 25%;"> : {{ $data->user->organisasi_status }}</th>
 		</tr>
 		<tr>
 			<th>Name</th>
@@ -46,12 +46,12 @@
 			<td style="width: 49%;vertical-align: top;">
 				<table style="width: 100%;" class="border">
 					<tr>
-						<th style="padding-bottom: 15px;padding-top: 15px; width: 25%;">Income Description</th>
-						<th style="text-align: right; width: 25%;">Amount</th>
+						<th style="padding-bottom: 15px;padding-top: 15px;">Income Description</th>
+						<th style="text-align: right;">Amount</th>
 					</tr>
 					<tr>
-						<td style="width: 25%;">Salary</td>
-						<td style="text-align: right;width: 25%;">{{ number_format($item->salary) }}</td>
+						<td>Salary</td>
+						<td style="text-align: right;">{{ number_format($item->salary) }}</td>
 					</tr>
 					@if($item->bonus > 0)
 					<tr>
