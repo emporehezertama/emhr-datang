@@ -21,8 +21,8 @@
 	<br />
 	<table style="width: 100%;">
 		<tr>
-			<th style="width: 25%;">EMPORE ID</th>
-			<th style="width: 25%;"> : {{ $data->user->nik }}</th>
+			<th style="width: 20%;">EMPORE ID</th>
+			<th style="width: 30%;"> : {{ $data->user->nik }}</th>
 			<th style="width: 25%;">Status</th>
 			<th style="width: 25%;"> : {{ $data->user->organisasi_status }}</th>
 		</tr>
