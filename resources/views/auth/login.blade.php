@@ -42,7 +42,7 @@
                   <span class="field-icon toggle-password fa fa-fw fa-eye"></span>
                 </div>
               </div>
-              <!--
+              
               @if(get_setting('login_with_captcha') == 2)
               <div class="form-group">
                 <div class="col-md-12">
@@ -56,7 +56,7 @@
                 </div>
               </div>
               @endif
-
+              <!--
               @if(get_setting('login_with_captcha') == 3)
               <div class="form-group">
                 <div class="col-md-12">

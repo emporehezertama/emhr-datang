@@ -45,7 +45,7 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
-        /*
+        
         if(get_setting('login_with_captcha')==2)
         {
             $this->validate($request, [
@@ -86,7 +86,7 @@ class LoginController extends Controller
 
             }
         }
-        */
+        
     }
 
     /**

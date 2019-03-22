@@ -47,7 +47,7 @@ class AssetController extends Controller
             }
         }
 
-        $params['data'] = $data->get();
+        $params['data'] = $data->paginate(50);
 
         return view('administrator.asset.index')->with($params);
     }

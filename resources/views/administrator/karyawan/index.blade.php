@@ -30,7 +30,7 @@
                         </ul>
                     </div>
                     <div class="btn-group m-l-10 m-r-10 pull-right">
-                        <a href="javascript:void(0)" aria-expanded="false" data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle btn-outline">Action 
+                        <a href="javascript:void(0)" aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle">Action 
                             <i class="fa fa-gear"></i>
                         </a>
                         <ul role="menu" class="dropdown-menu">

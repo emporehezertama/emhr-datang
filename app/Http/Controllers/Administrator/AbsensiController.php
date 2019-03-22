@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiItem;
-use App\Models\User;
+use App\User;
+use App\Models\Absensi;
 
 class AbsensiController extends Controller
 {   
-
 	public function __construct(\Maatwebsite\Excel\Excel $excel)
 	{
 	    $this->excel = $excel;
@@ -21,8 +21,22 @@ class AbsensiController extends Controller
      * @return [type] [description]
      */
     public function index()
+    {   
+        $data = Absensi::all();
+        
+        return view('administrator.absensi.index')->with(['data' => $data]);
+    }
+
+    /**
+     * Detail
+     * @param  $id
+     * @return view
+     */
+    public function detail($id)
     {
-        return view('administrator.absensi.index');
+        $data = AbsensiItem::where('absensi_id', $id)->get();
+
+        return view('administrator.absensi.detail')->with(['data' => $data]);
     }
 
     /**
@@ -33,7 +47,7 @@ class AbsensiController extends Controller
     {
         $data = AbsensiItemTemp::all();
 
-        $absensi                    = new \App\Absensi();
+        $absensi                    = new Absensi();
         $absensi->tanggal_upload    = date('Y-m-d');
         $absensi->save();
 
@@ -41,7 +55,7 @@ class AbsensiController extends Controller
         {
             $temp       = new AbsensiItem();
 
-            $user       = User::where('employee_number', $v->emp_no)->where('absensi_number', $v->ac_no)->first();
+            $user       = User::where('nik', $v->emp_no)->first();
             
             if($user) $temp->user_id = $user->id;
 
@@ -152,7 +166,11 @@ class AbsensiController extends Controller
             	$temp 				= new AbsensiItemTemp();
 
             	// cek absensi yang sama dengan no karyawa dan tanggal yang sama
-            	$absensiCek = AbsensiItem::where('emp_no', $row[0])->where('date', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]))->first();
+                $date = str_replace("'", '', $row[5]);
+                //$date = empty($row[5]) ?  "" : \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]);
+                
+
+            	$absensiCek = AbsensiItem::where('emp_no', $row[0])->where('date', $date)->first();
             	
             	if($absensiCek) $temp->absensi_item_id = $absensiCek->id;
 
@@ -161,7 +179,7 @@ class AbsensiController extends Controller
             	$temp->no 			= $row[2];
             	$temp->name 		= $row[3];
             	$temp->auto_assign 	= $row[4];
-            	$temp->date 		= \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]);
+            	$temp->date 		= $date;
             	$temp->timetable 	= $row[6];
             	$temp->on_dutty 	= $row[7];
             	$temp->off_dutty 	= $row[8];

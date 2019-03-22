@@ -27,7 +27,7 @@
                             </ul>
                         </div>
                     @endif
-                    <ul class="nav customtab nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#biodata" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Biodata</span></a></li>
 
                         <li role="presentation" class=""><a href="#dependent" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Dependent</span></a></li>
@@ -44,9 +44,101 @@
                         @if(isset($payroll->salary))
                         <li role="presentation" class=""><a href="#payroll" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Payroll</span></a></li>
                         @endif
+                        <li role="presentation" class=""><a href="#attendance" aria-controls="attendance" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-user"></i></span> <span class="hidden-xs">Attendance</span></a></li>
                     </ul>
 
                     <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade" id="attendance">
+                            <form class="form-control">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="date" placeholder="Period" />
+                                    </div>
+                                    <div class="col-md-2 p-l-0">
+                                        <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-search-plus"></i> </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <ul class="nav customtab nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#attendance_sheet" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Attendance Sheet</span></a></li>
+                                <li role="presentation" class=""><a href="#attendance_calculation" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Calculation Attendance Data</span></a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="attendance_sheet">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Day</th>
+                                                <th>Planned Sign In</th>
+                                                <th>Planned Sign Out</th>
+                                                <th>Sign In</th>
+                                                <th>Sign Out</th>
+                                                <th>Different Time</th>
+                                                <th>Late Sign In</th>
+                                                <th>Early Sign Out</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="no-padding-td">
+                                            @if(isset($data->absensiItem))
+                                                @foreach($data->absensiItem as $item)
+                                                <tr>
+                                                    <td>{{ $item->date }}</td>
+                                                    <td>{{ $item->timetable }}</td>
+                                                    <td>{{ $item->on_dutty }}</td>
+                                                    <td>{{ $item->off_dutty }}</td>
+                                                    <td>{{ $item->clock_in }}</td>
+                                                    <td>{{ $item->clock_out }}</td>
+                                                    <td>{{ $item->work_time }}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane fade" id="attendance_calculation">
+
+                                    <div class="col-md-4 b-all" style="width: 38%;margin-right: 0.5%;">
+                                        <h3>Overtime</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No Of Overtime</th>
+                                                    <th>Total Overtime</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4 b-all m-l-0" style="width: 38%; margin-left:0;">
+                                        <h3>Absensi</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No Of Overtime</th>
+                                                    <th>Total Overtime</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4 b-all m-l-0" style="width: 38%; margin-left:0;">
+                                        <h3>Daily Attendance</h3>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No Of Overtime</th>
+                                                    <th>Total Overtime</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="clearfix"></div> 
+                                </div>
+                            </div>
+
+                        </div>
                         @if(isset($payroll->salary))
                         <div role="tabpanel" class="tab-pane fade" id="payroll">
                             <h3 class="box-title m-b-0">Payroll</h3>
@@ -1070,6 +1162,10 @@
 
 @section('footer-script')
     <style type="text/css">
+        .no-padding-td td {
+            padding-top:2px !important;
+            padding-bottom:2px !important;
+        }
         .staff-branch-select, .head-branch-select {
             display: none;
         }

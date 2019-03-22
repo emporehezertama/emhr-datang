@@ -28,9 +28,7 @@
                 <li><a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
                 <li><a href="{{ route('administrator.exit-interview.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance </span></a></li>
                 <li><a href="{{ route('administrator.training.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a></li>
-                <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Gross</span></a></li>
-                <li><a href="{{ route('administrator.request-pay-slipnet.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Net</span></a></li>
-                <li><a href="{{ route('administrator.request-pay-slipgross.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip Net/Gross</span></a></li>
+                <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip</span></a></li>
             </ul>
         </li>
 
@@ -144,20 +142,9 @@
             </ul>
         </li>
         <li class="mega-nav">
-            <a href="javascript:void(0)" class="waves-effect">
-                <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Request Pay Slip<span class="fa arrow"></span></span>
+            <a href="{{ route('karyawan.request-pay-slip.index') }}" class="waves-effect">
+                <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>
             </a>
-            <ul class="nav nav-second-level">
-                <li>
-                    <a href="{{ route('karyawan.request-pay-slip.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Pay Slip Gross</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('karyawan.request-pay-slipnet.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Pay Slip Net</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('karyawan.request-pay-slipgross.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Pay Slip Net/Gross</span></a>
-                </li>
-            </ul>
         </li>
     @if(get_setting('struktur_organisasi') == 3)
         @php($leave_menu = count_leave_approval() )

@@ -38,6 +38,17 @@ class PayrollController extends Controller
 
         if(request())
         {
+            if(!empty(request()->month))
+            {
+                if(request()->month != date('m'))
+                {
+                    $result = PayrollHistory::select('payroll_history.*')
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->whereMonth('payroll_history.created_at', '=', request()->month)
+                                                ->orderBy('payroll_history.id', 'DESC');
+                }
+            }
+
             if(!empty(request()->is_calculate))
             {
                 $result = $result->where('is_calculate', request()->is_calculate );
@@ -73,7 +84,7 @@ class PayrollController extends Controller
         }
 
         $params['data'] = $result->get();
-
+        
         return view('administrator.payroll.index')->with($params);
     } 
 
@@ -134,11 +145,11 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Kecelakaan Kerja (JKK) (Company) '. get_setting('bpjs_jkk_company').'%']  = $item->salary *  get_setting('bpjs_jkk_company') / 100;
             $params[$k]['BPJS Jaminan Kematian (JKM) (Company) '. get_setting('bpjs_jkm_company').'%']          = $item->salary *  get_setting('bpjs_jkm_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Company) '. get_setting('bpjs_jht_company').'%']          = $item->salary *  get_setting('bpjs_jht_company') / 100;
-            $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->salary *  get_setting('bpjs_pensiun_company') / 100;
-            $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->salary *  get_setting('bpjs_kesehatan_company') / 100;
+            $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->bpjs_pensiun_company;
+            $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->bpjs_kesehatan_company; //$item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->salary *  get_setting('bpjs_jaminan_jht_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
-            $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
+            $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Total Earnings']                       = $item->total_earnings;
@@ -184,7 +195,7 @@ class PayrollController extends Controller
 
                 $sheet->fromArray($params);
                 
-              });
+            });
 
             $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
 
@@ -339,7 +350,6 @@ class PayrollController extends Controller
         $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
         $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
-        $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
         $temp->bonus                        = replace_idr($request->bonus);
         $temp->save(); 
 
@@ -391,7 +401,7 @@ class PayrollController extends Controller
         $history->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $history->bpjs_kesehatan_employee      = $temp->bpjs_kesehatan_employee;
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
-        $history->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+        $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
         $history->save();
 
@@ -446,6 +456,7 @@ class PayrollController extends Controller
             if($payroll)
             {
                 $params[$k]['Salary']                    = $payroll->salary;
+                $params[$k]['Bonus / THR']  = $payroll->bonus;
                 
                 foreach(PayrollEarnings::all() as $item)
                 {   
@@ -477,6 +488,8 @@ class PayrollController extends Controller
             else
             {
                 $params[$k]['Salary']                     = 0;
+                $params[$k]['Bonus / THR']                = 0;
+
                 foreach(PayrollEarnings::all() as $item)
                 {   
                     $params[$k][$item->title] = 0;
@@ -729,7 +742,7 @@ class PayrollController extends Controller
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2; //get_setting('bpjs_kesehatan_company');
             $temp->yearly_income_tax            = $yearly_income_tax;   
             $temp->save(); 
 
@@ -740,19 +753,18 @@ class PayrollController extends Controller
             $temp->payroll_id                   = $payroll_id;
             $temp->user_id                      = $user_id;
             $temp->salary                       = replace_idr($item->salary);
-            $temp->thp                          = replace_idr($thp);
+            $temp->thp                          = $thp;
             $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
             $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
             $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-
             $temp->bpjs_kesehatan_employee      = $item->bpjs_kesehatan_employee;
             $temp->bpjs_ketenagakerjaan_employee= $item->bpjs_ketenagakerjaan_employee;
             $temp->bpjs_pensiun_employee        = $item->bpjs_pensiun_employee;
-
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = get_setting('bpjs_kesehatan_company');
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2;
+            $temp->pph21                        = $monthly_income_tax;
             $temp->save();
 
             if(isset($item->payrollDeductionsEmployee))
@@ -809,7 +821,7 @@ class PayrollController extends Controller
             // delete all table temp
             foreach($rows as $key => $row)
             {
-                $count_row = 4;
+                $count_row = 5;
             	if($key ==0) continue;
 
                 $nik                    = $row[1];
@@ -835,6 +847,7 @@ class PayrollController extends Controller
                         $is_calculate   = 0;
                     }
                     $payroll->salary        = replace_idr($row[3]);
+                    $payroll->bonus        = replace_idr($row[4]);
                     $payroll->is_calculate  = $is_calculate;
                     $payroll->save();
 

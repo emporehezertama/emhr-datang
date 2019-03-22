@@ -26,7 +26,7 @@ class RequestPaySlipController extends Controller
      */
     public function index()
     {
-        $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->get();
+        $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->paginate(50);
 
         return view('administrator.request-pay-slip.index')->with($params);
     }
@@ -78,7 +78,7 @@ class RequestPaySlipController extends Controller
         }
 
         $params['total']        = $total;
-        $params['dataArray']    = $dataArray;//\App\PayrollHistory::whereIn('id', $whereIn)->get();
+        $params['dataArray']    = $dataArray;
         $params['data']         = $data;
         $params['bulan']        = $bulan;
         $params['tahun']        = $request->tahun;
@@ -103,14 +103,13 @@ class RequestPaySlipController extends Controller
         
         if($data->user->email != "")
         { 
-            \Mail::send('administrator.request-pay-slip.print-pay-slip', $params,
-                function($message) use($file, $data) {
+            \Mail::send('administrator.request-pay-slip.email-pay-slip', $params,
+                function($message) use($file, $data, $bulan) {
                     $message->from('info@system.com');
-                    //$message->to('doni.enginer@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Request Pay-Slip');
+                    $message->subject('Request Pay-Slip Bulan ('. implode('/', $bulan) .')');
                     $message->attach($file, array(
-                            'as' => 'Payslip-'. $data->user->nik .'.pdf', 
+                            'as' => 'Payslip-'. $data->user->nik .'('. implode('/', $bulan) .').pdf', 
                             'mime' => 'application/pdf')
                     );
                     $message->setBody('');

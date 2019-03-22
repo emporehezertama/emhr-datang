@@ -52,6 +52,17 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-md-2 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="month">
+                                <option value="">- Month - </option>
+                                @foreach(month_name() as $key => $item)
+                                <option value="{{ $key }}" {{ (request() and request()->month == $key) ? 'selected' : '' }}>{{ $item }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <input type="hidden" name="action" value="view">
                     <div class="clearfix"></div>
                 </form>
@@ -95,12 +106,12 @@
 			                                    @endif
 			                                </td>
 			                                <td>
-			                                    <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail</a>
-			                                </td>
+                                                @if(!isset(request()->month))
+			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail</a>
+			                                    @endif
+                                            </td>
 			                            </tr>
 			                            @php ($i ++)
-                                    @else
-                                    
 			                        @endIf
 	                            @endforeach
 	                        @endIf

@@ -5,17 +5,23 @@
 @section('content')
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row bg-title">
+        <div class="row bg-title" style="overflow: inherit;">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Overtime Sheet</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <form method="POST" action="{{ route('administrator.overtime.index') }}" id="filter-form">
-                        <!-- <p>Filter Form</p> -->
                         {{ csrf_field() }}
-                        <div class="col-md-3  pull-right">
-                            <button type="button" id="filter_view" class="btn btn-default btn-sm">View in table <i class="fa fa-search-plus"></i></button>
-                            <button type="button" onclick="submit_filter_download()" class="btn btn-info btn-sm">Download Excel <i class="fa fa-download"></i></button>
+                        <div style="padding-left:0; float: right;">
+                            <div class="btn-group m-l-10 m-r-10 pull-right">
+                                <a href="javascript:void(0)" aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle">Action 
+                                    <i class="fa fa-gear"></i>
+                                </a>
+                                <ul role="menu" class="dropdown-menu">
+                                    <li><a href="javascript:void(0)" onclick="submit_filter_download()">Download Excel <i class="fa fa-download"></i></a></li>
+                                </ul>
+                            </div>
+                            <button type="button" id="filter_view" class="btn btn-default btn-sm pull-right btn-outline"><i class="fa fa-search-plus"></i></button>
                         </div>
                         <div class="col-md-2 pull-right">
                             <div class="form-group  m-b-0">
@@ -46,7 +52,7 @@
                 <div class="white-box">
                     
                     <div class="table-responsive">
-                        <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -77,12 +83,14 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('administrator.overtime.edit', $item->id) }}" class="btn btn-default btn-xs">detail <i class="fa fa-search-plus"></i></a>
+                                            <a href="{{ route('administrator.overtime.edit', $item->id) }}" class="btn btn-info btn-xs">Detail <i class="fa fa-search-plus"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="col-m-6 pull-left text-left">Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries</div>
+                        <div class="col-md-6 pull-right text-right">{{ $data->appends($_GET)->render() }}</div><div class="clearfix"></div>
                     </div>
                 </div>
             </div> 

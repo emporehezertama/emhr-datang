@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Artisan;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {   
         $command_backup = 'backup:run';
+        $command_params = [];
 
         if(get_setting('backup_type') == 1)
         {
@@ -33,10 +35,19 @@ class Kernel extends ConsoleKernel
         if(get_setting('backup_type') == 2)
         {
             $command_backup = 'backup:run --only-db';
+            $command_params['--only-db']= true;
         }
         if(get_setting('backup_type') == 3)
         {
             $command_backup = 'backup:run --only-files';
+            $command_params['--only-files'] = true;
+        }
+
+        if(get_setting('schedule_custom_date') == date('Y/m/d'))
+        {
+            update_setting('schedule_custom_date','');
+
+            Artisan::call('backup:run', $command_params);
         }
 
         switch (get_setting('schedule')) {
@@ -44,16 +55,16 @@ class Kernel extends ConsoleKernel
                 $schedule->command()->everyMinute();;
                 break;
             case 2:
-                $schedule->command('backup:run --only-db')->hourly();;
+                $schedule->command($command_backup)->hourly();;
                 break;
             case 3:
-                $schedule->command('backup:run --only-db')->daily();;
+                $schedule->command($command_backup)->daily();;
                 break;
             case 4:
-                $schedule->command('backup:run --only-db')->weekly();;
+                $schedule->command($command_backup)->weekly();;
                 break;
             case 5:
-                $schedule->command('backup:run --only-db')->monthly();;
+                $schedule->command($command_backup)->monthly();;
                 break;
             default:
                 # code...

@@ -2,20 +2,12 @@
 
 @section('title', 'Business Trip')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Business Trip</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
@@ -23,17 +15,13 @@
                     <li class="active">Business Trip</li>
                 </ol>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-
         <!-- .row -->
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Business Trip</h3>
-                    <br />
                     <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -102,7 +90,7 @@
                                                             @endif
                                                         @else
                                                             @if($item->is_approve_atasan_actual_bill == "")
-                                                                <label class="btn btn-default btn-xs">Waiting Approval Atasan</label>
+                                                                <label class="btn btn-warning btn-xs">Waiting Approval Atasan</label>
                                                             @endif
                                                             @if($item->status_actual_bill == 3)
                                                                 <label class="btn btn-success btn-xs">Approved</label>
@@ -141,9 +129,9 @@
 
 
                                             @if($item->approve_direktur == 0)
-                                                <a href="{{ route('karyawan.approval.training.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">proses <i class="fa fa fa-arrow-right"></i></button></a>
+                                                <a href="{{ route('karyawan.approval.training.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">Proses <i class="fa fa fa-arrow-right"></i></button></a>
                                             @else
-                                                <a href="{{ route('karyawan.approval.training.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">detai <i class="fa fa-search-plus"></i></button></a>
+                                                <a href="{{ route('karyawan.approval.training.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">Detail <i class="fa fa-search-plus"></i></button></a>
                                             @endif
                                         </td>
                                     </tr>
@@ -155,9 +143,7 @@
                 </div>
             </div> 
         </div>
-        <!-- ============================================================== -->
     </div>
-    <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
 @endsection

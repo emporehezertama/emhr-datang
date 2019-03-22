@@ -50,6 +50,43 @@ function cek_level_leave_up($id)
 }
 
 /**
+ * Delete Item Asset
+ * @return void
+ */
+function delete_asset_item($id)
+{
+	$asset = \App\Models\Asset::where('id', $id)->first();
+	if($asset)
+	{
+		$asset->delete();
+	}
+
+	$history = \App\Models\AssetTracking::where('asset_id', $id)->first();
+	if($history)
+	{
+		$history->delete();
+	}
+
+	return;
+}
+
+
+/**
+ * Month name
+ * @return array
+ */
+function month_name()
+{
+	$months = [];
+	for ($i = 1; $i <= 12; $i++) {
+	    $timestamp = mktime(0, 0, 0, $i, 1);
+	    $months[date('n', $timestamp)] = date('F', $timestamp);
+	}
+
+	return $months;
+}
+
+/**
  * Replace IDR
  * @return string
  */
@@ -182,6 +219,20 @@ function generate_timezone_list()
 function list_language()
 {
 	return ['id' => 'Indonesia', 'en' => 'English'];
+}
+
+/**
+ * Update Setting
+ */
+function update_setting($key, $value)
+{
+	$setting = \App\Models\Setting::where('key', $key)->first();
+
+	if($setting)
+	{
+		$setting->value = $value;
+		$setting->save();
+	}
 }
 
 /**

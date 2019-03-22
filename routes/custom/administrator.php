@@ -86,6 +86,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('absensi/import-all', 'AbsensiController@importAll')->name('administrator.absensi.import-all');
 	Route::get('absensi/deletenew/{id}', 'AbsensiController@deleteNew')->name('administrator.absensi.deletenew');
 	Route::get('absensi/deleteold/{id}', 'AbsensiController@deleteOld')->name('administrator.absensi.deleteold');
+	Route::get('absensi/detail/{id}', 'AbsensiController@detail')->name('administrator.absensi.detail');
 	Route::post('cuti/batal', 'CutiController@batal')->name('administrator.cuti.batal');
 	Route::post('training/batal', 'TrainingController@batal')->name('administrator.training.batal');
 	Route::get('cuti/proses/{id}', 'CutiController@proses')->name('administrator.cuti.proses');
@@ -192,6 +193,8 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('organization-structure-custom/delete/{id}', 'StructureOrganizationCustomController@delete')->name('administrator.organization-structure-custom.delete');
 	Route::get('setting/backup', 'SettingController@backup')->name('administrator.setting.backup');
 	Route::post('setting/backup-save', 'SettingController@backupSave')->name('administrator.setting.backup-save');
+	Route::post('setting/backup-delete',  'SettingController@backupDelete')->name('administrator.setting.backup-delete');
+	Route::post('setting/backup-get',  'SettingController@backupGet')->name('administrator.setting.backup-get');
 	Route::post('setting/save','SettingController@save')->name('administrator.setting.save');
 	Route::post('setting/email-save', 'SettingController@emailSave')->name('administrator.setting.email-save');
 	Route::post('setting/email-test-send', 'SettingController@emailTestSend')->name('administrator.setting.email-test-send');
