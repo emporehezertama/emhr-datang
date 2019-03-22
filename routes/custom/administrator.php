@@ -19,6 +19,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::resource('exit-interview', 'ExitInterviewController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('directorate', 'DirectorateController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('division', 'DivisionController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::resource('position', 'PositionController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('section', 'SectionController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('overtime', 'OvertimeController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('cabang', 'CabangController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -44,6 +45,15 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::resource('cuti-bersama', 'CutiBersamaController', ['as' => 'administrator']);
 	Route::get('structure', 'IndexController@structure')->name('administrator.structure');
 	Route::resource('setting', 'SettingController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+
+	Route::resource('setting-approvalLeave', 'SettingApprovalLeaveController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalLeave/indexItem/{id}', 'SettingApprovalLeaveController@indexItem')->name('administrator.setting-approvalLeave.indexItem');
+	Route::get('setting-approvalLeave/createItem/{id}', 'SettingApprovalLeaveController@createItem')->name('administrator.setting-approvalLeave.createItem');
+	Route::post('setting-approvalLeave/storeItem', 'SettingApprovalLeaveController@storeItem')->name('administrator.setting-approvalLeave.storeItem');
+	Route::get('setting-approvalLeave/editItem/{id}', 'SettingApprovalLeaveController@editItem')->name('administrator.setting-approvalLeave.editItem');
+	Route::post('setting-approvalLeave/updateItem/{id}', 'SettingApprovalLeaveController@updateItem')->name('administrator.setting-approvalLeave.updateItem');
+	Route::post('setting-approvalLeave/destroyItem/{id}', 'SettingApprovalLeaveController@destroyItem')->name('administrator.setting-approvalLeave.destroyItem');
+
 	Route::resource('news', 'NewsController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('internal-memo', 'InternalMemoController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('branch-organisasi', 'BranchOrganisasiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -162,6 +172,10 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('update-profile', 'IndexController@updateProfile')->name('administrator.update-profile');
 	Route::post('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
 	Route::get('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
+	Route::post('leaveCustom/index', 'LeaveCustomController@index')->name('administrator.leaveCustom.index');
+	Route::get('leaveCustom/index', 'LeaveCustomController@index')->name('administrator.leaveCustom.index');
+	Route::get('leaveCustom/proses/{id}', 'LeaveCustomController@proses')->name('administrator.leaveCustom.proses');
+
 	Route::post('payment-request/index', 'PaymentRequestController@index')->name('administrator.payment-request.index');
 	Route::get('payment-request/index', 'PaymentRequestController@index')->name('administrator.payment-request.index');
 	Route::post('medical-reimbursement/index', 'MedicalController@index')->name('administrator.medical-reimbursement.index');

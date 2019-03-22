@@ -15,6 +15,13 @@ Route::group(['prefix' => 'karyawan', 'namespace'=>'Karyawan', 'middleware' => [
 	Route::get('training/detail/{id}', 'TrainingController@detailTraining')->name('karyawan.training.detail');
 	Route::post('training/submit-biaya', 'TrainingController@submitBiaya')->name('karyawan.training.submit-biaya');
 	Route::resource('cuti', 'CutiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	
+	Route::resource('leave', 'LeaveController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	Route::get('approval-leave-custom',  'ApprovalLeaveCustomController@index')->name('karyawan.approval.leave-custom.index');
+	Route::get('approval-leave-custom/detail/{id}',  'ApprovalLeaveCustomController@detail')->name('karyawan.approval.leave-custom.detail');
+	Route::post('approval-leave-custom/proses',  'ApprovalLeaveCustomController@proses')->name('karyawan.approval.leave-custom.proses');
+
+
 	Route::get('approval-cuti',  'ApprovalCutiController@index')->name('karyawan.approval.cuti.index');
 	Route::get('approval-cuti/detail/{id}',  'ApprovalCutiController@detail')->name('karyawan.approval.cuti.detail');
 	Route::post('approval-cuti/proses',  'ApprovalCutiController@proses')->name('karyawan.approval.cuti.proses');

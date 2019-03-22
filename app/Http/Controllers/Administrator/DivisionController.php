@@ -37,9 +37,7 @@ class DivisionController extends Controller
      */
     public function create()
     {   
-        $params['directorate'] = OrganisasiDirectorate::all();
-
-        return view('administrator.division.create')->with($params);
+        return view('administrator.division.create');
     }
 
     /**
@@ -49,9 +47,7 @@ class DivisionController extends Controller
      */
     public function edit($id)
     {
-        $params['directorate']  = OrganisasiDirectorate::all();
         $params['data']         = OrganisasiDivision::where('id', $id)->first();
-
         return view('administrator.division.edit')->with($params);
     }
 
@@ -63,11 +59,10 @@ class DivisionController extends Controller
     public function update(Request $request, $id)
     {
         $data                               = OrganisasiDivision::where('id', $id)->first();
-        $data->organisasi_directorate_id    = $request->organisasi_directorate_id;
         $data->name                         = $request->name;
         $data->save();
 
-        return redirect()->route('administrator.division.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.division.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -80,7 +75,7 @@ class DivisionController extends Controller
         $data = OrganisasiDivision::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.division.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.division.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -91,10 +86,9 @@ class DivisionController extends Controller
     public function store(Request $request)
     {
         $data                               = new OrganisasiDivision();
-        $data->organisasi_directorate_id    = $request->directorate_id;
         $data->name                         = $request->name;
         $data->save();
 
-        return redirect()->route('administrator.division.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.division.index')->with('message-success', 'Data successfully saved!');
     }
 }

@@ -42,9 +42,25 @@
                     <div class="modal-body">
                         <input type="hidden" name="parent_id" class="form-control" />
                         <div class="form-group">
-                            <label class="col-md-3">Name</label>
+                            <label class="col-md-3">Division</label>
                             <div class="col-md-9">
-                                <input type="text" name="name" class="form-control" />
+                                <select class="form-control" name="organisasi_division_id">
+                                        <option value=""> - choose - </option>
+                                        @foreach($division as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3">Position</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="organisasi_position_id">
+                                        <option value=""> - choose - </option>
+                                        @foreach($position as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -123,7 +139,7 @@
                 org_chart = $('#orgChart').orgChart({
                     data: data,
                     showControls: true,
-                    allowEdit: true,
+                    allowEdit: false,
                     newNodeText : 'Add',
                     onAddNode: function(node){ 
                         add_structure(node.data.id, node.data.name);

@@ -45,18 +45,6 @@
 
                         {{ csrf_field() }}
                         <div class="form-group">
-                            <label class="col-md-12">Directorate</label>
-                            <div class="col-md-6">
-                                <select class="form-control" name="directorate_id" required>
-                                    <option value=""> Pilih Directorate</option>
-                                    @foreach($directorate as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="col-md-12">Name</label>
                             <div class="col-md-6">
                                 <input type="text" name="name" class="form-control form-control-line" value="{{ old('name')}}">
@@ -65,7 +53,7 @@
                         <div class="clearfix"></div>
                     
                         <a href="{{ route('administrator.division.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
-                        <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Simpan Data</button>
+                        <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save</button>
                         <br style="clear: both;" />
                         <div class="clearfix"></div>
                     </div>

@@ -40,6 +40,8 @@ use App\Models\EmporeOrganisasiDirektur;
 use App\Models\EmporeOrganisasiManager;
 use App\Models\EmporeOrganisasiStaff;
 use App\User;
+use App\Models\SettingApprovalLeave;
+use App\Models\SettingApprovalLeaveItem;
 
 class AjaxController extends Controller
 {
@@ -1356,6 +1358,39 @@ public function getCalculatePayrollGross(Request $request)
         return response()->json($this->respon);
     }
 
+    public function getDetailSettingApprovalLeaveItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->foreign_id)->first();
+
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getHistoryApprovalLeaveCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = CutiKaryawan::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->is_approved;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+
 
     /**
      * [getHistoryApprovalCuti description]
@@ -1997,6 +2032,8 @@ public function getCalculatePayrollGross(Request $request)
 
             $data->dependent    = UserFamily::where('user_id', $data->id)->get();
             $data->jabatan      = empore_jabatan($request->id);
+            $data->position    = (isset($data->structure->position) ? $data->structure->position->name:'').'-'.(isset($data->structure->division) ?  $data->structure->division->name:'');
+
 
             return response()->json(['message' => 'success', 'data' => $data]);
         }
@@ -2171,7 +2208,9 @@ public function getCalculatePayrollGross(Request $request)
         foreach ($all as $key => $item) 
         {
             $data[$key]['id']       = $item->id;
-            $data[$key]['name']     = $item->name;
+            $data[$key]['name']     = isset($item->position) ? $item->position->name:'';
+            $data[$key]['name']     = isset($item->division) ? $data[$key]['name'] .' - '. $item->division->name: $data[$key]['name'];
+
             //$data[$key]['description']= 'this description';
             $data[$key]['parent']   = (int)$item->parent_id;
         }
@@ -2203,10 +2242,20 @@ public function getCalculatePayrollGross(Request $request)
         $data = \App\Models\StructureOrganizationCustom::where('id', $request->id)->first();
         $data->delete();
 
-        $data = \App\Models\StructureOrganizationCustom::where('parent_id', $request->id);
-        if($data)
+        $settingApproval = \App\Models\SettingApprovalLeave::where('structure_organization_custom_id', $request->id)->first();
+        
+        $settingApprovalCount = \App\Models\SettingApprovalLeaveItem::where('setting_approval_leave_id', $settingApproval->id)->get();
+        if(count($settingApprovalCount)>0)
         {
-            $data->delete();            
+            $settingApprovalCount->deleteAll();
+        }
+
+        $settingApproval->delete();
+
+        $settingApprovalItem = \App\Models\SettingApprovalLeaveItem::where('structure_organization_custom_id', $request->id)->first();
+        if($settingApprovalItem)
+        {
+            $settingApprovalItem->delete();
         }
 
         return json_encode(['message' => 'success']);

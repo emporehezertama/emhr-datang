@@ -45,50 +45,7 @@
 
                         {{ csrf_field() }}
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-12">Directorate</label>
-                                <div class="col-md-10">
-                                   <select class="form-control" name="directorate_id">
-                                        <option value=""> Pilih Directorate</option>
-                                        @foreach($directorate as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Division</label>
-                                <div class="col-md-10">
-                                    <select class="form-control" name="division_id">
-                                        <option value=""> Pilih Division</option>
-                                        @foreach($division as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Department</label>
-                                <div class="col-md-10">
-                                    <select class="form-control" name="department_id">
-                                        <option value=""> Pilih Department</option>
-                                        @foreach($department as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Section / Unit</label>
-                                <div class="col-md-10">
-                                    <select class="form-control" name="unit_id">
-                                        <option value=""> Pilih Department</option>
-                                        @foreach($unit as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                            
                             <div class="form-group">
                                 <label class="col-md-12">Name Position</label>
                                 <div class="col-md-10">
@@ -97,8 +54,8 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        <a href="{{ route('administrator.department.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
-                        <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Simpan Data</button>
+                        <a href="{{ route('administrator.position.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save</button>
                         <br style="clear: both;" />
                         <div class="clearfix"></div>
                     </div>
@@ -116,51 +73,6 @@
 <!-- ============================================================== -->
 
 @section('footer-script')
-<script type="text/javascript">
-    $("select[name='directorate_id']").on('change', function(){
-
-        var id = $(this).val();
-
-        $.ajax({
-            type: 'POST',
-            url: '{{ route('ajax.get-division-by-directorate') }}',
-            data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
-            dataType: 'json',
-            success: function (data) {
-
-                var html_ = '<option value=""> Pilih Division</option>';
-
-                $(data.data).each(function(k, v){
-                    html_ += "<option value=\""+ v.id +"\">"+ v.name +"</option>";
-                });
-
-                $("select[name='division_id'").html(html_);
-            }
-        });
-    });
-
-    $("select[name='division_id']").on('change', function(){
-
-        var id = $(this).val();
-
-        $.ajax({
-            type: 'POST',
-            url: '{{ route('ajax.get-department-by-division') }}',
-            data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
-            dataType: 'json',
-            success: function (data) {
-
-                var html_ = '<option value=""> Pilih Department</option>';
-
-                $(data.data).each(function(k, v){
-                    html_ += "<option value=\""+ v.id +"\">"+ v.name +"</option>";
-                });
-
-                $("select[name='department_id'").html(html_);
-            }
-        });
-    });
-</script>
 @endsection
 
 @endsection

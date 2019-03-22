@@ -40,12 +40,7 @@ class PositionController extends Controller
      */
     public function create()
     {   
-        $params['directorate']  = OrganisasiDirectorate::all();
-        $params['division']     = OrganisasiDivision::all();
-        $params['department']   = OrganisasiDepartment::all();
-        $params['unit']         = OrganisasiUnit::all();
-
-        return view('administrator.position.create')->with($params);
+        return view('administrator.position.create');
     }
 
     /**
@@ -55,12 +50,7 @@ class PositionController extends Controller
      */
     public function edit($id)
     {
-        $params['directorate']  = OrganisasiDirectorate::all();
-        $params['division']     = OrganisasiDivision::all();
-        $params['department']   = OrganisasiDepartment::all();
-        $params['unit']         = OrganisasiUnit::all();
         $params['data']         = OrganisasiPosition::where('id', $id)->first();
-
         return view('administrator.position.edit')->with($params);
     }
 
@@ -72,14 +62,10 @@ class PositionController extends Controller
     public function update(Request $request, $id)
     {
         $data       = OrganisasiPosition::where('id', $id)->first();
-        $data->organisasi_directorate_id            = $request->directorate_id; 
-        $data->organisasi_division_id               = $request->division_id;
-        $data->organisasi_department_id             = $request->department_id;
-        $data->organisasi_organisasi_unit_id        = $request->unit_id;
         $data->name                                 = $request->name;
         $data->save();
 
-        return redirect()->route('administrator.position.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.position.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -92,7 +78,7 @@ class PositionController extends Controller
         $data = OrganisasiPosition::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.position.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.position.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -103,12 +89,9 @@ class PositionController extends Controller
     public function store(Request $request)
     {
         $data       = new OrganisasiPosition();
-        $data->organisasi_division_id       = $request->division_id;
-        $data->organisasi_department_id     = $request->department_id;
-        $data->organisasi_unit_id           = $request->unit_id;
         $data->name                         = $request->name;
         $data->save();
 
-        return redirect()->route('administrator.position.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.position.index')->with('message-success', 'Data successfully saved!');
     }
 }

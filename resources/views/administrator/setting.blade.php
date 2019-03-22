@@ -73,6 +73,13 @@
                         <div class="col-md-2">
                             <a href="{{ route('administrator.payroll-setting.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Payroll</span></a>
                         </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.division.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Division</span></a>
+                        </div>
+                        <div class="clearfix"></div><hr />
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.position.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Position</span></a>
+                        </div>
                         <div class="clearfix"></div><br />
                     </div>
                 </div>

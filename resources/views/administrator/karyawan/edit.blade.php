@@ -357,7 +357,19 @@
                         </div>
 
                         <div role="tabpanel" class="tab-pane fade" id="department">
-
+                        @if(get_setting('struktur_organisasi') == 3)
+                            <div class="form-group">
+                                    <label class="col-md-12">Position</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="structure_organization_custom_id">
+                                        <option value=""> - choose - </option>
+                                        @foreach($structure as $item)
+                                        <option value="{{ $item["id"] }}" {{ $item["id"]== $data->structure_organization_custom_id ? 'selected' : '' }}>{{ $item["name"] }}</option>
+                                        @endforeach
+                                    </select>
+                                    </div>
+                                </div>
+                        @else
                             <div class="form-group">
                                 <label class="col-md-12">Office Type</label>
                                 <div class="col-md-6">
@@ -423,6 +435,7 @@
                                     </select>
                                 </div>
                             </div>
+                        @endif
                         </div>
 
                         <div role="tabpanel" class="tab-pane fade active in" id="biodata">

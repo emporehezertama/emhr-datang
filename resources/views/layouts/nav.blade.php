@@ -16,7 +16,13 @@
                 <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Workflow Monitoring<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
-                <li><a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
+                @if(get_setting('struktur_organisasi') == 3)
+                    <li><a href="{{ route('administrator.leaveCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
+                @else
+                    <li><a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
+                @endif
+
+                
                 <li><a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
                 <li><a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.medical_reimbursement')</span></a></li>
                 <li><a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
@@ -86,6 +92,18 @@
                 </li>
             </ul>
         </li>
+        @if(get_setting('struktur_organisasi') == 3)
+        <li>
+            <a href="javascript:void(0)">
+                <i class="mdi mdi-database fa-fw"></i> <span class="hide-menu">Setting Approval<span class="fa arrow"></span></span>
+            </a>
+            <ul class="nav nav-second-level">
+                <li>
+                    <a href="{{ route('administrator.setting-approvalLeave.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Leave/Permit Approval</span></a>
+                </li>
+            </ul>
+        </li>
+        @endif
 
     </ul>
 @else
@@ -102,7 +120,11 @@
             </a>
             <ul class="nav nav-second-level">
                 <li>
+                    @if(get_setting('struktur_organisasi') == 3)
+                    <a href="{{ route('karyawan.leave.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
+                    @else
                     <a href="{{ route('karyawan.cuti.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
+                    @endif
                 </li>
                 <li>
                     <a href="{{ route('karyawan.payment-request.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Payment Request</span></a>
@@ -137,96 +159,121 @@
                 </li>
             </ul>
         </li>
-
-        <!--- cek cuti sebagai DIREKTUR --->
-        @if(empore_is_direktur(Auth::user()->id))
+    @if(get_setting('struktur_organisasi') == 3)
+        @php($leave_menu = count_leave_approval() )
+        @if($leave_menu['all'] > 0 )
         <li style="position: relative;">
                 <a href="javascript:void(0)" class="waves-effect">
-                    <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval As Direktur<span class="fa arrow"></span></span>
+                    <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval<span class="fa arrow"></span></span>
                 </a>
-                @if(cek_cuti_direktur('null') > 0 ||  cek_training_direktur('null') > 0 || approval_count_payment_request('null') || approval_count_medical('null', 'direktur') > 0 || approval_count_overtime('null', 'direktur') || approval_count_exit('null', 'direktur'))    
+                @if($leave_menu['waiting'] > 0)    
                     <div class="notify" style="position: absolute;top: 61px;right: 10px;"> <span class="heartbit"></span> <span class="point"></span> </div>
                 @endif
 
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="{{ route('karyawan.approval.cuti.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Cuti / Ijin</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_cuti_direktur('null') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.training.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Training & Perjanalan Dinas</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_training_direktur('null') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.payment_request.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Payment Request</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_payment_request('null', 'direktur') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.medical.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_medical('null', 'direktur') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.overtime.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_overtime('null', 'direktur') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.exit.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Exit Interview</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_exit('null', 'direktur') }}</label>
+                    <a href="{{ route('karyawan.approval.leave-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Leave/Permit</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $leave_menu['waiting'] }}</label>
                     </a>
                 </li>
             </ul>
         </li>
         @endif
+    @else
+            <!--- cek cuti sebagai DIREKTUR --->
+            @if(empore_is_direktur(Auth::user()->id))
+            <li style="position: relative;">
+                    <a href="javascript:void(0)" class="waves-effect">
+                        <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval As Direktur<span class="fa arrow"></span></span>
+                    </a>
+                    @if(cek_cuti_direktur('null') > 0 ||  cek_training_direktur('null') > 0 || approval_count_payment_request('null') || approval_count_medical('null', 'direktur') > 0 || approval_count_overtime('null', 'direktur') || approval_count_exit('null', 'direktur'))    
+                        <div class="notify" style="position: absolute;top: 61px;right: 10px;"> <span class="heartbit"></span> <span class="point"></span> </div>
+                    @endif
 
-        @if(cek_cuti_atasan('all') > 0 || cek_training_atasan('all') > 0 || approval_count_payment_request('all', 'atasan') > 0 || approval_count_medical('all', 'atasan') > 0 || approval_count_overtime('all', 'atasan') || approval_count_exit('all', 'atasan'))
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{{ route('karyawan.approval.cuti.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Cuti / Ijin</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_cuti_direktur('null') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.training.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Training & Perjanalan Dinas</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_training_direktur('null') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.payment_request.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Payment Request</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_payment_request('null', 'direktur') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.medical.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_medical('null', 'direktur') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.overtime.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_overtime('null', 'direktur') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.exit.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Exit Interview</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_exit('null', 'direktur') }}</label>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+
+            @if(cek_cuti_atasan('all') > 0 || cek_training_atasan('all') > 0 || approval_count_payment_request('all', 'atasan') > 0 || approval_count_medical('all', 'atasan') > 0 || approval_count_overtime('all', 'atasan') || approval_count_exit('all', 'atasan'))
+            
+            <li style="position: relative;">
+                    <a href="javascript:void(0)" class="waves-effect">
+                        <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval As Manager<span class="fa arrow"></span></span>
+                    </a>
+                    @if(cek_cuti_atasan('null') > 0 || cek_training_atasan('null') > 0 || approval_count_payment_request('null', 'atasan') > 0 || approval_count_medical('null', 'atasan') > 0 || approval_count_overtime('null', 'atasan') || approval_count_exit('null', 'atasan') )    
+                        <div class="notify" style="position: absolute;top: 61px;right: 10px;"> <span class="heartbit"></span> <span class="point"></span> </div>
+                    @endif
+                    
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{{ route('karyawan.approval.cuti-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Cuti / Ijin</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_cuti_atasan('null') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.training-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Training & Perjanalan Dinas</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_training_atasan('null') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.payment-request-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Payment Request</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_payment_request('null', 'atasan') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.medical-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_medical('null', 'atasan') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.overtime-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_overtime('null', 'atasan') }}</label>
+                        </a>
+                    </li>
+                    <li style="position: relative;">
+                        <a href="{{ route('karyawan.approval.exit-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Exit Interview & Exit Clearance</span>
+                            <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_exit('null', 'atasan') }}</label>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+
+    @endif
+
+
         
-        <li style="position: relative;">
-                <a href="javascript:void(0)" class="waves-effect">
-                    <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval As Manager<span class="fa arrow"></span></span>
-                </a>
-                @if(cek_cuti_atasan('null') > 0 || cek_training_atasan('null') > 0 || approval_count_payment_request('null', 'atasan') > 0 || approval_count_medical('null', 'atasan') > 0 || approval_count_overtime('null', 'atasan') || approval_count_exit('null', 'atasan') )    
-                    <div class="notify" style="position: absolute;top: 61px;right: 10px;"> <span class="heartbit"></span> <span class="point"></span> </div>
-                @endif
-                
-            <ul class="nav nav-second-level">
-                <li>
-                    <a href="{{ route('karyawan.approval.cuti-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Cuti / Ijin</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_cuti_atasan('null') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.training-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Training & Perjanalan Dinas</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ cek_training_atasan('null') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.payment-request-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Payment Request</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_payment_request('null', 'atasan') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.medical-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_medical('null', 'atasan') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.overtime-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_overtime('null', 'atasan') }}</label>
-                    </a>
-                </li>
-                <li style="position: relative;">
-                    <a href="{{ route('karyawan.approval.exit-atasan.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Exit Interview & Exit Clearance</span>
-                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ approval_count_exit('null', 'atasan') }}</label>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        @endif
 
     </ul>
 @endif

@@ -65,4 +65,9 @@ class CutiKaryawan extends Model
     {
         return $this->hasOne('\App\User', 'id', 'approved_atasan_id');
     }
+
+    public function historyApproval()
+    {
+        return $this->hasMany('\App\Models\HistoryApprovalLeave', 'cuti_karyawan_id', 'id')->orderBy('setting_approval_level_id', 'ASC');
+    }
 }

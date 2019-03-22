@@ -18,7 +18,7 @@
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 @if(cek_approval('cuti_karyawan'))
-                    <a href="{{ route('karyawan.cuti.create') }}" class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light" onclick=""> <i class="fa fa-plus"></i> ADD LEAVE</a>
+                    <a href="{{ route('karyawan.leave.create') }}" class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light" onclick=""> <i class="fa fa-plus"></i> ADD LEAVE</a>
                 @else
                     <a class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light" onclick="bootbox.alert('Sorry you can not apply this transaction before the previous transaction has been completely approved')"> <i class="fa fa-plus"></i> ADD LEAVE</a>
                 @endif
@@ -58,27 +58,13 @@
                                         <td>{{ $item->total_cuti }} Hari</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
-                                            <a onclick="detail_approval({{ $item->id }})">
+                                            <a onclick="detail_approval_leaveCustom({{ $item->id }})">
                                             {!! status_cuti($item->status) !!}
                                             </a>
-                                            
-                                            
-                                        <!--
-                                            @if($item->status == 3)
-                                                <label class="btn btn-danger btn-xs" onclick="detail_approval({{ $item->id }})"><i class="fa fa-close"></i>Rejected</label>
-                                            @elseif($item->status == 4)
-                                                <label class="btn btn-danger btn-xs" onclick="detail_approval({{ $item->id }})"><i class="fa fa-close"></i>Cancelled</label>
-                                            @elseif($item->status == 1)
-                                                <label onclick="detail_approval({{ $item->id }})"class="btn btn-warning btn-xs">Waiting Approval</label>
-                                            @if($item->status == 2)
-                                                    <label onclick="detail_approval({{ $item->id }})"class="btn btn-success btn-xs">Approved</label>
-                                                @endif
-                                            @endif
-                                            -->
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('karyawan.cuti.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
+                                            <a href="{{ route('karyawan.leave.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
                                         </td>
                                     </tr>
                                 @endforeach

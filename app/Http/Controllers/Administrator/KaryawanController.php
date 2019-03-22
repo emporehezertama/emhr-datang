@@ -28,6 +28,8 @@ use App\Models\EmporeOrganisasiStaff;
 use App\Models\Cabang;
 use App\Models\UserInventarisMobil;
 use App\Models\UserInventaris;
+use App\Models\StructureOrganizationCustom;
+
 use PHPExcel_Worksheet_Drawing;
 
 class KaryawanController extends Controller
@@ -1007,6 +1009,7 @@ class KaryawanController extends Controller
         $params['payroll']          = Payroll::where('user_id', $id)->first();
         $params['list_manager']     = EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $params['data']['empore_organisasi_direktur'])->get();
         $params['list_staff']       = EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $params['data']['empore_organisasi_manager_id'])->get();
+        $params['structure']    = getStructureName();
 
         return view('administrator.karyawan.edit')->with($params);
     }
@@ -1022,6 +1025,7 @@ class KaryawanController extends Controller
         $params['division']     = Division::all();
         $params['department']   = Department::all();
         $params['section']      = Section::all();
+        $params['structure']    = getStructureName();
 
         return view('administrator.karyawan.create')->with($params);
     }
@@ -1087,6 +1091,7 @@ class KaryawanController extends Controller
         $data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
         $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
         $data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
+        $data->structure_organization_custom_id = $request->structure_organization_custom_id;
 
         if ($request->hasFile('foto'))
         {
@@ -1246,6 +1251,7 @@ class KaryawanController extends Controller
         $data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
         $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
         $data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
+        $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
 
         if (request()->hasFile('foto'))
         {

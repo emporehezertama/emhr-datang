@@ -117,66 +117,81 @@
                                 </div>
                             </div>
                         </div>
-
+                       
                         <div role="tabpanel" class="tab-pane fade" id="department">
-                            <div class="form-group">
-                                <label class="col-md-12">Office Type</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="branch_type">
-                                        <option value="">Choose Office Type</option>
-                                        @foreach(['HO', 'BRANCH'] as $item)
-                                        <option>{{ $item }}</option>
-                                        @endforeach
-                                    </select> 
+                            @if(get_setting('struktur_organisasi') == 3)
+                                <div class="form-group">
+                                    <label class="col-md-12">Position</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="structure_organization_custom_id">
+                                            <option value=""> Choose </option>
+                                            @foreach($structure as $item)
+                                            <option value="{{ $item["id"]}}">{{ $item["name"] }}</option>
+                                            @endforeach
+                                        </select> 
+                                    </div>
                                 </div>
-                            </div>
-                             <div class="form-group section-cabang" style="display:none">
-                                <label class="col-md-3">Branch</label>
-                                <div class="clearfix"></div>
-                                <div class="col-md-3">
-                                    <select class="form-control" name="cabang_id">
-                                        <option value="">Choose Branch</option>
-                                        @foreach(get_cabang() as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select> 
+                            @else
+                                <div class="form-group">
+                                    <label class="col-md-12">Office Type</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="branch_type">
+                                            <option value="">Choose Office Type</option>
+                                            @foreach(['HO', 'BRANCH'] as $item)
+                                            <option>{{ $item }}</option>
+                                            @endforeach
+                                        </select> 
+                                    </div>
                                 </div>
-                                <div class="clearfix" /></div>
-                                <br class="clearfix" />
-                                <div class="col-md-12">
-                                    <label><input type="checkbox" name="is_pic_cabang" value="1"> Branch PIC</label>
+                                 <div class="form-group section-cabang" style="display:none">
+                                    <label class="col-md-3">Branch</label>
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-3">
+                                        <select class="form-control" name="cabang_id">
+                                            <option value="">Choose Branch</option>
+                                            @foreach(get_cabang() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select> 
+                                    </div>
+                                    <div class="clearfix" /></div>
+                                    <br class="clearfix" />
+                                    <div class="col-md-12">
+                                        <label><input type="checkbox" name="is_pic_cabang" value="1"> Branch PIC</label>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr />
                                 </div>
-                                <div class="clearfix"></div>
-                                <hr />
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Director</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="empore_organisasi_direktur">
-                                        <option value=""> Choose </option>
-                                        @foreach(empore_list_direktur() as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select> 
+                                <div class="form-group">
+                                    <label class="col-md-12">Director</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="empore_organisasi_direktur">
+                                            <option value=""> Choose </option>
+                                            @foreach(empore_list_direktur() as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select> 
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Manager</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="empore_organisasi_manager_id">
-                                        <option value=""> Choose </option>
-                                    </select> 
+                                <div class="form-group">
+                                    <label class="col-md-12">Manager</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="empore_organisasi_manager_id">
+                                            <option value=""> Choose </option>
+                                        </select> 
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Staff</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="empore_organisasi_staff_id">
-                                        <option value=""> Choose </option>
-                                    </select> 
+                                <div class="form-group">
+                                    <label class="col-md-12">Staff</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="empore_organisasi_staff_id">
+                                            <option value=""> Choose </option>
+                                        </select> 
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
+                        
 
                         <div role="tabpanel" class="tab-pane fade active in" id="biodata">
                             <h3 class="box-title m-b-0">Biodata</h3>

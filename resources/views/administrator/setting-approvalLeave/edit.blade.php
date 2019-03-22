@@ -1,6 +1,6 @@
 @extends('layouts.administrator')
 
-@section('title', 'Position')
+@section('title', 'Setting Approval Leave')
 
 @section('sidebar')
 
@@ -15,24 +15,25 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Form Position</h4> </div>
+                <h4 class="page-title">SETTING APPROVAL LEAVE</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Position</li>
+                    <li class="active">Approval Leave</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.position.update', $data->id) }}" method="POST">
+            <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.setting-approvalLeave.update', $data->id) }}" method="POST">
                 <input type="hidden" name="_method" value="PUT">
+
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Data Position</h3>
-                        <br />
+                        <h3 class="box-title m-b-0">Update Approval Leave</h3>
+                        <hr />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -45,18 +46,35 @@
                         @endif
 
                         {{ csrf_field() }}
+                        
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="col-md-12">Name Position</label>
+                                <label class="col-md-12">Position</label>
                                 <div class="col-md-10">
-                                    <input type="text" name="name" class="form-control form-control-line" value="{{ $data->name }}">
+                                    <select class="form-control" name="structure_organization_custom_id">
+                                        <option value=""> - choose - </option>
+                                        @foreach($structure as $item)
+                                        <option value="{{ $item->id }}" {{ $item->id== $data->structure_organization_custom_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">Description</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="description" class="form-control form-control-line" value="{{ $data->description }}">
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="clearfix"></div>
-                        <a href="{{ route('administrator.position.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
-                        <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save</button>
-                        <br style="clear: both;" />
+                        <br />
+                        <div class="col-md-12">
+                            <a href="{{ route('administrator.setting-approvalLeave.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                            <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save</button>
+                            <br style="clear: both;" />
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>    
@@ -71,8 +89,4 @@
 <!-- ============================================================== -->
 <!-- End Page Content -->
 <!-- ============================================================== -->
-
-@section('footer-script')
-@endsection
-
 @endsection

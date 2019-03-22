@@ -83,7 +83,7 @@
                                     <th>TELEPHONE</th>
                                     <th>EMAIL</th>
                                     <th>POSITION</th>
-                                    <th>JOB RULE</th>
+                                    <th>DIVISION</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
@@ -96,6 +96,12 @@
                                         <td>{{ $item->jenis_kelamin }}</td>
                                         <td>{{ $item->telepon }}</td>
                                         <td>{{ $item->email }}</td>
+                                        @if(get_setting('struktur_organisasi') == 3)
+                                        <td>{{ isset($item->structure->position) ? $item->structure->position->name:''}}</td>
+                                        <td>
+                                            {{ isset($item->structure->division) ? $item->structure->division->name:'' }}
+                                        </td>
+                                        @else
                                         <td>
                                             @if(!empty($item->empore_organisasi_staff_id))
                                                 Staff
@@ -118,6 +124,8 @@
                                                 {{ isset($item->empore_manager->name) ? $item->empore_manager->name : '' }}
                                             @endif
                                         </td>
+                                        @endif
+                                        
                                         <td>
                                             <div class="btn-group m-r-10">
                                                 <button aria-expanded="false" data-toggle="dropdown" class="btn btn-xs btn-default dropdown-toggle waves-effect waves-light" type="button">Action 

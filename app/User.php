@@ -206,4 +206,14 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Kelurahan', 'id_kel', 'kelurahan_id');
     }
+
+    public function structure()
+    {
+        return $this->hasOne('\App\Models\StructureOrganizationCustom', 'id', 'structure_organization_custom_id');
+    }
+
+    public function approvalLeave()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalLeave', 'structure_organization_custom_id', 'structure_organization_custom_id');
+    }
 }

@@ -1,9 +1,121 @@
 <?php
+function get_level_header()
+{
+	$data = \App\Models\HistoryApprovalLeave::orderBy('setting_approval_level_id', 'DESC')->first();
+
+	if($data)
+		return $data->setting_approval_level_id;
+	else
+		return 0;
+}
+/**
+ * cek level up
+ */
+function getStructureName()
+{
+	$all = \App\Models\StructureOrganizationCustom::all();
+        $data = [];
+        foreach ($all as $key => $item) 
+        {
+            $data[$key]['id']       = $item->id;
+            $data[$key]['name']     = isset($item->position) ? $item->position->name:'';
+            $data[$key]['name']     = isset($item->division) ? $data[$key]['name'] .' - '. $item->division->name: $data[$key]['name'];
+        }
+        return $data;
+}
+function cek_level_leave_up($id)
+{
+	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')
+		//->where('cuti_karyawan.status','<','2')
+		->where('cuti_karyawan.id', $id);
+	//->whereNull('is_approved');
+
+	$cek1 = clone $cuti;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	
+	if(!$cek1) return false;
+
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $cuti;
+		$cek2 = $cek2->where('history_approval_leave.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+
+		if($cek2)
+		{
+			return false;
+		} 
+	}
+
+	return true;
+}
 
 /**
  * Replace IDR
  * @return string
  */
+
+function cek_leave_approval()
+{
+	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')->orderBy('cuti_karyawan_id', 'DESC')
+	//->where('cuti_karyawan.status','<','2')
+	;
+	//->whereNull('is_approved');
+
+	$cek1 = clone $cuti;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	
+	if(!$cek1) return false;
+
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $cuti;
+		//$cek2 = $cek2->where('history_approval_leave.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		$cek2 = $cek2->where('history_approval_leave.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		//cek beso yak
+		if($cek2)
+		{
+			#return false;
+		} 
+	}
+
+	return $cuti->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+}
+
+function count_leave_approval()
+{
+	$data = cek_leave_approval();
+	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;	
+	if(!$data) return $params;
+	
+	foreach($data as $item)	
+	{
+		if($item->is_approved == NULL)
+		{
+			if($item->status == 3) continue;
+			
+            if(cek_level_leave_up($item->cutiKaryawan->id))
+            {
+                $params['waiting'] = $params['waiting'] + 1; 
+            }
+        }
+        if($item->is_approved == 0)
+        {
+			$params['reject'] = $params['reject'] + 1;
+        }
+        if($item->is_approved == 1)
+        {
+			$params['approved'] = $params['approved'] + 1;
+        }
+	}
+
+	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+
+	return $params;
+}
+
 function replace_idr($nominal)
 {
 	if($nominal == "") return 0;

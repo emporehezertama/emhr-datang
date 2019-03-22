@@ -64,6 +64,11 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/add-setting-exit-ga', 'AjaxController@addSettingExitGA')->name('ajax.add-setting-exit-ga');
 	Route::post('ajax/add-setting-exit-it', 'AjaxController@addSettingExitIT')->name('ajax.add-setting-exit-it');
 	Route::post('ajax/add-setting-exit-accounting', 'AjaxController@addSettingExitAccounting')->name('ajax.add-setting-exit-accounting');
+	
+	Route::post('ajax/get-detail-setting-approval-leave-item', 'AjaxController@getDetailSettingApprovalLeaveItem')->name('ajax.get-detail-setting-approval-leave-item');
+
+	Route::post('ajax/get-history-approval-leave-custom', 'AjaxController@getHistoryApprovalLeaveCustom')->name('ajax.get-history-approval-leave-custom');
+
 	Route::post('ajax/get-history-approval', 'AjaxController@getHistoryApproval')->name('ajax.get-history-approval');
 	Route::post('ajax/get-airports', 'AjaxController@getAirports')->name('ajax.get-airports');
 	Route::post('ajax/get-history-approval-cuti', 'AjaxController@getHistoryApprovalCuti')->name('ajax.get-history-approval-cuti');	

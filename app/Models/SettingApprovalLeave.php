@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class SettingApprovalLeave extends Model
+{
+    //
+    protected $table = 'setting_approval_leave';
+
+     public function structure()
+    {
+    	return $this->hasOne('\App\Models\StructureOrganizationCustom', 'id', 'structure_organization_custom_id');
+    }
+
+    public function item()
+    {
+    	return $this->hasOne('\App\Models\SettingApprovalLeaveItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany('\App\Models\SettingApprovalLeaveItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function level1()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalLeaveItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
+    } 
+
+}
