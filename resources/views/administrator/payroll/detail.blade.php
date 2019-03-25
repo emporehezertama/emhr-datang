@@ -93,21 +93,6 @@
                                         </tr>
                                     @endif
                                 @endforeach
-<!-- 
-                                @if(isset($data->payrollEarningsEmployee))
-                                    @foreach($data->payrollEarningsEmployee as $item)
-                                        @if(isset($item->payrollEarnings->title))
-                                            <tr>
-                                                <td style="vertical-align: middle;">{{ $item->payrollEarnings->title }}</td>
-                                                <td>
-                                                    <input type="hidden" name="earning[]" value="{{ $item->payrollEarnings->id }}" /> 
-                                                    <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($item->nominal) }}" />
-                                                </td>
-                                                <td style="vertical-align: middle;"><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll.delete-earning-payroll', $item->id) }}')"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                @endif -->
 
                             </thead>
                             <tfoot>
@@ -199,21 +184,6 @@
                                     @endif
                                 @endforeach
 
-                                <!--
-                                @if(isset($data->payrollDeductionsEmployee))
-                                    @foreach($data->payrollDeductionsEmployee as $item)
-                                        @if(isset($item->payrollDeductions->title))
-                                            <tr>
-                                                <td style="vertical-align: middle;">{{ $item->payrollDeductions->title }}</td>
-                                                <td>
-                                                    <input type="hidden" name="deduction[]" value="{{ $item->payrollDeductions->id }}" />
-                                                    <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ number_format($item->nominal) }}" />
-                                                </td>
-                                                <td style="vertical-align: middle;"><a href="javascript:void(0)"  onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll.delete-deduction-payroll', $item->id) }}')"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                @endif-->
                             </thead>
                             <tfoot>
                                 <tr>
