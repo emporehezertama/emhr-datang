@@ -112,7 +112,7 @@ class PayrollController extends Controller
             $params[$k]['Resign Date']      = $item->user->resign_date;
             $params[$k]['Salary']           = $item->salary;
             $params[$k]['Bonus / THR']      = $item->bonus;
-            
+
             // earnings
             foreach(PayrollEarnings::all() as $i)
             {   
@@ -121,8 +121,9 @@ class PayrollController extends Controller
                 {
                     $earning = number_format($earning->nominal);
                 }
-                else
+                else{
                     $earning = 0;
+                }
 
                 $params[$k][$i->title] = $earning;
             }
@@ -136,7 +137,9 @@ class PayrollController extends Controller
                     $deduction = number_format($deduction->nominal);
                 }
                 else
+                {
                     $deduction = 0;
+                }
 
                 $params[$k][$i->title] = $deduction;
             }
@@ -190,15 +193,11 @@ class PayrollController extends Controller
         ];
 
         return \Excel::create('Report-Payroll-'.date('Y-m-d'),  function($excel) use($params, $styleHeader){
-
               $excel->sheet('Payroll',  function($sheet) use($params){
-
                 $sheet->fromArray($params);
-                
             });
 
             $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
-
         })->download('xls');
     }
 
