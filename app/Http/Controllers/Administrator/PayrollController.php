@@ -507,6 +507,8 @@ class PayrollController extends Controller
                 $sheet->fromArray($params);
               });
         })->download('xls');
+
+        exit;
     }
 
     /**
