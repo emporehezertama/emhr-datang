@@ -237,6 +237,7 @@ class TrainingController extends Controller
             $params[$no]['TGL APPROVAL']        = $item->approve_direktur_date !== NULL ? date('d F Y', strtotime($item->approve_direktur_date)) : '';
             $params[$no]['TGL SUBMIT ACTUAL BILL']= date('d F Y', strtotime($item->date_submit_actual_bill));
             $params[$no]['TICKET (KA/PESAWAT/KAPAL)']   = $item->transportasi_ticket;
+            $params[$no]['DESTINATION']                 = $item->tempat_tujuan;
             $params[$no]['TAXI']                        = $item->transportasi_taxi;
             $params[$no]['GASOLINE']                    = $item->transportasi_gasoline;
             $params[$no]['TOL']                         = $item->transportasi_tol;

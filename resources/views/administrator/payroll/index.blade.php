@@ -19,6 +19,7 @@
                             <ul role="menu" class="dropdown-menu">
                                 <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
+                                <li><a href="#" onclick="submit_bukti_potong()"><i class="fa fa-download"></i> Bukti Potong</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
                             </ul>
@@ -71,10 +72,14 @@
         <div class="row">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
+                 <form method="POST" id="form_table_payroll" action="{{ route('administrator.payroll.index') }}">
+                    <input type="hidden" name="action" value="bukti-potong">
+                    {{ csrf_field() }}
                     <div class="table-responsive">
                         <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th width="10" style="text-align: left;padding-left:9px;"><input type="checkbox" title="Check All" name="check_all" /></th>
                                     <th width="70" class="text-center">#</th>
                                     <th>NIK</th>
                                     <th>NAME</th>
@@ -92,6 +97,7 @@
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
 			                            <tr>
+                                            <td><input type="checkbox" name="payroll_id[]" value="{{ $item->id }}"></td>
 			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
 			                                <td>{{ $item->user->name }}</td>
@@ -118,6 +124,7 @@
                             </tbody>
                         </table>
                     </div>
+                  </form>
                 </div>
             </div> 
         </div>
@@ -160,6 +167,15 @@
 @section('footer-script')
 <script type="text/javascript">
     
+    function submit_bukti_potong()
+    {
+        $("#form_table_payroll").submit();
+    }
+
+    $("input[name='check_all']").click(function () {    
+        $('input:checkbox').prop('checked', this.checked);    
+    });
+
     $("#filter_view").click(function(){
         $("#filter-form input[name='action']").val('view');
         $("#filter-form").submit();

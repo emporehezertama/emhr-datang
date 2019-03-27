@@ -81,12 +81,40 @@ class PayrollController extends Controller
             {
                 $this->downloadExcel($result->get());
             }
+
+            if(request()->action == 'bukti-potong')
+            {
+                return $this->buktiPotong();
+            }
         }
 
         $params['data'] = $result->get();
         
         return view('administrator.payroll.index')->with($params);
     } 
+
+    /**
+     * 
+     * @return [type] [description]
+     */
+    public function buktiPotong()
+    {
+        $data = request();
+        
+        if($data->payroll_id == NULL)
+        {
+            return redirect()->route('administrator.payroll.index')->with('message-error', 'Select Payroll.');
+        }
+
+        $params['data'] = Payroll::whereIn('id', $data->payroll_id)->get();
+
+        $view = view('administrator.payroll.bukti-potong')->with($params);
+        
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+
+        return $pdf->stream();
+    }
 
     /**
      * [downloadExlce description]
@@ -153,17 +181,13 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->salary *  get_setting('bpjs_jaminan_jht_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
             $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
-            
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Total Earnings']                       = $item->total_earnings;
             $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
-            #$params[$k]['GROSS INCOME PER MONTH']               = $item->gross_income_per_month;
-            #$params[$k]['Less : Tax, BPJS (Monthly)']           = $item->less;
             $params[$k]['Take Home Pay']                        = $item->thp;
             $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
             $params[$k]['Acc Name']                             = isset($item->user->nama_rekening) ? $item->user->nama_rekening : '';
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
-            $params[$k]['Amount']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
         }
 
         $styleHeader = [

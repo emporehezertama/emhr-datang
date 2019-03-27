@@ -2,15 +2,7 @@
 
 @section('title', 'Form Import Payroll Karyawan')
 
-@section('sidebar')
-
-@endsection
-
 @section('content')
-
-<!-- ============================================================== -->
-<!-- Page Content -->
-<!-- ============================================================== -->
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
@@ -42,16 +34,13 @@
                                 </ul>
                             </div>
                         @endif
-
                         {{ csrf_field() }}
-                        
                         <div class="form-group">
                             <label class="col-md-12">Select File</label>
                             <div class="col-md-6">
                                <input type="file" name="file" class="form-control">
                             </div>
                         </div>
-                        
                         <div class="clearfix"></div>
                         <br />
                         <div class="col-md-12">
@@ -64,13 +53,8 @@
                 </div>    
             </form>                    
         </div>
-        <!-- /.row -->
-        <!-- ============================================================== -->
     </div>
     <!-- /.container-fluid -->
-    @extends('layouts.footer')
+    @include('layouts.footer')
 </div>
-<!-- ============================================================== -->
-<!-- End Page Content -->
-<!-- ============================================================== -->
 @endsection

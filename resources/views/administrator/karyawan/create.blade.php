@@ -17,7 +17,7 @@
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
 
-                     @if (count($errors) > 0)
+                    @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
                             <ul>
