@@ -18,10 +18,8 @@
         <!-- .row -->
         <div class="row">
             <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.absensi.temp-import') }}" method="POST">
-                <div class="col-md-12">
+                <div class="col-md-12 p-l-0 p-r-0">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Import Employee Attendance</h3>
-                        <hr />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -39,6 +37,9 @@
                             <label class="col-md-12">Select File</label>
                             <div class="col-md-6">
                                <input type="file" name="file" class="form-control">
+                            </div><div class="clearfix"></div><br />
+                            <div class="col-md-12">
+                                <a href="{{ asset('storage/sample/sample-excel.xls') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
                             </div>
                         </div>
                         

@@ -9,7 +9,6 @@
         "anhskohbo/no-captcha": "^3.0",
         "barryvdh/laravel-dompdf": "^0.8.3",
         "doctrine/dbal": "^2.8",
-        "dompdf/dompdf": "^0.8.2",
         "fideloper/proxy": "^4.0",
         "intervention/image": "dev-master",
         "laravel/framework": "5.7.*",
@@ -17,7 +16,6 @@
         "laravelcollective/html": "^5.2.0",
         "maatwebsite/excel": "^2.0",
         "mews/captcha": "^2.2",
-        "mpdf/mpdf": "^7.0",
         "phpoffice/phpspreadsheet": "^1.2",
         "spatie/laravel-backup": "^6.0"
     },
