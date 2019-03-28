@@ -39,7 +39,7 @@
                                <input type="file" name="file" class="form-control">
                             </div><div class="clearfix"></div><br />
                             <div class="col-md-12">
-                                <a href="{{ asset('storage/sample/sample-excel.xls') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
+                                <a href="{{ asset('storage/sample/Sample-Attendance.xls') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
                             </div>
                         </div>
                         
