@@ -81,8 +81,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-karyawan', 'AjaxController@getKaryawan')->name('ajax.get-karyawan');
 	Route::post('ajax/get-karyawan-payroll', 'AjaxController@getKaryawanPayroll')->name('ajax.get-karyawan-payroll');	
 	Route::post('ajax/get-calculate-payroll', 'AjaxController@getCalculatePayroll')->name('ajax.get-calculate-payroll');
-	Route::post('ajax/get-karyawan-payrollnet', 'AjaxController@getKaryawanPayrollNet')->name('ajax.get-karyawan-payrollnet');
-	Route::post('ajax/get-calculate-payrollnet', 'AjaxController@getCalculatePayrollNet')->name('ajax.get-calculate-payrollnet');
+	
+	#Route::post('ajax/get-karyawan-payrollnet', 'AjaxController@getKaryawanPayrollNet')->name('ajax.get-karyawan-payrollnet');
+	#Route::post('ajax/get-calculate-payrollnet', 'AjaxController@getCalculatePayrollNet')->name('ajax.get-calculate-payrollnet');
+
 	Route::post('ajax/get-karyawan-payrollgross', 'AjaxController@getKaryawanPayrollGross')->name('ajax.get-karyawan-payrollgross');
 	Route::post('ajax/get-calculate-payrollgross', 'AjaxController@getCalculatePayrollGross')->name('ajax.get-calculate-payrollgross');
 	Route::post('ajax/get-bulan-pay-slip', 'AjaxController@getBulangPaySlip')->name('ajax.get-bulan-pay-slip');		
