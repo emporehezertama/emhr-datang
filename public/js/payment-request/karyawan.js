@@ -180,7 +180,7 @@ $("#add").click(function(){
         html += '<div class="content_bensin"></div><div class="content_overtime"></div></td>';
         html += '<td class="description_td"><input type="text" class="form-control input" name="description[]"></td>';
         html += '<td><input type="number" name="quantity[]" value="1" class="form-control input" /></td>';
-        html += '<td><input type="number" name="estimation_cost[]" class="form-control estimation" /></td>';
+        //html += '<td><input type="number" name="estimation_cost[]" class="form-control estimation" /></td>';
         html += '<td><input type="number" name="amount[]" class="form-control amount" /></td>';
         html += '<td><input type="number" name="amount_approved[]" class="form-control" readonly="true" /></td>';
         html += '<td><input type="file" name="file_struk[]" class="form-control input" /></td>';

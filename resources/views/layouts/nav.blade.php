@@ -18,16 +18,18 @@
             <ul class="nav nav-second-level">
                 @if(get_setting('struktur_organisasi') == 3)
                     <li><a href="{{ route('administrator.leaveCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
+                    <li><a href="{{ route('administrator.paymentRequestCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
+                    <li><a href="{{ route('administrator.overtimeCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
+
+
                 @else
                     <li><a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
+                    <li><a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
+                    <li><a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.medical_reimbursement')</span></a></li>
+                    <li><a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
+                    <li><a href="{{ route('administrator.exit-interview.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance </span></a></li>
+                    <li><a href="{{ route('administrator.training.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a></li>
                 @endif
-
-                
-                <li><a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
-                <li><a href="{{ route('administrator.medical.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.medical_reimbursement')</span></a></li>
-                <li><a href="{{ route('administrator.overtime.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
-                <li><a href="{{ route('administrator.exit-interview.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance </span></a></li>
-                <li><a href="{{ route('administrator.training.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a></li>
                 <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Request Pay Slip</span></a></li>
             </ul>
         </li>
@@ -99,6 +101,15 @@
                 <li>
                     <a href="{{ route('administrator.setting-approvalLeave.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Leave/Permit Approval</span></a>
                 </li>
+                <li>
+                    <a href="{{ route('administrator.setting-approvalPaymentRequest.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Payment Request Approval</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.setting-approvalOvertime.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Overtime Approval</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.setting-approvalTraining.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Training Approval</span></a>
+                </li>
             </ul>
         </li>
         @endif
@@ -117,28 +128,39 @@
                 <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Management Form<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
-                <li>
+               
                     @if(get_setting('struktur_organisasi') == 3)
-                    <a href="{{ route('karyawan.leave.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
+                     <li>
+                        <a href="{{ route('karyawan.leave.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('karyawan.payment-request-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Payment Request</span></a>
+                    </li>
+                    <li>
+                    <a href="{{ route('karyawan.overtime-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Overtime Sheet </span></a>
+                    </li>
+                    <a href="{{ route('karyawan.training-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a>
+                    </li>
                     @else
-                    <a href="{{ route('karyawan.cuti.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
-                    @endif
-                </li>
-                <li>
-                    <a href="{{ route('karyawan.payment-request.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Payment Request</span></a>
-                </li>
-                <li>
+                     <li>
+                        <a href="{{ route('karyawan.cuti.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('karyawan.payment-request.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Payment Request</span></a>
+                    </li>
+                    <li>
                     <a href="{{ route('karyawan.overtime.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Overtime Sheet </span></a>
-                </li>
-                <li>
-                    <a href="{{ route('karyawan.exit-interview.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
-                </li>
-                 <li>
-                    <a href="{{ route('karyawan.training.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('karyawan.medical.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a>
-                </li>
+                    </li>
+                    <li>
+                        <a href="{{ route('karyawan.exit-interview.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
+                    </li>
+                     <li>
+                        <a href="{{ route('karyawan.training.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('karyawan.medical.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a>
+                    </li>
+                    @endif
             </ul>
         </li>
         <li class="mega-nav">
@@ -147,13 +169,15 @@
             </a>
         </li>
     @if(get_setting('struktur_organisasi') == 3)
-        @php($leave_menu = count_leave_approval() )
-        @if($leave_menu['all'] > 0 )
+        @php($leave_menu = count_leave_approval())
+        @php($payment_menu = count_payment_request_approval())
+        @php($overtime_menu = count_overtime_approval())
+        @if($leave_menu['all'] > 0 || $payment_menu['all'] > 0 || $overtime_menu['all'] > 0)
         <li style="position: relative;">
                 <a href="javascript:void(0)" class="waves-effect">
                     <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval<span class="fa arrow"></span></span>
                 </a>
-                @if($leave_menu['waiting'] > 0)    
+                @if($leave_menu['waiting'] > 0 || $payment_menu['waiting'] > 0 || $overtime_menu['waiting'] > 0)    
                     <div class="notify" style="position: absolute;top: 61px;right: 10px;"> <span class="heartbit"></span> <span class="point"></span> </div>
                 @endif
 
@@ -161,6 +185,16 @@
                 <li>
                     <a href="{{ route('karyawan.approval.leave-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Leave/Permit</span>
                         <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $leave_menu['waiting'] }}</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('karyawan.approval.payment-request-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Payment Request</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $payment_menu['waiting'] }}</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('karyawan.approval.overtime-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $overtime_menu['waiting'] }}</label>
                     </a>
                 </li>
             </ul>
@@ -256,11 +290,6 @@
                 </ul>
             </li>
             @endif
-
-    @endif
-
-
-        
-
+    @endif     
     </ul>
 @endif

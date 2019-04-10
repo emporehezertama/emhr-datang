@@ -151,7 +151,7 @@ class LeaveCustomController extends Controller
             $params[$no]['DATE OF SUBMITTED']       = date('d F Y', strtotime($item->created_at));
 
             // SET HEADER LEVEL APPROVAL
-            $level_header = get_level_header();
+            $level_header = get_payment_header();
             for($a=0; $a < $level_header  ; $a++)
             {
                 $params[$no]['APPROVAL STATUS '. ($a+1)]           = '-';
@@ -177,9 +177,6 @@ class LeaveCustomController extends Controller
                 $params[$no]['APPROVAL NAME '. ($key+1)]           = isset($value->userApproved) ? $value->userApproved->name:'';
 
                 $params[$no]['APPROVAL DATE '. ($key+1)]           = $value->date_approved != NULL ? date('d F Y', strtotime($value->date_approved)) : ''; 
-                //Status Approval
-               //Nama Approval
-               //Tanggal Approval
             }
            
           

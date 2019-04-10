@@ -29,4 +29,50 @@ class SettingApprovalLeave extends Model
         return $this->hasOne('\App\Models\SettingApprovalLeaveItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
     } 
 
+
+    public function itemPaymentRequest()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalPaymentRequestItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function itemsPaymentRequest()
+    {
+        return $this->hasMany('\App\Models\SettingApprovalPaymentRequestItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function level1PaymentRequest()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalPaymentRequestItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
+    } 
+
+    public function itemOvertime()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalOvertimeItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function itemsOvertime()
+    {
+        return $this->hasMany('\App\Models\SettingApprovalOvertimeItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function level1Overtime()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalOvertimeItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
+    }
+
+    public function itemTraining()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalTrainingItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function itemsTraining()
+    {
+        return $this->hasMany('\App\Models\SettingApprovalTrainingItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function level1Training()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalTrainingItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
+    } 
+
 }

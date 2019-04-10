@@ -66,8 +66,16 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/add-setting-exit-accounting', 'AjaxController@addSettingExitAccounting')->name('ajax.add-setting-exit-accounting');
 	
 	Route::post('ajax/get-detail-setting-approval-leave-item', 'AjaxController@getDetailSettingApprovalLeaveItem')->name('ajax.get-detail-setting-approval-leave-item');
+	Route::post('ajax/get-detail-setting-approval-paymentRequest-item', 'AjaxController@getDetailSettingApprovalPaymentRequestItem')->name('ajax.get-detail-setting-approval-paymentRequest-item');
+	Route::post('ajax/get-detail-setting-approval-overtime-item', 'AjaxController@getDetailSettingApprovalOvertimeItem')->name('ajax.get-detail-setting-approval-overtime-item');
+	Route::post('ajax/get-detail-setting-approval-training-item', 'AjaxController@getDetailSettingApprovalTrainingItem')->name('ajax.get-detail-setting-approval-training-item');
 
 	Route::post('ajax/get-history-approval-leave-custom', 'AjaxController@getHistoryApprovalLeaveCustom')->name('ajax.get-history-approval-leave-custom');
+	Route::post('ajax/get-history-approval-payment-request-custom', 'AjaxController@getHistoryApprovalPaymentRequestCustom')->name('ajax.get-history-approval-payment-request-custom');
+	Route::post('ajax/get-history-approval-overtime-custom', 'AjaxController@getHistoryApprovalOvertimeCustom')->name('ajax.get-history-approval-overtime-custom');
+	Route::post('ajax/get-history-approval-overtime-claim-custom', 'AjaxController@getHistoryApprovalOvertimeClaimCustom')->name('ajax.get-history-approval-overtime-claim-custom');
+	Route::post('ajax/get-date-overtime-custom', 'AjaxController@chekDateOVertime')->name('ajax.get-date-overtime-custom');
+	Route::post('ajax/get-in-out-overtime-custom', 'AjaxController@chekInOutOVertime')->name('ajax.get-in-out-overtime-custom');
 
 	Route::post('ajax/get-history-approval', 'AjaxController@getHistoryApproval')->name('ajax.get-history-approval');
 	Route::post('ajax/get-airports', 'AjaxController@getAirports')->name('ajax.get-airports');

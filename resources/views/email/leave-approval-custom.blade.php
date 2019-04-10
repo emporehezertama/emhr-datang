@@ -32,7 +32,7 @@
 			<table>
 				<tr>
 					<th style="text-align: left;">{{$item->level->name}} </th>
-					<th style="text-align: left;"> : {{ $item->structure->name}}</th>
+					<th style="text-align: left;"> : {{ (isset($item->structure->position) ? $item->structure->position->name:'').(isset($item->structure->division) ? '-'.$item->structure->division->name:'') }}</th>
 				</tr>
 			</table>
 		@endforeach

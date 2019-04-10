@@ -1,7 +1,34 @@
 <?php
+
+function overtime_absensi($date,$user_id)
+{
+	//tanggal dan user_id
+	$data = \App\Models\AbsensiItem::where('date',$date)->where('user_id',$user_id)->first();
+	return $data;
+	
+}
+
 function get_level_header()
 {
 	$data = \App\Models\HistoryApprovalLeave::orderBy('setting_approval_level_id', 'DESC')->first();
+
+	if($data)
+		return $data->setting_approval_level_id;
+	else
+		return 0;
+}
+function get_payment_header()
+{
+	$data = \App\Models\HistoryApprovalPaymentRequest::orderBy('setting_approval_level_id', 'DESC')->first();
+
+	if($data)
+		return $data->setting_approval_level_id;
+	else
+		return 0;
+}
+function get_overtime_header()
+{
+	$data = \App\Models\HistoryApprovalOvertime::orderBy('setting_approval_level_id', 'DESC')->first();
 
 	if($data)
 		return $data->setting_approval_level_id;
@@ -13,7 +40,7 @@ function get_level_header()
  */
 function getStructureName()
 {
-	$all = \App\Models\StructureOrganizationCustom::all();
+	$all = \App\Models\StructureOrganizationCustom::orderBy('organisasi_division_id','ASC')->get();
         $data = [];
         foreach ($all as $key => $item) 
         {
@@ -25,10 +52,7 @@ function getStructureName()
 }
 function cek_level_leave_up($id)
 {
-	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')
-		//->where('cuti_karyawan.status','<','2')
-		->where('cuti_karyawan.id', $id);
-	//->whereNull('is_approved');
+	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')->where('cuti_karyawan.id', $id);
 
 	$cek1 = clone $cuti;
 	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
@@ -39,7 +63,6 @@ function cek_level_leave_up($id)
 	{
 		$cek2 = clone $cuti;
 		$cek2 = $cek2->where('history_approval_leave.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
-
 		if($cek2)
 		{
 			return false;
@@ -93,28 +116,22 @@ function month_name()
 
 function cek_leave_approval()
 {
-	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')->orderBy('cuti_karyawan_id', 'DESC')
-	//->where('cuti_karyawan.status','<','2')
-	;
-	//->whereNull('is_approved');
+	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')->orderBy('cuti_karyawan_id', 'DESC');
 
 	$cek1 = clone $cuti;
 	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
 	
-	if(!$cek1) return false;
+	if(!$cek1) return [];
 
 	if($cek1->setting_approval_level_id >=2)
 	{
 		$cek2 = clone $cuti;
-		//$cek2 = $cek2->where('history_approval_leave.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
 		$cek2 = $cek2->where('history_approval_leave.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
-		//cek beso yak
 		if($cek2)
 		{
-			#return false;
+			//return [];
 		} 
 	}
-
 	return $cuti->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
 }
 
@@ -126,7 +143,6 @@ function count_leave_approval()
 	$params['reject'] 		= 0;
 	$params['all']			= 0;	
 	if(!$data) return $params;
-	
 	foreach($data as $item)	
 	{
 		if($item->is_approved == NULL)
@@ -147,10 +163,234 @@ function count_leave_approval()
 			$params['approved'] = $params['approved'] + 1;
         }
 	}
-
 	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
-
 	return $params;
+}
+
+function cek_payment_request_approval()
+{
+	$paymentRequest = \App\Models\HistoryApprovalPaymentRequest::join('payment_request','payment_request.id','=','history_approval_payment_request.payment_request_id')->orderBy('payment_request_id', 'DESC');
+	$cek1 = clone $paymentRequest;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	
+	if(!$cek1) return [];
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $paymentRequest;
+		$cek2 = $cek2->where('history_approval_payment_request.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			//return [];
+		} 
+	}
+	return $paymentRequest->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+}
+
+function count_payment_request_approval()
+{
+	$data = cek_payment_request_approval();
+	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;
+		
+	if(!$data) return $params;
+	foreach($data as $item)	
+	{
+		if($item->is_approved == NULL)
+		{
+			if($item->status == 3) continue;
+			
+            if(cek_level_payment_request_up($item->paymentRequest->id))
+            {
+                $params['waiting'] = $params['waiting'] + 1; 
+            }
+        }
+        if($item->is_approved == 0)
+        {
+			$params['reject'] = $params['reject'] + 1;
+        }
+        if($item->is_approved == 1)
+        {
+			$params['approved'] = $params['approved'] + 1;
+        }
+	}
+	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+	return $params;
+}
+
+function cek_level_payment_request_up($id)
+{
+	$paymentRequest = \App\Models\HistoryApprovalPaymentRequest::join('payment_request','payment_request.id','=','history_approval_payment_request.payment_request_id')->where('payment_request.id', $id);
+
+	$cek1 = clone $paymentRequest;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	if(!$cek1) return false;
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $paymentRequest;
+		$cek2 = $cek2->where('history_approval_payment_request.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			return false;
+		} 
+	}
+
+	return true;
+}
+
+//overtime
+function cek_overtime_approval()
+{
+	//jika statusnya 1
+	//jika status claimnya 1
+	$all = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->orderBy('overtime_sheet_id', 'DESC')->get();
+	
+	$overtime = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->orderBy('overtime_sheet_id', 'DESC');
+
+	foreach ($all as $key => $data) {
+		# code...
+		if($data->status == 1)
+		{
+			$cek1 = clone $overtime;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();	
+			if(!$cek1) return [];
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $overtime;
+				$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+				if($cek2)
+				{
+					//return [];
+				} 
+			}
+		}elseif($data->status_claim == 1)
+		{
+			$cek1 = clone $overtime;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();	
+			if(!$cek1) return [];
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $overtime;
+				$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved_claim')->first();
+				if($cek2)
+				{
+					//return [];
+				} 
+			}
+		}
+	}
+	
+	return $overtime->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+
+	/*
+	$overtime = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->orderBy('overtime_sheet_id', 'DESC');
+	$cek1 = clone $overtime;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();	
+	if(!$cek1) return [];
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $overtime;
+		$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			//return [];
+		} 
+	}
+	return $overtime->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+	*/
+}
+
+function count_overtime_approval()
+{
+	$data = cek_overtime_approval();
+	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;
+		
+	if(!$data) return $params;
+	foreach($data as $item)	
+	{
+		if($item->is_approved == NULL || $item->is_approved_claim == NULL)
+		{
+			if($item->status == 3 || $item->status_claim == 3) continue;
+			
+            if(cek_level_overtime_up($item->overtimeSheet->id))
+            {
+                $params['waiting'] = $params['waiting'] + 1; 
+            }
+        }
+        if($item->is_approved == 0 || $item->is_approved_claim == 0) 
+        {
+			$params['reject'] = $params['reject'] + 1;
+        }
+        if($item->is_approved == 1 || $item->is_approved_claim == 1)
+        {
+			$params['approved'] = $params['approved'] + 1;
+        }
+	}
+	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+	return $params;
+}
+
+function cek_level_overtime_up($id)
+{
+	$all = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->where('overtime_sheet.id', $id)->get();
+	
+	$overtime = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->where('overtime_sheet.id', $id);
+
+	foreach ($all as $key => $data) {
+		# code...
+		if($data->status == 1)
+		{
+			$cek1 = clone $overtime;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+			if(!$cek1) return false;
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $overtime;
+				$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id', ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+				if($cek2)
+				{
+					return false;
+				} 
+			}
+			return true;
+		}elseif ($data->status_claim == 1) {
+			# code...
+			$cek1 = clone $overtime;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+			if(!$cek1) return false;
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $overtime;
+				$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id', ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved_claim')->first();
+				if($cek2)
+				{
+					return false;
+				} 
+			}
+			return true;
+		}
+	}
+	/*
+	$overtime = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->where('overtime_sheet.id', $id);
+
+	$cek1 = clone $overtime;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	if(!$cek1) return false;
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $overtime;
+		$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id', ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			return false;
+		} 
+	}
+	return true;
+	*/
 }
 
 function replace_idr($nominal)
