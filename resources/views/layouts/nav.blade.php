@@ -103,6 +103,10 @@
         </li>
         @endif
 
+        <li>
+            <a href="{{ route('attendance.index') }}"><i class="mdi mdi-clock fa-fw"></i> <span class="hide-menu">Attendance</span></a>
+        </li>
+
     </ul>
 @else
     <ul class="nav" id="side-menu">

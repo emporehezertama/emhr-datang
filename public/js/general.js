@@ -90,6 +90,7 @@ $("#data_table_no_search").DataTable({
         
     ]
 });
+
 $("#data_table_no_pagging").DataTable({
     dom: 'Bfrtip',
     searching: false,
@@ -99,6 +100,19 @@ $("#data_table_no_pagging").DataTable({
     buttons: [
         
     ]
+});
+
+$(".data_table_no_pagging").each(function(){
+    $(this).DataTable({
+      dom: 'Bfrtip',
+      searching: false,
+      pageLength: 30,
+      bPaginate: false,
+      bInfo: false,
+      buttons: [
+          
+      ]
+  });
 });
 
 function _confirm(msg, url)
