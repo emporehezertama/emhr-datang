@@ -42,7 +42,7 @@
                             <a href="{{ route('administrator.cuti-bersama.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Collective Leave</span></a>
                         </div>
                         <div class="col-md-2">
-                            <a href="{{ route('administrator.absensi.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Attendance</span></a>
+                            <a href="{{ route('attendance.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Attendance</span></a>
                         </div>
                         <div class="col-md-2">
                             <a href="{{ route('administrator.libur-nasional.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Public Holiday</span></a>
