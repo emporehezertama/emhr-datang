@@ -41,4 +41,9 @@ class PaymentRequest extends Model
     {
         return $this->hasOne('App\User', 'id', 'approve_direktur_id');
     }
+
+    public function historyApproval()
+    {
+        return $this->hasMany('\App\Models\HistoryApprovalPaymentRequest', 'payment_request_id', 'id')->orderBy('setting_approval_level_id', 'ASC');
+    }
 }

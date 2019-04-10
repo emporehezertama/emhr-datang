@@ -54,6 +54,32 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('setting-approvalLeave/updateItem/{id}', 'SettingApprovalLeaveController@updateItem')->name('administrator.setting-approvalLeave.updateItem');
 	Route::post('setting-approvalLeave/destroyItem/{id}', 'SettingApprovalLeaveController@destroyItem')->name('administrator.setting-approvalLeave.destroyItem');
 
+	Route::resource('setting-approvalPaymentRequest', 'SettingApprovalPaymentRequestController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalPaymentRequest/indexItem/{id}', 'SettingApprovalPaymentRequestController@indexItem')->name('administrator.setting-approvalPaymentRequest.indexItem');
+	Route::get('setting-approvalPaymentRequest/createItem/{id}', 'SettingApprovalPaymentRequestController@createItem')->name('administrator.setting-approvalPaymentRequest.createItem');
+	Route::post('setting-approvalPaymentRequest/storeItem', 'SettingApprovalPaymentRequestController@storeItem')->name('administrator.setting-approvalPaymentRequest.storeItem');
+	Route::get('setting-approvalPaymentRequest/editItem/{id}', 'SettingApprovalPaymentRequestController@editItem')->name('administrator.setting-approvalPaymentRequest.editItem');
+	Route::post('setting-approvalPaymentRequest/updateItem/{id}', 'SettingApprovalPaymentRequestController@updateItem')->name('administrator.setting-approvalPaymentRequest.updateItem');
+	Route::post('setting-approvalPaymentRequest/destroyItem/{id}', 'SettingApprovalPaymentRequestController@destroyItem')->name('administrator.setting-approvalPaymentRequest.destroyItem');
+
+Route::resource('setting-approvalOvertime', 'SettingApprovalOvertimeController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalOvertime/indexItem/{id}', 'SettingApprovalOvertimeController@indexItem')->name('administrator.setting-approvalOvertime.indexItem');
+	Route::get('setting-approvalOvertime/createItem/{id}', 'SettingApprovalOvertimeController@createItem')->name('administrator.setting-approvalOvertime.createItem');
+	Route::post('setting-approvalOvertime/storeItem', 'SettingApprovalOvertimeController@storeItem')->name('administrator.setting-approvalOvertime.storeItem');
+	Route::get('setting-approvalOvertime/editItem/{id}', 'SettingApprovalOvertimeController@editItem')->name('administrator.setting-approvalOvertime.editItem');
+	Route::post('setting-approvalOvertime/updateItem/{id}', 'SettingApprovalOvertimeController@updateItem')->name('administrator.setting-approvalOvertime.updateItem');
+	Route::post('setting-approvalOvertime/destroyItem/{id}', 'SettingApprovalOvertimeController@destroyItem')->name('administrator.setting-approvalOvertime.destroyItem');
+
+	Route::resource('setting-approvalTraining', 'SettingApprovalTrainingController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalTraining/indexItem/{id}', 'SettingApprovalTrainingController@indexItem')->name('administrator.setting-approvalTraining.indexItem');
+	Route::get('setting-approvalTraining/createItem/{id}', 'SettingApprovalTrainingController@createItem')->name('administrator.setting-approvalTraining.createItem');
+	Route::post('setting-approvalTraining/storeItem', 'SettingApprovalTrainingController@storeItem')->name('administrator.setting-approvalTraining.storeItem');
+	Route::get('setting-approvalTraining/editItem/{id}', 'SettingApprovalTrainingController@editItem')->name('administrator.setting-approvalTraining.editItem');
+	Route::post('setting-approvalTraining/updateItem/{id}', 'SettingApprovalTrainingController@updateItem')->name('administrator.setting-approvalTraining.updateItem');
+	Route::post('setting-approvalTraining/destroyItem/{id}', 'SettingApprovalTrainingController@destroyItem')->name('administrator.setting-approvalTraining.destroyItem');
+
+
+
 	Route::resource('news', 'NewsController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('internal-memo', 'InternalMemoController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('branch-organisasi', 'BranchOrganisasiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -172,12 +198,23 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('karyawan/autologin/{id}', 'KaryawanController@autologin')->name('administrator.karyawan.autologin');
 	Route::get('profile', 'IndexController@profile')->name('administrator.profile');
 	Route::post('update-profile', 'IndexController@updateProfile')->name('administrator.update-profile');
-	Route::post('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
-	Route::get('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
+	//custom
 	Route::post('leaveCustom/index', 'LeaveCustomController@index')->name('administrator.leaveCustom.index');
 	Route::get('leaveCustom/index', 'LeaveCustomController@index')->name('administrator.leaveCustom.index');
 	Route::get('leaveCustom/proses/{id}', 'LeaveCustomController@proses')->name('administrator.leaveCustom.proses');
+	
+	Route::post('paymentRequestCustom/index', 'PaymentRequestCustomController@index')->name('administrator.paymentRequestCustom.index');
+	Route::get('paymentRequestCustom/index', 'PaymentRequestCustomController@index')->name('administrator.paymentRequestCustom.index');
+	Route::get('paymentRequestCustom/proses/{id}', 'PaymentRequestCustomController@proses')->name('administrator.paymentRequestCustom.proses');
 
+	Route::post('overtimeCustom/index', 'OvertimeCustomController@index')->name('administrator.overtimeCustom.index');
+	Route::get('overtimeCustom/index', 'OvertimeCustomController@index')->name('administrator.overtimeCustom.index');
+	Route::get('overtimeCustom/proses/{id}', 'OvertimeCustomController@proses')->name('administrator.overtimeCustom.proses');
+	Route::get('overtimeCustom/claim/{id}', 'OvertimeCustomController@claim')->name('administrator.overtimeCustom.claim');
+	
+
+	Route::post('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
+	Route::get('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
 	Route::post('payment-request/index', 'PaymentRequestController@index')->name('administrator.payment-request.index');
 	Route::get('payment-request/index', 'PaymentRequestController@index')->name('administrator.payment-request.index');
 	Route::post('medical-reimbursement/index', 'MedicalController@index')->name('administrator.medical-reimbursement.index');

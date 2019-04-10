@@ -27,8 +27,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('administrator.setting-approvalLeave.storeItem') }}" method="POST">
-
+            <form class="form-horizontal" id="form-settingApproval" enctype="multipart/form-data" action="{{ route('administrator.setting-approvalLeave.storeItem') }}" method="POST" autocomplete="off">
                 <div class="col-md-12">
                     <div class="white-box">
                         <h3 class="box-title m-b-0">Add Approval Leave</h3>
@@ -82,7 +81,7 @@
                         <br />
                         <div class="col-md-12">
                             <a href="{{ route('administrator.setting-approvalLeave.indexItem',['id' => $data->id] ) }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
-                            <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save</button>
+                            <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_submit_form"><i class="fa fa-save"></i> Save</button>
                             <br style="clear: both;" />
                         </div>
                         <div class="clearfix"></div>
@@ -96,7 +95,9 @@
     <!-- /.container-fluid -->
     @extends('layouts.footer')
 </div>
+
 <!-- ============================================================== -->
 <!-- End Page Content -->
 <!-- ============================================================== -->
+
 @endsection

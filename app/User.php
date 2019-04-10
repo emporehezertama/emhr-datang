@@ -226,4 +226,5 @@ class User extends Authenticatable
     {
         return $this->hasOne('\App\Models\SettingApprovalLeave', 'structure_organization_custom_id', 'structure_organization_custom_id');
     }
+    
 }

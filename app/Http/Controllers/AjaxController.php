@@ -42,6 +42,12 @@ use App\Models\EmporeOrganisasiStaff;
 use App\User;
 use App\Models\SettingApprovalLeave;
 use App\Models\SettingApprovalLeaveItem;
+use App\Models\SettingApprovalPaymentRequestItem;
+use App\Models\SettingApprovalOvertimeItem;
+use App\Models\SettingApprovalTrainingItem;
+use App\Models\CutiBersama;
+use App\Models\LiburNasional;
+use App\Models\AbsensiItem;
 
 class AjaxController extends Controller
 {
@@ -67,6 +73,44 @@ class AjaxController extends Controller
     public function index()
     {
         return ;
+    }
+
+    public function chekDateOVertime(Request $request)
+    {
+        if($request->ajax())
+        {
+            $cuti_bersama   = CutiBersama::all();
+            $libur_nasional = LiburNasional::all();
+            $user_ts = strtotime($request->date);
+            $result = false;
+
+            foreach ($cuti_bersama as $key => $value_cuti) {
+            # code...
+                $start_ts = strtotime($value_cuti->dari_tanggal);
+                $end_ts = strtotime($value_cuti->sampai_tanggal);
+                if(($user_ts >= $start_ts) && ($user_ts <= $end_ts))
+                    $result = true;
+            }
+
+            foreach ($libur_nasional as $key => $value_libur) {
+            # code...
+                if($user_ts == strtotime($value_libur->tanggal))
+                    $result = true;
+            }
+        }
+        return response()->json(['result'=> $result]);
+    }
+
+    public function chekInOutOVertime(Request $request)
+    {
+       if($request->ajax())
+        {
+            $absensi = \App\Models\AbsensiItem::where('date', $request->date)->where('user_id',$request->user_id)->first();
+
+            return response()->json(['message' => 'success', 'data' => $absensi]);
+        }
+        return response()->json($this->respon);
+
     }
 
     /**
@@ -1358,18 +1402,7 @@ public function getCalculatePayrollGross(Request $request)
         return response()->json($this->respon);
     }
 
-    public function getDetailSettingApprovalLeaveItem(Request $request)
-    {
-        if($request->ajax())
-        {
-            $data = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->foreign_id)->first();
-
-            return response()->json(['message' => 'success', 'data' => $data]);
-        }
-
-        return response()->json($this->respon);
-    }
-
+    
     public function getHistoryApprovalLeaveCustom(Request $request)
     {
         if($request->ajax())
@@ -1386,6 +1419,138 @@ public function getCalculatePayrollGross(Request $request)
             } 
             
             return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getHistoryApprovalPaymentRequestCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = PaymentRequest::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->is_approved;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getHistoryApprovalOvertimeCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = OvertimeSheet::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->is_approved;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getHistoryApprovalOvertimeClaimCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = OvertimeSheet::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApprovedClaim)?$value->userApprovedClaim->name:'';
+                $history[$key]['date']          = $value->date_approved_claim;
+                $history[$key]['is_approved']   = $value->is_approved_claim;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+
+    
+    public function getDetailSettingApprovalLeaveItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $all = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->foreign_id)->get();
+            $data =[];
+            foreach ($all as $key => $value) {
+                # code...
+                $data[$key]['level']         = $value->ApprovalLevel->name;
+                $data[$key]['position']      = (isset($value->structureApproval->position) ? $value->structureApproval->position->name:'').(isset($value->structureApproval->division) ? '-'.$value->structureApproval->division->name:'');
+            } 
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getDetailSettingApprovalPaymentRequestItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $all = SettingApprovalPaymentRequestItem::where('setting_approval_leave_id', $request->foreign_id)->get();
+            $data =[];
+            foreach ($all as $key => $value) {
+                # code...
+                $data[$key]['level']         = $value->ApprovalLevel->name;
+                $data[$key]['position']      = (isset($value->structureApproval->position) ? $value->structureApproval->position->name:'').(isset($value->structureApproval->division) ? '-'.$value->structureApproval->division->name:'');
+            } 
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getDetailSettingApprovalOvertimeItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $all = SettingApprovalOvertimeItem::where('setting_approval_leave_id', $request->foreign_id)->get();
+            $data =[];
+            foreach ($all as $key => $value) {
+                # code...
+                $data[$key]['level']         = $value->ApprovalLevel->name;
+                $data[$key]['position']      = (isset($value->structureApproval->position) ? $value->structureApproval->position->name:'').(isset($value->structureApproval->division) ? '-'.$value->structureApproval->division->name:'');
+            } 
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+    public function getDetailSettingApprovalTrainingItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $all = SettingApprovalTrainingItem::where('setting_approval_leave_id', $request->foreign_id)->get();
+            $data =[];
+            foreach ($all as $key => $value) {
+                # code...
+                $data[$key]['level']         = $value->ApprovalLevel->name;
+                $data[$key]['position']      = (isset($value->structureApproval->position) ? $value->structureApproval->position->name:'').(isset($value->structureApproval->division) ? '-'.$value->structureApproval->division->name:'');
+            } 
+            return response()->json(['message' => 'success', 'data' => $data]);
         }
 
         return response()->json($this->respon);

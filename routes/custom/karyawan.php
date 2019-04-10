@@ -21,6 +21,22 @@ Route::group(['prefix' => 'karyawan', 'namespace'=>'Karyawan', 'middleware' => [
 	Route::get('approval-leave-custom/detail/{id}',  'ApprovalLeaveCustomController@detail')->name('karyawan.approval.leave-custom.detail');
 	Route::post('approval-leave-custom/proses',  'ApprovalLeaveCustomController@proses')->name('karyawan.approval.leave-custom.proses');
 
+	Route::resource('payment-request-custom', 'PaymentRequestCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	Route::get('approval-payment-request-custom',  'ApprovalPaymentRequestCustomController@index')->name('karyawan.approval.payment-request-custom.index');
+	Route::get('approval-payment-request-custom/detail/{id}',  'ApprovalPaymentRequestCustomController@detail')->name('karyawan.approval.payment-request-custom.detail');
+	Route::post('approval-payment-request-custom/proses',  'ApprovalPaymentRequestCustomController@proses')->name('karyawan.approval.payment-request-custom.proses');
+
+	Route::resource('overtime-custom', 'OvertimeCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	Route::get('overtime-custom/claim/{id}',  'OvertimeCustomController@claim')->name('karyawan.overtime-custom.claim');
+	Route::post('overtime-custom/prosesclaim',  'OvertimeCustomController@prosesclaim')->name('karyawan.overtime-custom.prosesclaim');
+	Route::get('approval-overtime-custom',  'ApprovalOvertimeCustomController@index')->name('karyawan.approval.overtime-custom.index');
+	Route::get('approval-overtime-custom/detail/{id}',  'ApprovalOvertimeCustomController@detail')->name('karyawan.approval.overtime-custom.detail');
+	Route::post('approval-overtime-custom/proses',  'ApprovalOvertimeCustomController@proses')->name('karyawan.approval.overtime-custom.proses');
+	Route::get('approval-overtime-custom/claim/{id}',  'ApprovalOvertimeCustomController@claim')->name('karyawan.approval.overtime-custom.claim');
+	Route::post('approval-overtime-custom/prosesClaim',  'ApprovalOvertimeCustomController@prosesClaim')->name('karyawan.approval.overtime-custom.prosesClaim');
+
+	Route::resource('training-custom', 'TrainingCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+
 
 	Route::get('approval-cuti',  'ApprovalCutiController@index')->name('karyawan.approval.cuti.index');
 	Route::get('approval-cuti/detail/{id}',  'ApprovalCutiController@detail')->name('karyawan.approval.cuti.detail');

@@ -55,7 +55,11 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('administrator.setting-approvalLeave.indexItem', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs"><i class="fa fa-arrow-right"></i>Detail</button></a>
-                                            <!--<a onclick="detail_setting_approval_leave({{ $item->id }})"><button class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View</button></a>-->
+                                            @if(isset($item->item))
+                                                <a onclick="detail_setting_approval_leave_custom({{ $item->id }})">
+                                                    <button class="btn btn-success btn-xs"><i class="fa fa-arrow-right"></i>View Approval</button>
+                                                </a>
+                                            @endif
                                         </td>
                                         </td>
                                     </tr>

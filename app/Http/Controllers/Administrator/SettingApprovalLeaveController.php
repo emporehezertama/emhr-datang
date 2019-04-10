@@ -142,25 +142,30 @@ class SettingApprovalLeaveController extends Controller
         //cek data udah ada belum level segitu
         $checkdata = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
         $checkDataStruktur = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('structure_organization_custom_id', $request->structure_organization_custom_id)->first();
-
-        if(isset($checkDataStruktur))
-        {
-            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-        }elseif(isset($checkdata))
-        {
-            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+        
+        if ($request->structure_organization_custom_id == NULL) {
+            # code...
+            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval position is incomplete!');
         }else
         {
-            $data       = new SettingApprovalLeaveItem();
-            $data->setting_approval_leave_id  = $request->setting_approval_leave_id;
-            $data->setting_approval_level_id  = $request->setting_approval_level_id;
-            $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
-            $data->description = $request->description;
-            $data->save();
+            if(isset($checkDataStruktur))
+            {
+                return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+            }elseif(isset($checkdata))
+            {
+                return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+            }else
+            {
+                $data       = new SettingApprovalLeaveItem();
+                $data->setting_approval_leave_id  = $request->setting_approval_leave_id;
+                $data->setting_approval_level_id  = $request->setting_approval_level_id;
+                $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
+                $data->description = $request->description;
+                $data->save();
 
-            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-success', 'Data successfully saved!');
+                return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-success', 'Data successfully saved!');
+            }
         }
-       
     }
 
     public function editItem($id)
@@ -187,38 +192,46 @@ class SettingApprovalLeaveController extends Controller
         $data                       = SettingApprovalLeaveItem::where('id', $id)->first();
         $checkdata = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
         $checkDataStruktur = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('structure_organization_custom_id', $request->structure_organization_custom_id)->first();
-        if(isset($checkDataStruktur))
+        if($request->setting_approval_level_id == NULL)
         {
-            if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
+            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval level is incomplete!');
+        }elseif ($request->structure_organization_custom_id == NULL) {
+            # code...
+            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval position is incomplete!');
+        }else{
+            if(isset($checkDataStruktur))
             {
-                //$data->setting_approval_level_id  = $request->setting_approval_level_id;
-                $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
-                $data->description     = $request->description;
-                $data->save();
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
-            } else
+                if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
+                {
+                    //$data->setting_approval_level_id  = $request->setting_approval_level_id;
+                    $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
+                    $data->description     = $request->description;
+                    $data->save();
+                    return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
+                } else
+                {
+                    return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+                }            
+            } elseif(isset($checkdata))
             {
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-            }            
-        } elseif(isset($checkdata))
-        {
-            if($checkdata->structure_organization_custom_id != $request->structure_organization_custom_id){
-                $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
-                $data->description     = $request->description;
-                $data->save();
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
-            } else{
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-            }
-            
-        }else
-        {
-             //$data->setting_approval_level_id  = $request->setting_approval_level_id;
-             $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
-             $data->description     = $request->description;
-             $data->save();
+                if($checkdata->structure_organization_custom_id != $request->structure_organization_custom_id){
+                    $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
+                    $data->description     = $request->description;
+                    $data->save();
+                    return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
+                } else{
+                    return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+                }
+                
+            }else
+            {
+                 //$data->setting_approval_level_id  = $request->setting_approval_level_id;
+                 $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
+                 $data->description     = $request->description;
+                 $data->save();
 
-            return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
+                return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
+            }
         }
         
     }
