@@ -66,26 +66,34 @@
                             <thead>
                                 <tr>
                                     <td style="vertical-align: middle;">Salary</td>
-                                    <td colspan="2"><input type="text" class="form-control price_format calculate" name="salary" placeholder="Rp. " value="{{ number_format($data->salary) }}" /></td> 
+                                    <td><input type="text" class="form-control price_format calculate" name="salary" placeholder="Rp. " value="{{ number_format($data->salary) }}" /></td> 
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">Bonus / THR</td>
                                     <td><input type="text" class="form-control price_format calculate" name="bonus" value="{{ $data->bonus }}" placeholder="Rp. " /></td> 
                                 </tr>
-                                @if(isset($data->payrollEarningsEmployee))
-                                    @foreach($data->payrollEarningsEmployee as $item)
-                                        @if(isset($item->payrollEarnings->title))
-                                            <tr>
-                                                <td style="vertical-align: middle;">{{ $item->payrollEarnings->title }}</td>
-                                                <td>
-                                                    <input type="hidden" name="earning[]" value="{{ $item->payrollEarnings->id }}" /> 
-                                                    <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($item->nominal) }}" />
-                                                </td>
-                                                <td style="vertical-align: middle;"><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll.delete-earning-payroll', $item->id) }}')"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                @endif
+
+                                @foreach(get_earnings() as $item)
+                                    @php($earning = getEarningEmployee($item->id, $data->id))
+                                    @if($earning)
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ $earning->payrollEarnings->title }}</td>
+                                            <td>
+                                                <input type="hidden" name="earning[]" value="{{ $earning->payrollEarnings->id }}" /> 
+                                                <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($earning->nominal) }}" />
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ $item->title }}</td>
+                                            <td>
+                                                <input type="hidden" name="earning[]" value="{{ $item->id }}" /> 
+                                                <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($item->nominal) }}" />
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+
                             </thead>
                             <tfoot>
                                 <tr>
@@ -155,20 +163,27 @@
                                         </div>
                                     </td>
                                 </tr>
-                                @if(isset($data->payrollDeductionsEmployee))
-                                    @foreach($data->payrollDeductionsEmployee as $item)
-                                        @if(isset($item->payrollDeductions->title))
-                                            <tr>
-                                                <td style="vertical-align: middle;">{{ $item->payrollDeductions->title }}</td>
-                                                <td>
-                                                    <input type="hidden" name="deduction[]" value="{{ $item->payrollDeductions->id }}" />
-                                                    <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ number_format($item->nominal) }}" />
-                                                </td>
-                                                <td style="vertical-align: middle;"><a href="javascript:void(0)"  onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll.delete-deduction-payroll', $item->id) }}')"><i class="fa fa-trash text-danger" style="font-size: 15px;"></i></a></td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                @endif
+                                @foreach(get_deductions() as $item)
+                                    @php($deduction = getDeductionEmployee($item->id, $data->id))
+                                    @if($deduction)
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ $deduction->payrollDeductions->title }}</td>
+                                            <td>
+                                                <input type="hidden" name="deduction[]" value="{{ $deduction->payrollDeductions->id }}" /> 
+                                                <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ $deduction->nominal }}" />
+                                            </td>
+                                        </tr>
+                                    @else
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ $item->title }}</td>
+                                            <td>
+                                                <input type="hidden" name="deduction[]" value="{{ $item->id }}" /> 
+                                                <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ number_format($item->nominal) }}" />
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+
                             </thead>
                             <tfoot>
                                 <tr>
@@ -352,12 +367,13 @@
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
 
-                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus.split('.').join(''));
+                bonus = bonus != 0 ? bonus.split('.').join('') : 0;
+
+                sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus);
                 sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 
                 $("input[name='total_earnings']").val(sum_earnings);
                 $("input[name='total_deductions']").val(sum_deductions);
-
                 $(".total_earnings").html(numberWithDot(sum_earnings));
                 $(".total_deductions").html(numberWithDot(sum_deductions));
             }

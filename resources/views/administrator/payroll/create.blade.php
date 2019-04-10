@@ -345,6 +345,8 @@
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
 
+                bonus = bonus != 0 ? bonus.split('.').join('') : 0;
+
                 sum_earnings    = parseInt(sum_earnings) + parseInt(salary.split('.').join('')) + parseInt(bonus);
                 sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
 

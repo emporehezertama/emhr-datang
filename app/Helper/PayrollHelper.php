@@ -1,6 +1,30 @@
 <?php 
 
 /**
+ * Get Deduction Employee
+ * @param  $id
+ * @return object
+ */
+function getDeductionEmployee($id, $payroll_id)
+{
+	$item = \App\Models\PayrollDeductionsEmployee::where('payroll_deduction_id', $id)->where('payroll_id', $payroll_id)->first();
+
+	return $item;
+}
+
+/**
+ * Get Earning Employee
+ * @param  $id
+ * @return object
+ */
+function getEarningEmployee($id, $payroll_id)
+{
+	$item = \App\Models\PayrollEarningsEmployee::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id)->first();
+
+	return $item;
+}
+
+/**
  * Deduction Employee History
  */
 function payrollDeductionsEmployeeHistory($id)
