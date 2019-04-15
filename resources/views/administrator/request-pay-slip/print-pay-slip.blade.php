@@ -71,6 +71,12 @@
                           </tr>
                         @endif
                     @endforeach
+                    <tr>
+                    	<td>Monthly Income Tax / PPh21 (ditanggung perusahaan)</td>
+                    	<td>
+                    		{{ number_format($data->pph21) }}
+                    	</td>
+                    </tr>
 				</table>
 			</td>
 			<td>&nbsp;</td>
