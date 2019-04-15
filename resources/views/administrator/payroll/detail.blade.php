@@ -97,6 +97,10 @@
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th>Monthly Income Tax / PPh21 (ditanggung perusahaan)</th>
+                                    <th class="td-pph21" colspan="2">{{ number_format($data->pph21) }}</th>
+                                </tr>
+                                <tr>
                                     <th>Total Earnings </th>
                                     <th class="total_earnings">{{ number_format($data->total_earnings) }}</th>
                                 </tr>
