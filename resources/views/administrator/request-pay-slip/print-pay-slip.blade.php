@@ -74,7 +74,7 @@
                     <tr>
                     	<td>Monthly Income Tax / PPh21 (ditanggung perusahaan)</td>
                     	<td>
-                    		{{ number_format($data->pph21) }}
+                    		{{ number_format($item->pph21) }}
                     	</td>
                     </tr>
 				</table>
