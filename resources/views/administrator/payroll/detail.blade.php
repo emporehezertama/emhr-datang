@@ -119,13 +119,13 @@
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td colspan="2">
-                                        <div class="col-md-4 p-l-0">
+                                        <!-- <div class="col-md-4 p-l-0">
                                             <div class="input-group">
                                                 <input type="text" readonly="true" value="{{ get_setting('bpjs_jaminan_jht_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
+                                        </div> -->
+                                        <div class="col-md-12 p-r-0 p-l-0">
                                             <div class="input-group">
                                                 <span class="input-group-addon" id="basic-addon2">Rp</span>
                                                 <input type="text" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
@@ -136,13 +136,13 @@
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Kesehatan (Employee)</td>
                                     <td colspan="2">
-                                        <div class="col-md-4 p-l-0">
+                                       <!--  <div class="col-md-4 p-l-0">
                                             <div class="input-group">
                                                 <input type="text" readonly="true" value="{{ get_setting('bpjs_kesehatan_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
+                                        </div> -->
+                                        <div class="col-md-12 p-r-0 p-l-0">
                                             <div class="input-group">
                                                 <span class="input-group-addon" id="basic-addon2">Rp</span>
                                                 <input type="text" name="bpjs_kesehatan_employee" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
@@ -153,13 +153,13 @@
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Pensiun (Employee)</td>
                                     <td colspan="2">
-                                        <div class="col-md-4 p-l-0">
+                                       <!--  <div class="col-md-4 p-l-0">
                                             <div class="input-group">
                                                 <input type="text" readonly="true" value="{{ get_setting('bpjs_pensiun_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
+                                        </div> -->
+                                        <div class="col-md-12 p-r-0 p-l-0">
                                             <div class="input-group">
                                                 <span class="input-group-addon" id="basic-addon2">Rp</span>
                                                 <input type="text" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />

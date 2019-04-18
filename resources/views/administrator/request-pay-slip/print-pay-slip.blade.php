@@ -88,7 +88,8 @@
 					</tr>
 					<tr>
 						<td>BPJS Jaminan Hari Tua (JHT) {{ get_setting('bpjs_jaminan_jht_employee') }}% (Employee) </td>
-						<td style="text-align: right;">{{ format_idr($item->salary * get_setting('bpjs_jaminan_jht_employee') / 100) }}</td>
+						<!-- <td style="text-align: right;">{{ format_idr($item->salary * get_setting('bpjs_jaminan_jht_employee') / 100) }}</td> -->
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_ketenagakerjaan_employee ) }}</td>
 					</tr>
 					<tr> 
 						<td>BPJS Kesehatan ({{ get_setting('bpjs_kesehatan_employee') }}%) (employee)</td>
