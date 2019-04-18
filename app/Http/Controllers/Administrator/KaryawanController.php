@@ -97,6 +97,15 @@ class KaryawanController extends Controller
     }
 
     /**
+     * Send Pay Slip
+     * @return email
+     */
+    public function sendPaySlip()
+    {
+        
+    }
+
+    /**
      * [printPayslip description]
      * @param  [type] $id [description]
      * @return [type]     [description]

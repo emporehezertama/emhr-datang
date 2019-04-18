@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/structure-custome-edit', 'AjaxController@structureCustomeEdit')->name('ajax.structure-custome-edit');		
 	Route::get('attendance/index', 'AttendanceController@index')->name('attendance.index');
 	Route::get('attendance/detail-attendance/{SN}', 'AttendanceController@AttendanceList')->name('attendance.detail-attendance');
+	Route::post('ajax/get-year-pay-slip', 'AjaxController@getYearPaySlip')->name('ajax.get-year-pay-slip');		
 });
 
 /**

@@ -75,6 +75,19 @@ class AjaxController extends Controller
         return ;
     }
 
+    /**
+     * Get Year Pay Slip
+     * @param  Request $request
+     * @return json
+     */
+    public function getYearPaySlip(Request $request)
+    {
+        if($request->ajax())
+        {
+            return response()->json(['result'=> pay_slip_tahun_history($request->id)]);
+        }
+    }
+
     public function chekDateOVertime(Request $request)
     {
         if($request->ajax())
