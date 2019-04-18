@@ -73,7 +73,7 @@
                     @endforeach
                     <tr>
                     	<td>Monthly Income Tax / PPh21 (ditanggung perusahaan)</td>
-                    	<td>
+                    	<td style="text-align: right;">
                     		{{ number_format($item->pph21) }}
                     	</td>
                     </tr>

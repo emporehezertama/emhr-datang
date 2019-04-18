@@ -577,6 +577,13 @@ class PayrollController extends Controller
             $bpjs_ketenagakerjaan2_persen = get_setting('bpjs_jaminan_jht_employee');
             $bpjs_ketenagakerjaan2 = ($item->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
+            // start custom
+            if(replace_idr($item->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
+            {
+                $bpjs_ketenagakerjaan2 = replace_idr($item->bpjs_ketenagakerjaan_employee);
+            }
+            // end custom
+
             $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
             $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
@@ -600,6 +607,13 @@ class PayrollController extends Controller
                 $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
             }
 
+            // start custom
+            if(replace_idr($item->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
+            {
+                $bpjs_kesehatan2 = replace_idr($item->bpjs_kesehatan_employee);
+            }
+            // end custom
+
             $bpjs_pensiun         = 0;
             $bpjs_pensiun2        = 0;
             $bpjs_pensiun_persen  = 2;
@@ -622,6 +636,13 @@ class PayrollController extends Controller
             {
                 $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
             }
+
+            // start custom
+            if(replace_idr($item->bpjs_pensiun_employee) != $bpjs_pensiun2)
+            {
+                $bpjs_pensiun2 = replace_idr($item->bpjs_pensiun_employee);
+            }
+            // end custom
 
             $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
             $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
@@ -750,6 +771,11 @@ class PayrollController extends Controller
             if(!isset($item->salary) || empty($item->salary)) $item->salary = 0;
             if(!isset($thp) || empty($thp)) $thp = 0;
             
+            // start custom
+            $thp                         = $thp + $monthly_income_tax;
+            $earnings                     = $earnings + $monthly_income_tax;    
+            // end custom
+
             #$temp->total_deduction              = $total_deduction + $deductions; 
             $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax; 
             $temp->total_earnings               = $item->salary + $item->bonus + $earnings;
