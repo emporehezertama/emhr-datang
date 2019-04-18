@@ -219,6 +219,7 @@
 </div>
 @section('footer-script')
 <script type="text/javascript">
+    var var_edit_bpjs = 0;
     
     function form_submit()
     {
@@ -233,6 +234,7 @@
 
     // start custom
     $("input[name='bpjs_ketenagakerjaan_employee'], input[name='bpjs_kesehatan_employee'], input[name='bpjs_pensiun_employee']").on('input', function(){
+        var_edit_bpjs = 1;
         calculate();
     }); 
     // end custom
@@ -357,6 +359,7 @@
                 bpjs_ketenagakerjaan_employee: $('.bpjs_ketenagakerjaan_employee').val(),
                 bpjs_kesehatan_employee: $('.bpjs_kesehatan_employee').val(),
                 bpjs_pensiun_employee: $('.bpjs_pensiun_employee').val(),
+                edit_bpjs : var_edit_bpjs,
                 // end custom
                 
                 '_token' : $("meta[name='csrf-token']").attr('content')
@@ -389,6 +392,8 @@
                 $("input[name='total_deductions']").val(sum_deductions);
                 $(".total_earnings").html(numberWithDot(sum_earnings));
                 $(".total_deductions").html(numberWithDot(sum_deductions));
+                
+                var_edit_bpjs = 0;
             }
         })
     }
