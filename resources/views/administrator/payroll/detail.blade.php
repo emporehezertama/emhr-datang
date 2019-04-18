@@ -96,10 +96,12 @@
 
                             </thead>
                             <tfoot>
+                                <!-- start custom-->
                                 <tr>
                                     <th>Monthly Income Tax / PPh21 (ditanggung perusahaan)</th>
                                     <th class="td-pph21" colspan="2">{{ number_format($data->pph21) }}</th>
                                 </tr>
+                                <!--/end start custome-->
                                 <tr>
                                     <th>Total Earnings </th>
                                     <th class="total_earnings">{{ number_format($data->total_earnings) }}</th>
@@ -126,10 +128,7 @@
                                             </div>
                                         </div> -->
                                         <div class="col-md-12 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
-                                            </div>
+                                            <input type="text" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
                                         </div>
                                     </td>
                                 </tr>
@@ -143,10 +142,7 @@
                                             </div>
                                         </div> -->
                                         <div class="col-md-12 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" name="bpjs_kesehatan_employee" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
-                                            </div>
+                                            <input type="text" name="bpjs_kesehatan_employee" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
                                         </div>
                                     </td>
                                 </tr>
@@ -160,10 +156,7 @@
                                             </div>
                                         </div> -->
                                         <div class="col-md-12 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
-                                            </div>
+                                            <input type="text" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
                                         </div>
                                     </td>
                                 </tr>

@@ -1025,7 +1025,7 @@
     <script src="{{ asset('js/jquery.priceformat.min.js') }}"></script>
     
     <!-- Custom Theme JavaScript -->
-    <script src="{{ asset('admin-css/js/custom.min.js') }}"></script>
+    <script src="{{ asset('admin-css/js/custom.js') }}"></script>
     <script src="{{ asset('admin-css/js/dashboard1.js') }}?time=<?=date('His')?>"></script>
     <!-- Custom tab JavaScript -->
     <script src="{{ asset('admin-css/js/cbpFWTabs.js') }}"></script>

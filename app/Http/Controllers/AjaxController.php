@@ -358,7 +358,7 @@ class AjaxController extends Controller
             $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
             // start custom
-            if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
+            if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2 and ($request->bpjs_ketenagakerjaan_employee != 0 || $request->bpjs_ketenagakerjaan_employee != ""))
             {
                 $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);
             }
@@ -388,7 +388,7 @@ class AjaxController extends Controller
             }
 
             // start custom
-            if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
+            if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2 and ($request->bpjs_kesehatan_employee != 0 || $request->bpjs_kesehatan_employee != "") )
             {
                 $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);
             }
@@ -418,7 +418,7 @@ class AjaxController extends Controller
             }
 
             // start custom
-            if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
+            if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2 and ($request->bpjs_pensiun_employee !=0 || $request->bpjs_pensiun_employee != ""))
             {
                 $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
             }
