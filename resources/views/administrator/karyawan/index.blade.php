@@ -377,7 +377,7 @@
                         <label class="col-md-6">Year</label>
                         <label class="col-md-6">Month</label>
                         <div class="col-md-6">
-                            <select class="form-control modal-select-year" name="tahun">
+                            <select class="form-control modal-select-year" required name="tahun">
                                 <option value="">- Select -</option>
                             </select>
                         </div>
