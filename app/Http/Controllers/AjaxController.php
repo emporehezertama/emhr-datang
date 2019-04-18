@@ -309,7 +309,7 @@ class AjaxController extends Controller
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function getBulangPaySlip(Request $request)
+    public function getBulanPaySlip(Request $request)
     {
         $params = [];
         if($request->ajax())
@@ -321,10 +321,13 @@ class AjaxController extends Controller
             $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
             
             $bulan = [];
-            for($b = $params->bulan; $b <= date('m'); $b++)
+            if($params)
             {
-                $bulan[$b]['id'] = $b;
-                $bulan[$b]['name'] = $bulanArray[$b];
+                for($b = $params->bulan; $b <= date('m'); $b++)
+                {
+                    $bulan[$b]['id'] = $b;
+                    $bulan[$b]['name'] = $bulanArray[$b];
+                }    
             }
         }
 

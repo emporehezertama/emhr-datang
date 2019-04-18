@@ -1,4 +1,14 @@
 <?php
+/**
+ * Format IDR
+ * @param  snumber
+ * @return string
+ */
+function format_idr($number)
+{
+	return number_format($number,0,0,'.');
+}
+
 
 function overtime_absensi($date,$user_id)
 {

@@ -369,7 +369,7 @@
             <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h4 class="modal-title" id="myModalLabel">Send Pay Slip</h4> </div>
-            <form method="POST" id="form-upload" enctype="multipart/form-data" class="form-horizontal frm-modal-education" action="{{ route('administrator.karyawan.import') }}">
+            <form method="POST" class="form-horizontal" action="{{ route('administrator.karyawan.send-pay-slip') }}">
                 {{ csrf_field() }}
                 <input type="hidden" name="modal_user_id" />
                 <div class="modal-body">
@@ -377,17 +377,16 @@
                         <label class="col-md-6">Year</label>
                         <label class="col-md-6">Month</label>
                         <div class="col-md-6">
-                            <select class="form-control modal-select-year" name="year">
+                            <select class="form-control modal-select-year" name="tahun">
                                 <option value="">- Select -</option>
                             </select>
                         </div>
-                        <div class="col-md-6 modal-select-month">
-                        </div>
+                        <div class="col-md-6 modal-select-month"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
-                    <label class="btn btn-info btn-sm">Send</label>
+                    <button type="submit" class="btn btn-info btn-sm">Send</button>
                 </div>
             </form>
         </div>
