@@ -575,6 +575,7 @@ class PayrollController extends Controller
                 {
                     $p->delete();
                 }
+                continue;
             }
 
             $temp                   = Payroll::where('id', $item->id)->first();
