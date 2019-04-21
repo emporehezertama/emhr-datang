@@ -132,6 +132,7 @@ class AssetController extends Controller
         $data->status_mobil     = $request->status_mobil;
         $data->remark           = $request->remark;
         $data->rental_date      = $request->rental_date;
+        $data->user_id          = $request->user_id;
         $data->save();
 
         $tracking                   = new AssetTracking();

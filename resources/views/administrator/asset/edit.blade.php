@@ -134,7 +134,8 @@
                         <div class="form-group">
                             <label class="col-md-12">Employee/PIC Name </label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control autocomplete-karyawan" readonly value="{{ $data->user->nik .' - '. $data->user->name }}">
+                                <input type="text" class="form-control autocomplete-karyawan" value="{{ $data->user->nik .' - '. $data->user->name }}">
+                                <input type="hidden" name="user_id" class="form-control" value="{{ $data->user_id }}" />
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -181,6 +182,28 @@
     });
     jQuery('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd',
+    });
+
+    $(".autocomplete-karyawan" ).autocomplete({
+        minLength:0,
+        limit: 25,
+        source: function( request, response ) {
+            $.ajax({
+              url: "{{ route('ajax.get-karyawan') }}",
+              method : 'POST',
+              data: {
+                'name': request.term,'_token' : $("meta[name='csrf-token']").attr('content')
+              },
+              success: function( data ) {
+                response( data );
+              }
+            });
+        },
+        select: function( event, ui ) {
+            $( "input[name='user_id']" ).val(ui.item.id);
+        }
+    }).on('focus', function () {
+            $(this).autocomplete("search", "");
     });
 </script>
 @endsection

@@ -567,6 +567,16 @@ class PayrollController extends Controller
 
         foreach($data as $item)
         {
+
+            if(!isset($item->user->id))
+            {
+                $p = Payroll::where()->first();
+                if(!$p)
+                {
+                    $p->delete();
+                }
+            }
+
             $temp                   = Payroll::where('id', $item->id)->first();
             $ptkp                   = PayrollPtkp::where('id', 1)->first();
             $bpjs_pensiunan_batas   = PayrollOthers::where('id', 3)->first()->value;
