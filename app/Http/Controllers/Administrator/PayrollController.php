@@ -570,7 +570,7 @@ class PayrollController extends Controller
 
             if(!isset($item->user->id))
             {
-                $p = Payroll::where()->first();
+                $p = Payroll::where('user_id', $item->user_id)->first();
                 if(!$p)
                 {
                     $p->delete();
@@ -588,7 +588,7 @@ class PayrollController extends Controller
             $bpjs_ketenagakerjaan2 = ($item->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
             // start custom
-            if(replace_idr($item->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2 and $item->bpjs_ketenagakerjaan_employee != 0)
+            if(replace_idr($item->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
             {
                 $bpjs_ketenagakerjaan2 = replace_idr($item->bpjs_ketenagakerjaan_employee);
             }
@@ -618,7 +618,7 @@ class PayrollController extends Controller
             }
 
             // start custom
-            if(replace_idr($item->bpjs_kesehatan_employee) != $bpjs_kesehatan2 and $item->bpjs_kesehatan_employee != 0)
+            if(replace_idr($item->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
             {
                 $bpjs_kesehatan2 = replace_idr($item->bpjs_kesehatan_employee);
             }
@@ -648,7 +648,7 @@ class PayrollController extends Controller
             }
 
             // start custom
-            if(replace_idr($item->bpjs_pensiun_employee) != $bpjs_pensiun2 and $item->bpjs_pensiun_employee != 0)
+            if(replace_idr($item->bpjs_pensiun_employee) != $bpjs_pensiun2)
             {
                 $bpjs_pensiun2 = replace_idr($item->bpjs_pensiun_employee);
             }
