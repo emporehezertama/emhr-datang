@@ -567,7 +567,6 @@ class PayrollController extends Controller
 
         foreach($data as $item)
         {
-
             if(!isset($item->user->id))
             {
                 $p = Payroll::where('user_id', $item->user_id)->first();
@@ -591,7 +590,10 @@ class PayrollController extends Controller
             // start custom
             if(replace_idr($item->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
             {
-                $bpjs_ketenagakerjaan2 = replace_idr($item->bpjs_ketenagakerjaan_employee);
+                if($item->is_calculate ==1)
+                {
+                    $bpjs_ketenagakerjaan2 = replace_idr($item->bpjs_ketenagakerjaan_employee);                    
+                }
             }
             // end custom
 
@@ -621,7 +623,10 @@ class PayrollController extends Controller
             // start custom
             if(replace_idr($item->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
             {
-                $bpjs_kesehatan2 = replace_idr($item->bpjs_kesehatan_employee);
+                if($item->is_calculate ==1)
+                {
+                    $bpjs_kesehatan2 = replace_idr($item->bpjs_kesehatan_employee);                    
+                }
             }
             // end custom
 
@@ -651,7 +656,10 @@ class PayrollController extends Controller
             // start custom
             if(replace_idr($item->bpjs_pensiun_employee) != $bpjs_pensiun2)
             {
-                $bpjs_pensiun2 = replace_idr($item->bpjs_pensiun_employee);
+                if($item->is_calculate ==1)
+                {
+                    $bpjs_pensiun2 = replace_idr($item->bpjs_pensiun_employee);                    
+                }
             }
             // end custom
 
