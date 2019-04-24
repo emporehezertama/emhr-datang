@@ -31,8 +31,6 @@
             <div class="col-lg-12 col-sm-12 col-md-12" id="content_search_karyawan">
 
             </div>
-
-
             <div class="col-lg-4 col-sm-4 col-md-4">
                 <div class="panel panel-themecolor">
                     <div class="panel-heading"><i class="fa fa-list-alt"></i> News List</h2></div>

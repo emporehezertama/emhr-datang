@@ -1,4 +1,4 @@
-<?php
+r<?php
 
 namespace App\Http\Controllers\Karyawan;
 

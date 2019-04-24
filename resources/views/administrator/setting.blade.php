@@ -80,6 +80,12 @@
                         <div class="col-md-2">
                             <a href="{{ route('administrator.position.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Position</span></a>
                         </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.training-type.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Business Trip Type</span></a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="{{ route('administrator.medical-plafond.index') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">Medical Plafond</span></a>
+                        </div>
                         <div class="clearfix"></div><br />
                     </div>
                 </div>

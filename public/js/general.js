@@ -37,6 +37,15 @@ $('#data_table2').DataTable({
     ]
 });
 
+$('#data_table2_no_search').DataTable({
+    dom: 'Bfrtip',
+    searching: false,
+    pageLength: 30,
+    buttons: [
+        
+    ]
+});
+
 $('#data_table3').DataTable({
     dom: 'Bfrtip',
     buttons: [

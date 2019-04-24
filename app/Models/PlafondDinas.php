@@ -16,4 +16,5 @@ class PlafondDinas extends Model
     {
     	return $this->hasOne('\App\Models\OrganisasiPosition', 'id', 'organisasi_position_id');
     }
+    
 }

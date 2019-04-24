@@ -74,5 +74,20 @@ class SettingApprovalLeave extends Model
     {
         return $this->hasOne('\App\Models\SettingApprovalTrainingItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
     } 
+    public function itemMedical()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalMedicalItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function itemsMedical()
+    {
+        return $this->hasMany('\App\Models\SettingApprovalMedicalItem', 'setting_approval_leave_id', 'id');
+    }
+
+    public function level1Medical()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalMedicalItem', 'setting_approval_leave_id', 'id')->where('setting_approval_level_id',1);
+    } 
+
 
 }

@@ -1,5 +1,12 @@
 <?php
 
+function get_plafond_type()
+{
+	$type = ['Standard', 'Middle', 'High'];
+	
+	return $type;
+}
+
 function overtime_absensi($date,$user_id)
 {
 	//tanggal dan user_id
@@ -29,6 +36,15 @@ function get_payment_header()
 function get_overtime_header()
 {
 	$data = \App\Models\HistoryApprovalOvertime::orderBy('setting_approval_level_id', 'DESC')->first();
+
+	if($data)
+		return $data->setting_approval_level_id;
+	else
+		return 0;
+}
+function get_training_header()
+{
+	$data = \App\Models\HistoryApprovalTraining::orderBy('setting_approval_level_id', 'DESC')->first();
 
 	if($data)
 		return $data->setting_approval_level_id;
@@ -282,23 +298,6 @@ function cek_overtime_approval()
 	}
 	
 	return $overtime->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
-
-	/*
-	$overtime = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->orderBy('overtime_sheet_id', 'DESC');
-	$cek1 = clone $overtime;
-	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();	
-	if(!$cek1) return [];
-	if($cek1->setting_approval_level_id >=2)
-	{
-		$cek2 = clone $overtime;
-		$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
-		if($cek2)
-		{
-			//return [];
-		} 
-	}
-	return $overtime->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
-	*/
 }
 
 function count_overtime_approval()
@@ -374,24 +373,149 @@ function cek_level_overtime_up($id)
 			return true;
 		}
 	}
-	/*
-	$overtime = \App\Models\HistoryApprovalOvertime::join('overtime_sheet','overtime_sheet.id','=','history_approval_overtime.overtime_sheet_id')->where('overtime_sheet.id', $id);
+}
 
-	$cek1 = clone $overtime;
+function cek_training_approval()
+{
+	/*
+	$training = \App\Models\HistoryApprovalTraining::join('training','training.id','=','history_approval_training.training_id')->orderBy('training_id', 'DESC');
+	$cek1 = clone $training;
 	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
-	if(!$cek1) return false;
+	
+	if(!$cek1) return [];
 	if($cek1->setting_approval_level_id >=2)
 	{
-		$cek2 = clone $overtime;
-		$cek2 = $cek2->where('history_approval_overtime.setting_approval_level_id', ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		$cek2 = clone $training;
+		$cek2 = $cek2->where('history_approval_training.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
 		if($cek2)
 		{
-			return false;
+			//return [];
 		} 
 	}
-	return true;
+	return $training->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+
 	*/
+
+	//jika statusnya 1
+	//jika status claimnya 1
+	$all = \App\Models\HistoryApprovalTraining::join('training','training.id','=','history_approval_training.training_id')->orderBy('training.id', 'DESC')->get();
+	
+	$training = \App\Models\HistoryApprovalTraining::join('training','training.id','=','history_approval_training.training_id')->orderBy('training.id', 'DESC');
+
+	foreach ($all as $key => $data) {
+		# code...
+		if($data->status == 1)
+		{
+			$cek1 = clone $training;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();	
+			if(!$cek1) return [];
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $training;
+				$cek2 = $cek2->where('history_approval_training.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+				if($cek2)
+				{
+					//return [];
+				} 
+			}
+		}elseif($data->status_actual_bill == 1)
+		{
+			$cek1 = clone $training;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();	
+			if(!$cek1) return [];
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $training;
+				$cek2 = $cek2->where('history_approval_training.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved_claim')->first();
+				if($cek2)
+				{
+					//return [];
+				} 
+			}
+		}
+	}
+	
+	return $training->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+
 }
+
+function count_training_approval()
+{
+	$data = cek_training_approval();
+	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;
+		
+	if(!$data) return $params;
+	foreach($data as $item)	
+	{
+		if($item->is_approved == NULL || $item->is_approved_claim == NULL)
+		{
+			if($item->status == 3 || $item->status_actual_bill == 3) continue;
+			
+            if(cek_level_training_up($item->training->id))
+            {
+                $params['waiting'] = $params['waiting'] + 1; 
+            }
+        }
+        if($item->is_approved == 0 || $item->is_approved_claim == 0)
+        {
+			$params['reject'] = $params['reject'] + 1;
+        }
+        if($item->is_approved == 1 || $item->is_approved_claim == 1)
+        {
+			$params['approved'] = $params['approved'] + 1;
+        }
+	}
+	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+	return $params;
+
+}
+
+function cek_level_training_up($id)
+{
+	$all = \App\Models\HistoryApprovalTraining::join('training','training.id','=','history_approval_training.training_id')->where('training.id', $id)->get();
+	
+	$training = \App\Models\HistoryApprovalTraining::join('training','training.id','=','history_approval_training.training_id')->where('training.id', $id);
+
+	foreach ($all as $key => $data) {
+		# code...
+		if($data->status == 1)
+		{
+			$cek1 = clone $training;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+			if(!$cek1) return false;
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $training;
+				$cek2 = $cek2->where('history_approval_training.setting_approval_level_id', ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+				if($cek2)
+				{
+					return false;
+				} 
+			}
+			return true;
+		}elseif ($data->status_actual_bill == 1) {
+			# code...
+			$cek1 = clone $training;
+			$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+			if(!$cek1) return false;
+			if($cek1->setting_approval_level_id >=2)
+			{
+				$cek2 = clone $training;
+				$cek2 = $cek2->where('history_approval_training.setting_approval_level_id', ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved_claim')->first();
+				if($cek2)
+				{
+					return false;
+				} 
+			}
+			return true;
+		}
+	}
+
+}
+
 
 function replace_idr($nominal)
 {

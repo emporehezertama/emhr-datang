@@ -443,6 +443,7 @@
         total_actual = total_actual + total_hotel;
         total_reimbursement = parseInt(total_actual) {{ !empty($data->pengambilan_uang_muka) ? '-'. $data->pengambilan_uang_muka : '' }};
 
+        //
         if(total_reimbursement <=0 )
         {
             total_reimbursement  = 0;

@@ -71,8 +71,6 @@ class OvertimeCustomController extends Controller
             $form->akhir        = $request->akhir[$key];
             $form->total_lembur = $request->total_lembur[$key];
             $form->tanggal      = $request->tanggal[$key];
-           // $form->overtime_calculate      = $request->overtime_calculated[$key];
-            
             $form->save();
         }
 

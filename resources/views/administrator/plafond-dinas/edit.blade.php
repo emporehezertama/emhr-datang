@@ -49,19 +49,33 @@
                             <label class="col-md-12">Position</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="organisasi_position_id">
+                                        <option value=""> - choose Position - </option>
+                                        @foreach($position as $item)
+                                        <option value="{{ $item->id }}" {{ $item->id == $data->organisasi_position_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Plafond Type</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="plafond_type">
                                     <option value=""> - none - </option>
-                                    @foreach(get_organisasi_position_group() as $item)
-                                    <option {{ $item->name == $data->organisasi_position_text ? 'selected' : '' }}>{{ $item->name }}</option>
+                                    @foreach(get_plafond_type() as $item)
+                                    <option {{ $item == $data->plafond_type ? 'selected' : '' }}>{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+                      
+                        <!--
                         <div class="form-group">
                             <label class="col-md-12">Hotel (IDR)</label>
                             <div class="col-md-6">
                                 <input type="number" class="form-control" name="hotel" value="{{ $data->hotel }}"> 
                             </div>
                         </div>
+                        -->
                         <div class="form-group">
                             <label class="col-md-12">Meal Allowance / Day's (IDR)</label>
                             <div class="col-md-6">

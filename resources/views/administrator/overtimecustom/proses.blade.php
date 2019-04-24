@@ -96,8 +96,6 @@
                         <div class="clearfix"></div>
                         <br />
                         
-                        <div class="clearfix"></div>
-                        <br />
                         <a href="{{ route('administrator.overtimeCustom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                         <br style="clear: both;" />
                         <div class="clearfix"></div>

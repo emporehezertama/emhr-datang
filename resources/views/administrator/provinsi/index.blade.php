@@ -40,7 +40,7 @@
                                                 {{ method_field('DELETE') }}                                               
                                                 <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="confirm_delete('Delete this data ?', this)" class="text-danger"><i class="ti-trash"></i> </a>
                                             </form> 
-                                            <a href="javascript:void(0)" class="btn btn-info btn-xs" style="margin-left: 5px;" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> </a>
+                                            <a href="javascript:void(0)" class="btn btn-info btn-xs" style="margin-left: 5px;" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" data-type="{{ $item->type }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -67,6 +67,16 @@
                             <label class="col-md-3">Name</label>
                             <div class="col-md-9">
                                 <input type="text" name="nama" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3">Level</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="type">
+                                    @foreach(get_plafond_type() as $item)
+                                    <option>{{ $item }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -96,6 +106,16 @@
                                 <input type="text" name="nama" class="form-control" />
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-3">Level</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="type">
+                                    @foreach(get_plafond_type() as $item)
+                                    <option >{{ $item }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
@@ -113,6 +133,7 @@
         $("#modal_edit_provinsi").modal("show");
         $("#form-modal-edit").attr('action', $(el).data('url'));
         $("#form-modal-edit input[name='nama']").val($(el).data('nama'));
+        $("#form-modal-edit select[name='type']").val($(el).data('type'));
     }
 
     $("#form_add_modal").click(function(){

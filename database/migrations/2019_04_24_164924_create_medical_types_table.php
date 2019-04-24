@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableSettingApprovalLeave extends Migration
+class CreateMedicalTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateTableSettingApprovalLeave extends Migration
      */
     public function up()
     {
-        Schema::create('setting_approval_leave', function (Blueprint $table) {
+        Schema::create('medical_type', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('structure_organization_custom_id')->nullable();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateTableSettingApprovalLeave extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setting_approval_leave');
+        Schema::dropIfExists('medical_type');
     }
 }

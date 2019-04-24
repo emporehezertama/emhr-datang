@@ -83,8 +83,6 @@
                                     <textarea class="form-control note" name="note" placeholder="Note"></textarea>
                                 </div>
                                 @endif
-
-                                
                             </div>
                             <div class="clearfix"></div>
                             <br />

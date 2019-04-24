@@ -354,6 +354,6 @@ class TrainingController extends Controller
             }
         );
 
-        return redirect()->route('karyawan.training.index')->with('message-success', 'Payment Request berhasil di proses');
+        return redirect()->route('karyawan.training.index')->with('message-success', 'Training berhasil di proses');
     }
 }

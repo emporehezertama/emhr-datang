@@ -45,6 +45,7 @@ use App\Models\SettingApprovalLeaveItem;
 use App\Models\SettingApprovalPaymentRequestItem;
 use App\Models\SettingApprovalOvertimeItem;
 use App\Models\SettingApprovalTrainingItem;
+use App\Models\SettingApprovalMedicalItem;
 use App\Models\CutiBersama;
 use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
@@ -1257,6 +1258,28 @@ public function getCalculatePayrollGross(Request $request)
         return response()->json($params);   
     }
 
+    public function getCity(Request $request)
+    {
+        $data = [];
+        if($request->ajax())
+        {
+            if(strlen($request->word) >=2 ) 
+            { 
+                $data =  Kabupaten::where('nama', 'LIKE', "%". $request->word . "%")->groupBy('id_prov')->get();
+
+                $params = [];
+                foreach($data as $k => $item)
+                {
+                    if($k == 10) continue;
+                    $params[$k] = $item;
+                    $params[$k]['value'] = $item->nama;
+                }
+            }
+        }
+        
+        return response()->json($params);   
+    }
+
 
     /**
      * [getHistoryApprovalOvertime description]
@@ -1487,6 +1510,47 @@ public function getCalculatePayrollGross(Request $request)
         return response()->json($this->respon);
     }
 
+    public function getHistoryApprovalTrainingCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = Training::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->is_approved;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+    public function getHistoryApprovalTrainingClaimCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = Training::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApprovedClaim)?$value->userApprovedClaim->name:'';
+                $history[$key]['date']          = $value->date_approved_claim;
+                $history[$key]['is_approved']   = $value->is_approved_claim;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+
 
     
     public function getDetailSettingApprovalLeaveItem(Request $request)
@@ -1544,6 +1608,22 @@ public function getCalculatePayrollGross(Request $request)
         if($request->ajax())
         {
             $all = SettingApprovalTrainingItem::where('setting_approval_leave_id', $request->foreign_id)->get();
+            $data =[];
+            foreach ($all as $key => $value) {
+                # code...
+                $data[$key]['level']         = $value->ApprovalLevel->name;
+                $data[$key]['position']      = (isset($value->structureApproval->position) ? $value->structureApproval->position->name:'').(isset($value->structureApproval->division) ? '-'.$value->structureApproval->division->name:'');
+            } 
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+    public function getDetailSettingApprovalMedicalItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $all = SettingApprovalMedicalItem::where('setting_approval_leave_id', $request->foreign_id)->get();
             $data =[];
             foreach ($all as $key => $value) {
                 # code...

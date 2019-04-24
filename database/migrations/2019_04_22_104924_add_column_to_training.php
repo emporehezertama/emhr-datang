@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnStructureOrganizationCustom557 extends Migration
+class AddColumnToTraining extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddColumnStructureOrganizationCustom557 extends Migration
      */
     public function up()
     {
-        Schema::table('structure_organization_custom', function (Blueprint $table) {
-            $table->integer('organisasi_division_id')->nullable();
-            $table->integer('organisasi_position_id')->nullable();
+        Schema::table('training', function (Blueprint $table) {
+            //
+            $table->integer('sub_total_4')->nullable();
+            $table->integer('sub_total_4_disetujui')->nullable();
         });
     }
 
@@ -26,7 +27,7 @@ class AddColumnStructureOrganizationCustom557 extends Migration
      */
     public function down()
     {
-        Schema::table('structure_organization_custom', function (Blueprint $table) {
+        Schema::table('training', function (Blueprint $table) {
             //
         });
     }

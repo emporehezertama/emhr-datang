@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnUsers3 extends Migration
+class AddColumnToProvinsi extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddColumnUsers3 extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('structure_organization_custom_id')->nullable();
+        Schema::table('provinsi', function (Blueprint $table) {
+            //
+            $table->string('type')->nullable();
         });
     }
 
@@ -25,7 +26,7 @@ class AddColumnUsers3 extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('provinsi', function (Blueprint $table) {
             //
         });
     }
