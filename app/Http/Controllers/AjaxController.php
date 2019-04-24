@@ -76,6 +76,19 @@ class AjaxController extends Controller
         return ;
     }
 
+    /**
+     * Get Year Pay Slip
+     * @param  Request $request
+     * @return json
+     */
+    public function getYearPaySlip(Request $request)
+    {
+        if($request->ajax())
+        {
+            return response()->json(['result'=> pay_slip_tahun_history($request->id)]);
+        }
+    }
+
     public function chekDateOVertime(Request $request)
     {
         if($request->ajax())
@@ -297,7 +310,7 @@ class AjaxController extends Controller
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function getBulangPaySlip(Request $request)
+    public function getBulanPaySlip(Request $request)
     {
         $params = [];
         if($request->ajax())
@@ -309,10 +322,13 @@ class AjaxController extends Controller
             $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
             
             $bulan = [];
-            for($b = $params->bulan; $b <= date('m'); $b++)
+            if($params)
             {
-                $bulan[$b]['id'] = $b;
-                $bulan[$b]['name'] = $bulanArray[$b];
+                for($b = $params->bulan; $b <= date('m'); $b++)
+                {
+                    $bulan[$b]['id'] = $b;
+                    $bulan[$b]['name'] = $bulanArray[$b];
+                }    
             }
         }
 
@@ -342,6 +358,16 @@ class AjaxController extends Controller
             $bpjs_ketenagakerjaan2_persen = get_setting('bpjs_jaminan_jht_employee');
             $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
+            // start custom
+            #if($request->edit_bpjs == 1)
+            #{
+                if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
+                {
+                    $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);                    
+                }
+            #}
+            // end custom
+
             $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
             $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
@@ -365,6 +391,16 @@ class AjaxController extends Controller
                 $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
             }
 
+            // start custom
+            #if($request->edit_bpjs == 1)
+            #{
+                if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
+                {
+                    $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
+                }
+            #}
+            // end custom
+
             $bpjs_pensiun         = 0;
             $bpjs_pensiun2        = 0;
             $bpjs_pensiun_persen  = 2;
@@ -387,6 +423,16 @@ class AjaxController extends Controller
             {
                 $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
             }
+
+            // start custom
+            #if($request->edit_bpjs == 1)
+            #{
+                if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
+                {
+                    $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
+                }
+            #}
+            // end custom
 
             $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
             $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
@@ -527,7 +573,12 @@ class AjaxController extends Controller
             $params['monthly_income_tax']           = number_format($monthly_income_tax);
             $params['gross_income_per_month']                 = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
-            $params['thp']                          = number_format($thp);
+            
+            // start custom
+            // $params['thp']                          = number_format($thp);
+            $params['thp']                          = number_format($thp + $monthly_income_tax);
+            // end custom
+            
             $params['bpjs_pengurang']                          = number_format($bpjspengurangan);
             $params['bpjs_penambahan']                          = number_format($bpjspenambahan);
         }

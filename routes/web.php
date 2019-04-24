@@ -99,7 +99,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::post('ajax/get-karyawan-payrollgross', 'AjaxController@getKaryawanPayrollGross')->name('ajax.get-karyawan-payrollgross');
 	Route::post('ajax/get-calculate-payrollgross', 'AjaxController@getCalculatePayrollGross')->name('ajax.get-calculate-payrollgross');
-	Route::post('ajax/get-bulan-pay-slip', 'AjaxController@getBulangPaySlip')->name('ajax.get-bulan-pay-slip');		
+	Route::post('ajax/get-bulan-pay-slip', 'AjaxController@getBulanPaySlip')->name('ajax.get-bulan-pay-slip');		
 	Route::post('ajax/update-dependent', 'AjaxController@updateDependent')->name('ajax.update-dependent');		
 	Route::post('ajax/update-education', 'AjaxController@updateEducation')->name('ajax.update-education');		
 	Route::post('ajax/update-cuti', 'AjaxController@updateCuti')->name('ajax.update-cuti');		
@@ -112,6 +112,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/structure-custome-add', 'AjaxController@structureCustomeAdd')->name('ajax.structure-custome-add');		
 	Route::post('ajax/structure-custome-delete', 'AjaxController@structureCustomeDelete')->name('ajax.structure-custome-delete');		
 	Route::post('ajax/structure-custome-edit', 'AjaxController@structureCustomeEdit')->name('ajax.structure-custome-edit');		
+	Route::get('attendance/index', 'AttendanceController@index')->name('attendance.index');
+	Route::get('attendance/detail-attendance/{SN}', 'AttendanceController@AttendanceList')->name('attendance.detail-attendance');
+	Route::post('ajax/get-year-pay-slip', 'AjaxController@getYearPaySlip')->name('ajax.get-year-pay-slip');		
 });
 
 /**

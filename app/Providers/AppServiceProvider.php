@@ -14,6 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         if(get_setting('app_debug') == 'false')
         {
             \Config::set('app.debug', false );    
@@ -58,6 +59,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        require_once app_path('Helper/AttendanceHelper.php');
         require_once app_path('Helper/AsiaHelper.php');
         require_once app_path('Helper/EmporeHelper.php');
         require_once app_path('Helper/GeneralHelper.php');

@@ -96,6 +96,12 @@
 
                             </thead>
                             <tfoot>
+                                <!-- start custom-->
+                                <tr>
+                                    <th>Monthly Income Tax / PPh21 (ditanggung perusahaan)</th>
+                                    <th class="td-pph21" colspan="2">{{ number_format($data->pph21) }}</th>
+                                </tr>
+                                <!--/end start custome-->
                                 <tr>
                                     <th>Total Earnings </th>
                                     <th class="total_earnings">{{ number_format($data->total_earnings) }}</th>
@@ -115,51 +121,42 @@
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td colspan="2">
-                                        <div class="col-md-4 p-l-0">
+                                        <!-- <div class="col-md-4 p-l-0">
                                             <div class="input-group">
                                                 <input type="text" readonly="true" value="{{ get_setting('bpjs_jaminan_jht_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" name="bpjs_ketenagakerjaan_employee" readonly="true" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
-                                            </div>
+                                        </div> -->
+                                        <div class="col-md-12 p-r-0 p-l-0">
+                                            <input type="text" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Kesehatan (Employee)</td>
                                     <td colspan="2">
-                                        <div class="col-md-4 p-l-0">
+                                       <!--  <div class="col-md-4 p-l-0">
                                             <div class="input-group">
                                                 <input type="text" readonly="true" value="{{ get_setting('bpjs_kesehatan_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" name="bpjs_kesehatan_employee" readonly="true" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
-                                            </div>
+                                        </div> -->
+                                        <div class="col-md-12 p-r-0 p-l-0">
+                                            <input type="text" name="bpjs_kesehatan_employee" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Pensiun (Employee)</td>
                                     <td colspan="2">
-                                        <div class="col-md-4 p-l-0">
+                                       <!--  <div class="col-md-4 p-l-0">
                                             <div class="input-group">
                                                 <input type="text" readonly="true" value="{{ get_setting('bpjs_pensiun_employee') }}" class="form-control" />
                                                 <span class="input-group-addon" id="basic-addon2">%</span>
                                             </div>
-                                        </div>
-                                        <div class="col-md-8 p-r-0 p-l-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon2">Rp</span>
-                                                <input type="text" readonly="true" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
-                                            </div>
+                                        </div> -->
+                                        <div class="col-md-12 p-r-0 p-l-0">
+                                            <input type="text" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
                                         </div>
                                     </td>
                                 </tr>
@@ -222,6 +219,7 @@
 </div>
 @section('footer-script')
 <script type="text/javascript">
+    var var_edit_bpjs = 0;
     
     function form_submit()
     {
@@ -233,6 +231,13 @@
 
         $("#form-payroll").submit();
     }
+
+    // start custom
+    $("input[name='bpjs_ketenagakerjaan_employee'], input[name='bpjs_kesehatan_employee'], input[name='bpjs_pensiun_employee']").on('input', function(){
+        var_edit_bpjs = 1;
+        calculate();
+    }); 
+    // end custom
 
     function init_calculate()
     {   
@@ -349,6 +354,14 @@
                 salary : salary,
                 bonus : bonus,
                 marital_status : marital_status,
+                
+                // start custom
+                bpjs_ketenagakerjaan_employee: $('.bpjs_ketenagakerjaan_employee').val(),
+                bpjs_kesehatan_employee: $('.bpjs_kesehatan_employee').val(),
+                bpjs_pensiun_employee: $('.bpjs_pensiun_employee').val(),
+                edit_bpjs : var_edit_bpjs,
+                // end custom
+                
                 '_token' : $("meta[name='csrf-token']").attr('content')
             },
             success: function( data ) {
@@ -360,9 +373,8 @@
                 $("input[name='bpjs_kesehatan2']").val(data.bpjs_kesehatan2);
                 $("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
-                $("input[name='thp']").val(data.thp);
+                $("input[name='thp']").val(data.thp + parseInt(data.monthly_income_tax));
                 $("input[name='pph21']").val(data.monthly_income_tax);
-
                 $('.bpjs_ketenagakerjaan_employee').val(data.bpjs_ketenagakerjaan2);
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
@@ -370,12 +382,18 @@
                 bonus = bonus != 0 ? bonus.split('.').join('') : 0;
 
                 sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus);
-                sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''))
-
+                sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''));
+                
+                // start custom
+                sum_earnings    = parseInt(sum_earnings) + parseInt(data.monthly_income_tax.split(',').join(''));
+                // end custom
+                 
                 $("input[name='total_earnings']").val(sum_earnings);
                 $("input[name='total_deductions']").val(sum_deductions);
                 $(".total_earnings").html(numberWithDot(sum_earnings));
                 $(".total_deductions").html(numberWithDot(sum_deductions));
+                
+                var_edit_bpjs = 0;
             }
         })
     }

@@ -63,7 +63,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('setting-approvalPaymentRequest/updateItem/{id}', 'SettingApprovalPaymentRequestController@updateItem')->name('administrator.setting-approvalPaymentRequest.updateItem');
 	Route::post('setting-approvalPaymentRequest/destroyItem/{id}', 'SettingApprovalPaymentRequestController@destroyItem')->name('administrator.setting-approvalPaymentRequest.destroyItem');
 
-Route::resource('setting-approvalOvertime', 'SettingApprovalOvertimeController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::resource('setting-approvalOvertime', 'SettingApprovalOvertimeController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::get('setting-approvalOvertime/indexItem/{id}', 'SettingApprovalOvertimeController@indexItem')->name('administrator.setting-approvalOvertime.indexItem');
 	Route::get('setting-approvalOvertime/createItem/{id}', 'SettingApprovalOvertimeController@createItem')->name('administrator.setting-approvalOvertime.createItem');
 	Route::post('setting-approvalOvertime/storeItem', 'SettingApprovalOvertimeController@storeItem')->name('administrator.setting-approvalOvertime.storeItem');
@@ -87,7 +87,6 @@ Route::resource('setting-approvalOvertime', 'SettingApprovalOvertimeController',
 	Route::get('setting-approvalMedical/editItem/{id}', 'SettingApprovalMedicalController@editItem')->name('administrator.setting-approvalMedical.editItem');
 	Route::post('setting-approvalMedical/updateItem/{id}', 'SettingApprovalMedicalController@updateItem')->name('administrator.setting-approvalMedical.updateItem');
 	Route::post('setting-approvalMedical/destroyItem/{id}', 'SettingApprovalMedicalController@destroyItem')->name('administrator.setting-approvalMedical.destroyItem');
-
 
 	Route::resource('news', 'NewsController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('internal-memo', 'InternalMemoController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -256,4 +255,5 @@ Route::resource('setting-approvalOvertime', 'SettingApprovalOvertimeController',
 	Route::post('setting/email-save', 'SettingController@emailSave')->name('administrator.setting.email-save');
 	Route::post('setting/email-test-send', 'SettingController@emailTestSend')->name('administrator.setting.email-test-send');
 	Route::post('organization-structure-custom/store', 'StructureOrganizationCustomController@store')->name('administrator.organization-structure-custom.store');
+	Route::post('karyawan/send-pay-slip', 'KaryawanController@sendPaySlip')->name('administrator.karyawan.send-pay-slip');
 });

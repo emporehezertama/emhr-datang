@@ -1,4 +1,14 @@
 <?php
+/**
+ * Format IDR
+ * @param  snumber
+ * @return string
+ */
+function format_idr($number)
+{
+	return number_format($number,0,0,'.');
+}
+
 
 function get_plafond_type()
 {
@@ -24,6 +34,7 @@ function get_level_header()
 	else
 		return 0;
 }
+
 function get_payment_header()
 {
 	$data = \App\Models\HistoryApprovalPaymentRequest::orderBy('setting_approval_level_id', 'DESC')->first();
@@ -33,6 +44,7 @@ function get_payment_header()
 	else
 		return 0;
 }
+
 function get_overtime_header()
 {
 	$data = \App\Models\HistoryApprovalOvertime::orderBy('setting_approval_level_id', 'DESC')->first();

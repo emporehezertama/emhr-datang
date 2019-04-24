@@ -48,15 +48,15 @@
 					<tr>
 						<th style="padding-bottom: 15px;padding-top: 15px;">Income Description</th>
 						<th style="text-align: right;">Amount</th>
-					</tr>
+					</tr> 
 					<tr>
 						<td>Salary</td>
-						<td style="text-align: right;">{{ number_format($item->salary) }}</td>
+						<td style="text-align: right;">{{ format_idr($item->salary) }}</td>
 					</tr>
 					@if($item->bonus > 0)
 					<tr>
 						<td>Bonus / THR</td>
-						<td style="text-align: right;">{{ number_format($item->bonus) }}</td>
+						<td style="text-align: right;">{{ format_idr($item->bonus) }}</td>
 					</tr>
 					@endif
 					@foreach(payrollEarningsEmployeeHistory($item->id) as $i)
@@ -66,11 +66,17 @@
                           		{{ $i->payrollEarnings->title }}
                           	</td>
                           	<td style="text-align: right;">
-                          		{{ number_format($i->nominal) }}
+                          		{{ format_idr($i->nominal) }}
                           	</td>
                           </tr>
                         @endif
                     @endforeach
+                    <tr>
+                    	<td>Monthly Income Tax / PPh21 (ditanggung perusahaan)</td>
+                    	<td style="text-align: right;">
+                    		{{ format_idr($item->pph21) }}
+                    	</td>
+                    </tr>
 				</table>
 			</td>
 			<td>&nbsp;</td>
@@ -82,19 +88,20 @@
 					</tr>
 					<tr>
 						<td>BPJS Jaminan Hari Tua (JHT) {{ get_setting('bpjs_jaminan_jht_employee') }}% (Employee) </td>
-						<td style="text-align: right;">{{ number_format($item->salary * get_setting('bpjs_jaminan_jht_employee') / 100) }}</td>
+						<!-- <td style="text-align: right;">{{ format_idr($item->salary * get_setting('bpjs_jaminan_jht_employee') / 100) }}</td> -->
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_ketenagakerjaan_employee ) }}</td>
 					</tr>
 					<tr> 
 						<td>BPJS Kesehatan ({{ get_setting('bpjs_kesehatan_employee') }}%) (employee)</td>
-						<td style="text-align: right;">{{ number_format($item->bpjs_kesehatan_employee) }}</td>
+						<td style="text-align: right;">{{ format_idr($item->bpjs_kesehatan_employee) }}</td>
 					</tr>
 					<tr>
 						<td>BPJS Jaminan Pensiun (JP) {{ get_setting('bpjs_jaminan_jp_employee') }}% (Employee)</td>
-						<td style="text-align: right;"> {{ number_format($item->bpjs_pensiun_employee) }} </td>
+						<td style="text-align: right;"> {{ format_idr($item->bpjs_pensiun_employee) }} </td>
 					</tr>
 					<tr>
 						<td>PPH21</td>
-						<td style="text-align: right;">{{ number_format($item->pph21) }}</td>
+						<td style="text-align: right;">{{ format_idr($item->pph21) }}</td>
 					</tr>
 					@foreach(payrollDeductionsEmployeeHistory($item->id) as $i)
                         @if(isset($i->payrollDeductions->title))
@@ -103,7 +110,7 @@
                           		{{ $i->payrollDeductions->title }}
                           	</td>
                           	<td style="text-align: right;">
-                          		{{ number_format($i->nominal) }}
+                          		{{ format_idr($i->nominal) }}
                           	</td>
                           </tr>
                         @endif
@@ -120,7 +127,7 @@
 		</tr>
 		<tr>
 			<th>Take Home Pay </th>
-			<th> : {{ number_format($item->thp) }}</th>
+			<th> : {{ format_idr($item->thp) }}</th>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
