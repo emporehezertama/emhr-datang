@@ -77,17 +77,17 @@
         </li>
         <li>
             <a href="javascript:void(0)">
-                <i class="mdi mdi-database fa-fw"></i> <span class="hide-menu">Asset Management<span class="fa arrow"></span></span>
+                <i class="mdi mdi-database fa-fw"></i> <span class="hide-menu">Facilities Management<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="{{ route('administrator.asset.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset</span></a>
+                    <a href="{{ route('administrator.asset.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Facilities</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.asset-type.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset Type</span></a>
+                    <a href="{{ route('administrator.asset-type.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Facilities Type</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.asset-tracking.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset Tracking</span></a>
+                    <a href="{{ route('administrator.asset-tracking.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Facilities Tracking</span></a>
                 </li>
             </ul>
         </li>
