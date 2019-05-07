@@ -335,8 +335,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($data->assets as $no => $item)
-                                        
+                                    @foreach($data->assets as $no => $item)   
                                      @if(!isset($item->asset_type->name))
                                         <?php continue; ?>
                                      @endif
@@ -395,6 +394,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach($data->assets as $no => $item)
+                                    @if(!isset($item->asset_type->name))
+                                        <?php continue; ?>
+                                     @endif
                                       @if($item->asset_type->name !== 'Mobil')
                                         <tr>
                                             <td class="text-center">{{ $no+1 }}</td>   
