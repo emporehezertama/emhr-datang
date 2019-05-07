@@ -154,65 +154,90 @@
     });
 
 
-     // This is for Morris-chart-2
-    Morris.Area({
-        element: 'chart-2',
-        data: [
-        @for($i=1; $i<=12; $i++) 
-            { 
-                period: '{{ date('M',  mktime(0, 0, 0, $i, 10)) }}', 
-                SiteA: {{ employee_rate($i) }}
-            }
-            @if($i !=12),@endif  
-        @endfor
+    //ct-visits
+    new Chartist.Line('#chart-2', {
+         labels: ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'],
+         series: [
+    [5, 2, 7, 4, 5, 3, 5, 4]
+  ]
+     }, {
+         top: 0,
 
-        // {
-        //         period: '2010',
-        //         SiteA: 0,
+         low: 1,
+         showPoint: true,
 
-        // }, {
-        //         period: '2011',
-        //         SiteA: 130,
+         fullWidth: true,
+         plugins: [
+    Chartist.plugins.tooltip()
+  ],
+         axisY: {
+             labelInterpolationFnc: function (value) {
+                 return (value / 1) + 'k';
+             }
+         },
+         showArea: true
+     });
 
-        // }, {
-        //         period: '2012',
-        //         SiteA: 80,
 
-        // }, {
-        //         period: '2013',
-        //         SiteA: 70,
+    //  // This is for Morris-chart-2
+    // Morris.Area({
+    //     element: 'chart-2',
+    //     data: [
+    //     @for($i=1; $i<=12; $i++) 
+    //         { 
+    //             period: '{{ date('M',  mktime(0, 0, 0, $i, 10)) }}', 
+    //             SiteA: {{ employee_rate($i) }}
+    //         }
+    //         @if($i !=12),@endif  
+    //     @endfor
 
-        // }, {
-        //         period: '2014',
-        //         SiteA: 180,
+    //     // {
+    //     //         period: '2010',
+    //     //         SiteA: 0,
 
-        // }, {
-        //         period: '2015',
-        //         SiteA: 105,
+    //     // }, {
+    //     //         period: '2011',
+    //     //         SiteA: 130,
 
-        // },
-        //     {
-        //         period: '2016',
-        //         SiteA: 250,
+    //     // }, {
+    //     //         period: '2012',
+    //     //         SiteA: 80,
 
-        // }
+    //     // }, {
+    //     //         period: '2013',
+    //     //         SiteA: 70,
+
+    //     // }, {
+    //     //         period: '2014',
+    //     //         SiteA: 180,
+
+    //     // }, {
+    //     //         period: '2015',
+    //     //         SiteA: 105,
+
+    //     // },
+    //     //     {
+    //     //         period: '2016',
+    //     //         SiteA: 250,
+
+    //     // }
         
-        ],
-        xkey: 'period',
-        ykeys: ['SiteA'],
-        labels: ['Site A'],
-        pointSize: 0,
-        fillOpacity: 0.4,
-        pointStrokeColors: ['#2cabe3'],
-        behaveLikeLine: true,
-        gridLineColor: '#e0e0e0',
-        lineWidth: 0,
-        smooth: false,
-        hideHover: 'auto',
-        lineColors: ['#2cabe3'],
-        resize: true
+    //     ],
+    //     xkey: 'period',
+    //     ykeys: ['SiteA'],
+    //     labels: ['Site A'],
+    //     pointSize: 0,
+    //     fillOpacity: 0.4,
+    //     pointStrokeColors: ['#2cabe3'],
+    //     behaveLikeLine: true,
+    //     gridLineColor: '#e0e0e0',
+    //     lineWidth: 0,
+    //     smooth: false,
+    //     hideHover: 'auto',
+    //     lineColors: ['#2cabe3'],
+    //     resize: true
 
-    });
+    // });
 </script>
 @endsection
 @endsection
