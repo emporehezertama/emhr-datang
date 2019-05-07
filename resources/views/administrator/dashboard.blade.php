@@ -74,7 +74,6 @@
                   <div class="clearfix"></div>
                 </div>
             </div>
-
             <div class="col-sm-6  m-l-0 p-l-0 p-r-0">
                 <div class="white-box" style="margin-bottom:10px;">
                     <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joiness and resigness</div>
@@ -133,8 +132,10 @@
     new Chartist.Line('#chart-1', {
         labels: [@for($i=1; $i<=12; $i++) '{{ date('M',  mktime(0, 0, 0, $i, 10)) }}' @if($i !=12),@endif @endfor],
         series: [
-            [@for($i=1; $i<=12; $i++){{ employee_get_resigness($i) }} @if($i !=12),@endif @endfor],
-            [@for($i=1; $i<=12; $i++){{ employee_get_joinees($i) }}@if($i !=12),@endif @endfor]
+                [5, 2, 7, 4, 5, 3, 5, 4, 3, 5, 1, 6],
+                [0, 3, 8, 3, 4, 7, 8, 2, 4, 6, 4, 9],
+            //[@for($i=1; $i<=12; $i++){{ employee_get_resigness($i) }} @if($i !=12),@endif @endfor],
+            //[@for($i=1; $i<=12; $i++){{ employee_get_joinees($i) }}@if($i !=12),@endif @endfor]
         ]
     }, {
         top: 0,
