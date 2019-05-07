@@ -1134,7 +1134,6 @@
     <script src="{{ asset('admin-css/plugins/bower_components/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/morrisjs/morris.js') }}"></script>
     <!-- chartist chart -->
-    <script src="{{ asset('admin-css/plugins/bower_components/chartist-js/dist/chartist.min.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script>
     <!-- Calendar JavaScript -->
     <script src="{{ asset('admin-css/plugins/bower_components/moment/moment.js') }}"></script>

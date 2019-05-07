@@ -4,6 +4,8 @@ price_format();
 
 jQuery('.datepicker').datepicker({
     dateFormat: 'yy/mm/dd',
+    changeMonth: true,
+    changeYear: true
 });
 
 $('#data_table_no_copy').DataTable({
@@ -166,7 +168,24 @@ function _alert(msg)
   if(msg == "") return false;
 
   bootbox.alert({
-    title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+    title : "<i class=\"fa fa-check-square text-success\"></i> EMPORE SYSTEM",
+    closeButton: false,
+    message: msg,
+     buttons: {
+        ok: {
+            label: 'OK',
+            className: 'btn btn-sm btn-success'
+        },
+    },
+  })
+}
+
+function _alert_error(msg)
+{
+  if(msg == "") return false;
+
+  bootbox.alert({
+    title : "<i class=\"fa fa-exclamation-triangle text-danger\"></i> EMPORE SYSTEM",
     closeButton: false,
     message: msg,
      buttons: {

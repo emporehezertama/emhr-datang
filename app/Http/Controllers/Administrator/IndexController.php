@@ -26,9 +26,7 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $params[] = '';
-
-        return view('administrator.index')->with($params);
+        return view('administrator.index');
     }
 
     /**

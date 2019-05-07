@@ -359,13 +359,20 @@ class AjaxController extends Controller
             $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
             // start custom
-            #if($request->edit_bpjs == 1)
-            #{
+            if($request->edit_bpjs_ketenagakerjaan_employee != 0 )
+            {
                 if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
                 {
                     $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);                    
                 }
-            #}
+            }
+            else
+            {
+                // if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
+                // {
+                //     $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);                    
+                // }
+            }
             // end custom
 
             $bpjs_kesehatan         = 0;
@@ -392,13 +399,20 @@ class AjaxController extends Controller
             }
 
             // start custom
-            #if($request->edit_bpjs == 1)
-            #{
+            if($request->edit_bpjs_kesehatan_employee !=0 )
+            {
                 if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
                 {
                     $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
                 }
-            #}
+            }
+            else
+            {
+                // if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
+                // {
+                //     $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
+                // }   
+            }
             // end custom
 
             $bpjs_pensiun         = 0;
@@ -425,13 +439,20 @@ class AjaxController extends Controller
             }
 
             // start custom
-            #if($request->edit_bpjs == 1)
-            #{
+            if($request->edit_edit_bpjs_pensiun_employee != 0)
+            {
                 if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
                 {
                     $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
                 }
-            #}
+            }
+            else
+            {
+                // if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
+                // {
+                //     $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
+                // }   
+            }
             // end custom
 
             $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
