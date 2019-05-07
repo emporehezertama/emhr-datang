@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\MedicalType;
+use App\Models\MedicalPlafond;
+use App\Models\OrganisasiPosition;
+
 
 class MedicalPlafondController extends Controller
 {
@@ -25,6 +29,10 @@ class MedicalPlafondController extends Controller
     public function index()
     {
         //
+        $params['type']      = MedicalType::all();
+        $params['plafond']   = MedicalPlafond::all();
+
+        return view('administrator.medical-plafond.index')->with($params);
     }
 
     /**
@@ -35,6 +43,7 @@ class MedicalPlafondController extends Controller
     public function create()
     {
         //
+        return view('administrator.medical-plafond.create');
     }
 
     /**
@@ -46,6 +55,12 @@ class MedicalPlafondController extends Controller
     public function store(Request $request)
     {
         //
+        $data = new MedicalType();
+        $data->name            = $request->name;
+        $data->save();
+
+        return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully saved');
+
     }
 
     /**
@@ -68,6 +83,8 @@ class MedicalPlafondController extends Controller
     public function edit($id)
     {
         //
+        $params['data'] = MedicalType::where('id', $id)->first();
+        return view('administrator.medical-plafond.edit')->with($params);
     }
 
     /**
@@ -80,6 +97,11 @@ class MedicalPlafondController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data = MedicalType::where('id', $id)->first();
+        $data->name            = $request->name;
+        $data->save();
+
+        return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully saved');
     }
 
     /**
@@ -91,5 +113,65 @@ class MedicalPlafondController extends Controller
     public function destroy($id)
     {
         //
+        $data = MedicalType::where('id', $id)->first();
+        $data->delete();
+
+        return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully deleted');
     }
+     /**
+     * [create description]
+     * @return [type] [description]
+     */
+    public function createMedicalPlafond()
+    {
+        $params['type'] = MedicalType::all();
+        $params['position'] = OrganisasiPosition::all();
+        return view('administrator.medical-plafond.createPlafond')->with($params);
+    }
+
+    public function storeMedicalPlafond(Request $request)
+    {
+        $data = new MedicalPlafond();
+        $data->medical_type_id     = $request->medical_type_id;
+        $data->position_id         = $request->position_id;
+        $data->nominal             = $request->nominal;
+        $data->description         = $request->description;
+        $data->save();
+
+        return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully saved');
+    }
+
+    public function editMedicalPlafond($id)
+    {
+        $params['data'] = MedicalPlafond::where('id', $id)->first();
+        $params['type'] = MedicalType::all();
+        $params['position'] = OrganisasiPosition::all();
+
+        return view('administrator.medical-plafond.editPlafond')->with($params);
+    }
+
+    public function updateMedicalPlafond(Request $request, $id)
+    {
+        $data = MedicalPlafond::where('id', $id)->first();
+        $data->nominal       = $request->nominal;
+        $data->description   = $request->description;
+        $data->medical_type_id     = $request->medical_type_id;
+        $data->position_id         = $request->position_id;
+        $data->save();
+
+        return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully saved');
+    }
+
+     /**
+     * [desctroy description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function deleteMedicalPlafond($id)
+    {
+        $data = MedicalPlafond::where('id', $id)->first();
+        $data->delete();
+
+        return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully deleted');
+    } 
 }

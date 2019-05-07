@@ -21,6 +21,7 @@ class SettingApprovalLeaveController extends Controller
     {
         //
         $params['data']  = SettingApprovalLeave::orderBy('id', 'DESC')->get();
+         
         return view('administrator.setting-approvalLeave.index')->with($params);
 
     }

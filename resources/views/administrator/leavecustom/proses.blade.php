@@ -96,8 +96,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-12">Leave / Permit Type</label>
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control" value="{{ $data->cuti->jenis_cuti }}" readonly="true">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" value="{{ $data->cuti->description }}" readonly="true">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" value="{{ $data->jam_pulang_cepat }}" readonly="true">
                                 </div>
                             </div>
 

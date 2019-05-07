@@ -63,6 +63,25 @@ function get_training_header()
 	else
 		return 0;
 }
+function get_medical_header()
+{
+	$data = \App\Models\HistoryApprovalMedical::orderBy('setting_approval_level_id', 'DESC')->first();
+
+	if($data)
+		return $data->setting_approval_level_id;
+	else
+		return 0;
+}
+function get_exit_header()
+{
+	$data = \App\Models\HistoryApprovalExit::orderBy('exit_interview_id', 'DESC')->first();
+
+	if($data)
+		return $data->setting_approval_level_id;
+	else
+		return 0;
+}
+
 /**
  * cek level up
  */
@@ -195,6 +214,7 @@ function count_leave_approval()
 	return $params;
 }
 
+//payment request
 function cek_payment_request_approval()
 {
 	$paymentRequest = \App\Models\HistoryApprovalPaymentRequest::join('payment_request','payment_request.id','=','history_approval_payment_request.payment_request_id')->orderBy('payment_request_id', 'DESC');
@@ -528,6 +548,190 @@ function cek_level_training_up($id)
 
 }
 
+//medical
+function cek_medical_approval()
+{
+	$medical = \App\Models\HistoryApprovalMedical::join('medical_reimbursement','medical_reimbursement.id','=','history_approval_medical.medical_reimbursement_id')->orderBy('medical_reimbursement_id', 'DESC');
+
+	$cek1 = clone $medical;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	
+	if(!$cek1) return [];
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $medical;
+		$cek2 = $cek2->where('history_approval_medical.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			//return [];
+		} 
+	}
+	return $medical->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+}
+
+function count_medical_approval()
+{
+	$data = cek_medical_approval();
+	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;
+		
+	if(!$data) return $params;
+	foreach($data as $item)	
+	{
+		if($item->is_approved == NULL)
+		{
+			if($item->status == 3) continue;
+			
+            if(cek_level_medical_up($item->medicalReimbursement->id))
+            {
+                $params['waiting'] = $params['waiting'] + 1; 
+            }
+        }
+        if($item->is_approved == 0)
+        {
+			$params['reject'] = $params['reject'] + 1;
+        }
+        if($item->is_approved == 1)
+        {
+			$params['approved'] = $params['approved'] + 1;
+        }
+	}
+	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+	return $params;
+}
+
+function cek_level_medical_up($id)
+{
+	$medical = \App\Models\HistoryApprovalMedical::join('medical_reimbursement','medical_reimbursement.id','=','history_approval_medical.medical_reimbursement_id')->where('medical_reimbursement.id', $id);
+
+	$cek1 = clone $medical;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	if(!$cek1) return false;
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $medical;
+		$cek2 = $cek2->where('history_approval_medical.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			return false;
+		} 
+	}
+
+	return true;
+}
+
+//exit interview
+function cek_exit_approval()
+{
+	$exit = \App\Models\HistoryApprovalExit::join('exit_interview','exit_interview.id','=','history_approval_exit.exit_interview_id')->orderBy('exit_interview_id', 'DESC');
+
+	$cek1 = clone $exit;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	
+	if(!$cek1) return [];
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $exit;
+		$cek2 = $cek2->where('history_approval_exit.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			//return [];
+		} 
+	}
+	return $exit->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+}
+
+function count_exit_approval()
+{
+	$data = cek_exit_approval();
+	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;
+		
+	if(!$data) return $params;
+	foreach($data as $item)	
+	{
+		if($item->is_approved == NULL)
+		{
+			if($item->status == 3) continue;
+			
+            if(cek_level_exit_up($item->exitInterview->id))
+            {
+                $params['waiting'] = $params['waiting'] + 1; 
+            }
+        }
+        if($item->is_approved == 0)
+        {
+			$params['reject'] = $params['reject'] + 1;
+        }
+        if($item->is_approved == 1)
+        {
+			$params['approved'] = $params['approved'] + 1;
+        }
+	}
+	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+	return $params;
+}
+
+function cek_level_exit_up($id)
+{
+	$exit = \App\Models\HistoryApprovalExit::join('exit_interview','exit_interview.id','=','history_approval_exit.exit_interview_id')->where('exit_interview.id', $id);
+
+	$cek1 = clone $exit;
+	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	if(!$cek1) return false;
+	if($cek1->setting_approval_level_id >=2)
+	{
+		$cek2 = clone $exit;
+		$cek2 = $cek2->where('history_approval_exit.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		if($cek2)
+		{
+			return false;
+		} 
+	}
+
+	return true;
+}
+
+
+//exit clearance
+function count_clearance_approval()
+{
+	// cek jenis user
+    $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+   	$data = \App\Models\ExitInterviewAssets::join('exit_interview','exit_interview.id','=','exit_interview_assets.exit_interview_id')->where('exit_interview.status','<',3)->get();
+   	
+   	$params['approved'] 	= 0;
+	$params['waiting'] 		= 0;
+	$params['reject'] 		= 0;
+	$params['all']			= 0;
+
+	if(!$data) return $params;
+    if($approval)
+    {
+    	foreach($data as $item)	
+		{
+			if($item->approval_check == NULL)
+			{
+				 $params['waiting'] = $params['waiting'] + 1; 
+			}
+			if($item->approval_check == 0)
+	        {
+				$params['reject'] = $params['reject'] + 1;
+	        }
+	        if($item->approval_check == 1)
+	        {
+				$params['approved'] = $params['approved'] + 1;
+	        }
+		}
+    	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+		return $params;
+    }
+}
+
 
 function replace_idr($nominal)
 {
@@ -701,6 +905,19 @@ function medical_jenis_claim_string($id)
 	return substr($string, 0, -1);
 }
 
+function medical_type_string($id)
+{
+	$data = \App\Models\MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
+	$string = "";
+
+	foreach($data as $item)
+	{
+		$string  .= $item->medicalType->name.' ,';
+	}
+
+	return substr($string, 0, -1);
+}
+
 /**
  * @param  [type]
  * @return [type]
@@ -792,6 +1009,7 @@ function asset_type($id=null)
  * @param  [type]
  * @return [type]
  */
+
 function get_cuti_user($cuti_id, $user_id, $field)
 {
 	$cuti = \App\Models\UserCuti::where('user_id', $user_id)->where('cuti_id', $cuti_id)->first();

@@ -15,5 +15,11 @@ class ExitInterviewAssets extends Model
     public function asset()
     {
     	return $this->hasOne('\App\Models\Asset', 'id', 'asset_id');
-    }	
+    }
+    
+    public function userApproved()
+    {
+        return $this->hasOne('\App\User', 'id', 'approval_id');
+    }
+    
 }

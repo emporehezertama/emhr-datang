@@ -126,12 +126,12 @@ class AssetController extends Controller
         $data->asset_condition  = $request->asset_condition;
         $data->assign_to        = $request->assign_to;
         $data->handover_date    = NULL;
-        $data->tipe_mobil       = $request->tipe_mobil;
-        $data->tahun            = $request->tahun;
-        $data->no_polisi        = $request->no_polisi;
+        //$data->tipe_mobil       = $request->tipe_mobil;
+        //$data->tahun            = $request->tahun;
+        //$data->no_polisi        = $request->no_polisi;
         $data->status_mobil     = $request->status_mobil;
         $data->remark           = $request->remark;
-        $data->rental_date      = $request->rental_date;
+        //$data->rental_date      = $request->rental_date;
         $data->user_id          = $request->user_id;
         $data->save();
 
@@ -145,12 +145,12 @@ class AssetController extends Controller
         $tracking->assign_to        = $data->assign_to;
         $tracking->user_id          = $data->user_id;
         $tracking->asset_id         = $data->id;
-        $data->tipe_mobil           = $request->tipe_mobil;
-        $data->tahun                = $request->tahun;
-        $data->no_polisi            = $request->no_polisi;
+        //$data->tipe_mobil           = $request->tipe_mobil;
+        //$data->tahun                = $request->tahun;
+        //$data->no_polisi            = $request->no_polisi;
         $data->status_mobil         = $request->status_mobil;
         $data->remark           = $request->remark;
-        $data->rental_date      = $request->rental_date;
+        //$data->rental_date      = $request->rental_date;
         $tracking->save();
 
         $params['data']         = Asset::where('id', $data->id)->first();
@@ -166,7 +166,7 @@ class AssetController extends Controller
             );
         }
 
-        return redirect()->route('administrator.asset.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.asset.index')->with('message-success', 'Data saved successfully');
     }   
 
     /**
@@ -179,7 +179,7 @@ class AssetController extends Controller
         $data = Asset::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.asset.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.asset.index')->with('message-sucess', 'Data deleted successfully');
     } 
 
     /**
@@ -198,12 +198,12 @@ class AssetController extends Controller
         $data->asset_condition  = $request->asset_condition;
         $data->assign_to        = $request->assign_to;
         $data->user_id          = $request->user_id;
-        $data->tipe_mobil       = $request->tipe_mobil;
-        $data->tahun            = $request->tahun;
-        $data->no_polisi        = $request->no_polisi;
+        //$data->tipe_mobil       = $request->tipe_mobil;
+        //$data->tahun            = $request->tahun;
+        //$data->no_polisi        = $request->no_polisi;
         $data->status_mobil     = $request->status_mobil;
         $data->remark           = $request->remark;
-        $data->rental_date      = $request->rental_date;
+        //$data->rental_date      = $request->rental_date;
         $data->save();
 
         $tracking                   = new AssetTracking();
@@ -215,12 +215,12 @@ class AssetController extends Controller
         $tracking->assign_to        = $data->assign_to;
         $tracking->user_id          = $data->user_id;
         $tracking->asset_id         = $data->id;
-        $data->tipe_mobil           = $request->tipe_mobil;
-        $data->tahun                = $request->tahun;
-        $data->no_polisi            = $request->no_polisi;
+        //$data->tipe_mobil           = $request->tipe_mobil;
+        //$data->tahun                = $request->tahun;
+        //$data->no_polisi            = $request->no_polisi;
         $data->status_mobil         = $request->status_mobil;
         $data->remark               = $request->remark;
-        $data->rental_date          = $request->rental_date;
+        //$data->rental_date          = $request->rental_date;
         $tracking->save();
         
         $params['data']         = Asset::where('id', $data->id)->first();
@@ -235,7 +235,6 @@ class AssetController extends Controller
                 }
             );
         }
-
-        return redirect()->route('administrator.asset.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.asset.index')->with('message-success', 'Data saved successfully !');
     }
 }

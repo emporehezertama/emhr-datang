@@ -31,9 +31,7 @@
                 <input type="hidden" name="_method" value="PUT">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Form Medical Reimbursement</h3>
-                        <hr />
-                        <br />
+                       
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -101,6 +99,7 @@
                                       <th>RELATIONSHIP</th>
                                       <th>PATIENT NAME</th>
                                       <th>CLAIM TYPE</th>
+                                      <th>RECEIPT NO/ KWITANSI NO</th>
                                       <th>QTY</th>
                                       <th>FILE</th>
                                       <th>AMOUNT APPROVED</th>
@@ -117,7 +116,7 @@
                                         @if($data->user->id == $f->user_family_id)
                                             <input type="text" readonly="true" class="form-control" value="Saya Sendiri">
                                         @else
-                                            <input type="text" readonly="true" class="form-control" value="{{ $f->UserFamily->nama }}">
+                                            <input type="text" readonly="true" class="form-control" value="{{ $f->userFamily->hubungan }}">
                                         @endif
                                     </td>
                                     <td>
@@ -128,15 +127,11 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <select class="form-control" readonly>
-                                            <option value="">Choose Claim Type</option>
-                                            @foreach(jenis_claim_medical() as $k => $i)
-                                            <option value="{{ $k }}" {{ $f->jenis_klaim == $k ? 'selected' : '' }} >{{ $i }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" readonly="true" class="form-control" value="{{ isset($f->medicalType)? $f->medicalType->name:'' }}">
                                     </td>
+                                    <td><input type="text" readonly="true" class="form-control" required value="{{ $f->no_kwitansi }}" /></td>
                                     <td><input type="text" class="form-control" required value="{{ number_format($f->jumlah) }}" readonly /></td>
-                                    <td><a onclick="show_image('{{ $f->file_bukti_transaksi }}')" class="btn btn-default btn-xs"><i class="fa fa-search-plus"></i>File Receipt Transaction </a></td>
+                                    <td><a onclick="show_image('{{ $f->file_bukti_transaksi }}')" class="btn btn-default btn-xs"><i class="fa fa-search-plus"></i>View </a></td>
                                     <td><input type="text" readonly="true" class="form-control" value="{{ number_format($f->nominal_approve) }}"></td>
                                 </tr>
                                 @php($total += $f->jumlah)
@@ -145,17 +140,25 @@
                               </tbody>
                               <tfoot>
                                   <tr>
-                                      <th colspan="5" style="text-align: right;">TOTAL</th>
+                                      <th colspan="6" style="text-align: right;">TOTAL</th>
                                       <th colspan="2">IDR {{ number_format($total) }}</th>
                                       <th class="th-total-disetujui">Rp. {{ number_format($total_disetujui) }}</th>
                                   </tr>
                               </tfoot>
                           </table>  
                         </div>
+                        @foreach($data->historyApproval as $key => $item)
+                                    <div class="form-group">
+                                        <label class="col-md-12">Note Approval {{$item->setting_approval_level_id}}</label>
+                                        <div class="col-md-8">
+                                            <input type="text" readonly="true" class="form-control note" value="{{ $item->note }}">
+                                        </div>
+                                    </div>
+                                @endforeach
                         <br />
                         <br />
                         <div class="col-md-12">
-                            <a href="{{ route('karyawan.medical.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                            <a href="{{ route('karyawan.medical-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                             <br style="clear: both;" />
                         </div>
                         <div class="clearfix"></div>

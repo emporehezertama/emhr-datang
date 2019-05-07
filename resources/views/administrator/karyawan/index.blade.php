@@ -84,6 +84,7 @@
                                     <th>EMAIL</th>
                                     <th>POSITION</th>
                                     <th>DIVISION</th>
+                                    <th>RESIGN</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
@@ -125,7 +126,11 @@
                                             @endif
                                         </td>
                                         @endif
-                                        
+                                        <td>
+                                            @if(isset($item->resign_date))
+                                                <label class="btn btn-danger btn-xs" style="text-align: center;" title="{{$item->resign_date}}">R</label>
+                                            @endif
+                                        </td>
                                         <td>
                                             <div class="btn-group m-r-10">
                                                 <button aria-expanded="false" data-toggle="dropdown" class="btn btn-xs btn-default dropdown-toggle waves-effect waves-light" type="button">Action 

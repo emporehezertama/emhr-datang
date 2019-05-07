@@ -52,23 +52,12 @@
                                         <td class="text-center">{{ $no+1 }}</td> 
                                         <td>{{ date('d F Y', strtotime($item->tanggal_pengajuan)) }}</td>
                                         <td>
-                                            <a onclick="status_approval_medical({{ $item->id }})"> 
-                                            @if($item->status == 1)
-                                            <label class="btn btn-warning btn-xs">Waiting Approval</label>
-                                            @endif
-
-                                            @if($item->status == 2)
-                                            <label class="btn btn-success btn-xs">Approved</label>
-                                            @endif
-
-                                            @if($item->status == 3)
-                                            <label class="btn btn-danger btn-xs">Reject</label>
-                                            @endif
-                                            
+                                            <a onclick="detail_approval_medicalCustom({{ $item->id }})"> 
+                                            {!! status_medical($item->status) !!}
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('karyawan.medical.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
+                                            <a href="{{ route('karyawan.medical-custom.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Detail</button></a>
                                         </td>
                                     </tr>
                                 @endforeach

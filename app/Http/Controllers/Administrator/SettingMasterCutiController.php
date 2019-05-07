@@ -60,10 +60,11 @@ class SettingMasterCutiController extends Controller
     {
         $data                   = Cuti::where('id', $id)->first();
         $data->jenis_cuti       = $request->jenis_cuti; 
+        $data->description       = $request->description;
         $data->kuota            = $request->kuota;
         $data->save();
 
-        return redirect()->route('administrator.setting-master-cuti.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.setting-master-cuti.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -76,7 +77,7 @@ class SettingMasterCutiController extends Controller
         $data = Cuti::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.setting-master-cuti.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.setting-master-cuti.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -89,7 +90,7 @@ class SettingMasterCutiController extends Controller
         $data = Cuti::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.setting-master-cuti.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.setting-master-cuti.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -102,8 +103,9 @@ class SettingMasterCutiController extends Controller
         $data               = new Cuti();
         $data->jenis_cuti   = $request->jenis_cuti;
         $data->kuota        = $request->kuota;
+        $data->description        = $request->description;
         $data->save();
 
-        return redirect()->route('administrator.setting-master-cuti.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.setting-master-cuti.index')->with('message-success', 'Data successfully saved !');
     }
 }

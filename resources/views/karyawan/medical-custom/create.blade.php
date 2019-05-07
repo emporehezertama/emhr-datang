@@ -27,7 +27,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('karyawan.medical.store') }}" id="form-medical" method="POST"  autocomplete="off">
+            <form class="form-horizontal" enctype="multipart/form-data" action="{{ route('karyawan.medical-custom.store') }}" id="form-medical" method="POST"  autocomplete="off">
                 <div class="col-md-12">
                     <div class="white-box">
                         
@@ -51,7 +51,7 @@
                                     <input type="text" readonly="" class="form-control" value="{{ Auth::user()->nik .' - '. Auth::user()->name }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" readonly="" class="form-control" value="{{ empore_jabatan(Auth::user()->id) }}">
+                                    <input type="text" readonly="true" class="form-control jabatan" value="{{ isset(Auth::user()->structure->position) ? Auth::user()->structure->position->name:''}}{{ isset(Auth::user()->structure->division) ? '-'. Auth::user()->structure->division->name:''}}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -98,19 +98,21 @@
                                       <th>RELATIONSHIP</th>
                                       <th>PATIENT NAME</th>
                                       <th>CLAIM TYPE</th>
+                                      <th>RECEIPT NO/ KWITANSI NO</th>
                                       <th>QTY</th>
                                       <th>FILE</th>
                                       <th></th>
                                   </tr>
                               </thead>
                               <tbody class="table-claim">
+                                <!--
                                 <tr class="oninput">
                                     <td>1</td>
                                     <td><input type="text" class="form-control datepicker input" required name="tanggal_kwitansi[]" /></td>
                                     <td>
                                         <select name="user_family_id[]" class="form-control input" onchange="select_hubungan(this)" required>
                                             <option value="">Choose Relationship</option>
-                                            <option value="{{ \Auth::user()->id }}" data-nama="{{ \Auth::user()->name }}">Saya Sendiri</option>
+                                            <option value="{{ \Auth::user()->id }}" data-nama="{{ \Auth::user()->name }}">My Self</option>
                                             @foreach(Auth::user()->userFamily as $item)
                                             <option value="{{ $item->id }}" data-nama="{{ $item->nama }}">{{ $item->hubungan }}</option>
                                             @endforeach
@@ -118,21 +120,23 @@
                                     </td>
                                     <td><input type="text" readonly="true" class="form-control nama_hubungan input" /></td>
                                     <td>
-                                        <select name="jenis_klaim[]" class="form-control input" required>
-                                            <option value="">Choose Claim Type</option>
-                                            @foreach(jenis_claim_medical() as $k => $i)
-                                            <option value="{{ $k }}">{{ $i }}</option>
-                                            @endforeach
+                                        <select name="medical_type_id[]" class="form-control input" required>
+                                            <option value=""> - choose Medical Type - </option>
+                                        @foreach($type as $item)
+                                        <option value="{{ $item->id }}" {{ $item->id== request()->medical_type_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                        @endforeach
                                         </select>
-                                    </td> 
+                                    </td>
+                                    <td><input type="text" class="form-control" name="no_kwitansi[]" required /></td> 
                                     <td><input type="number" class="form-control input" name="jumlah[]" required /></td>
                                     <td><input type="file" class="form-control input" name="file_bukti_transaksi[]" required /></td>
                                     <td></td>
                                 </tr>
+                                -->
                               </tbody>
                               <tfoot>
                                   <tr>
-                                      <th colspan="5" style="text-align: right;">TOTAL : </th>
+                                      <th colspan="6" style="text-align: right;">TOTAL : </th>
                                       <th class="th-total"></th>
                                   </tr>
                               </tfoot>
@@ -146,7 +150,7 @@
                         <br />
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="{{ route('karyawan.medical.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                <a href="{{ route('karyawan.medical-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
                                 <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_submit"><i class="fa fa-save"></i> Submit Medical Reimbursement</a>
                                 <br style="clear: both;" />
                             </div>
@@ -180,24 +184,27 @@
     var data_dependent = [];
 
     $("#btn_submit").click(function(){
+        var jumlah = $('.table-claim tr').length;
+        var validate = true;
 
+        if(jumlah <= 0)
+        {
+            bootbox.alert('Form not completed. Please check and resubmit.');
+            validate = false;
+        }
         if(!validate_form){
             bootbox.alert('Form not completed. Please check and resubmit.');
-
             return false;
         }
-
-        if($("input[name='atasan_user_id']").val() == ""){
-            bootbox.alert('Approval name must be chosen !');
-            return false;
-        }
-
-        bootbox.confirm('Process Form Medical Reimbursement ?', function(result){
+        if(validate){
+            bootbox.confirm('Process Form Medical Reimbursement ?', function(result){
             if(result)
             {
                 $("#form-medical").submit();
             }
-        });
+            });
+        }
+        
     });
 
     function select_hubungan(el)
@@ -218,15 +225,18 @@
                         '<td><input type="text" class="form-control datepicker input" required name="tanggal_kwitansi[]" /></td>'+
                         '<td>'+
                             '<select name="user_family_id[]" class="form-control input" onchange="select_hubungan(this)" required>'+
-                                '<option value="">Pilih Hubungan</option><option value="{{ \Auth::user()->id }}" data-nama="{{ \Auth::user()->name }}">Saya Sendiri</option>@foreach(Auth::user()->userFamily as $item)<option value="{{ $item->id }}" data-nama="{{ $item->nama }}">{{ $item->hubungan }}</option>@endforeach'+
+                                '<option value="">Pilih Hubungan</option><option value="{{ \Auth::user()->id }}" data-nama="{{ \Auth::user()->name }}">My Self</option>@foreach(Auth::user()->userFamily as $item)<option value="{{ $item->id }}" data-nama="{{ $item->nama }}">{{ $item->hubungan }}</option>@endforeach'+
                             '</select>'+
                         '</td>'+
                         '<td><input type="text" readonly="true" class="form-control nama_hubungan" /></td>'+
                         '<td>'+
-                            '<select name="jenis_klaim[]" class="form-control input" required>'+
-                                '<option value="">Pilih Jenis Klaim</option>@foreach(jenis_claim_medical() as $k => $i)<option value="{{ $k }}">{{ $i }}</option>@endforeach'+
-                            '</select>'+
-                        '</td>'+
+                            '<select name="medical_type_id[]" class="form-control input" required>'+
+                                            '<option value=""> - choose Medical Type - </option>'+
+                                        '@foreach($type as $item)'+
+                                        '<option value="{{ $item->id }}" {{ $item->id== request()->medical_type_id ? 'selected' : '' }}>{{ $item->name }}</option> @endforeach'+
+                                        '</select>'+
+                        '</td> '+
+                        '<td><input type="text" class="form-control" name="no_kwitansi[]" required /></td>'+
                         '<td><input type="number" class="form-control input" name="jumlah[]" required /></td>'+
                         '<td><input type="file" class="form-control input" name="file_bukti_transaksi[]" required /></td>'+
                         '<td><a class="btn btn-danger btn-xs" onclick="hapus_item(this)"><i class="fa fa-trash"></i></a></td>'+
@@ -250,7 +260,7 @@ function show_hide_add()
 
         if($(this).val() == "")
         {
-            $("#add").show();
+            $("#add").hide();
             validate_form = false;
         }
     });
@@ -284,10 +294,11 @@ function cek_button_add()
 
 function hapus_item(el)
 {
-    if(confirm("Hapus item ?"))
+    if(confirm("Delete this item ?"))
     {
         $(el).parent().parent().remove();
-        cek_button_add()
+        cek_button_add();
+        show_hide_add();
     }
 }
 

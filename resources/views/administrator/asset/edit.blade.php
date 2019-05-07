@@ -41,13 +41,13 @@
                         <div class="form-group">
                             <label class="col-md-12">Asset Name</label>
                             <div class="col-md-6">
-                               <input type="text" name="asset_name" class="form-control" value="{{ $data->asset_name }}">
+                               <input type="text" name="asset_name" class="form-control" value="{{ $data->asset_name }}" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-12">Asset Type</label>
                             <div class="col-md-6">
-                                <select name="asset_type_id" class="form-control">
+                                <select name="asset_type_id" class="form-control" required>
                                     <option value=""> - none - </option>
                                     @foreach($asset_type as $item)
                                     <option value="{{ $item->id }}" {{ $item->id == $data->asset_type_id ? 'selected' : '' }}>{{ $item->name }}</option>
@@ -55,46 +55,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="asset-mobil col-md-6" style="{{ ($data->asset_type->name != 'Mobil' ? 'display: none;' : '') }}">
-                            <div class="form-group">
-                                <label class="col-md-12">Car Type</label>
-                                <div class="col-md-12">
-                                    <input type="text" name="tipe_mobil" value="{{ $data->tipe_mobil }}" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Year</label>
-                                <div class="col-md-12">
-                                    <input type="text" name="tahun" class="form-control" value="{{ $data->tahun }}">
-                                </div>
-                           </div>
-                           <div class="form-group">
-                                <label class="col-md-12">Plat Number</label>
-                                <div class="col-md-12">
-                                    <input type="text" name="no_polisi" class="form-control" value="{{ $data->no_polisi }}">
-                                </div>
-                           </div>
-                           <div class="form-group">
-                                <label class="col-md-12">Car Status</label>
-                                <div class="col-md-12">
-                                    <select class="form-control" name="status_mobil">
+                        <div class="form-group asset-ow">
+                            <label class="col-md-12">Asset Ownership</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="status_mobil" required>
                                         <option value="">- none -</option>
                                         <option {{ $data->status_mobil == 'Rental' ? 'selected' : '' }}>Rental</option>
                                         <option {{ $data->status_mobil == 'Perusahaan' ? 'selected' : '' }}>Company Inventory</option>
-                                    </select>
-                                </div>
-                           </div>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group asset-sn"  style="{{ ($data->asset_type->name == 'Mobil' ? 'display: none;' : '') }}">
-                            <label class="col-md-12">Asset S/N or Code</label>
+                        <div class="form-group asset-sn">
+                            <label class="col-md-12">Serial / Plat Number</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="asset_sn" value="{{ $data->asset_sn }}" />
+                                <input type="text" class="form-control" name="asset_sn" value="{{ $data->asset_sn }}" required/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Purchase Date</label>
+                            <label class="col-md-12">Purchase Date / Rental Date</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control datepicker" name="purchase_date" value="{{ $data->purchase_date }}" />
+                                <input type="text" class="form-control datepicker" name="purchase_date" value="{{ $data->purchase_date }}" required/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -104,15 +84,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Rental Date</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control datepicker" name="rental_date" value="{{ $data->rental_date }}" />
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-md-12">Asset Condition</label>
                             <div class="col-md-6">
-                                <select class="form-control" name="asset_condition">
+                                <select class="form-control" name="asset_condition" required>
                                     <option value=""> - none - </option>
                                     <option value="Good" {{ $data->asset_condition =='Good' ? 'selected' : '' }}>Good</option>
                                     <option value="Malfunction" {{ $data->asset_condition =='Malfunction' ? 'selected' : '' }}>Malfunction</option>
@@ -121,20 +95,19 @@
                             </div>
                         </div> 
                         <div class="form-group">
-                            <label class="col-md-12">Assign To</label>
+                            <label class="col-md-12">Status</label>
                             <div class="col-md-6">
-                                <select class="form-control" name="assign_to">
+                                <select class="form-control" name="assign_to" required>
                                     <option value=""> - none - </option>
-                                    <option {{ $data->assign_to =='Employee' ? 'selected' : '' }}>Employee</option>
-                                    <option {{ $data->assign_to =='Office Facility' ? 'selected' : '' }}>Office Facility</option>
-                                    <option {{ $data->assign_to =='Office Inventory/idle' ? 'selected' : '' }}>Office Inventory/idle</option>
+                                    <option {{ $data->assign_to =='Assign To Employee' ? 'selected' : '' }}>Assign To Employee</option>
+                                    <option {{ $data->assign_to =='Office Inventory/Idle' ? 'selected' : '' }}>Office Inventory/Idle</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-12">Employee/PIC Name </label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control autocomplete-karyawan" value="{{ $data->user->nik .' - '. $data->user->name }}">
+                                <input type="text" class="form-control autocomplete-karyawan" value="{{ $data->user->nik .' - '. $data->user->name }}" required>
                                 <input type="hidden" name="user_id" class="form-control" value="{{ $data->user_id }}" />
                             </div>
                         </div>

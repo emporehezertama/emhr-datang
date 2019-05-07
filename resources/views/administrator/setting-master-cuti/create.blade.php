@@ -44,11 +44,27 @@
                         @endif
 
                         {{ csrf_field() }}
-                        
                         <div class="form-group">
-                            <label class="col-md-12">Leave Type</label>
+                            <label class="col-md-12">Type</label>
                             <div class="col-md-6">
-                               <input type="text" name="jenis_cuti" class="form-control" value="{{ old('jenis_cuti') }}">
+                               <select class="form-control form-control" name="jenis_cuti">
+                                <option value="">- Type - </option>
+                                <option {{ (request() and request()->jenis_cuti == 'Permit') ? 'selected' : '' }}>Permit</option>
+                                <option {{ (request() and request()->jenis_cuti == 'Leave') ? 'selected' : '' }}>Leave</option>
+                             </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 pull-right">
+                        <div class="form-group m-b-0">
+                            
+                        </div>
+                    </div>
+
+                        <div class="form-group">
+                            <label class="col-md-12">Description</label>
+                            <div class="col-md-6">
+                               <input type="text" name="description" class="form-control" value="{{ old('description') }}">
                             </div>
                         </div>
                         <div class="form-group">
