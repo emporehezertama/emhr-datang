@@ -249,7 +249,6 @@
     <!-- /.modal-dialog -->
 </div>
 
-
 <!-- sample modal content -->
 <div id="modal_hari_libur" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -17,6 +17,7 @@ class AddColumnToTraining extends Migration
             //
             $table->integer('sub_total_4')->nullable();
             $table->integer('sub_total_4_disetujui')->nullable();
+            $table->integer('training_type_id')->nullable();
         });
     }
 

@@ -180,7 +180,10 @@
 </div>
 @section('footer-script')
 <script type="text/javascript">
-    var var_edit_bpjs = 0;
+    var var_edit_bpjs_ketenagakerjaan_employee       = 0;
+    var var_edit_bpjs_kesehatan_employee             = 0;
+    var var_edit_bpjs_pensiun_employee               = 0;
+
     function form_submit()
     {
         if($("input[name='user_id']").val() == "" || $("input[name='salary']").val() == "")
@@ -193,10 +196,18 @@
     }
 
     // start custom
-    $("input[name='bpjs_ketenagakerjaan_employee'], input[name='bpjs_kesehatan_employee'], input[name='bpjs_pensiun_employee']").on('input', function(){
-        var_edit_bpjs = 1;
+    $("input[name='bpjs_ketenagakerjaan_employee']").on('input', function(){
+        var_edit_bpjs_ketenagakerjaan_employee = 1;
         calculate();
     }); 
+    $("input[name='bpjs_kesehatan_employee']").on('input', function(){
+        var_edit_bpjs_kesehatan_employee = 1;
+        calculate();
+    });
+    $("input[name='bpjs_pensiun_employee']").on('input', function(){
+        var_edit_bpjs_pensiun_employee = 1;
+        calculate();
+    });
     // end custom
     
     function init_calculate()
@@ -332,9 +343,12 @@
                 bpjs_ketenagakerjaan_employee: $('.bpjs_ketenagakerjaan_employee').val(),
                 bpjs_kesehatan_employee: $('.bpjs_kesehatan_employee').val(),
                 bpjs_pensiun_employee: $('.bpjs_pensiun_employee').val(),
-                edit_bpjs : var_edit_bpjs,
+                edit_bpjs_ketenagakerjaan_employee : var_edit_bpjs_ketenagakerjaan_employee,
+                edit_bpjs_kesehatan_employee : var_edit_bpjs_kesehatan_employee,
+                edit_edit_bpjs_pensiun_employee : var_edit_bpjs_pensiun_employee,
                 // end custom
-
+                
+                is_create : 1,
                 '_token' : $("meta[name='csrf-token']").attr('content')
             },
             success: function( data ) {
@@ -348,11 +362,9 @@
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
                 $("input[name='thp']").val(data.thp);
                 $("input[name='pph21']").val(data.monthly_income_tax);
-
                 $('.bpjs_ketenagakerjaan_company').val(data.bpjs_ketenagakerjaan);
                 $('.bpjs_kesehatan_company').val(data.bpjs_kesehatan);
                 $('.bpjs_pensiun_company').val(data.bpjs_pensiun);
-
                 $('.bpjs_ketenagakerjaan_employee').val(data.bpjs_ketenagakerjaan2);
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
@@ -371,7 +383,9 @@
                 $(".total_earnings").html(numberWithDot(sum_earnings));
                 $(".total_deductions").html(numberWithDot(sum_deductions));
 
-                var_edit_bpjs = 0;
+                //var_edit_bpjs_ketenagakerjaan_employee  = 0;
+                //var_edit_bpjs_kesehatan_employee        = 0;
+                //var_edit_bpjs_pensiun_employee          = 0;
             }
         })
     }

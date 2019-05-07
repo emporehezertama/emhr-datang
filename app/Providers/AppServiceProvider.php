@@ -59,6 +59,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        require_once app_path('Helper/DashboardHelper.php');
+        require_once app_path('Helper/SettingHelper.php');
         require_once app_path('Helper/AttendanceHelper.php');
         require_once app_path('Helper/AsiaHelper.php');
         require_once app_path('Helper/EmporeHelper.php');

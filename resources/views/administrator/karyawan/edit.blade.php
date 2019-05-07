@@ -311,10 +311,10 @@
                             <div class="clearfix"></div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="inventaris">
-                            <table class="table table-bordered">
-                                 <thead>
+                            <table class="table table-bordered" cellspacing="0" width="100%">
+                                <thead>
                                     <tr>
-                                        <th width="70" class="text-center">NO</th>
+                                        <th width="70" class="text-center">#</th>
                                         <th>ASSET NUMBER</th>
                                         <th>ASSET NAME</th>
                                         <th>ASSET TYPE</th>
@@ -329,6 +329,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach($data->assets as $no => $item)
+                                     @if(!isset($item->asset_type->name))
+                                        <?php continue; ?>
+                                     @endif
                                         <tr>
                                             <td class="text-center">{{ $no+1 }}</td>   
                                             <td>{{ $item->asset_number }}</td>

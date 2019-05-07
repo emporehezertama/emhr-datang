@@ -18,26 +18,55 @@
                 <div class="col-md-6 p-l-0">
                     <div class="white-box">
                         <div class="form-group">
-                            <label class="col-md-5">Email Notifikasi</label>
-                            <label class="col-md-5">Backup Type</label>
+                            <label class="col-md-2">Email Notifikasi</label>
                             <div class="col-md-5">
                                 <input type="email" class="form-control" name="setting[backup_mail]" value="{{ get_setting('backup_mail') }}" />
                             </div>
-                            <div class="col-md-5">
+                           <!--  <div class="col-md-5">
                                 <select class="form-control" name="setting[backup_type]">
                                     <option value="0"> - Select Type Backup - </option>
                                     <option value="1" {{ get_setting('backup_type') == 1 ? 'selected' : '' }}>All Apps & Database</option>
                                     <option value="2" {{ get_setting('backup_type') == 2 ? 'selected' : '' }}>Database Only</option>
                                     <option value="3" {{ get_setting('backup_type') == 3 ? 'selected' : '' }}>Apps Only</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                      
                         <div class="form-group">
                             <div class="col-md-12">
-                                <div class="col-md-2 p-l-0">
-                                    <label class="m-r-0">Schedule Backup</label>
+                                <div class="col-md-6 p-l-0">
+                                    <h4>Schedule Backup</h4>
                                 </div>
+                                <table class="table table-stripped">
+                                    <thead>
+                                        <tr style="backgroud: #efefef;">
+                                            <th>No</th>
+                                            <th>Type Backup</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(count(get_schedule_backup()) == 0)
+                                            <tr>
+                                                <td colspan="5" class="text-center"><i>empty</i></td>
+                                            </tr>
+                                        @endif
+
+                                        @foreach(get_schedule_backup() as $key => $item)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $item->type }}</td>
+                                                <td>{{ $item->date }}</td>
+                                                <td>{{ $item->time }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <a href="javascript:void(0)" class="btn btn-info btn-sm btn-circle" title="Add Schedule Backup" data-toggle="modal" data-target="#modal_add_schedule_backup"><i class="fa fa-plus"></i></a>
+                                
+                                <!--
                                 <div class="col-md-8">
                                     <label class="m-r-10"><input type="radio" value="3" name="setting[schedule]" {{ get_setting('schedule') == 3 ? 'checked' : '' }} /> Nightly / Daily</label>
                                     <label class="m-r-10"><input type="radio" value="4" name="setting[schedule]" {{ get_setting('schedule') == 4 ? 'checked' : '' }} /> Weekly</label>
@@ -46,6 +75,7 @@
                                         <input type="text" class="form-control datepicker" name="setting[schedule_custom_date]" value="{{ get_setting('schedule_custom_date') }}" placeholder="Custom Date">
                                     </div>
                                 </div>
+                                -->
                             </div>
                         </div>
                     </div>
@@ -95,4 +125,65 @@
     </div>
     @include('layouts.footer')
 </div>
+
+<!-- sample modal content -->
+<div class="modal fade" id="modal_add_schedule_backup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="POST" action="{{ route('administrator.setting.store-backup-schedule') }}"></form>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myLargeModalLabel">Schedule Backup</h4> </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-6">Backup Type</label>
+                    <label class="col-md-6">Recurring</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="backup_type">
+                            <option value=""> - Select - </option>
+                            <option value="1">All Apps & Database</option>
+                            <option value="2">Database Only</option>
+                            <option value="3">Apps Only</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="m-r-10"><input type="radio" value="3" name="recurring" /> Nightly / Daily</label>
+                        <label class="m-r-10"><input type="radio" value="4" name="recurring" /> Weekly</label>
+                        <label class="m-r-10"><input type="radio" value="5" name="recurring" /> Monthly</label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group m-t-5">
+                    <label class="col-md-6">Date</label>
+                    <label class="col-md-6">Time</label>
+                    <div class="col-md-6">
+                        <input type="text"class="form-control datepicker"  name="date" />
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="time" />
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect text-left btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                <button type="submit" class="btn btn-success waves-effect btn-sm"><i class="fa fa-check-circle"></i> Submit Schedule</button>
+            </div>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<link href="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css') }}" rel="stylesheet">
+<!-- Clock Plugin JavaScript -->
+<script src="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
+@section('javascript')
+<script type="text/javascript">
+    
+</script>
+@endsection
 @endsection
