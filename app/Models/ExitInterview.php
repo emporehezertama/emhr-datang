@@ -68,4 +68,9 @@ class ExitInterview extends Model
     {
         return $this->hasMany('App\Models\ExitInterviewAssets', 'exit_interview_id', 'id');
     }
+
+    public function historyApproval()
+    {
+        return $this->hasMany('\App\Models\HistoryApprovalExit', 'exit_interview_id', 'id')->orderBy('setting_approval_level_id', 'ASC');
+    }
 }

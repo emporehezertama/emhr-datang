@@ -46,9 +46,12 @@ use App\Models\SettingApprovalPaymentRequestItem;
 use App\Models\SettingApprovalOvertimeItem;
 use App\Models\SettingApprovalTrainingItem;
 use App\Models\SettingApprovalMedicalItem;
+use App\Models\SettingApprovalExitItem;
 use App\Models\CutiBersama;
 use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
+use App\Models\SettingApprovalClearance;
+
 
 class AjaxController extends Controller
 {
@@ -1622,6 +1625,46 @@ public function getCalculatePayrollGross(Request $request)
 
         return response()->json($this->respon);
     }
+    public function getHistoryApprovalMedicalCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = MedicalReimbursement::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->is_approved;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
+    public function getHistoryApprovalExitCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = ExitInterview::where('id', $request->foreign_id)->first();
+            $history =[];
+           foreach ($data->historyApproval as $key => $value) {
+                # code...
+                $history[$key]['level']         = $value->level->name;
+                $history[$key]['position']      = (isset($value->structure->position) ? $value->structure->position->name:'').(isset($value->structure->division) ? '-'.$value->structure->division->name:'');
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->is_approved;
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+        }
+
+        return response()->json($this->respon);
+    }
 
 
     
@@ -1696,6 +1739,22 @@ public function getCalculatePayrollGross(Request $request)
         if($request->ajax())
         {
             $all = SettingApprovalMedicalItem::where('setting_approval_leave_id', $request->foreign_id)->get();
+            $data =[];
+            foreach ($all as $key => $value) {
+                # code...
+                $data[$key]['level']         = $value->ApprovalLevel->name;
+                $data[$key]['position']      = (isset($value->structureApproval->position) ? $value->structureApproval->position->name:'').(isset($value->structureApproval->division) ? '-'.$value->structureApproval->division->name:'');
+            } 
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+    public function getDetailSettingApprovalExitItem(Request $request)
+    {
+        if($request->ajax())
+        {
+            $all = SettingApprovalExitItem::where('setting_approval_leave_id', $request->foreign_id)->get();
             $data =[];
             foreach ($all as $key => $value) {
                 # code...
@@ -2561,20 +2620,20 @@ public function getCalculatePayrollGross(Request $request)
 
         $settingApproval = \App\Models\SettingApprovalLeave::where('structure_organization_custom_id', $request->id)->first();
         
-        $settingApprovalCount = \App\Models\SettingApprovalLeaveItem::where('setting_approval_leave_id', $settingApproval->id)->get();
+        /*$settingApprovalCount = \App\Models\SettingApprovalLeaveItem::where('setting_approval_leave_id', $settingApproval->id)->get();
         if(count($settingApprovalCount)>0)
         {
             $settingApprovalCount->deleteAll();
         }
-
+        */
         $settingApproval->delete();
 
-        $settingApprovalItem = \App\Models\SettingApprovalLeaveItem::where('structure_organization_custom_id', $request->id)->first();
+        /*$settingApprovalItem = \App\Models\SettingApprovalLeaveItem::where('structure_organization_custom_id', $request->id)->first();
         if($settingApprovalItem)
         {
             $settingApprovalItem->delete();
         }
-
+        */
         return json_encode(['message' => 'success']);
     }
 
@@ -2592,5 +2651,107 @@ public function getCalculatePayrollGross(Request $request)
         $data->save();
 
         return json_encode(['message' => 'success']);
+    }
+
+    /**
+     * [getKaryawanApproval description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getKaryawanApproval(Request $request)
+    {
+        $params = [];
+        if($request->ajax())
+        {
+            // Skip Exist User
+            $approvalExistUser = SettingApprovalClearance::select('user_id')->get()->toArray();
+            
+            // SKIP SUPERADMIN, ACCESS_ID 1
+            $data =  \App\User::whereNotIn('id', $approvalExistUser)->whereNull('resign_date')->where(function($table) use ($request) {
+
+                $table->where('name', 'LIKE', "%". $request->name . "%")
+                ->orWhere('nik', 'LIKE', '%'. $request->name .'%');  
+            })->where('access_id', 2)->get();
+
+            $params = [];
+            foreach($data as $k => $item)
+            {
+                if($k >= 10) continue;
+
+                $params[$k]['id'] = $item->id;
+                $params[$k]['value'] = $item->nik .' - '. $item->name;
+            }
+        }
+        
+        return response()->json($params); 
+    }
+
+
+    public function addSettingClearanceHrd(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = new SettingApprovalClearance();
+            $data->user_id      = $request->id;
+            $data->nama_approval= 'HRD';
+            $data->save();
+
+            Session::flash('message-success', 'User Approval successfully add');
+
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function addSettingClearanceGA(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = new SettingApprovalClearance();
+            $data->user_id      = $request->id;
+            $data->nama_approval= 'GA';
+            $data->save();
+
+            Session::flash('message-success', 'User Approval successfully add');
+
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function addSettingClearanceIT(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = new SettingApprovalClearance();
+            $data->user_id      = $request->id;
+            $data->nama_approval= 'IT';
+            $data->save();
+
+            Session::flash('message-success', 'User Approval successfully add');
+
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function addSettingClearanceAccounting(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = new SettingApprovalClearance();
+            $data->user_id      = $request->id;
+            $data->nama_approval= 'Accounting';
+            $data->save();
+
+            Session::flash('message-success', 'User Approval successfully add');
+
+            return response()->json(['message' => 'success', 'data' => $data]);
+        }
+
+        return response()->json($this->respon);
     }
 }

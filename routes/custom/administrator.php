@@ -80,6 +80,12 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('setting-approvalTraining/destroyItem/{id}', 'SettingApprovalTrainingController@destroyItem')->name('administrator.setting-approvalTraining.destroyItem');
 
     Route::resource('medical-plafond', 'MedicalPlafondController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+    Route::get('medical-plafond/create-medical-plafond', 'MedicalPlafondController@createMedicalPlafond')->name('administrator.medical-plafond.create-medical-plafond');
+	Route::post('medical-plafond/store-medical-plafond', 'MedicalPlafondController@storeMedicalPlafond')->name('administrator.medical-plafond.store-medical-plafond');
+	Route::get('medical-plafond/edit-medical-plafond/{id}', 'MedicalPlafondController@editMedicalPlafond')->name('administrator.medical-plafond.edit-medical-plafond');
+	Route::post('medical-plafond/update-lmedical-plafond/{id}', 'MedicalPlafondController@updateMedicalPlafond')->name('administrator.medical-plafond.update-medical-plafond');
+	Route::get('medical-plafond/destroy-medical-plafond/{id}', 'MedicalPlafondController@deleteMedicalPlafond')->name('administrator.medical-plafond.destroy-medical-plafond');
+
 	Route::resource('setting-approvalMedical', 'SettingApprovalMedicalController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::get('setting-approvalMedical/indexItem/{id}', 'SettingApprovalMedicalController@indexItem')->name('administrator.setting-approvalMedical.indexItem');
 	Route::get('setting-approvalMedical/createItem/{id}', 'SettingApprovalMedicalController@createItem')->name('administrator.setting-approvalMedical.createItem');
@@ -87,6 +93,17 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('setting-approvalMedical/editItem/{id}', 'SettingApprovalMedicalController@editItem')->name('administrator.setting-approvalMedical.editItem');
 	Route::post('setting-approvalMedical/updateItem/{id}', 'SettingApprovalMedicalController@updateItem')->name('administrator.setting-approvalMedical.updateItem');
 	Route::post('setting-approvalMedical/destroyItem/{id}', 'SettingApprovalMedicalController@destroyItem')->name('administrator.setting-approvalMedical.destroyItem');
+
+	Route::resource('setting-approvalExit', 'SettingApprovalExitController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalExit/indexItem/{id}', 'SettingApprovalExitController@indexItem')->name('administrator.setting-approvalExit.indexItem');
+	Route::get('setting-approvalExit/createItem/{id}', 'SettingApprovalExitController@createItem')->name('administrator.setting-approvalExit.createItem');
+	Route::post('setting-approvalExit/storeItem', 'SettingApprovalExitController@storeItem')->name('administrator.setting-approvalExit.storeItem');
+	Route::get('setting-approvalExit/editItem/{id}', 'SettingApprovalExitController@editItem')->name('administrator.setting-approvalExit.editItem');
+	Route::post('setting-approvalExit/updateItem/{id}', 'SettingApprovalExitController@updateItem')->name('administrator.setting-approvalExit.updateItem');
+	Route::post('setting-approvalExit/destroyItem/{id}', 'SettingApprovalExitController@destroyItem')->name('administrator.setting-approvalExit.destroyItem');
+
+	Route::resource('setting-approvalClearance', 'SettingApprovalClearanceController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+
 
 	Route::resource('news', 'NewsController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('internal-memo', 'InternalMemoController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -229,6 +246,15 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('trainingCustom/index', 'TrainingCustomController@index')->name('administrator.trainingCustom.index');
 	Route::get('trainingCustom/proses/{id}', 'TrainingCustomController@proses')->name('administrator.trainingCustom.proses');
 	Route::get('trainingCustom/claim/{id}', 'TrainingCustomController@claim')->name('administrator.trainingCustom.claim');
+
+	Route::post('medicalCustom/index', 'MedicalCustomController@index')->name('administrator.medicalCustom.index');
+	Route::get('medicalCustom/index', 'MedicalCustomController@index')->name('administrator.medicalCustom.index');
+	Route::get('medicalCustom/proses/{id}', 'MedicalCustomController@proses')->name('administrator.medicalCustom.proses');
+
+	Route::post('exitCustom/index', 'ExitInterviewClearanceCustomController@index')->name('administrator.exitCustom.index');
+	Route::get('exitCustom/index', 'ExitInterviewClearanceCustomController@index')->name('administrator.exitCustom.index');
+	Route::get('exitCustom/detail/{id}', 'ExitInterviewClearanceCustomController@detail')->name('administrator.exitCustom.detail');
+	Route::get('exitCustom/clearance/{id}', 'ExitInterviewClearanceCustomController@clearance')->name('administrator.exitCustom.clearance');
 	
 
 	Route::post('cuti/index', 'CutiController@index')->name('administrator.cuti.index');

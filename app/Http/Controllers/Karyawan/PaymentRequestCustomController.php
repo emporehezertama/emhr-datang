@@ -63,118 +63,126 @@ class PaymentRequestCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $data                       = new PaymentRequest();
-        $data->user_id              = \Auth::user()->id;
-        $data->transaction_type     = $request->transaction_type;
-        $data->payment_method       = $request->payment_method;
-        $data->tujuan               = $request->tujuan;
-        $data->status               = 1;
-        $data->is_proposal_approved = 0;
-        $data->is_proposal_verification_approved = 0;
-        $data->is_payment_approved  = 0;
-        $data->save();
+        $checkApproval = \Auth::user()->approvalLeave->level1PaymentRequest;
 
-        // jika ada overtime
-        if(isset($request->overtime))
+        if($checkApproval == null)
         {
-            foreach($request->overtime as $k => $i)
+            return redirect()->route('karyawan.payment-request-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+        }else{
+            $data                       = new PaymentRequest();
+            $data->user_id              = \Auth::user()->id;
+            $data->transaction_type     = $request->transaction_type;
+            $data->payment_method       = $request->payment_method;
+            $data->tujuan               = $request->tujuan;
+            $data->status               = 1;
+            $data->is_proposal_approved = 0;
+            $data->is_proposal_verification_approved = 0;
+            $data->is_payment_approved  = 0;
+            $data->save();
+
+            // jika ada overtime
+            if(isset($request->overtime))
             {
-                $form                       = new PaymentRequestOvertime();
-                $form->payment_request_id   = $data->id;
-                $form->overtime_sheet_id    = $i;
-                $form->save();
-
-                $ov                         = OvertimeSheet::where('id', $i)->first();
-                $ov->is_payment_request     = 1;
-                $ov->save();
-            }
-        }
-
-        if(isset($request->bensin))
-        {
-            foreach($request->bensin['tanggal'] as $k => $item)
-            {
-                $bensin                     = new PaymentRequestBensin();
-                $bensin->payment_request_id = $data->id;
-                $bensin->user_id            = \Auth::user()->id;
-                 $bensin->tanggal  = Carbon::parse($request->bensin['tanggal'][$k])->format('d.m.y');
-                //$bensin->tanggal            = $request->bensin['tanggal'][$k];
-                $bensin->odo_start          = $request->bensin['odo_from'][$k];
-                $bensin->odo_end            = $request->bensin['odo_to'][$k];
-                $bensin->liter              = $request->bensin['liter'][$k];
-                $bensin->cost               = $request->bensin['cost'][$k];
-                $bensin->save();
-            }
-        }
-
-        foreach($request->description as $key => $item)
-        {
-            $form = new PaymentRequestForm();
-            $form->payment_request_id   = $data->id;
-            $form->description          = $item;
-            $form->type_form            = $request->type[$key];
-            $form->quantity             = $request->quantity[$key];
-            $form->estimation_cost      = $request->estimation_cost[$key];
-            $form->amount               = $request->amount[$key];
-
-            if($request->hasFile('file_struk'))
-            {
-                foreach($request->file_struk as $k => $file)
+                foreach($request->overtime as $k => $i)
                 {
-                    if ($file and $key == $k ) {
-                    
-                        $image = $file;
-                        
-                        $name = time().'.'.$image->getClientOriginalExtension();
-                        
-                        $destinationPath = public_path('storage/file-struk/');
-                        
-                        $image->move($destinationPath, $name);
+                    $form                       = new PaymentRequestOvertime();
+                    $form->payment_request_id   = $data->id;
+                    $form->overtime_sheet_id    = $i;
+                    $form->save();
 
-                        $form->file_struk = $name;
-                    }
+                    $ov                         = OvertimeSheet::where('id', $i)->first();
+                    $ov->is_payment_request     = 1;
+                    $ov->save();
                 }
             }
 
-            $form->save();
-        }
+            if(isset($request->bensin))
+            {
+                foreach($request->bensin['tanggal'] as $k => $item)
+                {
+                    $bensin                     = new PaymentRequestBensin();
+                    $bensin->payment_request_id = $data->id;
+                    $bensin->user_id            = \Auth::user()->id;
+                     $bensin->tanggal  = Carbon::parse($request->bensin['tanggal'][$k])->format('d.m.y');
+                    //$bensin->tanggal            = $request->bensin['tanggal'][$k];
+                    $bensin->odo_start          = $request->bensin['odo_from'][$k];
+                    $bensin->odo_end            = $request->bensin['odo_to'][$k];
+                    $bensin->liter              = $request->bensin['liter'][$k];
+                    $bensin->cost               = $request->bensin['cost'][$k];
+                    $bensin->save();
+                }
+            }
 
-        $params['data']     = $data;
-        $position = \Auth::user()->structure_organization_custom_id;
-        $settingApproval = \Auth::user()->approvalLeave->id; //idnya
-        $settingApprovalItem = \Auth::user()->approvalLeave->level1PaymentRequest->structure_organization_custom_id;
+            foreach($request->description as $key => $item)
+            {
+                $form = new PaymentRequestForm();
+                $form->payment_request_id   = $data->id;
+                $form->description          = $item;
+                $form->type_form            = $request->type[$key];
+                $form->quantity             = $request->quantity[$key];
+                $form->estimation_cost      = $request->estimation_cost[$key];
+                $form->amount               = $request->amount[$key];
 
-        $historyApproval    = \Auth::user()->approvalLeave->itemsPaymentRequest;
-        foreach ($historyApproval as $key => $value) {
-            # code...
-            $history = new HistoryApprovalPaymentRequest();
-            $history->payment_request_id = $data->id;
-            $history->setting_approval_level_id = $value->setting_approval_level_id;
-            $history->structure_organization_custom_id = $value->structure_organization_custom_id;
-            $history->save();
-        }
-        $historyApprov = HistoryApprovalPaymentRequest::where('payment_request_id',$data->id)->get();
+                if($request->hasFile('file_struk'))
+                {
+                    foreach($request->file_struk as $k => $file)
+                    {
+                        if ($file and $key == $k ) {
+                        
+                            $image = $file;
+                            
+                            $name = time().'.'.$image->getClientOriginalExtension();
+                            
+                            $destinationPath = public_path('storage/file-struk/');
+                            
+                            $image->move($destinationPath, $name);
 
-        $userApproval = user_approval_custom($settingApprovalItem);
-        foreach ($userApproval as $key => $value) { 
-            
-            if($value->email == "") continue;
-            
+                            $form->file_struk = $name;
+                        }
+                    }
+                }
+
+                $form->save();
+            }
+
             $params['data']     = $data;
-            $params['value']    = $historyApprov;
-                $params['text']     = '<p><strong>Dear Sir/Madam '. $value->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Payment Request and currently waiting your approval.</p>';
+            $position = \Auth::user()->structure_organization_custom_id;
+            $settingApproval = \Auth::user()->approvalLeave->id; //idnya
+            $settingApprovalItem = \Auth::user()->approvalLeave->level1PaymentRequest->structure_organization_custom_id;
 
-           \Mail::send('email.payment-request-approval-custom', $params,
-                function($message) use($data, $value) {
-                $message->from('emporeht@gmail.com');
-                $message->to($value->email);
-                $message->subject('Empore - Payment Request');
-            }); 
-        }
+            $historyApproval    = \Auth::user()->approvalLeave->itemsPaymentRequest;
+            foreach ($historyApproval as $key => $value) {
+                # code...
+                $history = new HistoryApprovalPaymentRequest();
+                $history->payment_request_id = $data->id;
+                $history->setting_approval_level_id = $value->setting_approval_level_id;
+                $history->structure_organization_custom_id = $value->structure_organization_custom_id;
+                $history->save();
+            }
+            $historyApprov = HistoryApprovalPaymentRequest::where('payment_request_id',$data->id)->get();
 
-        //dd($position, $settingApproval,$settingApprovalItem, $historyApproval);
+            $userApproval = user_approval_custom($settingApprovalItem);
+            foreach ($userApproval as $key => $value) { 
+                
+                if($value->email == "") continue;
+                
+                $params['data']     = $data;
+                $params['value']    = $historyApprov;
+                    $params['text']     = '<p><strong>Dear Sir/Madam '. $value->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Payment Request and currently waiting your approval.</p>';
 
-        return redirect()->route('karyawan.payment-request-custom.index')->with('message-success', 'Payment Request successfully processed');
+               \Mail::send('email.payment-request-approval-custom', $params,
+                    function($message) use($data, $value) {
+                    $message->from('emporeht@gmail.com');
+                    $message->to($value->email);
+                    $message->subject('Empore - Payment Request');
+                }); 
+            }
+
+            //dd($position, $settingApproval,$settingApprovalItem, $historyApproval);
+
+            return redirect()->route('karyawan.payment-request-custom.index')->with('message-success', 'Payment Request successfully processed');
+            }
+        
     }
 
     /**

@@ -69,13 +69,15 @@
                                     <select class="form-control" name="jenis_cuti" id="jenis_cuti" required>
                                         <option value="">Choose Leave Type</option>
                                         @foreach(list_user_cuti() as $item)
-                                        <option value="{{ $item->id }}" data-kuota="{{ get_kuota_cuti($item->id, \Auth::user()->id ) }}" data-cutiterpakai="{{ get_cuti_terpakai($item->id, \Auth::user()->id) }}" data-sisacuti="{{ get_cuti_user($item->id, \Auth::user()->id, 'sisa_cuti') }}" >{{ $item->jenis_cuti }}</option>
+                                        <option value="{{ $item->id }}" data-kuota="{{ get_kuota_cuti($item->id, \Auth::user()->id ) }}" data-cutiterpakai="{{ get_cuti_terpakai($item->id, \Auth::user()->id) }}" data-sisacuti="{{ get_cuti_user($item->id, \Auth::user()->id, 'sisa_cuti') }}" data-type="{{$item->jenis_cuti}}" >{{ $item->description }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6"> 
-                                    <input type="text" name="jam_pulang_cepat" style="display: none;" class="form-control jam_pulang_cepat" placeholder="Early Leaving">
+                                    <input type="text" name="jam_pulang_cepat" style="display: none;" class="form-control jam_pulang_cepat" placeholder="Time">
+                                    <!--
                                     <input type="text" name="jam_datang_terlambat" style="display: none;" class="form-control jam_datang_terlambat" placeholder="Coming Late">
+                                    -->
                                 </div>
                             </div>
                             <div class="form-group"> 
@@ -444,7 +446,7 @@
 
         var el = $(this).find(":selected");
     
-        if($(this).val() != 'Izin')
+        if(el.data('type') =='Permit')
         {   
             $('.kuota_cuti').val( el.data('kuota') );
             $('.cuti_terpakai').val( el.data('cutiterpakai') );
@@ -455,8 +457,16 @@
             $('.sisa_cuti').val('0');
         }
 
+        if(el.data('type') =='Permit')
+        {
+            $('.jam_pulang_cepat').show();
+            time_picker();
+        }else{
+            time_picker();
+            $('.jam_pulang_cepat').hide();
+        }
 
-        if($(this).val() == 15)
+        /*if($(this).val() == 6)
         {
             $('.jam_pulang_cepat').show();
             time_picker();
@@ -476,6 +486,7 @@
             time_picker();
             $('.jam_datang_terlambat').hide();
         }
+        */
 
     });
 

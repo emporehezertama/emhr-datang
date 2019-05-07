@@ -29,7 +29,7 @@ function getPlafondTraining($lokasi_kegiatan,$tempat_tujuan)
 }
 function cek_create_exit_interview($user_id)
 {
-	$cek = \App\Models\ExitInterview::where('user_id', $user_id)->count();
+	$cek = \App\Models\ExitInterview::where('user_id', $user_id)->where('status','<',3)->count();
 
 	if($cek == 0)
 	{
@@ -163,14 +163,14 @@ function get_backup_cuti()
 
 	if($user->branch_type == 'BRANCH')
 	{
-		$karyawan = \App\User::where('cabang_id', $user->cabang_id)->where('id', '<>', $user->id)->get();
+		$karyawan = \App\User::where('cabang_id', $user->cabang_id)->where('id', '<>', $user->id)->whereNull('resign_date')->get();
 	}
 	else
 	{
-		$karyawan = \App\User::where('division_id', $user->division_id)->where('id', '<>', $user->id)->get();
+		$karyawan = \App\User::where('division_id', $user->division_id)->where('id', '<>', $user->id)->whereNull('resign_date')->get();
 	}
 
-	$karyawan = \App\User::where('id', '<>', $user->id)->where('access_id', '2')->get();
+	$karyawan = \App\User::where('id', '<>', $user->id)->where('access_id', '2')->whereNull('resign_date')->get();
 
 	return $karyawan;
 }

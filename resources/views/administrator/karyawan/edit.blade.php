@@ -311,69 +311,6 @@
                             <div class="clearfix"></div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="inventaris">
-                            <h3 class="box-title m-b-0">Car</h3>
-                            <hr />
-                            <table class="table table-bordered">
-                                 <thead>
-                                    <tr>
-                                        <th width="70" class="text-center">#</th>
-                                        <th>ASSET NUMBER</th>
-                                        <th>ASSET NAME</th>
-                                        <th>ASSET TYPE</th>
-                                        <th>CAR TYPE</th>
-                                        <th>YEAR</th>
-                                        <th>PLAT NUMBER</th>
-                                        <th>CAR STATUS</th>
-                                        <th>PURCHASE DATE</th>
-                                        <th>REMARK</th>
-                                        <th>RENTAL DATE</th>
-                                        <th>ASSET CONDITION</th>
-                                        <th>ASSIGN TO</th>
-                                        <th>EMPLOYEE</th>
-                                        <th>HANDOVER DATE</th>
-                                        <th>STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($data->assets as $no => $item)   
-                                     @if(!isset($item->asset_type->name))
-                                        <?php continue; ?>
-                                     @endif
-                                      @if($item->asset_type->name == 'Mobil')
-                                        <tr>
-                                            <td class="text-center">{{ $no+1 }}</td>   
-                                            <td>{{ $item->asset_number }}</td>
-                                            <td>{{ $item->asset_name }}</td>
-                                            <td>{{ isset($item->asset_type->name) ? $item->asset_type->name : ''  }}</td>
-                                            <td>{{ $item->tipe_mobil }}</td>
-                                            <td>{{ $item->tahun }}</td>
-                                            <td>{{ $item->no_polisi }}</td>
-                                            <td>{{ $item->status_mobil }}</td>
-                                            <td>{{ format_tanggal($item->purchase_date) }}</td>
-                                            <td>{{ $item->remark }}</td>
-                                            <td>{{ $item->rental_date }}</td>
-                                            <td>{{ $item->asset_condition }}</td>
-                                            <td>{{ $item->assign_to }}</td>
-                                            <td>{{ isset($item->user->name) ? $item->user->name : '' }}</td>
-                                            <td>{{ $item->handover_date != "" ?  format_tanggal($item->handover_date) : '' }}</td>
-                                            <td>
-                                                @if($item->handover_date === NULL)
-                                                    <label class="btn btn-warning btn-xs">Waiting Acceptance</label>
-                                                @endif
-
-                                                @if($item->handover_date !== NULL)
-                                                    <label class="btn btn-success btn-xs">Accepted</label>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                      @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <br />
-                            <br />
-                            <h3 class="box-title m-b-0">Lainnya</h3>
-                            <hr />
                             <table class="table table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
@@ -381,23 +318,20 @@
                                         <th>ASSET NUMBER</th>
                                         <th>ASSET NAME</th>
                                         <th>ASSET TYPE</th>
-                                        <th>SN</th>
-                                        <th>PURCHASE DATE</th>
-                                        <th>REMARK</th>
-                                        <th>RENTAL DATE</th>
+                                        <th>SERIAL/PLAT NUMBER</th>
+                                        <th>PURCHASE/RENTAL DATE</th>
                                         <th>ASSET CONDITION</th>
-                                        <th>ASSIGN TO</th>
-                                        <th>EMPLOYEE</th>
+                                        <th>STATUS ASSET</th>
+                                        <th>PIC</th>
                                         <th>HANDOVER DATE</th>
                                         <th>STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($data->assets as $no => $item)
-                                    @if(!isset($item->asset_type->name))
+                                     @if(!isset($item->asset_type->name))
                                         <?php continue; ?>
                                      @endif
-                                      @if($item->asset_type->name !== 'Mobil')
                                         <tr>
                                             <td class="text-center">{{ $no+1 }}</td>   
                                             <td>{{ $item->asset_number }}</td>
@@ -405,8 +339,6 @@
                                             <td>{{ isset($item->asset_type->name) ? $item->asset_type->name : ''  }}</td>
                                             <td>{{ $item->asset_sn }}</td>
                                             <td>{{ format_tanggal($item->purchase_date) }}</td>
-                                            <td>{{ $item->remark }}</td>
-                                            <td>{{ $item->rental_date }}</td>
                                             <td>{{ $item->asset_condition }}</td>
                                             <td>{{ $item->assign_to }}</td>
                                             <td>{{ isset($item->user->name) ? $item->user->name : '' }}</td>
@@ -415,17 +347,15 @@
                                                 @if($item->handover_date === NULL)
                                                     <label class="btn btn-warning btn-xs">Waiting Acceptance</label>
                                                 @endif
-
                                                 @if($item->handover_date !== NULL)
                                                     <label class="btn btn-success btn-xs">Accepted</label>
                                                 @endif
                                             </td>
                                         </tr>
-                                      @endif
                                     @endforeach
                                 </tbody>
                             </table>
-                           <br />
+                            <br />
                         </div>
 
                         <div role="tabpanel" class="tab-pane fade" id="rekening_bank">

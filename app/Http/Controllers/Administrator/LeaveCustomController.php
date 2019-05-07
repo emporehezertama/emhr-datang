@@ -144,14 +144,14 @@ class LeaveCustomController extends Controller
             $params[$no]['POSITION']         = (isset($item->user->structure->position) ? $item->user->structure->position->name:'').'-'.(isset($item->user->structure->division) ? $item->user->structure->division->name:'');
             $params[$no]['START DATE']      = date('d F Y', strtotime($item->tanggal_cuti_start));
             $params[$no]['END DATE']        =date('d F Y', strtotime($item->tanggal_cuti_end));
-            $params[$no]['LEAVE TYPE']= isset($item->cuti->jenis_cuti) ? $item->cuti->jenis_cuti : '';
+            $params[$no]['LEAVE TYPE']= isset($item->cuti->description) ? $item->cuti->description : '';
             $params[$no]['LEAVE DURATION'] = $item->total_cuti;
             $params[$no]['PURPOSE']        = $item->keperluan;
             $params[$no]['LEAVE BALANCE']   = $item->temp_sisa_cuti;
             $params[$no]['DATE OF SUBMITTED']       = date('d F Y', strtotime($item->created_at));
 
             // SET HEADER LEVEL APPROVAL
-            $level_header = get_payment_header();
+            $level_header = get_level_header();
             for($a=0; $a < $level_header  ; $a++)
             {
                 $params[$no]['APPROVAL STATUS '. ($a+1)]           = '-';

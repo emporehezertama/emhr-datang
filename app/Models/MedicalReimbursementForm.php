@@ -25,4 +25,9 @@ class MedicalReimbursementForm extends Model
     {
     	return $this->hasOne('App\User', 'id', 'user_family_id');
     }
+
+    public function medicalType()
+    {
+        return $this->hasOne('App\Models\MedicalType', 'id', 'medical_type_id');
+    }
 }

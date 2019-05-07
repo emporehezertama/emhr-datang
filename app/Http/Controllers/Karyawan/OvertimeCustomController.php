@@ -57,57 +57,65 @@ class OvertimeCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $data                       = new OvertimeSheet();
-        $data->user_id              = \Auth::user()->id;
-        $data->status               = 1;  
-        $data->save();
+        $checkApproval = \Auth::user()->approvalLeave->level1Overtime;
+        if($checkApproval == null)
+        {
+            return redirect()->route('karyawan.overtime-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+        }else{
+            $data                       = new OvertimeSheet();
+            $data->user_id              = \Auth::user()->id;
+            $data->status               = 1;  
+            $data->save();
 
-        foreach($request->tanggal as $key => $item)
-        {   
-            $form               = new OvertimeSheetForm();
-            $form->overtime_sheet_id= $data->id;
-            $form->description  = $request->description[$key];
-            $form->awal         = $request->awal[$key];
-            $form->akhir        = $request->akhir[$key];
-            $form->total_lembur = $request->total_lembur[$key];
-            $form->tanggal      = $request->tanggal[$key];
-            $form->save();
-        }
+            foreach($request->tanggal as $key => $item)
+            {   
+                $form               = new OvertimeSheetForm();
+                $form->overtime_sheet_id= $data->id;
+                $form->description  = $request->description[$key];
+                $form->awal         = $request->awal[$key];
+                $form->akhir        = $request->akhir[$key];
+                $form->total_lembur = $request->total_lembur[$key];
+                $form->tanggal      = $request->tanggal[$key];
+                $form->save();
+            }
 
-        $params['data']     = $data;
-        $position = \Auth::user()->structure_organization_custom_id;
-        $settingApproval = \Auth::user()->approvalLeave->id; //idnya
-        $settingApprovalItem = \Auth::user()->approvalLeave->level1Overtime->structure_organization_custom_id;
-
-        $historyApproval    = \Auth::user()->approvalLeave->itemsOvertime;
-        foreach ($historyApproval as $key => $value) {
-            # code...
-            $history = new HistoryApprovalOvertime();
-            $history->overtime_sheet_id = $data->id;
-            $history->setting_approval_level_id = $value->setting_approval_level_id;
-            $history->structure_organization_custom_id = $value->structure_organization_custom_id;
-            $history->save();
-        }
-        $historyApprov = HistoryApprovalOvertime::where('overtime_sheet_id',$data->id)->get();
-
-        $userApproval = user_approval_custom($settingApprovalItem);
-        foreach ($userApproval as $key => $value) { 
-            
-            if($value->email == "") continue;
-            
             $params['data']     = $data;
-            $params['value']    = $historyApprov;
-                $params['text']     = '<p><strong>Dear Sir/Madam '. $value->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Overtime and currently waiting your approval.</p>';
+            $position = \Auth::user()->structure_organization_custom_id;
+            $settingApproval = \Auth::user()->approvalLeave->id; //idnya
+            $settingApprovalItem = \Auth::user()->approvalLeave->level1Overtime->structure_organization_custom_id;
 
-           \Mail::send('email.overtime-approval-custom', $params,
-                function($message) use($data, $value) {
-                $message->from('emporeht@gmail.com');
-                $message->to($value->email);
-                $message->subject('Empore - Overtime Sheet');
-            }); 
+            $historyApproval    = \Auth::user()->approvalLeave->itemsOvertime;
+            foreach ($historyApproval as $key => $value) {
+                # code...
+                $history = new HistoryApprovalOvertime();
+                $history->overtime_sheet_id = $data->id;
+                $history->setting_approval_level_id = $value->setting_approval_level_id;
+                $history->structure_organization_custom_id = $value->structure_organization_custom_id;
+                $history->save();
+            }
+            $historyApprov = HistoryApprovalOvertime::where('overtime_sheet_id',$data->id)->get();
+
+            $userApproval = user_approval_custom($settingApprovalItem);
+            foreach ($userApproval as $key => $value) { 
+                
+                if($value->email == "") continue;
+                
+                $params['data']     = $data;
+                $params['value']    = $historyApprov;
+                    $params['text']     = '<p><strong>Dear Sir/Madam '. $value->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Overtime and currently waiting your approval.</p>';
+
+               \Mail::send('email.overtime-approval-custom', $params,
+                    function($message) use($data, $value) {
+                    $message->from('emporeht@gmail.com');
+                    $message->to($value->email);
+                    $message->subject('Empore - Overtime Sheet');
+                }); 
+            }
+
+            return redirect()->route('karyawan.overtime-custom.index')->with('message-success', 'Data successfully saved!');
         }
 
-        return redirect()->route('karyawan.overtime-custom.index')->with('message-success', 'Data successfully saved!');
+        
     }
 
     /**
