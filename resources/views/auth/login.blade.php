@@ -1,7 +1,7 @@
 @extends('layouts.login')
 
 @section('content')
-<img src="{{ asset('images/bg-left-bottom.png')}}?v=1" style="position: absolute; bottom: 0;left: 0; width: 820px;z-index: 999" />
+<img src="{{ asset('images/bg-left-bottom.png')}}?v=1" class="bg-left-bottom" style="position: absolute; bottom: 0;left: 0; width: 820px;z-index: 999" />
 <div class="img-contact">
   <img src="{{ asset('images/exit-button.png')}}?v=1" class="close_contact" title="Close " style="cursor: pointer; position: absolute;top: 0;left: 17px;width: 40px;" />
   <img src="{{ asset('images/contact.png')}}?v=1" style="width: 250px;" />
@@ -93,6 +93,13 @@
     <p style="color: #61c3d0;font-size: 12px; text-align: right;">Copyright &copy; PT Empore Hezer Tama</p>
 </footer>
 <style type="text/css">
+
+  @media all and (min-width: 320px) and (max-width: 780px) 
+  {
+    .bg-left-bottom {display: none;}
+    .img-contact { display: none !important; }
+  } 
+  
   .img-contact {
     position: absolute; 
     top: 50px;
