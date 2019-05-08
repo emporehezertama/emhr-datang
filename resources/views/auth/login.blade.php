@@ -1,7 +1,11 @@
 @extends('layouts.login')
 
 @section('content')
-<img src="{{ asset('images/bg-left-bottom.png')}}" style="position: absolute; bottom: 0;left: 0; width: 820px;z-index: 999" />
+<img src="{{ asset('images/bg-left-bottom.png')}}?v=1" style="position: absolute; bottom: 0;left: 0; width: 820px;z-index: 999" />
+<div class="img-contact">
+  <img src="{{ asset('images/exit-button.png')}}?v=1" class="close_contact" title="Close " style="cursor: pointer; position: absolute;top: 0;left: 17px;width: 40px;" />
+  <img src="{{ asset('images/contact.png')}}?v=1" style="width: 250px;" />
+</div>  
 
 <!-- Preloader -->
 <div class="preloader">
@@ -68,8 +72,6 @@
               </div>
               @endif
               -->
-             
-
               <div class="form-group">
                 <div class="col-md-12">
                   <div class="checkbox checkbox-info pull-left p-t-0">
@@ -85,13 +87,19 @@
               </div>
             </form>
           </div>
-      </div>
-        <!-- 
-      <img src="{{ asset('1.jpeg')}}" style="height: 80px;z-index: 9999;position: absolute;bottom: 0;right: 0px;" />          
-      <img src="{{ asset('2.jpeg')}}" style="height: 80px;z-index: 9999;position: absolute;bottom: 0;right: 404px;" />          
-      <img src="{{ asset('2.jpeg')}}" style="height: 80px;position: absolute;bottom: 0;right: 764px;" /> -->          
+      </div>    
 </section>
+<footer style="position: absolute;right:20px; bottom: 0; ">
+    <p style="color: #61c3d0;font-size: 12px; text-align: right;">Copyright &copy; PT Empore Hezer Tama</p>
+</footer>
 <style type="text/css">
+  .img-contact {
+    position: absolute; 
+    top: 50px;
+    right: 0; 
+    z-index: 999; 
+    display: none;
+  }
   .btn-info {
     background: #0d9a89 !important;
   }
