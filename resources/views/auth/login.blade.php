@@ -1,6 +1,8 @@
 @extends('layouts.login')
 
 @section('content')
+<img src="{{ asset('images/bg-left-bottom.png')}}" style="position: absolute; bottom: 0;left: 0; width: 820px;z-index: 999" />
+
 <!-- Preloader -->
 <div class="preloader">
   <div class="cssload-speeding-wheel"></div>
@@ -90,6 +92,12 @@
       <img src="{{ asset('2.jpeg')}}" style="height: 80px;position: absolute;bottom: 0;right: 764px;" /> -->          
 </section>
 <style type="text/css">
+  .btn-info {
+    background: #0d9a89 !important;
+  }
+  .btn-info:hover,.btn-info:active {
+    background: #0d9a89 !important;
+  }
   .field-icon {
     float: right;
     margin-right: 9px;
