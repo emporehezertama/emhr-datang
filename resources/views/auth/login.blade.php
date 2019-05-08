@@ -97,6 +97,11 @@
     position: relative;
     z-index: 2;
   }
+  .new-login-register {
+    background: url(images/bg-login.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 </style>
 @endsection
 
