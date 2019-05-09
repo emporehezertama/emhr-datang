@@ -184,15 +184,23 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">Bank Branch</label>
-                                    <div class="col-md-6">
-                                        <textarea class="form-control" name="cabang" readonly="true">{{ $data->cabang }}</textarea>
-                                    </div>
-                                </div>
                             </div>
 
                             <div role="tabpanel" class="tab-pane fade" id="department">
+                                @if(get_setting('struktur_organisasi') == 3)
+                                <div class="form-group">
+                                    <label class="col-md-12">Position</label>
+                                    <div class="col-md-6">
+                                       <input type="text" name="position" class="form-control"  readonly="true" value="{{ $data->structure->position->name }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Division</label>
+                                    <div class="col-md-6">
+                                       <input type="text" name="division" class="form-control"  readonly="true" value="{{ $data->structure->division->name }}" />
+                                    </div>
+                                </div>
+                                @else
                                 <div class="form-group">
                                     <label class="col-md-12">Branch Type</label>
                                     <div class="col-md-6">
@@ -278,6 +286,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         
                             <div role="tabpanel" class="tab-pane fade in active" id="dependent">

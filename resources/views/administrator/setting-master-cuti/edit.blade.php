@@ -52,7 +52,7 @@
                             <div class="col-md-6">
                                <select class="form-control" name="jenis_cuti">
                                     <option value="">- Select - </option>
-                                    @foreach(['Permit', 'Leave'] as $item)
+                                    @foreach(['Permit', 'Leave', 'Attendance'] as $item)
                                     <option {{ $data->jenis_cuti == $item ? 'selected' : '' }}>{{ $item }}</option>
                                     @endforeach
                                 </select>

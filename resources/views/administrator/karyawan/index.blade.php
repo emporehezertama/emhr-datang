@@ -82,7 +82,12 @@
                                     <th>GENDER</th>
                                     <th>TELEPHONE</th>
                                     <th>EMAIL</th>
-                                    <th>POSITION</th>
+                                    <th>POSITION </th>
+                                    <th>
+                                        @if($countPos > 0)
+                                            <a href="{{ route('administrator.karyawan.index', ['position'=> 1])}}"><label class="btn btn-danger btn-xs" style="text-align: center;" title="">{{$countPos}}</label></a>
+                                        @endif
+                                    </th>
                                     <th>DIVISION</th>
                                     <th>RESIGN</th>
                                     <th>ACTION</th>
@@ -99,6 +104,7 @@
                                         <td>{{ $item->email }}</td>
                                         @if(get_setting('struktur_organisasi') == 3)
                                         <td>{{ isset($item->structure->position) ? $item->structure->position->name:''}}</td>
+                                        <td></td>
                                         <td>
                                             {{ isset($item->structure->division) ? $item->structure->division->name:'' }}
                                         </td>

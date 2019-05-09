@@ -68,8 +68,11 @@
                                 <div class="col-md-6">
                                     <input type="text" readonly="true" class="form-control" value="{{ $data->cuti->description }}">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input type="text" readonly="true" class="form-control" value="{{ $data->jam_pulang_cepat }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" readonly="true" class="form-control" value="{{ $data->jam_datang_terlambat }}">
                                 </div>
                                 <div class="col-md-6" id="section_jenis_izin" style="display: none;">
                                     <input type="text" class="form-control" name="jenis_izin" placeholder="Jenis Izin" />

@@ -95,12 +95,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-12">Leave / Permit Type</label>
+                                <label class="col-md-12">Leave / Permit Description</label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" value="{{ $data->cuti->description }}" readonly="true">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input type="text" class="form-control" value="{{ $data->jam_pulang_cepat }}" readonly="true">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" value="{{ $data->jam_datang_terlambat }}" readonly="true">
                                 </div>
                             </div>
 

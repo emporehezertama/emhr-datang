@@ -733,7 +733,7 @@
                                 <select class="form-control modal-jenis_cuti">
                                     <option value="">- none -</option>
                                     @foreach(get_master_cuti() as $i)
-                                    <option value="{{ $i->id }}">{{ $i->jenis_cuti }}</option>
+                                    <option value="{{ $i->id }}">{{ $i->description }}</option>
                                     @endforeach
                                 </select>
                             </div>

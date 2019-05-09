@@ -51,6 +51,7 @@
                                 <option value="">- Type - </option>
                                 <option {{ (request() and request()->jenis_cuti == 'Permit') ? 'selected' : '' }}>Permit</option>
                                 <option {{ (request() and request()->jenis_cuti == 'Leave') ? 'selected' : '' }}>Leave</option>
+                                <option {{ (request() and request()->jenis_cuti == 'Attendance') ? 'selected' : '' }}>Attendance</option>
                              </select>
                             </div>
                         </div>
