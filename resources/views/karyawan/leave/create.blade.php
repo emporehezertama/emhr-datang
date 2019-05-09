@@ -73,14 +73,15 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6"> 
+                                <div class="col-md-3"> 
                                     <input type="text" name="jam_pulang_cepat" style="display: none;" class="form-control jam_pulang_cepat" placeholder="Time">
-                                    <!--
-                                    <input type="text" name="jam_datang_terlambat" style="display: none;" class="form-control jam_datang_terlambat" placeholder="Coming Late">
-                                    -->
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="jam_datang_terlambat" style="display: none;" class="form-control jam_datang_terlambat" placeholder="Time">
+                                    
                                 </div>
                             </div>
-                            <div class="form-group"> 
+                            <div class="form-group" id="TypeLeave" style="display: none;"> 
                                 <label class="col-md-4">Leave Quota</label>
                                 <label class="col-md-3">Leave Taken</label>
                                 <label class="col-md-3">Leave Balance</label>
@@ -258,7 +259,6 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-
 @section('footer-script')
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -280,6 +280,7 @@
     @endforeach
 </script>
 <script type="text/javascript">
+
     $(".autcomplete-atasan" ).autocomplete({
         source: list_atasan,
         minLength:0,
@@ -445,49 +446,41 @@
     $("select[name='jenis_cuti']").on('change', function(){
 
         var el = $(this).find(":selected");
-    
-        if(el.data('type') =='Permit')
+
+        if(el.data('type') =='Leave')
         {   
+            document.getElementById('TypeLeave').style.display = "block";
+            time_picker();
+            $('.jam_pulang_cepat').hide();
+            $('.jam_datang_terlambat').hide();
+
             $('.kuota_cuti').val( el.data('kuota') );
             $('.cuti_terpakai').val( el.data('cutiterpakai') );
             $('.sisa_cuti').val( el.data('sisacuti') );
-        }else{
+        }
+        if(el.data('type') =='Permit')
+        {
+            document.getElementById('TypeLeave').style.display = "none";
+            time_picker();
+            $('.jam_pulang_cepat').show();
+            $('.jam_datang_terlambat').hide();
+
+            $('.kuota_cuti').val('0');
+            $('.cuti_terpakai').val('0');
+            $('.sisa_cuti').val('0');
+
+        }
+        if(el.data('type') =='Attendance')
+        {
+            document.getElementById('TypeLeave').style.display = "none";
+            time_picker();
+            $('.jam_pulang_cepat').show();
+            $('.jam_datang_terlambat').show();
+
             $('.kuota_cuti').val('0');
             $('.cuti_terpakai').val('0');
             $('.sisa_cuti').val('0');
         }
-
-        if(el.data('type') =='Permit')
-        {
-            $('.jam_pulang_cepat').show();
-            time_picker();
-        }else{
-            time_picker();
-            $('.jam_pulang_cepat').hide();
-        }
-
-        /*if($(this).val() == 6)
-        {
-            $('.jam_pulang_cepat').show();
-            time_picker();
-        }
-        else
-        {
-            $('.jam_pulang_cepat').hide();
-        }
-
-        if($(this).val() == 14)
-        {
-            $('.jam_datang_terlambat').show();
-            time_picker();
-        }
-        else
-        {
-            time_picker();
-            $('.jam_datang_terlambat').hide();
-        }
-        */
-
     });
 
     $("#btn_submit_form").click(function(){

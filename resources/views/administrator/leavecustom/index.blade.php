@@ -67,7 +67,7 @@
                                     <th>NIK</th>
                                     <th>NAME</th>
                                     <th>DATE OF LEAVE / PERMIT</th>
-                                    <th>LEAVE / PERMIT TYPE</th>
+                                    <th>LEAVE / PERMIT DESCRIPTION</th>
                                     <th>LEAVE / PERMIT DURATION</th>
                                     <th>PURPOSE</th>
                                     <th>STATUS</th>

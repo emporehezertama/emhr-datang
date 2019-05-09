@@ -10,6 +10,8 @@ use App\User;
 use App\Models\StructureOrganizationCustom; 
 use App\Models\OrganisasiDivision;
 use App\Models\OrganisasiPosition;
+use App\Models\MedicalPlafond;
+
 
 class MedicalCustomController extends Controller
 {
@@ -131,7 +133,13 @@ class MedicalCustomController extends Controller
 
     public function proses($id)
     {   
-        $params['data'] = MedicalReimbursement::where('id', $id)->first();;
+        
+
+        $test = MedicalReimbursement::where('id', $id)->first();
+        $userPos = $test->user->structure->organisasi_position_id;
+        $plafond = MedicalPlafond::where('position_id',$userPos);
+
+        $params['data'] = MedicalReimbursement::where('id', $id)->first();
         $params['form'] = MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
         return view('administrator.medicalcustom.edit')->with($params);
     }

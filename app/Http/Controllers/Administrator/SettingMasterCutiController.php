@@ -103,8 +103,26 @@ class SettingMasterCutiController extends Controller
         $data               = new Cuti();
         $data->jenis_cuti   = $request->jenis_cuti;
         $data->kuota        = $request->kuota;
-        $data->description        = $request->description;
+        $data->description  = $request->description;
         $data->save();
+
+        if($data->jenis_cuti == 'Leave')
+        {
+            $dataUser = User::where('access_id',2)->whereNull('resign_date')->get();
+            foreach ($dataUser as $key => $value) {
+                # code...
+                $userCuti = UserCuti::where('user_id',$value->id)->where('cuti_id',$data->id)->first();
+                if(!$userCuti)
+                {
+                    $c = new UserCuti();
+                    $c->user_id     = $value->id;
+                    $c->cuti_id     = $data->id;
+                    $c->kuota       = $data->kuota;
+                    $c->sisa_cuti   = $data->kuota;
+                    $c->save();
+                }
+            }
+        }
 
         return redirect()->route('administrator.setting-master-cuti.index')->with('message-success', 'Data successfully saved !');
     }

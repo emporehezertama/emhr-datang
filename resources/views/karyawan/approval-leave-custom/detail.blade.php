@@ -59,7 +59,7 @@
                                     <input type="text" readonly="true" class="form-control jabatan" value="{{ isset($datas->karyawan->structure->position) ? $datas->karyawan->structure->position->name:''}}{{ isset($datas->karyawan->structure->division) ? '-'. $datas->karyawan->structure->division->name:''}}">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="LeaveType">
                                 <label class="col-md-6">Leave Quota</label>
                                 <label class="col-md-3">Leave Taken</label>
                                 <label class="col-md-3">Leave Balance</label>
@@ -101,13 +101,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-12">Leave Type</label>
+                                <label class="col-md-12">Leave /Permit Description</label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" value="{{ $datas->cuti->description }}" readonly="true">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <input type="text" class="form-control" value="{{ $datas->jam_pulang_cepat }}" readonly="true">
                                 </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" value="{{ $datas->jam_datang_terlambat }}" readonly="true">
+                                </div>
+
                             </div>
 
                             <div class="form-group">
@@ -170,6 +174,7 @@
 <!-- End Page Content -->
 <!-- ============================================================== -->
 @section('footer-script')
+LeaveType
     <script type="text/javascript">
         $("#btn_approved").click(function(){
             bootbox.confirm('Approve the leave form ?', function(result){

@@ -294,7 +294,7 @@
                                         @foreach($data->cuti as $no => $item)
                                         <tr>
                                             <td>{{ $no+1 }}</td>
-                                            <td>{{ isset($item->cuti->jenis_cuti) ? $item->cuti->jenis_cuti : '' }}</td>
+                                            <td>{{ isset($item->cuti->description) ? $item->cuti->description : '' }}</td>
                                             <td>{{ $item->kuota }}</td>
                                             <td>{{ $item->cuti_terpakai }}</td>
                                             <td>{{ $item->sisa_cuti }}</td>
@@ -1021,7 +1021,7 @@
                                 <select class="form-control modal-jenis_cuti">
                                     <option value="">- none -</option>
                                     @foreach(get_master_cuti() as $i)
-                                    <option value="{{ $i->id }}">{{ $i->jenis_cuti }}</option>
+                                    <option value="{{ $i->id }}">{{ $i->description }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -1528,7 +1528,7 @@
                 return false;
             }
 
-            el += '<td>'+ parseInt($('.dependent_table tr').length) + 1  +'</td>';
+            el += '<td>'+ (parseInt($('.dependent_table tr').length) + 1)  +'</td>';
             el +='<td>'+ modal_nama +'</td>';
             el +='<td>'+ modal_hubungan +'</td>';
             el +='<td>'+ modal_tempat_lahir +'</td>';
@@ -1545,8 +1545,8 @@
             el +='<input type="hidden" name="dependent[pekerjaan][]" value="'+ modal_pekerjaan +'" />';
             el +='<input type="hidden" name="dependent[tertanggung][]" value="'+ modal_tertanggung +'" />';
             el += '<td>';
-            el += '<a onclick="delete_row_dependent(this)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
             el += '<a onclick="update_row_dependent(this,\''+ modal_nama +'\',\''+ modal_hubungan +'\',\''+ modal_tempat_lahir +'\',\''+ modal_tanggal_lahir +'\',\''+ modal_tanggal_meninggal +'\',\''+ modal_jenjang_pendidikan +'\',\''+ modal_pekerjaan +'\',\''+ modal_tertanggung +'\')" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>';
+            el += '<a onclick="delete_row_dependent(this)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>';
             el += '</td>';
 
             var act = $("input[name='action_dependent']").val();
@@ -1565,7 +1565,7 @@
 
         function delete_row_dependent(el)
         {
-            if(confirm('Hapus data ini'))
+            if(confirm('Delete this data?'))
             {
                 $(el).parent().parent().remove();
             }

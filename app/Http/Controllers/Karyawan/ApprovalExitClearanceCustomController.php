@@ -114,7 +114,11 @@ class ApprovalExitClearanceCustomController extends Controller
 
     public function detail($id)
     {
-        $count = ExitInterviewAssets::where('exit_interview_id', $id)->whereNull('approval_check')->get();
+        $count = ExitInterviewAssets::where('exit_interview_id', $id)->where(function($table){
+          $table->where('approval_check','<',1)
+          ->orWhereNull('approval_check');  
+        })->get();
+
         $params['data']      = ExitInterviewAssets::where('exit_interview_id', $id)->get();
         $params['check']      = count($count);
 
@@ -129,12 +133,12 @@ class ApprovalExitClearanceCustomController extends Controller
                 $dataAset = ExitInterviewAssets::where('id', $request->asset[$key])->first();
                 $dataAset->approval_check  = isset($request->approval_check[$key]) ? 1 : 0;
                 $dataAset->catatan         = $request->catatan[$key];
-                $dataAset->approval_id     = \Auth::user()->id;
-                $dataAset->date_approved   = date('Y-m-d H:i:s');
-                $dataAset->save();
                 
                 if($dataAset->approval_check == 1)
                 {
+                    $dataAset->approval_id     = \Auth::user()->id;
+                    $dataAset->date_approved   = date('Y-m-d H:i:s');
+
                     $aset = Asset::where('id',$dataAset->asset_id)->first();
                     $aset->user_id = \Auth::user()->id;
                     $aset->handover_date = date('Y-m-d H:i:s');
@@ -155,9 +159,19 @@ class ApprovalExitClearanceCustomController extends Controller
                     $tracking->remark               = $aset->remark;
                     $tracking->save();
                 }
+                $dataAset->save();
             }
         }
-        return redirect()->route('karyawan.approval-clearance-custom.index')->with('message-success', 'Exit Clearance succesfully process');
 
+        $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+        if($approval)
+        {
+            $params['data'] = ExitInterview::where('status','<',3)->orderBy('id', 'DESC')->get();
+          
+        } else
+        {
+            $params['data'] = [];
+        }
+        return redirect()->route('karyawan.approval.clearance-custom.index')->with('message-success', 'Exit Clearance succesfully process')->with($params);
     }
 }

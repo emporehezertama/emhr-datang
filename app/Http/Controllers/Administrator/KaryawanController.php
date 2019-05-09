@@ -31,6 +31,7 @@ use App\Models\UserInventaris;
 use App\Models\StructureOrganizationCustom;
 use App\Models\RequestPaySlip;
 use App\Models\RequestPaySlipItem;
+use App\Models\Cuti;
 use PHPExcel_Worksheet_Drawing;
 
 class KaryawanController extends Controller
@@ -53,6 +54,12 @@ class KaryawanController extends Controller
     public function index()
     {
         $data = User::where('access_id', 2);
+        $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->get();
+        $params['countPos'] = count($notDefinePos);
+        if(isset($_GET["position"]) and $_GET["position"] ==1)
+        {
+             $data = $data->whereNull('structure_organization_custom_id');
+        }
         if(request())
         {
             if(!empty(request()->name))
@@ -364,12 +371,13 @@ class KaryawanController extends Controller
             $user->nama_rekening        = $item->bank_account_name_1;
             $user->nomor_rekening       = $item->bank_account_number;
 
-            $user->sisa_cuti            = $item->cuti_sisa_cuti;
-            $user->cuti_yang_terpakai   = $item->cuti_terpakai;
-            $user->length_of_service    = $item->cuti_length_of_service;
-            $user->cuti_status          = $item->cuti_status;
-            $user->cuti_2018            = $item->cuti_cuti_2018;
-
+            //$user->sisa_cuti            = $item->cuti_sisa_cuti;
+            //$user->cuti_yang_terpakai   = $item->cuti_terpakai;
+            //$user->length_of_service    = $item->cuti_length_of_service;
+            //$user->cuti_status          = $item->cuti_status;
+            //$user->cuti_2018            = $item->cuti_cuti_2018;
+            $user->organisasi_status    = empty($item->organisasi_status) ? $user->organisasi_status : $item->organisasi_status ;
+            /*
             $user->cabang_id            = empty($item->organisasi_branch) ? $user->cabang_id : $item->organisasi_branch;
             $user->branch_type          = strtoupper(empty($item->organisasi_ho_or_branch) ? $user->branch_type : $item->organisasi_ho_or_branch);
             $user->organisasi_status    = empty($item->organisasi_status) ? $user->organisasi_status : $item->organisasi_status ;
@@ -388,9 +396,26 @@ class KaryawanController extends Controller
             {
                 $user->empore_organisasi_staff_id   = $item->empore_organisasi_staff_id;
             }
+            */
 
             $user->save();
 
+            //add user cuti sesuai master cuti
+            $masterCuti = Cuti::where('jenis_cuti','Leave')->get();
+            foreach ($masterCuti as $key => $value) {
+                # code...
+                $userCuti = UserCuti::where('user_id',$user->id)->where('cuti_id',$value->id)->first();
+                if(!$userCuti)
+                {
+                    $c = new UserCuti();
+                    $c->user_id     = $user->id;
+                    $c->cuti_id     = $value->id;
+                    $c->kuota       = $value->kuota;
+                    $c->sisa_cuti   = $value->kuota;
+                    $c->save();
+                }
+            }
+            /*
             if(!empty($item->cuti_cuti_2018) || !empty($item->cuti_terpakai) || !empty($item->cuti_sisa_cuti))
             {
                 // cek exist cuti
@@ -430,6 +455,8 @@ class KaryawanController extends Controller
 
                 $c->save();
             }
+            */
+
 
             // EDUCATION
             foreach(UserEducationTemp::where('user_temp_id', $item->id)->get() as $edu)
@@ -629,6 +656,7 @@ class KaryawanController extends Controller
                     $user->bank_account_name_1= $item[35];
                     $user->bank_account_number= $item[36];
 
+                    /*
                     if(!empty($item[37]))
                     {
                         $direktur = EmporeOrganisasiDirektur::where('name', 'LIKE', '%'. $item[37] .'%')->first();
@@ -682,319 +710,319 @@ class KaryawanController extends Controller
 
                         $user->organisasi_branch    = $cabang->id;
                     }
-
-                    $user->organisasi_ho_or_branch= $item[41];
-                    $user->organisasi_status    = $item[42];
-                    $user->cuti_length_of_service = $item[43];
-                    $user->cuti_cuti_2018       = $item[44];
-                    $user->cuti_terpakai        = $item[45];
-                    $user->cuti_sisa_cuti       = $item[46];
+                    */
+                    //$user->organisasi_ho_or_branch= $item[41];
+                    $user->organisasi_status    = $item[37];
+                    //$user->cuti_length_of_service = $item[38];
+                    //$user->cuti_cuti_2018       = $item[39];
+                    //$user->cuti_terpakai        = $item[40];
+                    //$user->cuti_sisa_cuti       = $item[41];
                     $user->save();
 
                      // SD
-                    if(!empty($item[47])){
+                    if(!empty($item[38])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "SD";
-                        $education->tahun_awal      = $item[47];
-                        $education->tahun_akhir     = $item[48];
-                        $education->fakultas        = strtoupper($item[49]);
-                        $education->kota            = strtoupper($item[50]); // CITY
-                        $education->jurusan         = strtoupper($item[51]); // MAJOR
-                        $education->nilai           = $item[52]; // GPA
-                        $education->certificate     = $item[53];
-                        $education->note            = strtoupper($item[54]);
+                        $education->tahun_awal      = $item[38];
+                        $education->tahun_akhir     = $item[39];
+                        $education->fakultas        = strtoupper($item[40]);
+                        $education->kota            = strtoupper($item[41]); // CITY
+                        $education->jurusan         = strtoupper($item[42]); // MAJOR
+                        $education->nilai           = $item[43]; // GPA
+                        $education->certificate     = $item[44];
+                        $education->note            = strtoupper($item[45]);
                         $education->save();
                     }
 
                      // SMP
-                    if(!empty($item[55])){
+                    if(!empty($item[46])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "SMP";
-                        $education->tahun_awal      = $item[55];
-                        $education->tahun_akhir     = $item[56];
-                        $education->fakultas        = strtoupper($item[57]);
-                        $education->kota            = strtoupper($item[58]); // CITY
-                        $education->jurusan         = strtoupper($item[59]); // MAJOR
-                        $education->nilai           = $item[60]; // GPA
-                        $education->certificate     = $item[61];
-                        $education->note            = strtoupper($item[62]);
+                        $education->tahun_awal      = $item[46];
+                        $education->tahun_akhir     = $item[47];
+                        $education->fakultas        = strtoupper($item[48]);
+                        $education->kota            = strtoupper($item[49]); // CITY
+                        $education->jurusan         = strtoupper($item[50]); // MAJOR
+                        $education->nilai           = $item[51]; // GPA
+                        $education->certificate     = $item[52];
+                        $education->note            = strtoupper($item[53]);
                         $education->save();
                     }
 
                     // SMA/SMK
-                    if(!empty($item[63])){
+                    if(!empty($item[54])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "SMA/SMK";
-                        $education->tahun_awal      = $item[63];
-                        $education->tahun_akhir     = $item[64];
-                        $education->fakultas        = strtoupper($item[65]);
-                        $education->kota            = strtoupper($item[66]); // CITY
-                        $education->jurusan         = strtoupper($item[67]); // MAJOR
-                        $education->nilai           = $item[68]; // GPA
-                        $education->certificate     = $item[69];
-                        $education->note            = strtoupper($item[70]);
+                        $education->tahun_awal      = $item[54];
+                        $education->tahun_akhir     = $item[55];
+                        $education->fakultas        = strtoupper($item[56]);
+                        $education->kota            = strtoupper($item[57]); // CITY
+                        $education->jurusan         = strtoupper($item[58]); // MAJOR
+                        $education->nilai           = $item[59]; // GPA
+                        $education->certificate     = $item[60];
+                        $education->note            = strtoupper($item[61]);
                         $education->save();
                     }
 
                     // D1
-                    if(!empty($item[71])){
+                    if(!empty($item[62])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "D1";
-                        $education->tahun_awal      = $item[71];
-                        $education->tahun_akhir     = $item[72];
-                        $education->fakultas        = strtoupper($item[73]);
-                        $education->kota            = strtoupper($item[74]); // CITY
-                        $education->jurusan         = strtoupper($item[75]); // MAJOR
-                        $education->nilai           = $item[76]; // GPA
-                        $education->certificate     = $item[77];
-                        $education->note            = strtoupper($item[78]);
+                        $education->tahun_awal      = $item[62];
+                        $education->tahun_akhir     = $item[63];
+                        $education->fakultas        = strtoupper($item[64]);
+                        $education->kota            = strtoupper($item[65]); // CITY
+                        $education->jurusan         = strtoupper($item[66]); // MAJOR
+                        $education->nilai           = $item[67]; // GPA
+                        $education->certificate     = $item[68];
+                        $education->note            = strtoupper($item[69]);
                         $education->save();
                     }
 
                     // D2
-                    if(!empty($item[79])){
+                    if(!empty($item[70])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "D2";
-                        $education->tahun_awal      = $item[79];
-                        $education->tahun_akhir     = $item[80];
-                        $education->fakultas        = strtoupper($item[81]);
-                        $education->kota            = strtoupper($item[82]); // CITY
-                        $education->jurusan         = strtoupper($item[83]); // MAJOR
-                        $education->nilai           = $item[84]; // GPA
-                        $education->certificate     = $item[85];
-                        $education->note            = strtoupper($item[86]);
+                        $education->tahun_awal      = $item[70];
+                        $education->tahun_akhir     = $item[71];
+                        $education->fakultas        = strtoupper($item[72]);
+                        $education->kota            = strtoupper($item[73]); // CITY
+                        $education->jurusan         = strtoupper($item[74]); // MAJOR
+                        $education->nilai           = $item[75]; // GPA
+                        $education->certificate     = $item[76];
+                        $education->note            = strtoupper($item[77]);
                         $education->save();
                     }
 
                     // D3
-                    if(!empty($item[87])){
+                    if(!empty($item[78])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "D3";
-                        $education->tahun_awal      = $item[87];
-                        $education->tahun_akhir     = $item[88];
-                        $education->fakultas        = strtoupper($item[89]);
-                        $education->kota            = strtoupper($item[90]); // CITY
-                        $education->jurusan         = strtoupper($item[91]); // MAJOR
-                        $education->nilai           = $item[92]; // GPA
-                        $education->certificate     = $item[93];
-                        $education->note            = strtoupper($item[94]);
+                        $education->tahun_awal      = $item[78];
+                        $education->tahun_akhir     = $item[79];
+                        $education->fakultas        = strtoupper($item[80]);
+                        $education->kota            = strtoupper($item[81]); // CITY
+                        $education->jurusan         = strtoupper($item[82]); // MAJOR
+                        $education->nilai           = $item[83]; // GPA
+                        $education->certificate     = $item[84];
+                        $education->note            = strtoupper($item[85]);
                         $education->save();
                     }
 
                     // S1
-                    if(!empty($item[95])){
+                    if(!empty($item[86])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "S1";
-                        $education->tahun_awal      = $item[95];
-                        $education->tahun_akhir     = $item[96];
-                        $education->fakultas        = strtoupper($item[97]);
-                        $education->kota            = strtoupper($item[98]); // CITY
-                        $education->jurusan         = strtoupper($item[99]); // MAJOR
-                        $education->nilai           = $item[100]; // GPA
-                        $education->certificate     = $item[101];
-                        $education->note            = strtoupper($item[102]);
+                        $education->tahun_awal      = $item[86];
+                        $education->tahun_akhir     = $item[87];
+                        $education->fakultas        = strtoupper($item[88]);
+                        $education->kota            = strtoupper($item[89]); // CITY
+                        $education->jurusan         = strtoupper($item[90]); // MAJOR
+                        $education->nilai           = $item[91]; // GPA
+                        $education->certificate     = $item[92];
+                        $education->note            = strtoupper($item[93]);
                         $education->save();
                     }
 
                     // S2
-                    if(!empty($item[103])){
+                    if(!empty($item[94])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "S2";
-                        $education->tahun_awal      = $item[103];
-                        $education->tahun_akhir     = $item[104];
-                        $education->fakultas        = strtoupper($item[105]);
-                        $education->kota            = strtoupper($item[106]); // CITY
-                        $education->jurusan         = strtoupper($item[107]); // MAJOR
-                        $education->nilai           = $item[108]; // GPA
-                        $education->certificate     = $item[109];
-                        $education->note            = strtoupper($item[110]);
+                        $education->tahun_awal      = $item[94];
+                        $education->tahun_akhir     = $item[95];
+                        $education->fakultas        = strtoupper($item[96]);
+                        $education->kota            = strtoupper($item[97]); // CITY
+                        $education->jurusan         = strtoupper($item[98]); // MAJOR
+                        $education->nilai           = $item[99]; // GPA
+                        $education->certificate     = $item[100];
+                        $education->note            = strtoupper($item[101]);
                         $education->save();
                     }
 
                     // S3
-                    if(!empty($item[111])){
+                    if(!empty($item[102])){
                         $education                  = new UserEducationTemp();
                         $education->user_temp_id    = $user->id;
                         $education->pendidikan      = "S3";
-                        $education->tahun_awal      = $item[111];
-                        $education->tahun_akhir     = $item[112];
-                        $education->fakultas        = strtoupper($item[113]);
-                        $education->kota            = strtoupper($item[114]); // CITY
-                        $education->jurusan         = strtoupper($item[115]); // MAJOR
-                        $education->nilai           = $item[116]; // GPA
-                        $education->certificate     = $item[117];
-                        $education->note            = strtoupper($item[118]);
+                        $education->tahun_awal      = $item[102];
+                        $education->tahun_akhir     = $item[103];
+                        $education->fakultas        = strtoupper($item[104]);
+                        $education->kota            = strtoupper($item[105]); // CITY
+                        $education->jurusan         = strtoupper($item[106]); // MAJOR
+                        $education->nilai           = $item[107]; // GPA
+                        $education->certificate     = $item[108];
+                        $education->note            = strtoupper($item[109]);
                         $education->save();
                     }
                    
                    //AYAH
-                    if(!empty($item[119]))
+                    if(!empty($item[110]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Ayah Kandung";
-                        $family->nama               = strtoupper($item[119]);
-                        $family->gender             = ($item[120]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[121]);
-                        if(!empty($item[122])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[122]);
+                        $family->nama               = strtoupper($item[110]);
+                        $family->gender             = ($item[111]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[112]);
+                        if(!empty($item[113])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[113]);
                         }
 
-                        $family->jenjang_pendidikan = strtoupper($item[123]);
-                        $family->pekerjaan          = strtoupper($item[124]);
+                        $family->jenjang_pendidikan = strtoupper($item[114]);
+                        $family->pekerjaan          = strtoupper($item[115]);
                         $family->save();
                     }
 
                     //IBU
-                    if(!empty($item[125]))
+                    if(!empty($item[116]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Ibu Kandung";
-                        $family->nama               = strtoupper($item[125]);
-                        $family->gender             = ($item[126]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[127]);
+                        $family->nama               = strtoupper($item[116]);
+                        $family->gender             = ($item[117]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[118]);
                         
-                        if(!empty($item[128])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[128]);
+                        if(!empty($item[119])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[119]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[129]);
-                        $family->pekerjaan          = strtoupper($item[130]);
+                        $family->jenjang_pendidikan = strtoupper($item[120]);
+                        $family->pekerjaan          = strtoupper($item[121]);
                         $family->save();
                     }
 
                     //ISTRI
-                    if(!empty($item[131]))
+                    if(!empty($item[122]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Istri";
-                        $family->nama               = strtoupper($item[131]);
-                        $family->gender             = ($item[132]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[133]);
+                        $family->nama               = strtoupper($item[122]);
+                        $family->gender             = ($item[123]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[124]);
                         
-                         if(!empty($item[134])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[134]);
+                         if(!empty($item[125])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[125]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[135]);
-                        $family->pekerjaan          = strtoupper($item[136]);
+                        $family->jenjang_pendidikan = strtoupper($item[126]);
+                        $family->pekerjaan          = strtoupper($item[127]);
                         $family->save();
                     }
 
                     //SUAMI
-                    if(!empty($item[137]))
+                    if(!empty($item[128]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Suami";
-                        $family->nama               = strtoupper($item[137]);
-                        $family->gender             = ($item[138]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[139]);
+                        $family->nama               = strtoupper($item[128]);
+                        $family->gender             = ($item[129]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[130]);
                         
-                        if(!empty($item[140])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[140]);
+                        if(!empty($item[131])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[131]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[141]);
-                        $family->pekerjaan          = strtoupper($item[142]);
+                        $family->jenjang_pendidikan = strtoupper($item[132]);
+                        $family->pekerjaan          = strtoupper($item[133]);
                         $family->save();
                     }
 
                     //Anak 1
-                    if(!empty($item[143]))
+                    if(!empty($item[134]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Anak 1";
-                        $family->nama               = strtoupper($item[143]);
-                        $family->gender             = ($item[144]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[145]);
+                        $family->nama               = strtoupper($item[134]);
+                        $family->gender             = ($item[135]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[136]);
                         
-                        if(!empty($item[146])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[146]);
+                        if(!empty($item[137])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[137]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[147]);
-                        $family->pekerjaan          = strtoupper($item[148]);
+                        $family->jenjang_pendidikan = strtoupper($item[138]);
+                        $family->pekerjaan          = strtoupper($item[139]);
                         $family->save();
                     }
 
                     //Anak 2
-                    if(!empty($item[149]))
+                    if(!empty($item[140]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Anak 2";
-                        $family->nama               = strtoupper($item[149]);
-                        $family->gender             = ($item[150]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[151]);
+                        $family->nama               = strtoupper($item[140]);
+                        $family->gender             = ($item[141]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[142]);
                         
-                        if(!empty($item[152])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[152]);
+                        if(!empty($item[143])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[143]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[153]);
-                        $family->pekerjaan          = strtoupper($item[154]);
+                        $family->jenjang_pendidikan = strtoupper($item[144]);
+                        $family->pekerjaan          = strtoupper($item[145]);
                         $family->save();
                     }
 
                      //Anak 3
-                    if(!empty($item[155]))
+                    if(!empty($item[146]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Anak 3";
-                        $family->nama               = strtoupper($item[155]);
-                        $family->gender             = ($item[156]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[157]);
+                        $family->nama               = strtoupper($item[146]);
+                        $family->gender             = ($item[147]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[148]);
                         
-                        if(!empty($item[158])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[158]);
+                        if(!empty($item[149])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[149]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[159]);
-                        $family->pekerjaan          = strtoupper($item[160]);
+                        $family->jenjang_pendidikan = strtoupper($item[150]);
+                        $family->pekerjaan          = strtoupper($item[151]);
                         $family->save();
                     }
 
 
                     //Anak 4
-                    if(!empty($item[161]))
+                    if(!empty($item[152]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Anak 4";
-                        $family->nama               = strtoupper($item[161]);
-                        $family->gender             = ($item[162]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[163]);
+                        $family->nama               = strtoupper($item[152]);
+                        $family->gender             = ($item[153]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[154]);
                         
-                        if(!empty($item[164])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[164]);
+                        if(!empty($item[155])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[155]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[165]);
-                        $family->pekerjaan          = strtoupper($item[166]);
+                        $family->jenjang_pendidikan = strtoupper($item[156]);
+                        $family->pekerjaan          = strtoupper($item[157]);
                         $family->save();
                     }
 
                     //Anak 5
-                    if(!empty($item[167]))
+                    if(!empty($item[158]))
                     {
                         $family                     = new UserFamilyTemp();
                         $family->user_temp_id       = $user->id;
                         $family->hubungan           = "Anak 5";
-                        $family->nama               = strtoupper($item[167]);
-                        $family->gender             = ($item[168]=='Male' ? 'Laki-laki' : 'Perempuan');
-                        $family->tempat_lahir       = strtoupper($item[169]);
+                        $family->nama               = strtoupper($item[158]);
+                        $family->gender             = ($item[159]=='Male' ? 'Laki-laki' : 'Perempuan');
+                        $family->tempat_lahir       = strtoupper($item[160]);
                         
-                        if(!empty($item[170])){
-                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[170]);
+                        if(!empty($item[161])){
+                        $family->tanggal_lahir      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[161]);
                         }
-                        $family->jenjang_pendidikan = strtoupper($item[171]);
-                        $family->pekerjaan          = strtoupper($item[172]);
+                        $family->jenjang_pendidikan = strtoupper($item[162]);
+                        $family->pekerjaan          = strtoupper($item[163]);
                         $family->save();
                     }   
                 }
@@ -1331,19 +1359,19 @@ class KaryawanController extends Controller
         $data->current_address      = $request->current_address;
         $data->id_address           = $request->id_address;
         $data->access_id            = 2;
-        $data->branch_type          = $request->branch_type;
-        $data->hak_cuti             = 12;
-        $data->cuti_yang_terpakai   = 0;
-        $data->cabang_id            =$request->cabang_id;
+        //$data->branch_type          = $request->branch_type;
+        //$data->hak_cuti             = 12;
+        //$data->cuti_yang_terpakai   = 0;
+        //$data->cabang_id            =$request->cabang_id;
         $data->nama_rekening        = $request->nama_rekening;
         $data->nomor_rekening       = $request->nomor_rekening;
         $data->bank_id              = $request->bank_id;
         $data->ext                  = $request->ext;
-        $data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
+        //$data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
         
-        $data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
-        $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
-        $data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
+        //$data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
+        //$data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
+        //$data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
         $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
 
         if (request()->hasFile('foto'))
@@ -1422,7 +1450,7 @@ class KaryawanController extends Controller
 
         if(isset($request->cuti))
         {
-            // user Education
+            // user Cuti
             foreach($request->cuti['cuti_id'] as $key => $item)
             {
                 $c = new UserCuti();
@@ -1430,6 +1458,21 @@ class KaryawanController extends Controller
                 $c->cuti_id    = $request->cuti['cuti_id'][$key];
                 $c->kuota    = $request->cuti['kuota'][$key];
                 $c->save();
+            }
+        }else{
+            $masterCuti = Cuti::where('jenis_cuti','Leave')->get();
+            foreach ($masterCuti as $key => $value) {
+                # code...
+                $userCuti = UserCuti::where('user_id',$data->id)->where('cuti_id',$value->id)->first();
+                if(!$userCuti)
+                {
+                    $c = new UserCuti();
+                    $c->user_id     = $data->id;
+                    $c->cuti_id     = $value->id;
+                    $c->kuota      = $value->kuota;
+                    $c->sisa_cuti   = $value->kuota;
+                    $c->save();
+                }
             }
         }
 

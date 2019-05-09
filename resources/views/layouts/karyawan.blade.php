@@ -152,8 +152,6 @@
         
         @yield('content')
 
-        @include('layouts.alert')
-
     <!-- sample modal content -->
     <div id="modal_history_approval" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -1106,6 +1104,7 @@
     <link rel="stylesheet" href="{{ asset('admin-css/plugins/bower_components/jquery-ui/jquery-ui.css') }}">
     <script src="{{ asset('admin-css/plugins/bower_components/jquery-ui/jquery-ui.js') }}"></script>
     <script src="{{ asset('js/general.js?v='. date('His')) }}"></script>
+    
     @if(Auth::user()->is_reset_first_password === null)
         <div class="modal fade" id="modal_reset_password" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
             <div class="modal-dialog" role="document">
@@ -1178,7 +1177,10 @@
         });
     </script>
 
+    @yield('js')
+
     @yield('footer-script')
+    @include('layouts.alert')
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
     {{ csrf_field() }}
 </form>

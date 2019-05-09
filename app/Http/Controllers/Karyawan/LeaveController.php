@@ -61,7 +61,6 @@ class LeaveController extends Controller
         if($checkApproval == null)
         {
             return redirect()->route('karyawan.leave.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
-            
         }else{
             $data                   = new CutiKaryawan();
             $data->user_id          = \Auth::user()->id;
@@ -73,7 +72,7 @@ class LeaveController extends Controller
             $data->status           = 1;
 
             $data->jam_pulang_cepat    = $request->jam_pulang_cepat;
-            //$data->jam_datang_terlambat= $request->jam_datang_terlambat;
+            $data->jam_datang_terlambat= $request->jam_datang_terlambat;
             $data->total_cuti           = $request->total_cuti;
             $data->temp_kuota               = $request->temp_kuota;
             $data->temp_cuti_terpakai       = $request->temp_cuti_terpakai;
