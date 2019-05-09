@@ -22,11 +22,11 @@
                     </div>
                     <div class="col-md-2 text-center">
                         <h3 class="btn-info">{{ employee('wfh') }}</h3>
-                        <p>WFH</p>
+                        <p>Permanent</p>
                     </div>
                     <div class="col-md-2 text-center">
                         <h3 class="btn-primary">{{ employee('woh') }}</h3>
-                        <p>WOH</p>
+                        <p>Contract</p>
                     </div>
                     <div class="col-md-2 text-center">
                         <h3 style="background: #7d7d7d;color: white;">{{ employee('on-tour') }}</h3>
@@ -81,8 +81,8 @@
                     <div class="clearfix"></div>
                     <div id="chart-1" style="height: 220px"></div>
                     <p class="text-center">
-                        <label class="text-danger"><i class="fa fa-circle"></i></label> Monthly resigness
-                        <label class="text-info m-l-10"><i class="fa fa-circle"></i></label> Monthly joiness
+                        <label class="text-danger"><i class="fa fa-circle"></i></label> Monthly resignees
+                        <label class="text-info m-l-10"><i class="fa fa-circle"></i></label> Monthly joinees
                     </p>
                 </div>
             </div>
