@@ -76,7 +76,7 @@
             </div>
             <div class="col-sm-6  m-l-0 p-l-0 p-r-0">
                 <div class="white-box" style="margin-bottom:10px;">
-                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joiness and resigness</div>
+                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joinees and resignees</div>
                     <button class="btn btn-xs btn-danger pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i> </button>
                     <div class="clearfix"></div>
                     <div id="chart-1" style="height: 220px"></div>
