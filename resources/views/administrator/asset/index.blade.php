@@ -53,29 +53,19 @@
                         <br />
                     </form>
                     <hr style="margin-top:0;margin-bottom:6px;" />
-                    <ul class="nav customtab nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#asset" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Asset</span></a></li>
-                        <li role="presentation" class=""><a href="#mobil" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Car</span></a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade" id="mobil">
-                            <div class="table-responsive">
-                                <table id="data_table2" class="display nowrap" cellspacing="0" width="100%">
+                    <div class="table-responsive">
+                                <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th width="70" class="text-center">#</th>
                                             <th>ASSET NUMBER</th>
                                             <th>ASSET NAME</th>
                                             <th>ASSET TYPE</th>
-                                            <th>CAR TYPE</th>
-                                            <th>YEAR</th>
-                                            <th>PLAT NUMBER</th>
-                                            <th>CAR STATUS</th>
-                                            <th>SN</th>
-                                            <th>PURCHASE DATE</th>
+                                            <th>SERIAL/PLAT NUMBER</th>
+                                            <th>PURCHASE/RENTAL DATE</th>
                                             <th>ASSET CONDITION</th>
-                                            <th>ASSIGN TO</th>
-                                            <th>EMPLOYEE</th>
+                                            <th>STATUS ASSET</th>
+                                            <th colspan="2">PIC / STATUS</th>
                                             <th>HANDOVER DATE</th>
                                             <th>STATUS</th>
                                             <th>#</th>
@@ -83,74 +73,6 @@
                                     </thead>
                                     <tbody>
                                         @foreach($data as $no => $item)
-                                          @if(!isset($item->user->name))
-                                          {{ delete_asset_item($item->id) }}
-                                          <?php continue; ?>
-                                          @endif  
-                                          
-                                          @if(isset($item->asset_type->name) and strtoupper($item->asset_type->name) =='MOBIL')
-                                            <tr>
-                                                <td class="text-center">{{ $no+1 }}</td>   
-                                                <td>{{ $item->asset_number }}</td>
-                                                <td>{{ $item->asset_name }}</td>
-                                                <td>{{ isset($item->asset_type->name) ? $item->asset_type->name : ''  }}</td>
-                                                <td>{{ $item->tipe_mobil }}</td>
-                                                <td>{{ $item->tahun }}</td>
-                                                <td>{{ $item->no_polisi }}</td>
-                                                <td>{{ $item->status_mobil }}</td>
-                                                <td>{{ $item->asset_sn }}</td>
-                                                <td>{{ format_tanggal($item->purchase_date) }}</td>
-                                                <td>{{ $item->asset_condition }}</td>
-                                                <td>{{ $item->assign_to }}</td>
-                                                <td>{{ isset($item->user->name) ? $item->user->name : '' }}</td>
-                                                <td>{{ $item->handover_date != "" ?  format_tanggal($item->handover_date) : '' }}</td>
-                                                <td>
-                                                    @if($item->status === NULL)
-                                                        <label class="btn btn-warning btn-xs">Waiting Acceptance</label>
-                                                    @endif
-
-                                                    @if($item->status == 1)
-                                                        <label class="btn btn-success btn-xs">Accepted</label>
-                                                    @endif
-
-                                                    @if($item->status == 2)
-                                                        <label class="btn btn-warning btn-xs">Office Inventory</label>
-                                                    @endif                                                  
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('administrator.asset.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
-                                                </td>
-                                            </tr>
-                                          @endif
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <div class="col-m-6 pull-left text-left">Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries</div>
-                                <div class="col-md-6 pull-right text-right">{{ $data->appends($_GET)->render() }}</div><div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane active" id="asset">
-                            <div class="table-responsive">
-                                <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th width="70" class="text-center">#</th>
-                                            <th>ASSET NUMBER</th>
-                                            <th>ASSET NAME</th>
-                                            <th>ASSET TYPE</th>
-                                            <th>SN</th>
-                                            <th>PURCHASE DATE</th>
-                                            <th>ASSET CONDITION</th>
-                                            <th>ASSIGN TO</th>
-                                            <th>EMPLOYEE</th>
-                                            <th>HANDOVER DATE</th>
-                                            <th>STATUS</th>
-                                            <th>#</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($data as $no => $item)
-                                          @if(isset($item->asset_type->name) and strtoupper($item->asset_type->name) !='MOBIL')
                                             <tr>
                                                 <td class="text-center">{{ $no+1 }}</td>   
                                                 <td>{{ $item->asset_number }}</td>
@@ -160,7 +82,13 @@
                                                 <td>{{ format_tanggal($item->purchase_date) }}</td>
                                                 <td>{{ $item->asset_condition }}</td>
                                                 <td>{{ $item->assign_to }}</td>
-                                                <td>{{ isset($item->user->name) ? $item->user->name : '' }}</td>
+                                                <td>{{ isset($item->user->name) ? $item->user->name : '' }}
+                                                </td>
+                                                <td>
+                                                     @if(isset($item->user->resign_date))
+                                                        <label class="btn btn-danger btn-xs" style="text-align: center;" title="{{$item->user->resign_date}}">R</label>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $item->handover_date != "" ?  format_tanggal($item->handover_date) : '' }}</td>
                                                 <td>
                                                     @if($item->handover_date === NULL)
@@ -172,16 +100,13 @@
                                                     @endif                                                  
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('administrator.asset.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
+                                                    <a href="{{ route('administrator.asset.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Edit</button></a>
                                                 </td>
                                             </tr>
-                                          @endif
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
                 </div>
             </div> 
         </div>

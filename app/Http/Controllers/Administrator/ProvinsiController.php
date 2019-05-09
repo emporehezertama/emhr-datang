@@ -39,6 +39,7 @@ class ProvinsiController extends Controller
     {
         $data = new Provinsi();
         $data->nama = $request->nama;
+        $data->type = $request->type;
         $data->save();
         
         return redirect()->route('administrator.provinsi.index')->with('message-success', \Lang::get('setting.provinsi-message-success'));
@@ -52,6 +53,7 @@ class ProvinsiController extends Controller
     {
         $data = Provinsi::where('id_prov', $id)->first();
         $data->nama = $request->nama;
+        $data->type = $request->type;
         $data->save();
         
         return redirect()->route('administrator.provinsi.index')->with('message-success', \Lang::get('setting.provinsi-message-success'));

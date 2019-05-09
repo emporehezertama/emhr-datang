@@ -47,7 +47,19 @@
 <script src="{{ asset('admin-css/plugins/bower_components/styleswitcher/jQuery.style.switcher.js') }}"></script>
 
 <script type="text/javascript">
-  $(document).ready(function(){
+	
+	setTimeout(function(){
+		$(".img-contact").animate({width:'toggle'},350);
+	}, 2000);
+
+	$('.close_contact').on('click', function(){
+		$(".img-contact").animate({
+					    'margin-top' : "-50%",
+					    'opacity' : '0'
+					    },500);;
+	});
+	
+  	$(document).ready(function(){
 
      	$(".toggle-password").click(function() {
 

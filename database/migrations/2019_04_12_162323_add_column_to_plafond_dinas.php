@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableSettingApprovalLevel extends Migration
+class AddColumnToPlafondDinas extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateTableSettingApprovalLevel extends Migration
      */
     public function up()
     {
-        Schema::create('setting_approval_level', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->nullable();
-            $table->timestamps();
+        Schema::table('plafond_dinas', function (Blueprint $table) {
+            //
+            $table->string('plafond_type')->nullable();
+            
         });
     }
 
@@ -27,6 +27,8 @@ class CreateTableSettingApprovalLevel extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setting_approval_level');
+        Schema::table('plafond_dinas', function (Blueprint $table) {
+            //
+        });
     }
 }

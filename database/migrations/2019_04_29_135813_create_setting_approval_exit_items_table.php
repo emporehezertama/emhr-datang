@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableSettingApprovalLeaveItem extends Migration
+class CreateSettingApprovalExitItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateTableSettingApprovalLeaveItem extends Migration
      */
     public function up()
     {
-        Schema::create('setting_approval_leave_item', function (Blueprint $table) {
+        Schema::create('setting_approval_exit_item', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('setting_approval_leave_id')->nullable();
-            $table->integer('setting_approval_level_id')->nullable();
-            $table->integer('structure_organization_custom_id')->nullable();
+            $table->integer('setting_approval_leave_id');
+            $table->integer('setting_approval_level_id');
+            $table->integer('structure_organization_custom_id');
             $table->text('description')->nullable();
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateTableSettingApprovalLeaveItem extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('setting_approval_leave_item');
+        Schema::dropIfExists('setting_approval_exit_item');
     }
 }

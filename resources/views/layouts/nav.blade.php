@@ -20,8 +20,9 @@
                     <li><a href="{{ route('administrator.leaveCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
                     <li><a href="{{ route('administrator.paymentRequestCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
                     <li><a href="{{ route('administrator.overtimeCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.overtime_sheet') </span></a></li>
-
-
+                    <li><a href="{{ route('administrator.trainingCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a></li>
+                    <li><a href="{{ route('administrator.medicalCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a></li>
+                    <li><a href="{{ route('administrator.exitCustom.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a></li>
                 @else
                     <li><a href="{{ route('administrator.cuti.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.leave_or_permit')</span></a></li>
                     <li><a href="{{ route('administrator.payment-request.index') }}"><i class="mdi mdi-clipboard-text fa-fw"></i><span class="hide-menu">@lang('menu.payment_request')</span></a></li>
@@ -78,17 +79,17 @@
         </li>
         <li>
             <a href="javascript:void(0)">
-                <i class="mdi mdi-database fa-fw"></i> <span class="hide-menu">Asset Management<span class="fa arrow"></span></span>
+                <i class="mdi mdi-database fa-fw"></i> <span class="hide-menu">Facilities Management<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
                 <li>
-                    <a href="{{ route('administrator.asset.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset</span></a>
+                    <a href="{{ route('administrator.asset.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Facilities</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.asset-type.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset Type</span></a>
+                    <a href="{{ route('administrator.asset-type.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Facilities Type</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('administrator.asset-tracking.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Asset Tracking</span></a>
+                    <a href="{{ route('administrator.asset-tracking.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Facilities Tracking</span></a>
                 </li>
             </ul>
         </li>
@@ -109,6 +110,15 @@
                 </li>
                 <li>
                     <a href="{{ route('administrator.setting-approvalTraining.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Training Approval</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.setting-approvalMedical.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Medical Approval</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.setting-approvalExit.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Exit Interview</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('administrator.setting-approvalClearance.index') }}"><i class="mdi mdi-database fa-fw"></i><span class="hide-menu">Exit Clearance</span></a>
                 </li>
             </ul>
         </li>
@@ -132,7 +142,6 @@
                 <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Management Form<span class="fa arrow"></span></span>
             </a>
             <ul class="nav nav-second-level">
-               
                     @if(get_setting('struktur_organisasi') == 3)
                      <li>
                         <a href="{{ route('karyawan.leave.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
@@ -143,7 +152,14 @@
                     <li>
                     <a href="{{ route('karyawan.overtime-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Overtime Sheet </span></a>
                     </li>
+                    <li>
                     <a href="{{ route('karyawan.training-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a>
+                    </li>
+                    <li>
+                    <a href="{{ route('karyawan.medical-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a>
+                    </li>
+                    <li>
+                    <a href="{{ route('karyawan.exit-custom.index') }}"><i class="ti-user fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
                     </li>
                     @else
                      <li>
@@ -176,12 +192,16 @@
         @php($leave_menu = count_leave_approval())
         @php($payment_menu = count_payment_request_approval())
         @php($overtime_menu = count_overtime_approval())
-        @if($leave_menu['all'] > 0 || $payment_menu['all'] > 0 || $overtime_menu['all'] > 0)
+        @php($training_menu = count_training_approval())
+        @php($medical_menu = count_medical_approval())
+        @php($exit_menu = count_exit_approval())
+        @php($clearance_menu = count_clearance_approval())
+        @if($leave_menu['all'] > 0 || $payment_menu['all'] > 0 || $overtime_menu['all'] > 0 || $training_menu['all'] > 0 || $medical_menu['all'] > 0 || $exit_menu['all'] > 0 || $clearance_menu['all'] > 0)
         <li style="position: relative;">
                 <a href="javascript:void(0)" class="waves-effect">
                     <i class="mdi mdi-account-check fa-fw"></i> <span class="hide-menu">Management Approval<span class="fa arrow"></span></span>
                 </a>
-                @if($leave_menu['waiting'] > 0 || $payment_menu['waiting'] > 0 || $overtime_menu['waiting'] > 0)    
+                @if($leave_menu['waiting'] > 0 || $payment_menu['waiting'] > 0 || $overtime_menu['waiting'] > 0 || $training_menu['waiting'] > 0 || $medical_menu['waiting'] > 0 || $exit_menu['waiting'] > 0 || $clearance_menu['waiting'] > 0)    
                     <div class="notify" style="position: absolute;top: 61px;right: 10px;"> <span class="heartbit"></span> <span class="point"></span> </div>
                 @endif
 
@@ -201,6 +221,27 @@
                         <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $overtime_menu['waiting'] }}</label>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('karyawan.approval.training-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Business Trip / Training</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $training_menu['waiting'] }}</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('karyawan.approval.medical-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $medical_menu['waiting'] }}</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('karyawan.approval.exit-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Exit Interview</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $exit_menu['waiting'] }}</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('karyawan.approval.clearance-custom.index') }}"><i class="ti-check-box fa-fw"></i><span class="hide-menu">Exit Clearance</span>
+                        <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $clearance_menu['waiting'] }}</label>
+                    </a>
+                </li>
+                
             </ul>
         </li>
         @endif

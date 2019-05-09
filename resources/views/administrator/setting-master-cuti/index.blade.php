@@ -35,6 +35,7 @@
                             <thead>
                                 <tr>
                                     <th width="30" class="text-center">#</th>
+                                    <th>DESCRIPTION</th>
                                     <th>LEAVE TYPE</th>
                                     <th>QUOTA</th>
                                     <th>#</th>
@@ -44,11 +45,11 @@
                                 @foreach($data as $no => $item)
                                     <tr>
                                         <td class="text-center">{{ $no+1 }}</td>
+                                        <td>{{ $item->description }}</td>
                                         <td>{{ $item->jenis_cuti }}</td>
                                         <td>{{ $item->kuota }}</td>
                                         <td>
                                             <a href="{{ route('administrator.setting-master-cuti.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
-
                                             <a href="{{ route('administrator.setting-master-cuti.delete', ['id' => $item->id]) }}" onclick="return confirm('Delete this data?')"> <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                             
                                         </td>

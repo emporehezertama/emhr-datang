@@ -59,8 +59,8 @@
                                     <th>ASSET NUMBER</th>
                                     <th>ASSET NAME</th>
                                     <th>ASSET TYPE</th>
-                                    <th>SN</th>
-                                    <th>PURCHASE DATE</th>
+                                    <th>SERIAL/PLAT NUMBER</th>
+                                    <th>PURCHASE/RENTAL DATE</th>
                                     <th>ASSET CONDITION</th>
                                     <th>ASSIGN TO</th>
                                     <th>EMPLOYEE</th>

@@ -18,7 +18,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.asset.store') }}" method="POST">
+            <form class="form-horizontal" id="form-asset" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.asset.store') }}" method="POST">
                 <div class="col-md-12 p-l-0 p-r-0">
                     <div class="white-box">
                         @if (count($errors) > 0)
@@ -41,13 +41,13 @@
                         <div class="form-group">
                             <label class="col-md-12">Asset Name</label>
                             <div class="col-md-6">
-                               <input type="text" name="asset_name" class="form-control" value="{{ old('asset_name') }}">
+                               <input type="text" name="asset_name" class="form-control" value="{{ old('asset_name') }}" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-12">Asset Type</label>
                             <div class="col-md-6">
-                                <select name="asset_type_id" class="form-control">
+                                <select name="asset_type_id" class="form-control" required>
                                     <option value=""> - none - </option>
                                     @foreach($asset_type as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -55,46 +55,27 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="asset-mobil col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-12">Car Type</label>
-                                <div class="col-md-12">
-                                    <input type="text" name="tipe_mobil" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12">Year</label>
-                                <div class="col-md-12">
-                                    <input type="text" name="tahun" class="form-control">
-                                </div>
-                           </div>
-                           <div class="form-group">
-                                <label class="col-md-12">Plat Number</label>
-                                <div class="col-md-12">
-                                    <input type="text" name="no_polisi" class="form-control">
-                                </div>
-                           </div>
-                           <div class="form-group">
-                                <label class="col-md-12">Car Status</label>
-                                <div class="col-md-12">
-                                    <select class="form-control" name="status_mobil">
+                        <div class="form-group asset-ow">
+                            <label class="col-md-12">Asset Ownership</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="status_mobil" required>
                                         <option value="">- none -</option>
                                         <option value="Rental">Rental</option>
                                         <option value="Perusahaan">Company Inventory</option>
-                                    </select>
-                                </div>
-                           </div>
+                                </select>
+                            </div>
                         </div>
+
                         <div class="form-group asset-sn">
-                            <label class="col-md-12">Asset S/N or Code</label>
+                            <label class="col-md-12">Serial / Plat Number</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="asset_sn" />
+                                <input type="text" class="form-control" name="asset_sn" required/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Purchase Date</label>
+                            <label class="col-md-12">Purchase Date / Rental Date</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control datepicker" name="purchase_date" />
+                                <input type="text" class="form-control datepicker" name="purchase_date" required/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -104,15 +85,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Rental Date</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control datepicker" name="rental_date" />
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-md-12">Asset Condition</label>
                             <div class="col-md-6">
-                                <select class="form-control" name="asset_condition">
+                                <select class="form-control" name="asset_condition" required>
                                     <option value=""> - none - </option>
                                     <option value="Good">Good</option>
                                     <option value="Malfunction">Malfunction</option>
@@ -121,20 +96,19 @@
                             </div>
                         </div> 
                         <div class="form-group">
-                            <label class="col-md-12">Assign To</label>
+                            <label class="col-md-12">Status</label>
                             <div class="col-md-6">
-                                <select class="form-control" name="assign_to">
+                                <select class="form-control" name="assign_to" required>
                                     <option value=""> - none - </option>
-                                    <option>Employee</option>
-                                    <option>Office Facility</option>
-                                    <option>Office Inventory/idle</option>
+                                    <option>Assign To Employee</option>
+                                    <option>Office Inventory/Idle</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-12">Employee/PIC Name </label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control autocomplete-karyawan">
+                                <input type="text" class="form-control autocomplete-karyawan" required>
                                 <input type="hidden" name="user_id" class="form-control" />
                             </div>
                         </div>
@@ -142,7 +116,7 @@
                         <br />
                         <div class="col-md-12">
                             <a href="{{ route('administrator.asset.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
-                            <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Save and Send</button>
+                            <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btn_submit_form"><i class="fa fa-save"></i> Save and Send</button>
                             <br style="clear: both;" />
                         </div>
                         <div class="clearfix"></div>
@@ -169,20 +143,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-    $("select[name='asset_type_id']").on('change', function(){
-        var val = $("select[name='asset_type_id'] option:selected").text();
 
-        if(val == 'Mobil')
-        {
-            $('.asset-mobil').slideDown("slow");
-            $(".asset-sn").hide();
-        }
-        else
-        {
-            $('.asset-mobil').slideUp("slow");
-            $(".asset-sn").show();
-        }
-    });
     jQuery('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd',
     });
@@ -208,6 +169,8 @@
     }).on('focus', function () {
             $(this).autocomplete("search", "");
     });
+
+    
 </script>
 @endsection
 @endsection

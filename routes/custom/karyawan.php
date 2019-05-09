@@ -36,7 +36,30 @@ Route::group(['prefix' => 'karyawan', 'namespace'=>'Karyawan', 'middleware' => [
 	Route::post('approval-overtime-custom/prosesClaim',  'ApprovalOvertimeCustomController@prosesClaim')->name('karyawan.approval.overtime-custom.prosesClaim');
 
 	Route::resource('training-custom', 'TrainingCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	Route::get('training-custom/claim/{id}',  'TrainingCustomController@claim')->name('karyawan.training-custom.claim');
+	Route::post('training-custom/prosesclaim',  'TrainingCustomController@prosesclaim')->name('karyawan.training-custom.prosesclaim');
+	Route::get('approval-training-custom',  'ApprovalTrainingCustomController@index')->name('karyawan.approval.training-custom.index');
+	Route::get('approval-training-custom/detail/{id}',  'ApprovalTrainingCustomController@detail')->name('karyawan.approval.training-custom.detail');
+	Route::post('approval-training-custom/proses',  'ApprovalTrainingCustomController@proses')->name('karyawan.approval.training-custom.proses');
+	Route::get('approval-training-custom/claim/{id}',  'ApprovalTrainingCustomController@claim')->name('karyawan.approval.training-custom.claim');
+	Route::post('approval-training-custom/prosesClaim',  'ApprovalTrainingCustomController@prosesClaim')->name('karyawan.approval.training-custom.prosesClaim');
 
+	Route::resource('medical-custom', 'MedicalCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	Route::get('approval-medical-custom',  'ApprovalMedicalCustomController@index')->name('karyawan.approval.medical-custom.index');
+	Route::get('approval-medical-custom/detail/{id}',  'ApprovalMedicalCustomController@detail')->name('karyawan.approval.medical-custom.detail');
+	Route::post('approval-medical-custom/proses',  'ApprovalMedicalCustomController@proses')->name('karyawan.approval.medical-custom.proses');
+
+	Route::resource('exit-custom', 'ExitInterviewCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'karyawan']);
+	Route::get('exit-custom/clearance/{id}',  'ExitInterviewCustomController@clearance')->name('karyawan.exit-custom.clearance');
+	Route::post('exit-custom/prosesclearance',  'ExitInterviewCustomController@prosesclearance')->name('karyawan.exit-custom.prosesclearance');
+	Route::get('approval-exit-custom',  'ApprovalExitInterviewCustomController@index')->name('karyawan.approval.exit-custom.index');
+	Route::get('approval-exit-custom/detail/{id}',  'ApprovalExitInterviewCustomController@detail')->name('karyawan.approval.exit-custom.detail');
+	Route::post('approval-exit-custom/proses',  'ApprovalExitInterviewCustomController@proses')->name('karyawan.approval.exit-custom.proses');
+
+	Route::get('approval-clearance-custom', 'ApprovalExitClearanceCustomController@index')->name('karyawan.approval.clearance-custom.index');
+	Route::get('approval-clearance-custom/detail/{id}', 'ApprovalExitClearanceCustomController@detail')->name('karyawan.approval.clearance-custom.detail');
+	Route::post('approval-clearance-custom/proses', 'ApprovalExitClearanceCustomController@proses')->name('karyawan.approval.clearance-custom.proses');
+	
 
 	Route::get('approval-cuti',  'ApprovalCutiController@index')->name('karyawan.approval.cuti.index');
 	Route::get('approval-cuti/detail/{id}',  'ApprovalCutiController@detail')->name('karyawan.approval.cuti.detail');

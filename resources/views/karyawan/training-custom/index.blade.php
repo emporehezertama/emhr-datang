@@ -51,47 +51,33 @@
                                 @foreach($data as $no => $item)
                                     <tr>
                                         <td class="text-center">{{ $no+1 }}</td>   
-                                        <td>{{ $item->jenis_training }}</td>
+                                        <td>{{ isset($item->training_type)? $item->training_type->name:''}}</td>
                                         <td>{{ $item->topik_kegiatan }}</td>
                                         <td>{{ date('d F Y', strtotime($item->tanggal_kegiatan_start)) }} - {{ date('d F Y', strtotime($item->tanggal_kegiatan_end)) }}</td>
                                         <td>
-                                            <a onclick="status_approval_training({{ $item->id }})"> 
+                                            <a onclick="detail_approval_trainingCustom({{ $item->id }})"> 
                                             {!! status_cuti($item->status) !!}
                                             </a>
                                         </td>
                                         <td>
-                                            <a onclick="status_approval_actual_bill({{ $item->id }})"> 
-                                                @if($item->status_actual_bill == 1)
-                                                <label class="btn btn-warning btn-xs"><i class="fa fa-history"></i> Save as Draft</label>
-                                                @endif
-
-                                                @if($item->status_actual_bill == 2)
-                                                <label class="btn btn-warning btn-xs"><i class="fa fa-history"></i> Waiting Approval</label>
-                                                @endif
-
-                                                @if($item->status_actual_bill == 3)
-                                                <label class="btn btn-success btn-xs"><i class="fa fa-check"></i> Actual Bill di Approve</label>
-                                                @endif
-
-                                                @if($item->status_actual_bill == 4)
-                                                <label class="btn btn-danger btn-xs"><i class="fa fa-close"></i> Actual Bill di Tolak</label>
-                                                @endif
+                                            <a href="javascript:;" onclick="detail_approval_trainingClaimCustom({{ $item->id }})"> 
+                                                {!! status_cuti($item->status_actual_bill) !!}
                                             </a>
+                                        </td>
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('karyawan.training-custom.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
+                                            <a href="{{ route('karyawan.training-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                         </td>
                                         <td>
                                             @if($item->status == 2)
-                                                @if(empty($item->status_actual_bill) or $item->status_actual_bill == 1)
-                                                    <a href="{{ route('karyawan.training-custom.biaya', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-book"></i> Reimbursement</a>
+                                                @if(empty($item->status_actual_bill) or $item->status_actual_bill < 1)
+                                                    <a href="{{ route('karyawan.training-custom.claim', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-book"></i> Reimbursement</a>
                                                 @else
-                                                    @if($item->status_actual_bill >= 2)
-                                                    <a href="{{ route('karyawan.training-custom.biaya', $item->id) }}">
+                                                    @if($item->status_actual_bill >= 1)
+                                                    <a href="{{ route('karyawan.training-custom.claim', $item->id) }}">
                                                     <label class="btn btn-info btn-xs"><i class="fa fa-history"></i> Detail Actual Bill</label></a>
                                                     @endif
-
                                                 @endif
                                             @endif
                                         </td>

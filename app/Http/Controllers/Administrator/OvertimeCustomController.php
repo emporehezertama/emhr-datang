@@ -152,6 +152,7 @@ class OvertimeCustomController extends Controller
             }
             $total_loop_header[] = $total;
         }
+        
         foreach($data as $no =>  $item)
         {
             $params[$no]['NO']                      = $no+1;

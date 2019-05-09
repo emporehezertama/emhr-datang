@@ -219,7 +219,9 @@
 </div>
 @section('footer-script')
 <script type="text/javascript">
-    var var_edit_bpjs = 0;
+    var var_edit_bpjs_ketenagakerjaan_employee       = 0;
+    var var_edit_bpjs_kesehatan_employee             = 0;
+    var var_edit_bpjs_pensiun_employee               = 0;
     
     function form_submit()
     {
@@ -233,10 +235,18 @@
     }
 
     // start custom
-    $("input[name='bpjs_ketenagakerjaan_employee'], input[name='bpjs_kesehatan_employee'], input[name='bpjs_pensiun_employee']").on('input', function(){
-        var_edit_bpjs = 1;
+    $("input[name='bpjs_ketenagakerjaan_employee']").on('input', function(){
+        var_edit_bpjs_ketenagakerjaan_employee = 1;
         calculate();
     }); 
+    $("input[name='bpjs_kesehatan_employee']").on('input', function(){
+        var_edit_bpjs_kesehatan_employee = 1;
+        calculate();
+    });
+    $("input[name='bpjs_pensiun_employee']").on('input', function(){
+        var_edit_bpjs_pensiun_employee = 1;
+        calculate();
+    });
     // end custom
 
     function init_calculate()
@@ -359,7 +369,9 @@
                 bpjs_ketenagakerjaan_employee: $('.bpjs_ketenagakerjaan_employee').val(),
                 bpjs_kesehatan_employee: $('.bpjs_kesehatan_employee').val(),
                 bpjs_pensiun_employee: $('.bpjs_pensiun_employee').val(),
-                edit_bpjs : var_edit_bpjs,
+                edit_bpjs_ketenagakerjaan_employee : var_edit_bpjs_ketenagakerjaan_employee,
+                edit_bpjs_kesehatan_employee : var_edit_bpjs_kesehatan_employee,
+                edit_edit_bpjs_pensiun_employee : var_edit_bpjs_pensiun_employee,
                 // end custom
                 
                 '_token' : $("meta[name='csrf-token']").attr('content')
@@ -393,7 +405,9 @@
                 $(".total_earnings").html(numberWithDot(sum_earnings));
                 $(".total_deductions").html(numberWithDot(sum_deductions));
                 
-                var_edit_bpjs = 0;
+                //var_edit_bpjs_ketenagakerjaan_employee  = 0;
+                //var_edit_bpjs_kesehatan_employee        = 0;
+                //var_edit_bpjs_pensiun_employee          = 0;
             }
         })
     }

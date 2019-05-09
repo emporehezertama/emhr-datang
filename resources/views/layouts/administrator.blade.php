@@ -870,6 +870,184 @@
             $("#modal_history_approval").modal('show');
         }
 
+        function detail_approval_training_custom(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-history-approval-training-custom') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = "";
+
+                    $.each(data.history, function(key,value){
+                    el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+
+                    if(value.is_approved == 1)
+                    {
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+                    }
+                    else if(value.is_approved == 0)
+                    {
+                        el += '<div class="sl-left bg-danger" title="Denied"> <i class="fa fa-close"></i></div>';
+                    }
+                    else if(value.is_approved === null)
+                    {
+                        el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
+                    }
+                                    
+
+                    el += '<div class="sl-right">'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
+                                        '<div>'+value.user+'<br></div>'+
+                                        '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                    });
+                    $("#modal_content_history_approval").html(el);
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }
+        function detail_approval_trainingClaim_custom(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-history-approval-training-claim-custom') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = "";
+
+                    $.each(data.history, function(key,value){
+                    el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+
+                    if(value.is_approved == 1)
+                    {
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+                    }
+                    else if(value.is_approved == 0)
+                    {
+                        el += '<div class="sl-left bg-danger" title="Denied"> <i class="fa fa-close"></i></div>';
+                    }
+                    else if(value.is_approved === null)
+                    {
+                        el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
+                    }
+                    el += '<div class="sl-right">'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
+                                        '<div>'+value.user+'<br></div>'+
+                                        '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                    });
+                    $("#modal_content_history_approval").html(el);
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }
+
+        function detail_approval_medical_custom(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-history-approval-medical-custom') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = "";
+
+                    $.each(data.history, function(key,value){
+                    el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+
+                    if(value.is_approved == 1)
+                    {
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+                    }
+                    else if(value.is_approved == 0)
+                    {
+                        el += '<div class="sl-left bg-danger" title="Denied"> <i class="fa fa-close"></i></div>';
+                    }
+                    else if(value.is_approved === null)
+                    {
+                        el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
+                    }
+                                    
+
+                    el += '<div class="sl-right">'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
+                                        '<div>'+value.user+'<br></div>'+
+                                        '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                    });
+                    $("#modal_content_history_approval").html(el);
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }
+
+        function detail_approval_exit_custom(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-history-approval-exit-custom') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = "";
+
+                    $.each(data.history, function(key,value){
+                    el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+
+                    if(value.is_approved == 1)
+                    {
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+                    }
+                    else if(value.is_approved == 0)
+                    {
+                        el += '<div class="sl-left bg-danger" title="Denied"> <i class="fa fa-close"></i></div>';
+                    }
+                    else if(value.is_approved === null)
+                    {
+                        el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
+                    }
+                                    
+
+                    el += '<div class="sl-right">'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
+                                        '<div>'+value.user+'<br></div>'+
+                                        '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                    });
+                    $("#modal_content_history_approval").html(el);
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }
+
+
         function detail_setting_approval_leave_custom(id)
         {
              $.ajax({
@@ -990,6 +1168,67 @@
             $("#modal_history_approval").modal('show');
         }
 
+        function detail_setting_approval_medical_custom(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-detail-setting-approval-medical-item') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = "";
+
+                    $.each(data.data, function(key,value){
+                         el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+
+                        el += '<div class="sl-right">'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                        $("#modal_content_history_approval").html(el);
+                });
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }
+
+        function detail_setting_approval_exit_custom(id)
+        {
+             $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-detail-setting-approval-exit-item') }}',
+                data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = "";
+
+                    $.each(data.data, function(key,value){
+                         el += '<div class="panel-body">'+
+                            '<div class="steamline">'+
+                                '<div class="sl-item">';
+                        el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
+
+                        el += '<div class="sl-right">'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                        $("#modal_content_history_approval").html(el);
+                });
+                }
+            });
+
+            $("#modal_history_approval").modal('show');
+        }
+
+
                
     </script>
 
@@ -1015,7 +1254,6 @@
     <script src="{{ asset('admin-css/plugins/bower_components/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/morrisjs/morris.js') }}"></script>
     <!-- chartist chart -->
-    <script src="{{ asset('admin-css/plugins/bower_components/chartist-js/dist/chartist.min.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script>
     <!-- Calendar JavaScript -->
     <script src="{{ asset('admin-css/plugins/bower_components/moment/moment.js') }}"></script>

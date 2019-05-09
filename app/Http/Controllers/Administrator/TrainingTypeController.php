@@ -4,9 +4,19 @@ namespace App\Http\Controllers\Administrator;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\TrainingType;
 
 class TrainingTypeController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +25,9 @@ class TrainingTypeController extends Controller
     public function index()
     {
         //
+        $params['data'] = TrainingType::all();
+
+        return view('administrator.training-type.index')->with($params);
     }
 
     /**
@@ -25,6 +38,7 @@ class TrainingTypeController extends Controller
     public function create()
     {
         //
+        return view('administrator.training-type.create');
     }
 
     /**
@@ -36,6 +50,12 @@ class TrainingTypeController extends Controller
     public function store(Request $request)
     {
         //
+        $data                  = new TrainingType();
+        $data->name            = $request->name;
+        $data->description     = $request->description;             
+        $data->save();
+
+        return redirect()->route('administrator.training-type.index')->with('message-success', 'Data successfully saved!');
     }
 
     /**
@@ -58,6 +78,8 @@ class TrainingTypeController extends Controller
     public function edit($id)
     {
         //
+        $params['data']         = TrainingType::where('id', $id)->first();
+        return view('administrator.training-type.edit')->with($params);
     }
 
     /**
@@ -70,6 +92,12 @@ class TrainingTypeController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $data                  = TrainingType::where('id', $id)->first();
+        $data->name            = $request->name;
+        $data->description     = $request->description;   
+        $data->save();
+
+        return redirect()->route('administrator.training-type.index')->with('message-success', 'Data successfully saved');
     }
 
     /**
@@ -81,5 +109,9 @@ class TrainingTypeController extends Controller
     public function destroy($id)
     {
         //
+        $data = TrainingType::where('id', $id)->first();
+        $data->delete();
+
+        return redirect()->route('administrator.training-type.index')->with('message-sucess', 'Data successfully deleted');
     }
 }

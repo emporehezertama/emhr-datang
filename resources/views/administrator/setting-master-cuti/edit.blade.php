@@ -48,9 +48,20 @@
                         {{ csrf_field() }}
                         
                         <div class="form-group">
-                            <label class="col-md-12">Leave Type</label>
+                            <label class="col-md-12">Type</label>
                             <div class="col-md-6">
-                               <input type="text" name="jenis_cuti" class="form-control" value="{{ $data->jenis_cuti }}">
+                               <select class="form-control" name="jenis_cuti">
+                                    <option value="">- Select - </option>
+                                    @foreach(['Permit', 'Leave'] as $item)
+                                    <option {{ $data->jenis_cuti == $item ? 'selected' : '' }}>{{ $item }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Description</label>
+                            <div class="col-md-6">
+                               <input type="text" name="description" class="form-control" value="{{ $data->description }}">
                             </div>
                         </div>
                         <div class="form-group">

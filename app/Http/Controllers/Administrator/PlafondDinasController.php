@@ -22,7 +22,7 @@ class PlafondDinasController extends Controller
      */
     public function index()
     {
-        $params['data']             = PlafondDinas::all();
+        $params['data']             = PlafondDinas::orderby('organisasi_position_id','DESC')->get();
         $params['data_luarnegeri']  = PlafondDinasLuarNegeri::all();
 
         return view('administrator.plafond-dinas.index')->with($params);
@@ -34,7 +34,8 @@ class PlafondDinasController extends Controller
      */
     public function create()
     {
-        return view('administrator.plafond-dinas.create');
+        $params['position'] = OrganisasiPosition::all();
+        return view('administrator.plafond-dinas.create')->with($params);
     }
 
     /**
@@ -45,7 +46,7 @@ class PlafondDinasController extends Controller
     public function edit($id)
     {
         $params['data'] = PlafondDinas::where('id', $id)->first();
-
+        $params['position'] = OrganisasiPosition::all();
         return view('administrator.plafond-dinas.edit')->with($params);
     }
 
@@ -107,7 +108,7 @@ class PlafondDinasController extends Controller
 	        }
         }
 
-        return redirect()->route('administrator.plafond-dinas.index')->with('messages-success', 'Data berhasil di import');
+        return redirect()->route('administrator.plafond-dinas.index')->with('messages-success', 'Data successfully import');
     }
 
     /**
@@ -118,16 +119,19 @@ class PlafondDinasController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request);
+
         $data = PlafondDinas::where('id', $id)->first();
-        $data->hotel                        = $request->hotel;
+        //$data->hotel                        = $request->hotel;
         $data->tunjangan_makanan            = $request->tunjangan_makanan;
         $data->tunjangan_harian             = $request->tunjangan_harian;
         //$data->pesawat                      = $request->pesawat;
         $data->keterangan                   = $request->keterangan;
-        $data->organisasi_position_text     = $request->organisasi_position_id;
+        $data->organisasi_position_id       = $request->organisasi_position_id;
+        $data->plafond_type                 = $request->plafond_type;
         $data->save();
 
-        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully saved');
     }
 
     /**
@@ -140,7 +144,7 @@ class PlafondDinasController extends Controller
         $data = PlafondDinas::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data berhasi di hapus');
+        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully deleted');
     } 
 
     /**
@@ -152,14 +156,82 @@ class PlafondDinasController extends Controller
     public function store(Request $request)
     {
         $data = new PlafondDinas();
-        $data->hotel                        = $request->hotel;
         $data->tunjangan_makanan            = $request->tunjangan_makanan;
         $data->tunjangan_harian             = $request->tunjangan_harian;
         //$data->pesawat                      = $request->pesawat;
         $data->keterangan                   = $request->keterangan;
-        $data->organisasi_position_text     = $request->organisasi_position_id;
+        $data->organisasi_position_id       = $request->organisasi_position_id;
+        $data->plafond_type                 = $request->plafond_type;
+        
         $data->save();
 
-        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully saved');
     }
+     /**
+     * [create description]
+     * @return [type] [description]
+     */
+    public function createLuarNegeri()
+    {
+        $params['position'] = OrganisasiPosition::all();
+        return view('administrator.plafond-dinas.createLuar')->with($params);
+    }
+    /**
+     * [update description]
+     * @param  Request $request [description]
+     * @param  [type]  $id      [description]
+     * @return [type]           [description]
+     */
+    public function storeLuarNegeri(Request $request)
+    {
+        $data = new PlafondDinasLuarNegeri();
+        $data->tunjangan_makanan            = $request->tunjangan_makanan;
+        $data->tunjangan_harian             = $request->tunjangan_harian;
+        //$data->pesawat                      = $request->pesawat;
+        $data->keterangan                   = $request->keterangan;
+        $data->organisasi_position_id       = $request->organisasi_position_id;
+        //$data->plafond_type                 = $request->plafond_type;
+        
+        $data->save();
+
+        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully saved');
+    }
+
+    public function editLuarNegeri($id)
+    {
+        $params['data'] = PlafondDinasLuarNegeri::where('id', $id)->first();
+        $params['position'] = OrganisasiPosition::all();
+        return view('administrator.plafond-dinas.editLuar')->with($params);
+    }
+
+    public function updateLuarNegeri(Request $request, $id)
+    {
+        //dd($request);
+
+        $data = PlafondDinasLuarNegeri::where('id', $id)->first();
+        //$data->hotel                        = $request->hotel;
+        $data->tunjangan_makanan            = $request->tunjangan_makanan;
+        $data->tunjangan_harian             = $request->tunjangan_harian;
+        //$data->pesawat                      = $request->pesawat;
+        $data->keterangan                   = $request->keterangan;
+        $data->organisasi_position_id       = $request->organisasi_position_id;
+        //$data->plafond_type                 = $request->plafond_type;
+        $data->save();
+
+        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully saved');
+    }
+
+     /**
+     * [desctroy description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
+    public function deleteLuarNegeri($id)
+    {
+        $data = PlafondDinasLuarNegeri::where('id', $id)->first();
+        $data->delete();
+
+        return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully deleted');
+    } 
+
 }

@@ -202,7 +202,7 @@ class PaymentRequestCustomController extends Controller
             $params[$no]['TOTAL AMOUNT APPROVED']  = $total_amount_approved;
 
             // SET HEADER LEVEL APPROVAL
-            $level_header = get_level_header();
+            $level_header = get_payment_header();
             for($a=0; $a < $level_header  ; $a++)
             {
                 $params[$no]['APPROVAL STATUS '. ($a+1)]           = '-';

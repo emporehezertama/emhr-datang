@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableHistoryApprovalLearve extends Migration
+class CreateHistoryApprovalExitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateTableHistoryApprovalLearve extends Migration
      */
     public function up()
     {
-        Schema::create('history_approval_leave', function (Blueprint $table) {
+        Schema::create('history_approval_exit', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cuti_karyawan_id')->nullable();
-            $table->integer('structure_organization_custom_id')->nullable();
-            $table->integer('setting_approval_level_id')->nullable();
+            $table->integer('exit_interview_id');
+            $table->integer('structure_organization_custom_id');
+            $table->integer('setting_approval_level_id');
             $table->integer('approval_id')->nullable();
-            $table->boolean('is_approved')->nullable();
-            $table->date('date_approved')->nullable();
+            $table->integer('is_approved')->nullable();
+            $table->datetime('date_approved')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ class CreateTableHistoryApprovalLearve extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('history_approval_leave');
+        Schema::dropIfExists('history_approval_exit');
     }
 }

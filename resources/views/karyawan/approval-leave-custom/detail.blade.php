@@ -83,8 +83,6 @@
                                     <textarea class="form-control note" name="note" placeholder="Note"></textarea>
                                 </div>
                                 @endif
-
-                                
                             </div>
                             <div class="clearfix"></div>
                             <br />
@@ -104,8 +102,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-md-12">Leave Type</label>
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control" value="{{ $datas->cuti->jenis_cuti }}" readonly="true">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" value="{{ $datas->cuti->description }}" readonly="true">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" value="{{ $datas->jam_pulang_cepat }}" readonly="true">
                                 </div>
                             </div>
 

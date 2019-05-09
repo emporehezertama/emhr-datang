@@ -62,7 +62,7 @@ class AssetTypeController extends Controller
         $data->name     = $request->name; 
         $data->save();
 
-        return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data saved successfully');
     }   
 
     /**
@@ -75,7 +75,7 @@ class AssetTypeController extends Controller
         $data = AssetType::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.asset-type.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.asset-type.index')->with('message-sucess', 'Data deleted successfully');
     } 
 
     /**
@@ -89,6 +89,6 @@ class AssetTypeController extends Controller
         $data->name     = $request->name; 
         $data->save();
 
-        return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data saved successfully !');
     }
 }

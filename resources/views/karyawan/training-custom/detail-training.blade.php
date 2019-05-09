@@ -27,7 +27,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" id="form-training" enctype="multipart/form-data" action="{{ route('karyawan.approval.training-atasan.proses') }}" method="POST">
+            <form class="form-horizontal" id="form-training" enctype="multipart/form-data" action="#" method="POST">
                 <div class="col-md-12">
                     <div class="white-box">
                         <h3 class="box-title m-b-0">Form Business Trip</h3>
@@ -59,24 +59,9 @@
                                 <hr />
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-md-6">Business Trip Type</label>
-                                        <label class="col-md-6 select-cabang" style="display: none;">Branch Location</label>
-                                        <div class="clearfix"></div>
-                                        <div class="col-md-6">
-                                            <select name="jenis_training" readonly class="form-control">
-                                                <option value="">Choose Business Trip Type</option>
-                                                @foreach(jenis_perjalanan_dinas() as $item)
-                                                <option {{ $item == $data->jenis_training ? 'selected' : '' }}>{{ $item }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 select-cabang" style="{{  $data->jenis_training != 'Branch Visit' ? 'display: none;' : '' }}">
-                                            <select class="form-control" name="cabang_id" readonly>
-                                                <option value="">Choose Branch Location </option>
-                                                @foreach(get_cabang() as $item)
-                                                <option {{ $item->id == $data->cabang_id ? 'selected' : '' }}>{{ $item->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <label class="col-md-12">Business Trip Type</label>
+                                        <div class="col-md-12">
+                                            <input type="text" readonly="true" class="form-control" value="{{ isset($data->training_type)? $data->training_type->name:'' }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -159,7 +144,8 @@
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> / </div>
                                     <div class="col-md-1">
-                                        <input type="text" class="form-control time_picker" value="{{ $data->waktu_berangkat }}" placeholder="Time" readonly name="waktu_berangkat" />
+                                        <input type="text" class="form-control time_picker" value="
+                                        {{ date("H:i",strtotime($data->waktu_berangkat))}}" placeholder="Time" readonly name="waktu_berangkat" />
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> - </div>
 
@@ -167,7 +153,7 @@
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> / </div>
                                      <div class="col-md-1">
-                                        <input type="text" class="form-control time_picker" value="{{ $data->waktu_pulang }}" placeholder="Time" readonly name="waktu_pulang" />
+                                        <input type="text" class="form-control time_picker" value="{{ date("H:i",strtotime($data->waktu_pulang))}}" placeholder="Time" readonly name="waktu_pulang" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -232,16 +218,26 @@
                                         <input type="text" class="form-control" value="{{ $data->note }}" readonly="true" />
                                     </div>
                                 </div>
+                                @foreach($data->historyApproval as $key => $item)
+                                    <div class="form-group">
+                                        <label class="col-md-12">Note Approval {{$item->setting_approval_level_id}}</label>
+                                        <div class="col-md-8">
+                                            <input type="text" readonly="true" class="form-control note" value="{{ $item->note }}">
+                                        </div>
+                                    </div>
+                                @endforeach
                                 
                             </div>
                         </div>
-
+                        <div class="clearfix"></div>
+                        <br/>
+                        
                         <input type="hidden" name="status" value="0" />
                         <input type="hidden" name="id" value="{{ $data->id }}">
                         
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="{{ route('karyawan.training.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
+                                <a href="{{ route('karyawan.training-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Back</a>
                                 <br style="clear: both;" />
                             </div>
                         </div>

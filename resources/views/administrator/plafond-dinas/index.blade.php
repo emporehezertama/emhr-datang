@@ -20,10 +20,11 @@
                 <h4 class="page-title">Dashboard</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <!--
                 <a href="{{ route('administrator.plafond-dinas.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD BUSINESS TRIP ALLOWANCE</a>
                 
                 <a class="btn btn-info btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light" id="add-import-karyawan"> <i class="fa fa-upload"></i> IMPORT</a>
-
+-->
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Business Trip Allowance</li>
@@ -45,14 +46,16 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="domestik">
                             <h3 class="box-title m-b-0">Setting for Local Business Trip Allowance</h3>
+                            <a href="{{ route('administrator.plafond-dinas.create') }}" class="btn btn-success btn-sm  hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD</a>
                             <br />
                             <div class="table-responsive">
-                                <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                                <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th width="70" class="text-center">#</th>
+                                            <th>NO</th>
                                             <th>POSITION</th>
-                                            <th>HOTEL (IDR)</th>
+                                            <!--<th>HOTEL (IDR)</th>-->
+                                            <th>PLAFOND TYPE</th>
                                             <th>MEAL ALLOWANCE/DAY'S (IDR)</th>
                                             <th>DAILY ALLOWANCE (IDR / DAY'S)</th>
                                             <th>DESCRIPTION</th>
@@ -63,8 +66,9 @@
                                         @foreach($data as $no => $item)
                                         <tr>
                                             <td>{{ $no+1 }}</td>
-                                            <td>{{ ucfirst( strtolower($item->organisasi_position_text)) }}</td>
-                                            <td>{{ number_format($item->hotel) }}</td>
+                                            <td>{{ isset($item->position) ? $item->position->name :'' }}</td>
+                                            <!--<td>{{ number_format($item->hotel) }}</td>-->
+                                            <td>{{ $item->plafond_type}}</td>
                                             <td>{{ number_format($item->tunjangan_makanan) }}</td>
                                             <td>{{ number_format($item->tunjangan_harian) }}</td>
                                             <td>{{ $item->keterangan }}</td>
@@ -84,14 +88,16 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="luarnegeri">
                             <h3 class="box-title m-b-0">Setting for Abroad Business Trip Allowance</h3>
+                            <a href="{{ route('administrator.plafond-dinas.create-luar-negeri') }}" class="btn btn-success btn-sm  hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD</a>
                             <br />
                             <div class="table-responsive">
-                                <table id="data_table2" class="display nowrap" cellspacing="0" width="100%">
+                                <table id="data_table2_no_search" class="display nowrap" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th width="70" class="text-center">#</th>
+                                            <th>NO</th>
                                             <th>POSITION</th>
-                                            <th>HOTEL TYPE</th>
+                                            <!--<th>PLAFOND TYPE</th>-->
+                                            <!--<th>HOTEL TYPE</th>-->
                                             <th>MEAL ALLOWANCE/DAY'S (USD)</th>
                                             <th>DAILY ALLOWANCE (USD / DAY'S)</th>
                                             <th>DESCRIPTION</th>
@@ -102,14 +108,16 @@
                                         @foreach($data_luarnegeri as $no => $item)
                                         <tr>
                                             <td>{{ $no+1 }}</td>
-                                            <td>{{ ucfirst( strtolower($item->organisasi_position_text)) }}</td>
-                                            <td>{{ $item->hotel }}</td>
+                                            <!--<td>{{ ucfirst( strtolower($item->organisasi_position_text)) }}</td>-->
+                                            <!--<td>{{ $item->hotel }}</td>-->
+                                            <td>{{ isset($item->position) ? $item->position->name :'' }}</td>
+                                            <!--<td>{{ $item->plafond_type}}</td>-->
                                             <td>{{ number_format($item->tunjangan_makanan) }}</td>
                                             <td>{{ number_format($item->tunjangan_harian) }}</td>
                                             <td>{{ $item->keterangan }}</td>
                                             <td>
                                                     <a href="{{ route('administrator.plafond-dinas.edit-luar-negeri', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
-                                                    <a href="{{ route('administrator.plafond-dinas.edit-luar-negeri', ['id' => $item->id]) }}"> <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
+                                                    <a href="{{ route('administrator.plafond-dinas.destroy-luar-negeri', ['id' => $item->id]) }}"> <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                                 </td>
                                         </tr>
                                         @endforeach

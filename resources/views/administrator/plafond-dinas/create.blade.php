@@ -48,19 +48,32 @@
                             <label class="col-md-12">Position</label>
                             <div class="col-md-6">
                                 <select class="form-control" name="organisasi_position_id">
+                                        <option value=""> - choose Position - </option>
+                                        @foreach($position as $item)
+                                        <option value="{{ $item->id }}" {{ $item->id== request()->position_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                        @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Plafond Type</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="plafond_type">
                                     <option value=""> - none - </option>
-                                    @foreach(get_level_organisasi() as $item)
+                                    @foreach(get_plafond_type() as $item)
                                     <option>{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+                        <!--
                         <div class="form-group">
                             <label class="col-md-12">Hotel (IDR)</label>
                             <div class="col-md-6">
                                 <input type="number" class="form-control" name="hotel"> 
                             </div>
                         </div>
+                        -->
                         <div class="form-group">
                             <label class="col-md-12">Meal Allowance / Day's (IDR)</label>
                             <div class="col-md-6">
@@ -73,12 +86,6 @@
                                 <input type="number" class="form-control" name="tunjangan_harian"> 
                             </div>
                         </div>
-                       <!--  <div class="form-group">
-                            <label class="col-md-12">Pesawat/Kelas</label>
-                            <div class="col-md-6">
-                                <input type="number" class="form-control" name="pesawat"> 
-                            </div>
-                        </div> -->
                         <div class="form-group">
                             <label class="col-md-12">Description</label>
                             <div class="col-md-6">

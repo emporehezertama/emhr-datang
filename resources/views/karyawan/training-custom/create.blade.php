@@ -27,7 +27,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" onsubmit="return confirm('Submit Pengajuan Perjalanan Dinas / Training ?');" enctype="multipart/form-data" action="{{ route('karyawan.training.store') }}" method="POST" autocomplete="off">
+            <form class="form-horizontal" onsubmit="return confirm('Submit Business Trip / Training ?');" enctype="multipart/form-data" action="{{ route('karyawan.training-custom.store') }}" method="POST" autocomplete="off">
                 <div class="col-md-12">
                     <div class="white-box">
                         <h3 class="box-title m-b-0">Form Business Trip</h3>
@@ -50,221 +50,23 @@
 
                             <li role="presentation" class=""><a href="#pesawat" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Trip by plane</span></a></li>
                             
-                           <!--  <li role="presentation" class=""><a href="#biaya" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Perhitungan Biaya</span></a></li> -->
-                            
                         </ul>
 
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane fade" id="biaya">
-                                <h3>Actual Bill</h3>
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <th style="background: #eee;">1. Transportation</th>
-                                            <th style="background: #eee;">Nominal</th>
-                                            <th style="background: #eee;">Nominal Approved</th>
-                                            <th style="background: #eee;">Receipt Transaction</th>
-                                            <th style="background: #eee;">Note</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Ticket (Train/Airlines/Ship,etc)</td>
-                                            <td><input placeholder="Rp" type="number" class="form-control" name="transportasi_ticket" ></td>
-                                            <td><input placeholder="IDR"  type="number" class="form-control" readonly="true"></td>
-                                            <td><input type="file" /></td>
-                                            <td>
-                                                <input type="text" class="form-control" readonly="true">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Taxi</td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" name="transportasi_taxi" ></td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" readonly="true"></td>
-                                            <td><input type="file" /></td>
-                                            <td>
-                                                <input type="text" class="form-control" readonly="true">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gasoline</td>
-                                            <td><input placeholder="IDR"  type="number" class="form-control" name="transportasi_gasoline" ></td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" readonly="true"></td>
-                                            <td><input type="file" /></td>
-                                            <td>
-                                                <input type="text" class="form-control" readonly="true">
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>Tol</td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" name="transportasi_tol" ></td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" readonly="true"></td>
-                                            <td><input type="file" /></td>
-                                            <td>
-                                                <input type="text" class="form-control" readonly="true">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Parking</td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" name="transportasi_parkir" ></td>
-                                            <td><input placeholder="IDR" type="number" class="form-control" readonly="true"></td>
-                                            <td><input type="file" /></td>
-                                            <td>
-                                                <input type="text" class="form-control" readonly="true">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Sub Total</th>
-                                            <th class="total_transport"></th>
-                                        </tr>
-                                    </tbody>
-                            </table>
-                            <table class="table table-bordered">
-                                <tbody>
-                                     <tr>
-                                            <th style="background: #eee;">2. Hotel and Meal Allowance</th>
-                                            <th style="background: #eee;">Plafond</th>
-                                            <th style="background: #eee;">Nominal / days</th>
-                                            <th style="background: #eee;">QTY (days)</th>
-                                            <th style="background: #eee;">Total Request</th>
-                                            <th style="background: #eee;">Nominal Approved</th>
-                                            <th style="background: #eee;">Receipt Transaction</th>
-                                            <th style="background: #eee;">Note</th>
-
-                                        </tr> 
-                                        @php ($item = plafond_perjalanan_dinas( isset(\Auth::user()->organisasiposition->name) ? \Auth::user()->organisasiposition->name : ''  ))
-                                        <tr>
-                                            <td>Hotel</td>
-                                            <td>IDR {{ number_format($item->hotel) }}</td>
-                                            <td><input type="number" class="form-control" placeholder="IDR " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
-                                            <td></td>
-                                            <td><input type="text" readonly="true" class="form-control"></td>
-                                            <td><input type="file" class="form-control"></td>
-                                            <td><input type="text" class="form-control" placeholder="Note"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Meal Allowance</td>
-                                            <td>IDR  {{ number_format($item->tunjangan_makanan) }}</td>
-                                            <td><input type="number" class="form-control" placeholder="IDR " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
-                                            <td></td>
-                                            <td><input type="text" readonly="true" class="form-control"></td>
-                                            <td><input type="file" class="form-control"></td>
-                                            <td><input type="text" class="form-control" placeholder="Note"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Daily Allowance</td>
-                                            <td>IDR {{ number_format($item->hotel) }}</td>
-                                            <td><input type="number" class="form-control" placeholder="Rp. " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
-                                            <td></td>
-                                            <td><input type="text" readonly="true" class="form-control"></td>
-                                            <td><input type="file" class="form-control"></td>
-                                            <td><input type="text" class="form-control" placeholder="Note"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Plane</td>
-                                            <td>{{ $item->pesawat }}</td>
-                                            <td><input type="number" class="form-control" placeholder="IDR " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
-                                            <td></td>
-                                            <td><input type="text" readonly="true" class="form-control"></td>
-                                            <td><input type="file" class="form-control"></td>
-                                            <td><input type="text" class="form-control" placeholder="Catatan"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Sub Total</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <table class="table table-bordered">
-                                        <tr>
-                                            <th colspan="2" style="background: #eee;">3. Others </th>
-                                            <th style="background: #eee;">Nominal </th>
-                                            <th style="background: #eee;">Nominal Approved </th>
-                                            <th style="background: #eee;">Receipt Transaction </th>
-                                            <th style="background: #eee;">Note </th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <input type="text" name="biaya_lainnya_label[]" class="form-control" placeholder="Other Expense" />
-                                            </td>
-                                            <td>
-                                                <input type="text" name="biaya_lainnya_nominal[]" class="form-control" placeholder="Nominal" />
-                                            </td>
-                                            <td>
-                                                <input type="text" name="biaya_lainnya_nominal[]" readonly="true" class="form-control" placeholder="IDR " />
-                                            </td>
-                                            <td>
-                                                <input type="file" placeholder="IDR" />
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly="true" name="biaya_lainnya_nominal[]" class="form-control" placeholder="Note" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <input type="text" name="biaya_lainnya_label[]" class="form-control" placeholder="Other Expense" />
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" placeholder="IDR " />
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" readonly="true" placeholder="IDR " />
-                                            </td>
-                                            <td>
-                                                <input type="file" class="form-control" />
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly="true" name="biaya_lainnya_nominal[]" class="form-control" placeholder="Note" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="6">Sub Total</th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="6">Total Actual Bill</th>
-                                        </t>
-                                        <tr>
-                                            <th colspan="6">Cash Advance</th>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="6">Total</th>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
                             <div role="tabpanel" class="tab-pane fade in active" id="kegiatan">
                                 <h4><b>Activity Form</b></h4>
                                 <hr />
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-md-6">Business Trip Type</label>
-                                        <label class="col-md-6 select-cabang" style="display: none;">Branch Location</label>
-                                        <div class="clearfix"></div>
-                                        <div class="col-md-6">
-                                            <select name="jenis_training" required class="form-control">
-                                                <option value="">Choose Business Trip Type</option>
-                                                @foreach(jenis_perjalanan_dinas() as $item)
-                                                <option>{{ $item }}</option>
+                                        <label class="col-md-12">Business Trip Type</label>
+                                        <div class="col-md-12">
+                                            <select name="training_type_id" required class="form-control">
+                                                <option value="">Choose Business Trip Type</option>@foreach($trainingType as $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                        <div class="col-md-6 select-cabang" style="display: none;">
-                                            <select class="form-control" name="cabang_id">
-                                                <option value="">Choose Branch Location</option>
-                                                @foreach(get_cabang() as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name  }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 select-others" style="display: none;">
-                                            <input type="text" class="form-control" name="others" placeholder="Others Business Trip">
                                         </div>
                                     </div>
-                                    
                                     <div class="form-group">
                                         <label class="col-md-12">Activity Location</label>
                                         <div class="col-md-12">
@@ -276,7 +78,7 @@
                                     <div class="form-group">
                                         <label class="col-md-12">Destination</label>
                                         <div class="col-md-12">
-                                            <input type="text" class="form-control" required name="tempat_tujuan" />
+                                            <input type="text" class="form-control" required name="tempat_tujuan" id="tempat_tujuan"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -318,7 +120,7 @@
                                     <hr />
                                     
                                     <div class="form-group">
-                                        <a href="{{ route('administrator.training.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                        <a href="{{ route('karyawan.training-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
                                         <a href="#pesawat" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false" class="btn btn-info btn-sm next_">NEXT</a>
                                     </div>
                                 </div>
@@ -384,7 +186,6 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <!-- <a class="btn btn-info btn-xs" id="table_tambah_penumpang"><i class="fa fa-plus"></i> Tambah Penumpang</a> -->
 
                                     </div>
                                 </div>
@@ -411,9 +212,11 @@
                                         <input type="text" class="form-control" name="note" placeholder="Type here.." />
                                     </div>
                                 </div>
+                        <div class="clearfix"></div>
+                        <br/>
 
                                 <div class="col-md-12" style="padding-left: 0;">
-                                    <a href="{{ route('karyawan.training.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                    <a href="{{ route('karyawan.training-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
                                     <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Submit Activity</button>
                                     <p>* If you don't use the plane, please directly click the submit button</p>
                                     <br style="clear: both;" />
@@ -611,26 +414,26 @@
         'default': 'now'
     });
 
-    $("select[name='jenis_training']").on('change', function(){
-        if($(this).val() == 'Branch Visit')
-        {
-            $('.select-cabang').show("slow");
-        }
-        else
-        {
-            $('.select-cabang').hide("slow");
-        }
-
-        if($(this).val() == 'Others')
-        {
-            $('.select-others').show("slow");
-        }
-        else
-        {
-            $('.select-others').hide("slow");
-        }
+    $("#tempat_tujuan" ).autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "{{ route('ajax.get-city') }}",
+                method:"POST",
+                data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType:"json",
+                success:function(data)
+                {
+                    response(data);
+                }
+            })
+        },
+        select: function( event, ui ) {
+            $("input[name='tempat_tujuan']").val(ui.item.id)
+        },
+        showAutocompleteOnFocus: true
     });
-    
+
+
     $("input[name='pesawat_perjalanan']").each(function(){
 
         $(this).on('click', function(){
@@ -697,14 +500,6 @@
     $("#table_tambah_penumpang").click(function(){
         $('#modal_penumpang').modal('show');
     });
-
-    $("#btn_plus_biaya_lainnya").click(function(){
-
-        var el = '<tr><td><input type="text" name="biaya_lainnya_label[]" class="form-control" placeholder="Biaya Lainnya" /></td><td><input type="text" name="biaya_lainnya_nominal[]" class="form-control" placeholder="Nominal" /><a class="btn btn-xs btn-danger" onclick="hapus_el(this)"><i class="fa fa-trash"></i></a></td></tr>';
-
-        $('.append_lain_lain').append(el);
-    })
-
     function hapus_el(el)
     {
         $(el).parent().parent().remove();

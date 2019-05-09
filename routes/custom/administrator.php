@@ -12,6 +12,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::resource('kecamatan', 'KecamatanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('kelurahan', 'KelurahanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('training', 'TrainingController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::resource('training-type', 'TrainingTypeController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('cuti', 'CutiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('overtime', 'OvertimeController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('payment-request', 'PaymentRequestController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -78,6 +79,32 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('setting-approvalTraining/updateItem/{id}', 'SettingApprovalTrainingController@updateItem')->name('administrator.setting-approvalTraining.updateItem');
 	Route::post('setting-approvalTraining/destroyItem/{id}', 'SettingApprovalTrainingController@destroyItem')->name('administrator.setting-approvalTraining.destroyItem');
 
+    Route::resource('medical-plafond', 'MedicalPlafondController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+    Route::get('medical-plafond/create-medical-plafond', 'MedicalPlafondController@createMedicalPlafond')->name('administrator.medical-plafond.create-medical-plafond');
+	Route::post('medical-plafond/store-medical-plafond', 'MedicalPlafondController@storeMedicalPlafond')->name('administrator.medical-plafond.store-medical-plafond');
+	Route::get('medical-plafond/edit-medical-plafond/{id}', 'MedicalPlafondController@editMedicalPlafond')->name('administrator.medical-plafond.edit-medical-plafond');
+	Route::post('medical-plafond/update-lmedical-plafond/{id}', 'MedicalPlafondController@updateMedicalPlafond')->name('administrator.medical-plafond.update-medical-plafond');
+	Route::get('medical-plafond/destroy-medical-plafond/{id}', 'MedicalPlafondController@deleteMedicalPlafond')->name('administrator.medical-plafond.destroy-medical-plafond');
+
+	Route::resource('setting-approvalMedical', 'SettingApprovalMedicalController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalMedical/indexItem/{id}', 'SettingApprovalMedicalController@indexItem')->name('administrator.setting-approvalMedical.indexItem');
+	Route::get('setting-approvalMedical/createItem/{id}', 'SettingApprovalMedicalController@createItem')->name('administrator.setting-approvalMedical.createItem');
+	Route::post('setting-approvalMedical/storeItem', 'SettingApprovalMedicalController@storeItem')->name('administrator.setting-approvalMedical.storeItem');
+	Route::get('setting-approvalMedical/editItem/{id}', 'SettingApprovalMedicalController@editItem')->name('administrator.setting-approvalMedical.editItem');
+	Route::post('setting-approvalMedical/updateItem/{id}', 'SettingApprovalMedicalController@updateItem')->name('administrator.setting-approvalMedical.updateItem');
+	Route::post('setting-approvalMedical/destroyItem/{id}', 'SettingApprovalMedicalController@destroyItem')->name('administrator.setting-approvalMedical.destroyItem');
+
+	Route::resource('setting-approvalExit', 'SettingApprovalExitController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+	Route::get('setting-approvalExit/indexItem/{id}', 'SettingApprovalExitController@indexItem')->name('administrator.setting-approvalExit.indexItem');
+	Route::get('setting-approvalExit/createItem/{id}', 'SettingApprovalExitController@createItem')->name('administrator.setting-approvalExit.createItem');
+	Route::post('setting-approvalExit/storeItem', 'SettingApprovalExitController@storeItem')->name('administrator.setting-approvalExit.storeItem');
+	Route::get('setting-approvalExit/editItem/{id}', 'SettingApprovalExitController@editItem')->name('administrator.setting-approvalExit.editItem');
+	Route::post('setting-approvalExit/updateItem/{id}', 'SettingApprovalExitController@updateItem')->name('administrator.setting-approvalExit.updateItem');
+	Route::post('setting-approvalExit/destroyItem/{id}', 'SettingApprovalExitController@destroyItem')->name('administrator.setting-approvalExit.destroyItem');
+
+	Route::resource('setting-approvalClearance', 'SettingApprovalClearanceController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
+
+
 	Route::resource('news', 'NewsController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('internal-memo', 'InternalMemoController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('branch-organisasi', 'BranchOrganisasiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -89,8 +116,13 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('libur-nasional/import', 'LiburNasionalController@import')->name('administrator.libur-nasional.import');
 	Route::post('cabang/import', 'CabangController@import')->name('administrator.cabang.import');
 	Route::post('plafond-dinas/import', 'PlafondDinasController@import')->name('administrator.plafond-dinas.import');
-	Route::post('plafond-dinas/destroy-luar-negeri', 'PlafondDinasController@deleteLuarNegeri')->name('administrator.plafond-dinas.destroy-luar-negeri');
-	Route::post('plafond-dinas/edit-luar-negeri/{id}', 'PlafondDinasController@editLuarNegeri')->name('administrator.plafond-dinas.edit-luar-negeri');
+	Route::get('plafond-dinas/create-luar-negeri', 'PlafondDinasController@createLuarNegeri')->name('administrator.plafond-dinas.create-luar-negeri');
+	Route::post('plafond-dinas/store-luar-negeri', 'PlafondDinasController@storeLuarNegeri')->name('administrator.plafond-dinas.store-luar-negeri');
+	Route::get('plafond-dinas/edit-luar-negeri/{id}', 'PlafondDinasController@editLuarNegeri')->name('administrator.plafond-dinas.edit-luar-negeri');
+	Route::post('plafond-dinas/update-luar-negeri/{id}', 'PlafondDinasController@updateLuarNegeri')->name('administrator.plafond-dinas.update-luar-negeri');
+	Route::get('plafond-dinas/destroy-luar-negeri/{id}', 'PlafondDinasController@deleteLuarNegeri')->name('administrator.plafond-dinas.destroy-luar-negeri');
+	
+	
 	Route::get('branch-organisasi/tree', 'BranchOrganisasiController@tree')->name('administrator.branch-organisasi.tree');
 	Route::get('karyawan/delete-cuti/{id}', 'KaryawanController@DeleteCuti')->name('administrator.karyawan.delete-cuti');
 	Route::post('karyawan/import', 'KaryawanController@importData')->name('administrator.karyawan.import');
@@ -209,6 +241,20 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('overtimeCustom/index', 'OvertimeCustomController@index')->name('administrator.overtimeCustom.index');
 	Route::get('overtimeCustom/proses/{id}', 'OvertimeCustomController@proses')->name('administrator.overtimeCustom.proses');
 	Route::get('overtimeCustom/claim/{id}', 'OvertimeCustomController@claim')->name('administrator.overtimeCustom.claim');
+
+	Route::post('trainingCustom/index', 'TrainingCustomController@index')->name('administrator.trainingCustom.index');
+	Route::get('trainingCustom/index', 'TrainingCustomController@index')->name('administrator.trainingCustom.index');
+	Route::get('trainingCustom/proses/{id}', 'TrainingCustomController@proses')->name('administrator.trainingCustom.proses');
+	Route::get('trainingCustom/claim/{id}', 'TrainingCustomController@claim')->name('administrator.trainingCustom.claim');
+
+	Route::post('medicalCustom/index', 'MedicalCustomController@index')->name('administrator.medicalCustom.index');
+	Route::get('medicalCustom/index', 'MedicalCustomController@index')->name('administrator.medicalCustom.index');
+	Route::get('medicalCustom/proses/{id}', 'MedicalCustomController@proses')->name('administrator.medicalCustom.proses');
+
+	Route::post('exitCustom/index', 'ExitInterviewClearanceCustomController@index')->name('administrator.exitCustom.index');
+	Route::get('exitCustom/index', 'ExitInterviewClearanceCustomController@index')->name('administrator.exitCustom.index');
+	Route::get('exitCustom/detail/{id}', 'ExitInterviewClearanceCustomController@detail')->name('administrator.exitCustom.detail');
+	Route::get('exitCustom/clearance/{id}', 'ExitInterviewClearanceCustomController@clearance')->name('administrator.exitCustom.clearance');
 	
 
 	Route::post('cuti/index', 'CutiController@index')->name('administrator.cuti.index');
@@ -236,4 +282,5 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('setting/email-test-send', 'SettingController@emailTestSend')->name('administrator.setting.email-test-send');
 	Route::post('organization-structure-custom/store', 'StructureOrganizationCustomController@store')->name('administrator.organization-structure-custom.store');
 	Route::post('karyawan/send-pay-slip', 'KaryawanController@sendPaySlip')->name('administrator.karyawan.send-pay-slip');
+	Route::post('setting/store-backup-schedule', 'SettingController@storeBackupSchedule')->name('administrator.setting.store-backup-schedule');
 });

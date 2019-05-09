@@ -8,7 +8,7 @@
 
 function user_approval_custom($id)
 {
-	return App\User::where('structure_organization_custom_id',$id)->get();
+	return App\User::where('structure_organization_custom_id',$id)->whereNull('resign_date')->get();
 }
 
 function cek_training_direktur($status='approved')

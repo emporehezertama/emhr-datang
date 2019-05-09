@@ -69,6 +69,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-detail-setting-approval-paymentRequest-item', 'AjaxController@getDetailSettingApprovalPaymentRequestItem')->name('ajax.get-detail-setting-approval-paymentRequest-item');
 	Route::post('ajax/get-detail-setting-approval-overtime-item', 'AjaxController@getDetailSettingApprovalOvertimeItem')->name('ajax.get-detail-setting-approval-overtime-item');
 	Route::post('ajax/get-detail-setting-approval-training-item', 'AjaxController@getDetailSettingApprovalTrainingItem')->name('ajax.get-detail-setting-approval-training-item');
+	Route::post('ajax/get-detail-setting-approval-medical-item', 'AjaxController@getDetailSettingApprovalMedicalItem')->name('ajax.get-detail-setting-approval-medical-item');
+	Route::post('ajax/get-detail-setting-approval-exit-item', 'AjaxController@getDetailSettingApprovalExitItem')->name('ajax.get-detail-setting-approval-exit-item');
 
 	Route::post('ajax/get-history-approval-leave-custom', 'AjaxController@getHistoryApprovalLeaveCustom')->name('ajax.get-history-approval-leave-custom');
 	Route::post('ajax/get-history-approval-payment-request-custom', 'AjaxController@getHistoryApprovalPaymentRequestCustom')->name('ajax.get-history-approval-payment-request-custom');
@@ -76,7 +78,19 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-history-approval-overtime-claim-custom', 'AjaxController@getHistoryApprovalOvertimeClaimCustom')->name('ajax.get-history-approval-overtime-claim-custom');
 	Route::post('ajax/get-date-overtime-custom', 'AjaxController@chekDateOVertime')->name('ajax.get-date-overtime-custom');
 	Route::post('ajax/get-in-out-overtime-custom', 'AjaxController@chekInOutOVertime')->name('ajax.get-in-out-overtime-custom');
+	Route::post('ajax/get-history-approval-training-custom', 'AjaxController@getHistoryApprovalTrainingCustom')->name('ajax.get-history-approval-training-custom');
+	Route::post('ajax/get-history-approval-training-claim-custom', 'AjaxController@getHistoryApprovalTrainingClaimCustom')->name('ajax.get-history-approval-training-claim-custom');
+	Route::post('ajax/get-history-approval-medical-custom', 'AjaxController@getHistoryApprovalMedicalCustom')->name('ajax.get-history-approval-medical-custom');
+	Route::post('ajax/get-history-approval-exit-custom', 'AjaxController@getHistoryApprovalExitCustom')->name('ajax.get-history-approval-exit-custom');
 
+	Route::post('ajax/get-karyawan-approval', 'AjaxController@getKaryawanApproval')->name('ajax.get-karyawan-approval');
+	Route::post('ajax/add-setting-clearance-hrd', 'AjaxController@addSettingClearanceHrd')->name('ajax.add-setting-clearance-hrd');
+	Route::post('ajax/add-setting-clearance-ga', 'AjaxController@addSettingClearanceGA')->name('ajax.add-setting-clearance-ga');
+	Route::post('ajax/add-setting-clearance-it', 'AjaxController@addSettingClearanceIT')->name('ajax.add-setting-clearance-it');
+	Route::post('ajax/add-setting-clearance-accounting', 'AjaxController@addSettingClearanceAccounting')->name('ajax.add-setting-clearance-accounting');
+
+
+	Route::post('ajax/get-city', 'AjaxController@getCity')->name('ajax.get-city');
 	Route::post('ajax/get-history-approval', 'AjaxController@getHistoryApproval')->name('ajax.get-history-approval');
 	Route::post('ajax/get-airports', 'AjaxController@getAirports')->name('ajax.get-airports');
 	Route::post('ajax/get-history-approval-cuti', 'AjaxController@getHistoryApprovalCuti')->name('ajax.get-history-approval-cuti');	
