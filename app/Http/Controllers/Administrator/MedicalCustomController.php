@@ -138,6 +138,7 @@ class MedicalCustomController extends Controller
         $test = MedicalReimbursement::where('id', $id)->first();
         $userPos = $test->user->structure->organisasi_position_id;
         $plafond = MedicalPlafond::where('position_id',$userPos);
+        
 
         $params['data'] = MedicalReimbursement::where('id', $id)->first();
         $params['form'] = MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
