@@ -197,22 +197,21 @@ class ExitInterviewCustomController extends Controller
                 $dataAset->catatan     = $request->catatan[$key];
                 $dataAset->save();
             }
-        }
-        $data = ExitInterview::where('id',$dataAset->exit_interview_id)->first();
+            $data = ExitInterview::where('id',$dataAset->exit_interview_id)->first();
 
-        $clearanceApproval = SettingApprovalClearance::all();
-        foreach ($clearanceApproval as $key => $value) {
-            # code...
-            if($value->user->email == "") continue;
-            $params['data']     = $data;
-            $params['text']     = '<p><strong>Dear Sir/Madam '. $value->user->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Exit Clearance and currently waiting your approval.</p>';
-               \Mail::send('email.clearance-approval-custom', $params,
-                    function($message) use($data,$value) {
-                    $message->from('emporeht@gmail.com');
-                    $message->to($value->user->email);
-                    $message->subject('Empore - Exit Clearance');
-                }); 
-           
+            $clearanceApproval = SettingApprovalClearance::all();
+            foreach ($clearanceApproval as $key => $value) {
+                # code...
+                if($value->user->email == "") continue;
+                $params['data']     = $data;
+                $params['text']     = '<p><strong>Dear Sir/Madam '. $value->user->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Exit Clearance and currently waiting your approval.</p>';
+                   \Mail::send('email.clearance-approval-custom', $params,
+                        function($message) use($data,$value) {
+                        $message->from('emporeht@gmail.com');
+                        $message->to($value->user->email);
+                        $message->subject('Empore - Exit Clearance');
+                    }); 
+            }
         }
         return redirect()->route('karyawan.exit-custom.index')->with('message-success', 'Exit Clearance succesfully process');
     }
