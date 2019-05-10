@@ -6,77 +6,139 @@
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row m-t-10">
-            <div class="col-sm-6 m-l-0 p-l-0 p-r-0">
-                <div class="white-box" style="margin-bottom:10px; min-height: 302px;">
+            <div class="col-sm-12">
+                <div class="white-box m-b-2">
                     <div class="box-title pull-left" style="text-transform: inherit;"><i class="fa fa-user m-r-5"></i> Employees Status</div>
                     <button class="btn btn-xs btn-info pull-right datepicker"><i class="fa fa-table m-r-5"></i> {{ date('dS M Y') }} </button>
                     <div class="clearfix"></div>
-                    
-                    <div class="col-md-2 text-center">
-                        <h3 class="btn-warning">{{ employee('active') }}</h3>
-                        <p>Present</p>
+
+                    <div class="row row-in">
+                        <div class="col-lg-2 col-sm-6 row-in-br">
+                            <ul class="col-in">
+                                <li>
+                                    <span class="circle circle-md bg-danger" style="font-size: 18px !important;padding-top: 18px;">
+                                    {{ employee('active') }}
+                                    </span>
+                                </li>
+                                <li class="col-middle">
+                                    <h4>Present</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-sm-6 row-in-br  b-r-none">
+                            <ul class="col-in">
+                                <li>
+                                    <span class="circle circle-md bg-info" style="font-size: 18px !important;padding-top: 18px;">
+                                    {{ employee('on-leave') }}
+                                    </span>
+                                </li>
+                                <li class="col-middle">
+                                    <h4>On Leave</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-sm-6 row-in-br">
+                            <ul class="col-in">
+                                <li>
+                                    <span class="circle circle-md bg-success" style="font-size: 18px !important;padding-top: 18px;">
+                                        {{ employee('permanent') }}
+                                    </span>
+                                </li>
+                                <li class="col-middle">
+                                    <h4>Permanent</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-sm-6  b-0">
+                            <ul class="col-in">
+                                <li>
+                                    <span class="circle circle-md bg-warning" style="font-size: 18px !important;padding-top: 18px;">
+                                        {{ employee('contract') }}
+                                    </span>
+                                </li>
+                                <li class="col-middle">
+                                    <h4>Contract</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-sm-6  b-0">
+                            <ul class="col-in">
+                                <li>
+                                    <span class="circle circle-md" style="font-size: 18px !important;padding-top: 18px;background: grey;">
+                                        {{ employee('on-tour') }}
+                                    </span>
+                                </li>
+                                <li class="col-middle">
+                                    <h4>On Tour</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-sm-6  b-0">
+                            <ul class="col-in">
+                                <li>
+                                    <span class="circle circle-md bg-warning" style="font-size: 18px !important;padding-top: 18px;background: purple;">
+                                        {{ employee('late-comers') }}
+                                    </span>
+                                </li>
+                                <li class="col-middle">
+                                    <h4>Late Comers</h4>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-md-2 text-center">
-                        <h3 class="btn-danger">{{ employee('on-leave') }}</h3>
-                        <p>On Leave</p>
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h3 class="btn-info">{{ employee('wfh') }}</h3>
-                        <p>Permanent</p>
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h3 class="btn-primary">{{ employee('woh') }}</h3>
-                        <p>Contract</p>
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h3 style="background: #7d7d7d;color: white;">{{ employee('on-tour') }}</h3>
-                        <p>On tour</p>
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h3 class="btn-success">{{ employee('late-comers') }}</h3>
-                        <p>Late comers</p>
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
-            <div class="col-sm-3 p-r-0 m-l-0">
+            <div class="col-sm-6"><div id="calendar2"></div></div>
+            <div class="col-sm-3">
                 <div class="white-box" style="margin-bottom:10px;">
                     <div class="box-title" style="text-transform: inherit;">Department wise headcount distribution</div>
-                    <div class="col-md-8">
-                        <div id="pie-chart-1" style="height:218px; padding-top: 20px; width:"></div>
-                    </div>
-                    <div class="col-md-4">
+                    <div id="pie-chart-1" style="height:218px; padding-top: 20px; width:"></div>
+                    <div class="col-md-6">
                         <p><button class="btn btn-xs" style="background: #ff7676"> &nbsp;&nbsp;</button> Accounting</p>
                         <p><button class="btn btn-xs" style="background: #2cabe3"> &nbsp;&nbsp;</button> Admin</p>
+                    </div>
+                    <div class="col-md-6">
                         <p><button class="btn btn-xs" style="background: #53e69d"> &nbsp;&nbsp;</button> Analysis</p>
-                        <p><button class="btn btn-xs" style="background: #53e69d"> &nbsp;&nbsp;</button> Business Proccess</p>
+                        <p><button class="btn btn-xs btn-warning"> &nbsp;&nbsp;</button> Business Proccess</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             </div>
-            <div class="col-sm-3 p-r-0">
-                <div class="white-box" style="margin-bottom:10px;text-align: center; padding:0 !important">
-                  <div class="col-md-8" style="background: #74bfd0;color: white !important;">
-                    <h4>Total Headcount</h4>
-                    <h1>{{ total_karyawan() }}</h1>
-                  </div>
-                  <div class="col-md-4" style="background: #94cddb;">
-                    <h1 style="font-size: 80px;color: #74bfd0;"><i class="fa fa-user"></i></h1>
-                  </div>
-                  <div class="clearfix"></div>
-                  <div class="col-md-8" style="background: #6d6fbb;color: white !important;">
-                    <h4>Exit This Month</h4>
-                    <h1>{{ employee_exit_this_month() }}</h1>
-                  </div>
-                  <div class="col-md-4" style="background: #8f90c9;">
-                    <h1 style="font-size: 80px;color: #6d6fbb;"><i class="fa fa-user"></i></h1>
-                  </div>
-                  <div class="clearfix"></div>
+            <div class="col-sm-3">
+                <div class="col-md-6 col-sm-6 col-lg-12">
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2 class="m-b-0 font-medium">{{ total_karyawan() }}</h2>
+                                <h5 class="text-muted m-t-0">Total Headcount</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="pull-right">
+                                    <h1 style="font-size: 80px;color: #74bfd0;"><i class="fa fa-user"></i></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-lg-12">
+                    <div class="white-box">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2 class="m-b-0 font-medium">{{ employee_exit_this_month() }}</h2>
+                                <h5 class="text-muted m-t-0">Exit This Month</h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="pull-right">
+                                    <h1 style="font-size: 80px;color: #74bfd0;"><i class="fa fa-warning"></i></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-6  m-l-0 p-l-0 p-r-0">
+            <div class="col-sm-6">
                 <div class="white-box" style="margin-bottom:10px;">
-                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joiness and resigness</div>
+                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joinees and resignees</div>
                     <button class="btn btn-xs btn-danger pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i> </button>
                     <div class="clearfix"></div>
                     <div id="chart-1" style="height: 220px"></div>
@@ -86,7 +148,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-sm-6 m-l-0">
+            <div class="col-sm-6">
                 <div class="white-box" style="margin-bottom:10px;">
                     <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-line m-r-5"></i> Attrition Rate</div>
                     <button class="btn btn-xs btn-info pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i></button>
@@ -99,6 +161,25 @@
     </div>
     @include('layouts.footer')
 </div>
+
+<!-- BEGIN MODAL -->
+<div class="modal fade none-border" id="my-event">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><strong>Add Event</strong></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
+                <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style type="text/css">
     .col-in h3 {
         font-size: 20px;
@@ -106,9 +187,16 @@
 </style>
 <link href="{{ asset('admin-css/plugins/bower_components/css-chart/css-chart.css') }}" rel="stylesheet">
 <script src="{{ asset('admin-css/plugins/bower_components/chartist-js/dist/chartist.min.js') }}"></script>
+<link href="{{ asset('admin-css/plugins/bower_components/calendar/dist/fullcalendar.css') }}" rel="stylesheet" />
 @section('js')
+<script src="{{ asset('admin-css/plugins/bower_components/calendar/dist/fullcalendar.min.js') }}"></script>
+<script src="{{ asset('admin-css/plugins/bower_components/calendar/dist/cal-init.js') }} "></script>
 
 <script type="text/javascript">
+    $('#calendar2').fullCalendar({
+        height: 390
+    });
+
     // Morris donut chart
     Morris.Donut({
         element: 'pie-chart-1',

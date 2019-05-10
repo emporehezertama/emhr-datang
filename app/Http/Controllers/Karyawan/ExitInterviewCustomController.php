@@ -63,7 +63,7 @@ class ExitInterviewCustomController extends Controller
         $checkApproval = \Auth::user()->approvalLeave->level1Exit;
         if($checkApproval == null)
         {
-            return redirect()->route('karyawan.interview-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            return redirect()->route('karyawan.exit-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
         }else {
             $data       = new ExitInterview();
         $data->status               = 1;
