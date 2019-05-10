@@ -63,10 +63,10 @@
                                         <label class="col-md-6">Resign Date </label>
                                         <label class="col-md-6">Date Last Work </label>
                                         <div class="col-md-6">
-                                            <input type="text" name="resign_date" class="form-control datepicker" value="" >
+                                            <input type="text" name="resign_date" class="form-control datepickerResign" value="" >
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" name="last_work_date" class="form-control datepicker" value="">
+                                            <input type="text" name="last_work_date" class="form-control datepickerLast" value="">
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -194,10 +194,21 @@
 
     });
 
-    jQuery('.datepicker').datepicker({
+    jQuery('.datepickerResign').datepicker({
         dateFormat: 'yy-mm-dd',
+        onSelect: function () {
+             //$('.datepickerLast').val('').datepicker('refresh');
+            var selectedDate = $.datepicker.formatDate("yy-mm-dd", $(this).datepicker('getDate'));
+            $('.datepickerLast').datepicker('option', 'maxDate', selectedDate);
+            jQuery('.datepickerLast').datepicker({
+                dateFormat: 'yy-mm-dd',
+                autoclose:true,
+                endDate: selectedDate,
+                maxDate: selectedDate
+            });
+        }   
     });
-
+    
     $('.next_exit_clearance').click(function(){
 
         $("a[href='#clearance']").parent().addClass('active');        
