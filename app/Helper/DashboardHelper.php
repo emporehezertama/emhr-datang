@@ -75,12 +75,12 @@ function employee($status='all')
 		$employee = \App\Models\Training::where('status', 2)->whereDate('tanggal_kegiatan_start','<=', $today)->whereDate('tanggal_kegiatan_end','>=', $today)->count();
 	}
 
-	if($status == 'wfh')
+	if($status == 'permanent')
 	{
 		$employee =0;
 	}
 
-	if($status == 'woh')
+	if($status == 'contract')
 	{
 		$employee =0;
 	}
