@@ -43,7 +43,11 @@ class Kernel extends ConsoleKernel
                 }elseif ($value->recurring == 3) {
                     $schedule->command($command_backup)->monthlyOn(4, $value->time);
                 }elseif ($value->recurring == 4) {
-                    $schedule->command($command_backup)->monthlyOn($value->date, '23.59');
+                    if($value->date == date('Y/m/d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    {
+                        Artisan::call($command_backup);
+                    }
+                    //$schedule->command($command_backup)->monthlyOn($value->date, $value->time);
                 }
             }elseif ($value->backup_type == 2) {
                 $command_backup = 'backup:run --only-db';
@@ -57,7 +61,11 @@ class Kernel extends ConsoleKernel
                 }elseif ($value->recurring == 3) {
                     $schedule->command($command_backup)->monthlyOn(4, $value->time);
                 }elseif ($value->recurring == 4) {
-                    $schedule->command($command_backup)->monthlyOn($value->date, '23.59');
+                    if($value->date == date('Y/m/d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    {
+                        Artisan::call($command_backup);
+                    }
+                    //$schedule->command($command_backup)->monthlyOn($value->date, $value->time);
                 }
             }elseif ($value->backup_type == 3) {
                 $command_backup = 'backup:run --only-files';
@@ -71,7 +79,11 @@ class Kernel extends ConsoleKernel
                 }elseif ($value->recurring == 3) {
                     $schedule->command($command_backup)->monthlyOn(4, $value->time);
                 }elseif ($value->recurring == 4) {
-                    $schedule->command($command_backup)->monthlyOn($value->date, '23.59');
+                    if($value->date == date('Y/m/d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    {
+                        Artisan::call($command_backup);
+                    }
+                    //$schedule->command($command_backup)->monthlyOn($value->date, $value->time);
                 }
             }
         }
