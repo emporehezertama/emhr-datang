@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
                 }elseif ($value->recurring == 3) {
                     $schedule->command($command_backup)->monthlyOn(4, $value->time);
                 }elseif ($value->recurring == 4) {
-                    if($value->date == date('Y/m/d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    if($value->date == date('Y-m-d') && date('H:i',strtotime($value->time)) == date('H:i'))
                     {
                         Artisan::call($command_backup);
                     }
@@ -61,7 +61,7 @@ class Kernel extends ConsoleKernel
                 }elseif ($value->recurring == 3) {
                     $schedule->command($command_backup)->monthlyOn(4, $value->time);
                 }elseif ($value->recurring == 4) {
-                    if($value->date == date('Y/m/d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    if($value->date == date('Y-m-d') && date('H:i',strtotime($value->time)) == date('H:i'))
                     {
                         Artisan::call($command_backup);
                     }
@@ -79,7 +79,7 @@ class Kernel extends ConsoleKernel
                 }elseif ($value->recurring == 3) {
                     $schedule->command($command_backup)->monthlyOn(4, $value->time);
                 }elseif ($value->recurring == 4) {
-                    if($value->date == date('Y/m/d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    if($value->date == date('Y-m-d') && date('H:i',strtotime($value->time)) == date('H:i'))
                     {
                         Artisan::call($command_backup);
                     }
