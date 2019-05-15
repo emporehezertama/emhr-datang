@@ -22,16 +22,7 @@
                             <div class="col-md-5">
                                 <input type="email" class="form-control" name="setting[backup_mail]" value="{{ get_setting('backup_mail') }}" />
                             </div>
-                           <!--  <div class="col-md-5">
-                                <select class="form-control" name="setting[backup_type]">
-                                    <option value="0"> - Select Type Backup - </option>
-                                    <option value="1" {{ get_setting('backup_type') == 1 ? 'selected' : '' }}>All Apps & Database</option>
-                                    <option value="2" {{ get_setting('backup_type') == 2 ? 'selected' : '' }}>Database Only</option>
-                                    <option value="3" {{ get_setting('backup_type') == 3 ? 'selected' : '' }}>Apps Only</option>
-                                </select>
-                            </div> -->
                         </div>
-                     
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-6 p-l-0">
@@ -41,9 +32,10 @@
                                     <thead>
                                         <tr style="backgroud: #efefef;">
                                             <th>No</th>
-                                            <th>Type Backup</th>
-                                            <th>Date</th>
+                                            <th>Backup Type</th>
                                             <th>Time</th>
+                                            <th>Recurring</th>
+                                            <th>Date</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -53,29 +45,39 @@
                                                 <td colspan="5" class="text-center"><i>empty</i></td>
                                             </tr>
                                         @endif
-
                                         @foreach(get_schedule_backup() as $key => $item)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
-                                                <td>{{ $item->type }}</td>
-                                                <td>{{ $item->date }}</td>
+                                                <td>
+                                                    @if($item->backup_type == 1)
+                                                        All Apps & Database
+                                                    @elseif($item->backup_type == 2)
+                                                        Database Only
+                                                    @elseif($item->backup_type == 3)
+                                                        Apps Only
+                                                    @endif
+                                                </td>
                                                 <td>{{ $item->time }}</td>
+                                                <td>
+                                                    @if($item->recurring == 1)
+                                                        Daily
+                                                    @elseif($item->recurring == 2)
+                                                        Weekly
+                                                    @elseif($item->recurring == 3)
+                                                        Monthly
+                                                    @elseif($item->recurring == 4)
+                                                        Custom
+                                                    @endif
+                                                </td>
+                                                <td>{{ $item->date }}</td>
+                                                <td>
+                                                    <a href="{{ route('administrator.setting.delete-backup-schedule', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                                 <a href="javascript:void(0)" class="btn btn-info btn-sm btn-circle" title="Add Schedule Backup" data-toggle="modal" data-target="#modal_add_schedule_backup"><i class="fa fa-plus"></i></a>
-                                
-                                <!--
-                                <div class="col-md-8">
-                                    <label class="m-r-10"><input type="radio" value="3" name="setting[schedule]" {{ get_setting('schedule') == 3 ? 'checked' : '' }} /> Nightly / Daily</label>
-                                    <label class="m-r-10"><input type="radio" value="4" name="setting[schedule]" {{ get_setting('schedule') == 4 ? 'checked' : '' }} /> Weekly</label>
-                                    <label class="m-r-10"><input type="radio" value="5" name="setting[schedule]" {{ get_setting('schedule') == 5 ? 'checked' : '' }} /> Monthly</label>
-                                    <div class="">
-                                        <input type="text" class="form-control datepicker" name="setting[schedule_custom_date]" value="{{ get_setting('schedule_custom_date') }}" placeholder="Custom Date">
-                                    </div>
-                                </div>
-                                -->
                             </div>
                         </div>
                     </div>
@@ -130,37 +132,48 @@
 <div class="modal fade" id="modal_add_schedule_backup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-          <form method="POST" action="{{ route('administrator.setting.store-backup-schedule') }}"></form>
+          <form method="POST" action="{{ route('administrator.setting.store-backup-schedule') }}">
+             {{ csrf_field() }}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="myLargeModalLabel">Schedule Backup</h4> </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="col-md-6">Backup Type</label>
-                    <label class="col-md-6">Recurring</label>
-                    <div class="col-md-6">
-                        <select class="form-control" name="backup_type">
+                    <label class="col-md-12">Backup Type</label>
+                    <div class="col-md-12">
+                        <select class="form-control backup_type" name="backup_type" required="">
                             <option value=""> - Select - </option>
                             <option value="1">All Apps & Database</option>
                             <option value="2">Database Only</option>
                             <option value="3">Apps Only</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <label class="m-r-10"><input type="radio" value="3" name="recurring" /> Nightly / Daily</label>
-                        <label class="m-r-10"><input type="radio" value="4" name="recurring" /> Weekly</label>
-                        <label class="m-r-10"><input type="radio" value="5" name="recurring" /> Monthly</label>
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
-                <div class="form-group m-t-5">
-                    <label class="col-md-6">Date</label>
-                    <label class="col-md-6">Time</label>
-                    <div class="col-md-6">
-                        <input type="text"class="form-control datepicker"  name="date" />
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label class="col-md-12">Time</label>
+                    <div class="col-md-12">
+                        <input type="text" class="form-control time_picker" name="time" required/>
                     </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" name="time" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label class="col-md-12">Recurring</label>
+                    <div class="col-md-12">
+                        <select class="form-control" name="recurring" id="recurring" required>
+                            <option value=""> - Select - </option>
+                            <option value="1">Daily</option>
+                            <option value="2">Weekly</option>
+                            <option value="3">Monthly</option>
+                            <option value="4">Custom</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group dateBackup" name="dateBackup" style="display: none;">
+                    <label class="col-md-12">Date</label>
+                    <div class="col-md-12">
+                        <input type="text"class="form-control datepicker"  name="date" />
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -169,21 +182,39 @@
                 <button type="button" class="btn btn-default waves-effect text-left btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 <button type="submit" class="btn btn-success waves-effect btn-sm"><i class="fa fa-check-circle"></i> Submit Schedule</button>
             </div>
+            </form>
           </div>
         </div>
         <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
 
-
+@section('js')
+<style type="text/css">
+    .clockpicker-popover{
+        z-index: 99999 !important;
+    }
+</style>
 <link href="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css') }}" rel="stylesheet">
 <!-- Clock Plugin JavaScript -->
 <script src="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
-@section('javascript')
 <script type="text/javascript">
-    
+
+    $('.time_picker').clockpicker({
+        placement: 'bottom',
+        align: 'left',
+        autoclose: true,
+        'default': 'now'
+    });
+
+    $("select[name='recurring']").on('change', function(){
+        var el = $(this).find(":selected");
+        if($(this).val() == 4)
+        {
+            $('.dateBackup').show();   
+        }
+    });
+
 </script>
 @endsection
 @endsection

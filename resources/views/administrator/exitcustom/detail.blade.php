@@ -98,12 +98,13 @@
                                 </div>
                                 <hr />
                                 <div class="form-group">
-                                    <label class="col-md-12">Most memorable moments at this company</label>
+                                    <label class="col-md-12">Most memorable moments while working at this company</label>
                                     <div class="col-md-12">
                                         <textarea class="form-control" name="hal_berkesan" readonly="true">{{ $data->hal_berkesan }}</textarea>
                                     </div>
                                 </div>
                                 <hr />
+                                <!--
                                 <div class="form-group">
                                     <label class="col-md-12">Unmemorable moments at this company</label>
                                     <div class="col-md-12">
@@ -111,6 +112,7 @@
                                     </div>
                                 </div>
                                 <hr />
+                                -->
                                 <div class="form-group">
                                     <label class="col-md-12">Suggestion and Critic </label>
                                     <div class="col-md-12">

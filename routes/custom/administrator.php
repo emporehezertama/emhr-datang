@@ -283,4 +283,5 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('organization-structure-custom/store', 'StructureOrganizationCustomController@store')->name('administrator.organization-structure-custom.store');
 	Route::post('karyawan/send-pay-slip', 'KaryawanController@sendPaySlip')->name('administrator.karyawan.send-pay-slip');
 	Route::post('setting/store-backup-schedule', 'SettingController@storeBackupSchedule')->name('administrator.setting.store-backup-schedule');
+	Route::get('setting/delete-backup-schedule/{id}', 'SettingController@deleteBackupSchedule')->name('administrator.setting.delete-backup-schedule');
 });

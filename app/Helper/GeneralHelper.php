@@ -832,6 +832,11 @@ function get_setting($key)
 	return '';
 }
 
+function get_schedule()
+{
+	return \App\Models\ScheduleBackup::all();
+}
+
 
 /**
  * [format_tanggal description]
