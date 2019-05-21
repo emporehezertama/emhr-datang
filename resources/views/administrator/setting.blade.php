@@ -19,7 +19,7 @@
             <div class="col-md-12 pt-1 p-l-0 p-r-0">
                 <div class="white-box">
                     <div>
-                        <h3 class="box-title">Setting</h3>
+                        <h5 class="box-title">Setting</h5>
                         <div class="col-md-2">
                             <a href="{{ route('administrator.setting.general') }}"><i class="mdi mdi-settings fa-fw"></i><span class="hide-menu">General</span></a>
                         </div>
@@ -94,7 +94,7 @@
             <div class="col-md-12 pt-1 p-l-0 p-r-0">
                 <div class="white-box">
                     <div>
-                        <h3 class="box-title">Setting Approval</h3>
+                        <h5 class="box-title">Setting Approval</h5>
                         <div class="col-md-2">
                              <a href="{{ route('administrator.setting-approvalLeave.index') }}"><i class="mdi mdi-calendar-check fa-fw"></i><span class="hide-menu">Leave/Permit Approval</span></a>
                         </div>
@@ -131,6 +131,8 @@
     .box-title{
         margin-bottom: 25px !important;
         margin-left: 16px !important;
+        font-size: 12px !important;
+        color: #337ab7 !important;
     }
 </style>
 @endsection
