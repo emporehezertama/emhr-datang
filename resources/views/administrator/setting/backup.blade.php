@@ -148,6 +148,7 @@
                             <option value="3">Apps Only</option>
                         </select>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group">
@@ -155,6 +156,7 @@
                     <div class="col-md-12">
                         <input type="text" class="form-control time_picker" name="time" required/>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group">
@@ -168,6 +170,7 @@
                             <option value="4">Custom</option>
                         </select>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group dateBackup" name="dateBackup" style="display: none;">
@@ -212,6 +215,8 @@
         if($(this).val() == 4)
         {
             $('.dateBackup').show();   
+        }else{
+            $('.dateBackup').hide(); 
         }
     });
 
