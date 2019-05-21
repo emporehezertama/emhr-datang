@@ -107,6 +107,7 @@
                                 </div>
                         </div>
                         <hr />
+                        <!--
                         <div class="form-group">
                             <label class="col-md-12">Unmemorable moments while working at this company</label>
                             <div class="col-md-12">
@@ -114,6 +115,7 @@
                             </div>
                         </div>
                         <hr />
+                        -->
                         <div class="form-group">
                             <label class="col-md-12">Suggestion and Critic</label>
                             <div class="col-md-12">

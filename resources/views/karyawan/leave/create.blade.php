@@ -73,12 +73,12 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3"> 
+                                <div class="col-md-2"> 
                                     <input type="text" name="jam_pulang_cepat" style="display: none;" class="form-control jam_pulang_cepat" placeholder="Time">
                                 </div>
-                                <div class="col-md-3">
+                                <div name="until"  class="until" style="float: left; width: 5px;padding-top:10px; display: none;"> - </div>
+                                <div class="col-md-2">
                                     <input type="text" name="jam_datang_terlambat" style="display: none;" class="form-control jam_datang_terlambat" placeholder="Time">
-                                    
                                 </div>
                             </div>
                             <div class="form-group" id="TypeLeave" style="display: none;"> 
@@ -452,6 +452,7 @@
             document.getElementById('TypeLeave').style.display = "block";
             time_picker();
             $('.jam_pulang_cepat').hide();
+            $('.until').hide();
             $('.jam_datang_terlambat').hide();
 
             $('.kuota_cuti').val( el.data('kuota') );
@@ -463,6 +464,7 @@
             document.getElementById('TypeLeave').style.display = "none";
             time_picker();
             $('.jam_pulang_cepat').show();
+            $('.until').hide();
             $('.jam_datang_terlambat').hide();
 
             $('.kuota_cuti').val('0');
@@ -475,6 +477,7 @@
             document.getElementById('TypeLeave').style.display = "none";
             time_picker();
             $('.jam_pulang_cepat').show();
+            $('.until').show();
             $('.jam_datang_terlambat').show();
 
             $('.kuota_cuti').val('0');

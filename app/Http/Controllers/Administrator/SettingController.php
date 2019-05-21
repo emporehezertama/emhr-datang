@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\ScheduleBackup;
+
 use Storage;
 
 class SettingController extends Controller
@@ -209,4 +211,25 @@ class SettingController extends Controller
 
         return redirect()->route('administrator.setting.backup')->with('message-success', 'Setting saved');
     }
+
+    public function storeBackupSchedule(Request $request)
+    {
+        $data               = new ScheduleBackup();
+        $data->backup_type  = $request->backup_type;
+        $data->time         = $request->time;
+        $data->recurring    = $request->recurring;
+        $data->date         = $request->date;
+        $data->save();
+
+        return redirect()->route('administrator.setting.backup')->with('message-success', 'Setting saved');
+    }
+    
+     public function deleteBackupSchedule($id)
+    {
+        $data = ScheduleBackup::where('id', $id)->first();
+        $data->delete();
+
+        return redirect()->route('administrator.setting.backup')->with('message-success', 'Setting delete');
+    }
+    
 }

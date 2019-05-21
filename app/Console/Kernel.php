@@ -28,47 +28,64 @@ class Kernel extends ConsoleKernel
         $command_backup = 'backup:run';
         $command_params = [];
 
-        if(get_setting('backup_type') == 1)
-        {
-            $command_backup = 'backup:run';
-        }
-        if(get_setting('backup_type') == 2)
-        {
-            $command_backup = 'backup:run --only-db';
-            $command_params['--only-db']= true;
-        }
-        if(get_setting('backup_type') == 3)
-        {
-            $command_backup = 'backup:run --only-files';
-            $command_params['--only-files'] = true;
-        }
+        $dataSchedule = get_schedule();
 
-        if(get_setting('schedule_custom_date') == date('Y/m/d'))
-        {
-            update_setting('schedule_custom_date','');
+        foreach ($dataSchedule as $key => $value) {
+            if($value->backup_type == 1)
+            {
+                $command_backup = 'backup:run';
+                if($value->recurring == 1)
+                {
+                    $schedule->command($command_backup)->dailyAt($value->time);;
+                }elseif ($value->recurring == 2) {
+                    $schedule->command($command_backup)->weeklyOn(1, $value->time);
 
-            Artisan::call('backup:run', $command_params);
-        }
+                }elseif ($value->recurring == 3) {
+                    $schedule->command($command_backup)->monthlyOn(4, $value->time);
+                }elseif ($value->recurring == 4) {
+                    if($value->date == date('Y-m-d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    {
+                        Artisan::call($command_backup);
+                    }
+                    //$schedule->command($command_backup)->monthlyOn($value->date, $value->time);
+                }
+            }elseif ($value->backup_type == 2) {
+                $command_backup = 'backup:run --only-db';
+                $command_params['--only-db']= true;
+                if($value->recurring == 1)
+                {
+                    $schedule->command($command_backup)->dailyAt($value->time);;
+                }elseif ($value->recurring == 2) {
+                    $schedule->command($command_backup)->weeklyOn(1, $value->time);
 
-        switch (get_setting('schedule')) {
-            case 1:
-                $schedule->command()->everyMinute();;
-                break;
-            case 2:
-                $schedule->command($command_backup)->hourly();;
-                break;
-            case 3:
-                $schedule->command($command_backup)->daily();;
-                break;
-            case 4:
-                $schedule->command($command_backup)->weekly();;
-                break;
-            case 5:
-                $schedule->command($command_backup)->monthly();;
-                break;
-            default:
-                # code...
-                break;
+                }elseif ($value->recurring == 3) {
+                    $schedule->command($command_backup)->monthlyOn(4, $value->time);
+                }elseif ($value->recurring == 4) {
+                    if($value->date == date('Y-m-d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    {
+                        Artisan::call($command_backup);
+                    }
+                    //$schedule->command($command_backup)->monthlyOn($value->date, $value->time);
+                }
+            }elseif ($value->backup_type == 3) {
+                $command_backup = 'backup:run --only-files';
+                $command_params['--only-files'] = true;
+                if($value->recurring == 1)
+                {
+                    $schedule->command($command_backup)->dailyAt($value->time);;
+                }elseif ($value->recurring == 2) {
+                    $schedule->command($command_backup)->weeklyOn(1, $value->time);
+
+                }elseif ($value->recurring == 3) {
+                    $schedule->command($command_backup)->monthlyOn(4, $value->time);
+                }elseif ($value->recurring == 4) {
+                    if($value->date == date('Y-m-d') && date('H:i',strtotime($value->time)) == date('H:i'))
+                    {
+                        Artisan::call($command_backup);
+                    }
+                    //$schedule->command($command_backup)->monthlyOn($value->date, $value->time);
+                }
+            }
         }
     }
 
