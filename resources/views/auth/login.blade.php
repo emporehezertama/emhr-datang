@@ -1,10 +1,10 @@
 @extends('layouts.login')
 
 @section('content')
-<img src="{{ asset('images/bg-left-bottom.png')}}?v=2" class="bg-left-bottom" style="position: absolute; bottom: 0;left: 0; width: 800px;z-index: 999" />
+<img src="{{ asset('images/bg-left-bottom.png')}}?v=2" class="bg-left-bottom" style="position: absolute; bottom: 0;left: 0; width: 600px;z-index: 999;" />
 <div class="img-contact">
   <img src="{{ asset('images/exit-button.png')}}?v=1" class="close_contact" title="Close " style="cursor: pointer; position: absolute;top: 0;left: 17px;width: 40px;" />
-  <img src="{{ asset('images/contact.png')}}?v=1" style="width: 250px;" />
+  <img src="{{ asset('images/contact.png')}}?v=1" style="width: 200px;" />
 </div>  
 
 <!-- Preloader -->
@@ -124,6 +124,10 @@
     background: url(images/bg-login.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+  }
+  .new-login-register .new-login-box {
+    margin-left: 730px !important;
+    position: absolute !important;
   }
 </style>
 @endsection

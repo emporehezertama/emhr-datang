@@ -1,6 +1,6 @@
 @extends('layouts.administrator')
 
-@section('title', 'Setting Approval Exit')
+@section('title', 'Setting Approval Clearance')
 
 @section('sidebar')
 
@@ -16,9 +16,10 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">SETTING APPROVAL EXIT CLEARANCE</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+               
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">SETTING APPROVAL EXIT CLEARANCE</li>
+                    <li class="active">SETTING APPROVAL CLEARANCE</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -60,7 +61,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div>    
             <div class="col-md-4">
                 <div class="white-box">
                     <h3 class="box-title m-b-0 pull-left">Check From General Affair (GA)</h3>
@@ -134,7 +135,7 @@
                 </div>
             </div>
             <div class="clearfix"></div>
-             <div class="col-md-4">
+            <div class="col-md-4">
                 <div class="white-box">
                     <h3 class="box-title m-b-0 pull-left">Check From Accounting & Finance</h3>
                     <a class="btn btn-info btn-xs pull-right add-accounting"><i class="fa fa-plus"></i> Add</a>
@@ -169,9 +170,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
-
-
+            </div>        
         </div>
         <!-- /.row -->
         <!-- ============================================================== -->
@@ -182,7 +181,7 @@
 <!-- ============================================================== -->
 <!-- End Page Content -->
 <!-- ============================================================== -->
-<!-- sample modal content -->
+
 <div id="modal_hrd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -452,9 +451,6 @@ $(".autocomplete-accounting" ).autocomplete({
             }
         });
     });
-
-
-    
 </script>
 @endsection
-
+@endsection

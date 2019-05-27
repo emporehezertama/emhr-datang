@@ -11,8 +11,9 @@
 		</tr>
 		<tr>
 			<th style="text-align: left;">Leave/Permit Type </th>
-			<th style="text-align: left;"> : {{ isset($data->cuti->jenis_cuti) ? $data->cuti->jenis_cuti : '' }}</th>
+			<th style="text-align: left;"> : {{ isset($data->cuti) ? $data->cuti->description : '' }}</th>
 		</tr>
+		
 		<tr>
 			<th style="text-align: left;">Leave/Permit Duration </th>
 			<th style="text-align: left;"> : {{ $data->total_cuti }} Days</th>

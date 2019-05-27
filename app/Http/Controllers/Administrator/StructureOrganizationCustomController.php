@@ -42,17 +42,23 @@ class StructureOrganizationCustomController extends Controller
      */
     public function store(Request $request)
     {
-        $data               = new StructureOrganizationCustom();
-        $data->parent_id    = $request->parent_id;
-        $data->organisasi_division_id   = $request->organisasi_division_id;
-        $data->organisasi_position_id   = $request->organisasi_position_id;
-        $data->save();
+        $checkExist = StructureOrganizationCustom::where('organisasi_division_id',$request->organisasi_division_id)->where('organisasi_position_id',$request->organisasi_position_id)->first();
+        if(isset($checkExist))
+        {
+            return redirect()->route('administrator.organization-structure-custom.index', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+        }else{
+            $data               = new StructureOrganizationCustom();
+            $data->parent_id    = $request->parent_id;
+            $data->organisasi_division_id   = $request->organisasi_division_id;
+            $data->organisasi_position_id   = $request->organisasi_position_id;
+            $data->save();
 
-        $settingApproval = new SettingApprovalLeave();
-        $settingApproval->structure_organization_custom_id = $data->id;
-        $settingApproval->save();
-
-        return redirect()->route('administrator.organization-structure-custom.index');
+            $settingApproval = new SettingApprovalLeave();
+            $settingApproval->structure_organization_custom_id = $data->id;
+            $settingApproval->save();
+            return redirect()->route('administrator.organization-structure-custom.index');
+        }
+      
     }
 
     /**
