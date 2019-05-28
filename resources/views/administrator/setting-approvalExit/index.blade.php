@@ -14,13 +14,13 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> </div>
+                <h4 class="page-title">SETTING APPROVAL EXIT INTERVIEW</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <!--<a href="{{ route('administrator.setting-approvalLeave.create') }}" class="btn btn-sm btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD APPROVAL</a>
                     -->
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">SETTING APPROVAL EXIT INTERVIEW & CLEARANCE</li>
+                    <li class="active">SETTING APPROVAL EXIT INTERVIEW</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -29,8 +29,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">SETTING APPROVAL EXIT INTERVIEW & CLEARANCE</h3>
-                    <br />
                     <div class="table-responsive">
                         <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
