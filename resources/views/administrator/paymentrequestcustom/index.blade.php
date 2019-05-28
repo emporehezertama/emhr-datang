@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Dashboard</h4> 
+                <h4 class="page-title">Manage Payment Request</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
@@ -28,8 +28,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage Payment Request</h3>
-                    <hr />
                     <form method="POST" action="{{ route('administrator.paymentRequestCustom.index') }}" id="filter-form">
                         <p>Filter Form</p>
                         {{ csrf_field() }}
