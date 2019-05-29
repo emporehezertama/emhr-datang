@@ -79,9 +79,14 @@
 			function form_free_trial()
 			{
 				$('html, body').animate({
-			        scrollTop: $(".form").offset().top
+			        scrollTop: $(".container_bottom").offset().top
 			    }, 1000);
 			}
+
+			@if(Session::has('message-success'))
+				alert("{{ Session::get('message-success') }}");
+			@endif
+
 		</script>
 	</head>
 <body>
@@ -107,7 +112,7 @@
 		  </div>
 		</div>
 		<div class="bg-2">
-		  <div class="container">
+		  <div class="container container_bottom">
 			<div class="col-md-4 float-left">
 				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px;" />
 			</div>
@@ -238,7 +243,7 @@
 			<div class="clearfix"></div>			
 		</div>
 		<div>
-			<img src="{{ asset('landing-page/2019-05-28/line botton.png') }}" class="mb-4" style="width: 100%; margin-top: 5%">
+			<img src="{{ asset('landing-page/2019-05-28/line botton.png') }}" class="mb-4" style="width: 100%; margin-top: 1%">
 		</div>
 	  </div>
 	</div>
