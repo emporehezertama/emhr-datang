@@ -3,8 +3,8 @@
 @section('content')
 <!--<img src="{{ asset('images/bg-left-bottom.png')}}?v=2" class="bg-left-bottom" style="position: absolute; bottom: 0;left: 0; width: 600px;z-index: 999;" />
   -->
-  <img src="{{ asset('images/logo.gif')}}?v=2" class="bg-left-bottom" style="position: absolute; top: 50px;left: 220px; width:350px;z-index: 999;"  />  
-  <img src="{{ asset('images/Komputer.png')}}?v=2" class="bg-left-bottom" style="position: absolute; bottom: 50px;left: 65px; width:350px;z-index: 999;" />
+  <img src="{{ asset('images/logo.gif')}}?v=2" class="bg-left-bottom" style="position: absolute;top: 98px;left: 246px;width:350px;z-index: 1010;"  />  
+  <img src="{{ asset('images/Komputer.png')}}?v=2" class="bg-left-bottom" style="position: absolute;bottom: 75px;left: 117px;width:350px;z-index: 999;" />
 
 <div class="img-contact">
   <img src="{{ asset('images/exit-button.png')}}?v=1" class="close_contact" title="Close " style="cursor: pointer; position: absolute;top: 0;left: 17px;width: 40px;" />
@@ -137,7 +137,7 @@
     background-size: cover;
   }
   .new-login-register .new-login-box {
-    margin-left: 730px !important;
+    -margin-left: 730px !important;
     position: absolute !important;
   }
 </style>

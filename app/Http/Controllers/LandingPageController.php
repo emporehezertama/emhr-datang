@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Asset;
-use App\Models\AssetTracking;
+use App\Models\LandingPageForm;
 
 class LandingPageController extends Controller
 {
@@ -26,6 +25,26 @@ class LandingPageController extends Controller
      */
     public function storePage1(Request $request)
     {
-        
+        $this->validate($request,[
+            'nama' => 'required',
+            'jabatan' => 'required',
+            'email' => 'email',
+            'perusahaan' => 'perusahaan',
+            'bidang_usaha' => 'bidang_usaha',
+            'handphone' => 'handphone',
+            'confirmation'      => 'same:password',
+        ]);
+
+        $data               = new LandingPageForm();
+        $data->nama         = $request->nama;
+        $data->jabatan      = $request->jabatan;
+        $data->email        = $request->email;
+        $data->password     = $request->password;
+        $data->perusahaan   = $request->perusahaan;
+        $data->bidang_usaha = $request->bidang_usaha;
+        $data->handphone    = $request->handphone; 
+        $data->save();
+
+        return redirect()->route('landing-page1')->with('message-success', 'Form Submited.');
     }
 }
