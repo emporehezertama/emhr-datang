@@ -86,7 +86,7 @@
 	</head>
 <body>
 	<div>
-		<a class="btn btn-info float-right btn_login">Login</a>
+		<a href="{{ route('login') }}" class="btn btn-info float-right btn_login">Login</a>
 		<div class="bg-1">
 		  <div class="container" style="height: 100vh;">
 			<div class="col-md-4 float-left section-1">

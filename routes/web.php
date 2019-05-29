@@ -24,7 +24,7 @@ date_default_timezone_set($timezone);
 
 Route::get('/', function () 
 {
-	return redirect('login');
+	return redirect()->route('landing-page1');
 });
 
 Auth::routes();
