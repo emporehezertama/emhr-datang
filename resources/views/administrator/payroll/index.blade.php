@@ -64,6 +64,11 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-2 pull-right">
+                        <div class="form-group m-b-0">
+                            <input type="text" class="form-control  form-control-line" name="name" value="{{ isset(request()->name) ? request()->name : '' }}" placeholder="Nik / Name">
+                        </div>
+                    </div>
                     <input type="hidden" name="action" value="view">
                     <div class="clearfix"></div>
                 </form>
@@ -72,6 +77,9 @@
         <div class="row">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
+                 <div class="section-btn-send-payslip" style="display: none;">
+                    <button type="button" class="btn btn-info btn-xs" onclick="send_payslip()"><i class="fa fa-send-o"></i> Send Payslip</button>
+                 </div>
                  <form method="POST" id="form_table_payroll" action="{{ route('administrator.payroll.index') }}">
                     <input type="hidden" name="action" value="bukti-potong">
                     {{ csrf_field() }}
@@ -91,13 +99,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                            	@php ($i = 1)
                             @if(isset($data))	
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
 			                            <tr>
-                                            <td><input type="checkbox" name="payroll_id[]" value="{{ $item->id }}"></td>
+                                            <td><input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
 			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
 			                                <td>{{ $item->user->name }}</td>
@@ -164,8 +171,113 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+
+<!-- modal send pay slip  -->
+<div id="modal_send_pay_slip" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">Send Pay Slip</h4> </div>
+            <form method="POST" class="form-horizontal form_send_payslip" action="{{ route('administrator.payroll.index') }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="send-pay-slip">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-6">Year</label>
+                        <label class="col-md-6">Month</label>
+                        <div class="col-md-6">
+                            <select class="form-control modal-select-year" required name="tahun">
+                                <option value="">- Select -</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 modal-select-month"></div>
+                        <div class="section-user-id"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="submit_payslip()"><i class="fa fa-send-o"></i> Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section('footer-script')
 <script type="text/javascript">
+
+    var send_payslip = function(){
+       $("#modal_send_pay_slip").modal("show");
+
+       $.ajax({
+            type: 'POST',
+            url: '{{ route('ajax.get-year-pay-slip-all') }}',
+            data: {'_token' : $("meta[name='csrf-token']").attr('content')},
+            dataType: 'json',
+            success: function (data) {
+                var el = '<option value="">- Select -</option>';
+                    
+                $.each(data.result, function(k,v){
+                    el += '<option value="'+ v.tahun +'">'+ v.tahun +'</option>';
+                });              
+
+                $("#modal_send_pay_slip .modal-select-year").html(el);
+            }
+        }); 
+
+        var count   = $("input[name='payroll_id[]']").filter(':checked');
+        var html    = '';
+
+        $(count).each(function(k,v){
+            html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
+
+        });
+
+        $('.section-user-id').html(html);
+    }
+
+
+    function submit_payslip()
+    {
+        var year    = $('.modal-select-year').val();
+        var bulan   = $("input[name='bulan[]']").filter(':checked').length;
+
+        if(year == "" || bulan <= 0)
+        {
+            _alert('Year / Month required.');
+            return false;
+        }
+
+        _confirm_submit('Send payslip ?', $('form.form_send_payslip'));
+    }
+
+    $("#modal_send_pay_slip .modal-select-year").on('change', function(){
+
+       var tahun = $(this).val();
+
+        if($(this).val() != "")
+        {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-bulan-pay-slip-all') }}',
+                data: {'tahun': tahun, '_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = '';
+
+                    $.each(data, function(k, v){
+                        el += '<label><input type="checkbox" value="'+ v.id +'" name="bulan[]" /> '+ v.name +'</label> &nbsp; ';
+
+                    });
+
+                    $('#modal_send_pay_slip .modal-select-month').html(el);
+                }
+            });
+        }
+    });
+
     
     function submit_bukti_potong()
     {
@@ -173,7 +285,27 @@
     }
 
     $("input[name='check_all']").click(function () {    
-        $('input:checkbox').prop('checked', this.checked);    
+        $('input:checkbox').prop('checked', this.checked);  
+
+        check_button_payslip();
+    });
+
+    function check_button_payslip()
+    {
+        var count = $("input:checkbox").filter(':checked').length; 
+
+        if(count > 0)
+        {
+            $('.section-btn-send-payslip').show();
+        }
+        else
+        {   
+            $('.section-btn-send-payslip').hide();
+        }
+    }
+
+    $('input:checkbox').click(function(){
+        check_button_payslip();
     });
 
     $("#filter_view").click(function(){
