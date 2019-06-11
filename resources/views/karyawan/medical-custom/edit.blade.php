@@ -100,7 +100,7 @@
                                       <th>PATIENT NAME</th>
                                       <th>CLAIM TYPE</th>
                                       <th>RECEIPT NO/ KWITANSI NO</th>
-                                      <th>QTY</th>
+                                      <th>AMOUNT</th>
                                       <th>FILE</th>
                                       <th>AMOUNT APPROVED</th>
                                   </tr>
@@ -114,9 +114,10 @@
                                     <td><input type="text" class="form-control datepicker"  readonly="true" name="tanggal_kwitansi[]" value="{{ $f->tanggal_kwitansi }}"  /></td>
                                      <td>
                                         @if($data->user->id == $f->user_family_id)
-                                            <input type="text" readonly="true" class="form-control" value="Saya Sendiri">
+                                            <input type="text" readonly="true" class="form-control" value="My Self">
                                         @else
-                                            <input type="text" readonly="true" class="form-control" value="{{ $f->userFamily->hubungan }}">
+                                            <input type="text" readonly="true" class="form-control" value="{{ isset($f->UserFamily->hubungan) ? $f->UserFamily->hubungan : ''  }}">
+
                                         @endif
                                     </td>
                                     <td>

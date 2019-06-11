@@ -32,13 +32,16 @@ class ApprovalExitClearanceCustomController extends Controller
     {
         //
         $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
-
         //if(!$approval) return [];
-
         if($approval)
         {
             $params['data'] = ExitInterview::where('status','<',3)->orderBy('id', 'DESC')->get();
-          
+           /* $count = ExitInterviewAssets::where('exit_interview_id',$params['data']['id'])->where(function($table)
+                    {
+                        $table->where('approval_check','<',1)->orWhereNull('approval_check');  
+                    })->get();
+            $params['check']      = count($count);
+            */
         } else
         {
             $params['data'] = [];

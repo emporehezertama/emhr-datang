@@ -20,9 +20,12 @@
                 <h4 class="page-title hidden-xs hidden-sm">Manage Medical Reimbursement</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                <!--
                 @if(cek_approval('medical_reimbursement'))
                 <a href="{{ route('karyawan.medical-custom.create') }}" class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light"> <i class="fa fa-plus"></i> ADD MEDICAL REIMBURSEMENT</a>
                 @endif
+                -->
+                <a href="{{ route('karyawan.medical-custom.create') }}" class="btn btn-success btn-sm pull-right m-l-20 waves-effect waves-light"> <i class="fa fa-plus"></i> ADD MEDICAL REIMBURSEMENT</a>
                 <ol class="breadcrumb hidden-xs hidden-sm">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Medical Reimbursement</li>
