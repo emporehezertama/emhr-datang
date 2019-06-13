@@ -39,6 +39,7 @@
 				height: 54px;
 				color : white;
 				font-size: 20px;
+				cursor: pointer;
 			}
 			.btn_trial_3 {
 				background: url('{{ asset('landing-page/2019-05-28/button trial now.png') }}');
@@ -123,7 +124,10 @@
 					<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
 
-                        @if (count($errors) > 0)
+						<div class="bg-form-title">
+							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 13px !important;" class="py-2 px-0 mx-0 mt-0">Start Free Register</h3>
+						</div>
+						@if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <strong>Whoops!</strong> There were some problems with your input.<br><br>
                                 <ul>
@@ -133,13 +137,9 @@
                                 </ul>
                             </div>
                         @endif
-
-						<div class="bg-form-title">
-							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 13px !important;" class="py-2 px-0 mx-0 mt-0">Start Free Register</h3>
-						</div>
 						<div class="px-5 pt-4">
 							<div class="form-group">
-								<input type="text" class="form-control" name="nama" placeholder="Full Name" required>
+								<input type="text" class="form-control" name="nama" placeholder="Full Name" value="{{ old('nama') }}" required>
 							</div>
 							<div class="form-group">
 								<select name="jabatan" class="form-control">
@@ -151,16 +151,16 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<input type="email" class="form-control" name="email" placeholder="Email" required>
+								<input type="email" class="form-control" name="email" placeholder="Email" value="{{ old('email') }}" required>
 							</div>
 							<div class="form-group">
-								<input type="password" class="form-control" name="password" placeholder="Password" required>
+								<input type="password" class="form-control" name="password" placeholder="Password"  value="{{ old('password') }}" required>
 							</div>
 							<div class="form-group">
-								<input type="password" class="form-control" name="confirm" placeholder="Confirm Password" required>
+								<input type="password" class="form-control" name="confirm" placeholder="Confirm Password" value="{{ old('confirm') }}" required>
 							</div>
 							<div class="form-group">
-								<input type="input" class="form-control" name="nama_perusahaan" placeholder="Company" required>
+								<input type="input" class="form-control" name="nama_perusahaan" placeholder="Company" value="{{ old('company') }}" required>
 							</div>
 							<div class="form-group">
 								<select class="form-control" name="bidang_usaha" required>
@@ -222,7 +222,7 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<input type="text" name="handphone" class="form-control" placeholder="Handphone Number" required>
+								<input type="text" name="handphone" class="form-control" placeholder="Handphone Number" value="{{ old('handphone') }}" required>
 							</div>
 							<!-- <div class="form-group">
 								<div class="float-left px-0 mx-0" style="width: 15px">

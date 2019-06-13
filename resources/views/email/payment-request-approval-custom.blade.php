@@ -14,7 +14,7 @@
 			<th style="text-align: left;"> : {{ $data->tujuan }}</th>
 		</tr>
 		<tr>
-			<th style="text-align: left;">Qty </th>
+			<th style="text-align: left;">Amount </th>
 			<th style="text-align: left;"> : {{ sum_payment_request_price($data->id) }}</th>
 		</tr>
 		<tr>

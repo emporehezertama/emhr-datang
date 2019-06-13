@@ -106,7 +106,7 @@
                             <div class="col-md-12">
                                 <a href="{{ route('karyawan.approval.clearance-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
                                 @if($check > 0)
-                                <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="submit_form"><i class="fa fa-save"></i> Approve Exit Clearance</a>
+                                <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="submit_form"><i class="fa fa-save"></i> Approve</a>
                                 @endif
                                 
                             </div>

@@ -155,6 +155,35 @@ function _confirm(msg, url)
   return false;
 }
 
+function _confirm_submit(msg, form)
+{
+  if(msg == "") return false;
+
+  bootbox.confirm({
+    title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+    message: msg,
+    closeButton: false,
+    buttons: {
+        confirm: {
+            label: '<i class="fa fa-check"></i> Yes',
+            className: 'btn btn-sm btn-success'
+        },
+        cancel: {
+            label: '<i class="fa fa-close"></i> No',
+            className: 'btn btn-sm btn-default btn-outline'
+        }
+    },
+    callback: function (result) {
+      if(result)
+      { 
+        form.trigger('submit');
+      }
+    }
+  });
+
+  return false;
+}
+
 
 
 

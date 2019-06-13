@@ -53,7 +53,15 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        $data = User::where('access_id', 2);
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = User::where('access_id', 2)->where('project_id', $user->project_id);
+        } else
+        {
+            $data = User::where('access_id', 2);
+        }
+        
         $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->get();
         $params['countPos'] = count($notDefinePos);
         if(isset($_GET["position"]) and $_GET["position"] ==1)
@@ -65,8 +73,8 @@ class KaryawanController extends Controller
             if(!empty(request()->name))
             {
                 $data = $data->where(function($table){
-                    $table->where('users.name', 'LIKE', request()->name)
-                            ->orWhere('users.nik', request()->name);
+                    $table->where('users.name', 'LIKE', '%'. request()->name .'%')
+                            ->orWhere('users.nik', 'LIKE', '%'. request()->name .'%');
                 });
             }
 
@@ -102,98 +110,6 @@ class KaryawanController extends Controller
         $params['data'] = $data->orderBy('id', 'DESC')->paginate(50);
 
         return view('administrator.karyawan.index')->with($params);
-    }
-
-    /**
-     * Send Pay Slip
-     * @return email
-     */
-    public function sendPaySlip(Request $request)
-    {
-        $data                       = new RequestPaySlip();
-        $data->user_id              = $request->modal_user_id;
-        $data->status               = 1;   
-        $data->save();
-
-        foreach($request->bulan as $key => $i)
-        {   
-            $item               = new RequestPaySlipItem();
-            $item->tahun        = $request->tahun;
-            $item->request_pay_slip_id = $data->id;
-            $item->bulan        = $i;
-            $item->status       = 1; 
-            $item->user_id      = $request->modal_user_id;
-            $item->save();
-        }
-
-
-        $bulanItem = RequestPaySlipItem::where('request_pay_slip_id', $data->id)->get();
-        $bulan = [];
-        $total = 0;
-        $dataArray = [];
-        $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
-        foreach($bulanItem as $k => $i)
-        {
-            $bulan[$k] = $bulanArray[$i->bulan]; $total++;
-
-            $items   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $i->bulan ." and user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun. ' ORDER BY id DESC'));
-            
-            if(!$items)
-            {
-                $items   = \DB::select(\DB::raw("SELECT * FROM payroll_history WHERE user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun ." ORDER BY id DESC"));
-                $dataArray[$k] = $items[0];
-            }
-            else
-            {
-                $dataArray[$k] = $items[0];
-            }
-        }
-
-        $params['total']        = $total;
-        $params['dataArray']    = $dataArray;
-        $params['data']         = $data;
-        $params['bulan']        = $bulan;
-        $params['tahun']        = $request->tahun;
-
-        $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);
-
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-
-        $pdf->stream();
-
-        $output = $pdf->output();
-        $destinationPath = public_path('/storage/temp/');
-
-        file_put_contents( $destinationPath . $data->user->nik .'.pdf', $output);
-
-        $file = $destinationPath . $data->user->nik .'.pdf';
-
-        // send email
-        $objDemo = new \stdClass();
-        $objDemo->content = view('administrator.request-pay-slip.email-pay-slip'); 
-        
-        if($data->user->email != "")
-        { 
-            \Mail::send('administrator.request-pay-slip.email-pay-slip', $params,
-                function($message) use($file, $data, $bulan) {
-                    $message->from('info@system.com');
-                    $message->to($data->user->email);
-                    $message->subject('Request Pay-Slip Bulan ('. implode('/', $bulan) .')');
-                    $message->attach($file, array(
-                            'as' => 'Payslip-'. $data->user->nik .'('. implode('/', $bulan) .').pdf', 
-                            'mime' => 'application/pdf')
-                    );
-                    $message->setBody('');
-                }
-            );
-        }
-        
-        $data->note     = $request->note;
-        $data->status   = 2;
-        $data->save();
-
-        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Pay Slip Send successfully');
     }
 
     /**
@@ -1326,165 +1242,167 @@ class KaryawanController extends Controller
     {
         $data               = new User();
 
-        $this->validate($request,[
+        if(checkUserLimit()){
+            $this->validate($request,[
             'nik'               => 'required|unique:users',
             //'email'               => 'required|unique:users',
             //'confirmation'      => 'same:password',
-        ]);
+            ]);
 
-        $data->password             = bcrypt($request->password);
-        $data->name                 = strtoupper($request->name);
-        $data->employee_number      = $request->employee_number;
-        $data->absensi_number       = $request->absensi_number;
-        $data->nik                  = $request->nik;
-        $data->ext                  = $request->ext;
-        $data->tempat_lahir         = $request->tempat_lahir;
-        $data->tanggal_lahir        = $request->tanggal_lahir;
-        $data->marital_status       = $request->marital_status;
-        $data->jenis_kelamin        = $request->jenis_kelamin;
-        $data->blood_type           = $request->blood_type;
-        $data->email                = $request->email;
-        $data->join_date            = $request->join_date;
-        $data->organisasi_status    = $request->organisasi_status;
-        $data->npwp_number          = $request->npwp_number;
-        $data->bpjs_number          = $request->bpjs_number;
-        $data->jamsostek_number     = $request->jamsostek_number;
-        $data->ktp_number           = $request->ktp_number;
-        $data->passport_number      = $request->passport_number;
-        $data->kk_number            = $request->kk_number;
-        $data->telepon              = $request->telepon;
-        $data->mobile_1             = $request->mobile_1;
-        $data->mobile_2             = $request->mobile_2;
-        $data->agama                = $request->agama;
-        $data->current_address      = $request->current_address;
-        $data->id_address           = $request->id_address;
-        $data->access_id            = 2;
-        //$data->branch_type          = $request->branch_type;
-        //$data->hak_cuti             = 12;
-        //$data->cuti_yang_terpakai   = 0;
-        //$data->cabang_id            =$request->cabang_id;
-        $data->nama_rekening        = $request->nama_rekening;
-        $data->nomor_rekening       = $request->nomor_rekening;
-        $data->bank_id              = $request->bank_id;
-        $data->ext                  = $request->ext;
-        //$data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
-        
-        //$data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
-        //$data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
-        //$data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
-        $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
+            $data->password             = bcrypt($request->password);
+            $data->name                 = strtoupper($request->name);
+            $data->employee_number      = $request->employee_number;
+            $data->absensi_number       = $request->absensi_number;
+            $data->nik                  = $request->nik;
+            $data->ext                  = $request->ext;
+            $data->tempat_lahir         = $request->tempat_lahir;
+            $data->tanggal_lahir        = $request->tanggal_lahir;
+            $data->marital_status       = $request->marital_status;
+            $data->jenis_kelamin        = $request->jenis_kelamin;
+            $data->blood_type           = $request->blood_type;
+            $data->email                = $request->email;
+            $data->join_date            = $request->join_date;
+            $data->organisasi_status    = $request->organisasi_status;
+            $data->npwp_number          = $request->npwp_number;
+            $data->bpjs_number          = $request->bpjs_number;
+            $data->jamsostek_number     = $request->jamsostek_number;
+            $data->ktp_number           = $request->ktp_number;
+            $data->passport_number      = $request->passport_number;
+            $data->kk_number            = $request->kk_number;
+            $data->telepon              = $request->telepon;
+            $data->mobile_1             = $request->mobile_1;
+            $data->mobile_2             = $request->mobile_2;
+            $data->agama                = $request->agama;
+            $data->current_address      = $request->current_address;
+            $data->id_address           = $request->id_address;
+            $data->access_id            = 2;
+            //$data->branch_type          = $request->branch_type;
+            //$data->hak_cuti             = 12;
+            //$data->cuti_yang_terpakai   = 0;
+            //$data->cabang_id            =$request->cabang_id;
+            $data->nama_rekening        = $request->nama_rekening;
+            $data->nomor_rekening       = $request->nomor_rekening;
+            $data->bank_id              = $request->bank_id;
+            $data->ext                  = $request->ext;
+            //$data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
+            
+            //$data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
+            //$data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
+            //$data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
+            $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
 
-        if (request()->hasFile('foto'))
-        {
-            $file = $request->file('foto');
-            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
-
-            $destinationPath = public_path('/storage/foto/');
-            $file->move($destinationPath, $fileName);
-
-            $data->foto = $fileName;
-        }
-        if (request()->hasFile('foto_ktp'))
-        {
-            $fileKtp = $request->file('foto_ktp');
-            $fileNameKtp = md5($fileKtp->getClientOriginalName() . time()) . "." . $fileKtp->getClientOriginalExtension();
-
-            $destinationPath = public_path('/storage/fotoktp/');
-            $fileKtp->move($destinationPath, $fileNameKtp);
-
-            $data->foto_ktp = $fileNameKtp;
-        }
-
-        $data->save();
-
-        // user Dependent
-        if(isset($request->dependent))
-        {
-            foreach($request->dependent['nama'] as $key => $item)
+            if (request()->hasFile('foto'))
             {
-                $dep = new UserFamily();
-                $dep->user_id           = $data->id;
-                $dep->nama          = $request->dependent['nama'][$key];
-                $dep->hubungan      = $request->dependent['hubungan'][$key];
-                $dep->tempat_lahir  = $request->dependent['tempat_lahir'][$key];
-                $dep->tanggal_lahir = $request->dependent['tanggal_lahir'][$key];
-                $dep->tanggal_meninggal = $request->dependent['tanggal_meninggal'][$key];
-                $dep->jenjang_pendidikan = $request->dependent['jenjang_pendidikan'][$key];
-                $dep->pekerjaan = $request->dependent['pekerjaan'][$key];
-                $dep->tertanggung = $request->dependent['tertanggung'][$key];
-                $dep->save();
-            }
-        }
+                $file = $request->file('foto');
+                $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
 
-        if(isset($request->inventaris_mobil))
-        {
-            foreach($request->inventaris_mobil['tipe_mobil'] as $k => $item)
-            {
-                $inventaris                 = new UserInventarisMobil();
-                $inventaris->user_id        = $data->id;
-                $inventaris->tipe_mobil     = $request->inventaris_mobil['tipe_mobil'][$k];
-                $inventaris->tahun          = $request->inventaris_mobil['tahun'][$k];
-                $inventaris->no_polisi      = $request->inventaris_mobil['no_polisi'][$k];
-                $inventaris->status_mobil   = $request->inventaris_mobil['status_mobil'][$k];
-                $inventaris->save();
-            }
-        }
+                $destinationPath = public_path('/storage/foto/');
+                $file->move($destinationPath, $fileName);
 
-        if(isset($request->education))
-        {
-            // user Education
-            foreach($request->education['pendidikan'] as $key => $item)
-            {
-                $edu = new UserEducation();
-                $edu->user_id = $data->id;
-                $edu->pendidikan    = $request->education['pendidikan'][$key];
-                $edu->tahun_awal    = $request->education['tahun_awal'][$key];
-                $edu->tahun_akhir   = $request->education['tahun_akhir'][$key];
-                $edu->fakultas      = $request->education['fakultas'][$key];
-                $edu->jurusan       = $request->education['jurusan'][$key];
-                $edu->nilai         = $request->education['nilai'][$key];
-                $edu->kota          = $request->education['kota'][$key];
-                $edu->save();
+                $data->foto = $fileName;
             }
-        }
+            if (request()->hasFile('foto_ktp'))
+            {
+                $fileKtp = $request->file('foto_ktp');
+                $fileNameKtp = md5($fileKtp->getClientOriginalName() . time()) . "." . $fileKtp->getClientOriginalExtension();
 
-        if(isset($request->cuti))
-        {
-            // user Cuti
-            foreach($request->cuti['cuti_id'] as $key => $item)
-            {
-                $c = new UserCuti();
-                $c->user_id = $data->id;
-                $c->cuti_id    = $request->cuti['cuti_id'][$key];
-                $c->kuota    = $request->cuti['kuota'][$key];
-                $c->save();
+                $destinationPath = public_path('/storage/fotoktp/');
+                $fileKtp->move($destinationPath, $fileNameKtp);
+
+                $data->foto_ktp = $fileNameKtp;
             }
-        }else{
-            $masterCuti = Cuti::where('jenis_cuti','Leave')->get();
-            foreach ($masterCuti as $key => $value) {
-                # code...
-                $userCuti = UserCuti::where('user_id',$data->id)->where('cuti_id',$value->id)->first();
-                if(!$userCuti)
+
+            $data->save();
+
+            // user Dependent
+            if(isset($request->dependent))
+            {
+                foreach($request->dependent['nama'] as $key => $item)
                 {
-                    $c = new UserCuti();
-                    $c->user_id     = $data->id;
-                    $c->cuti_id     = $value->id;
-                    $c->kuota      = $value->kuota;
-                    $c->sisa_cuti   = $value->kuota;
-                    $c->save();
+                    $dep = new UserFamily();
+                    $dep->user_id           = $data->id;
+                    $dep->nama          = $request->dependent['nama'][$key];
+                    $dep->hubungan      = $request->dependent['hubungan'][$key];
+                    $dep->tempat_lahir  = $request->dependent['tempat_lahir'][$key];
+                    $dep->tanggal_lahir = $request->dependent['tanggal_lahir'][$key];
+                    $dep->tanggal_meninggal = $request->dependent['tanggal_meninggal'][$key];
+                    $dep->jenjang_pendidikan = $request->dependent['jenjang_pendidikan'][$key];
+                    $dep->pekerjaan = $request->dependent['pekerjaan'][$key];
+                    $dep->tertanggung = $request->dependent['tertanggung'][$key];
+                    $dep->save();
                 }
             }
-        }
 
-        if(isset($request->inventaris_lainnya['jenis']))
-        {
-            foreach($request->inventaris_lainnya['jenis'] as $k => $i)
+            if(isset($request->inventaris_mobil))
             {
-                $i              = new UserInventaris();
-                $i->user_id     = $data->id;
-                $i->jenis       = $request->inventaris_lainnya['jenis'][$key];
-                $i->description = $request->inventaris_lainnya['description'][$key];
-                $i->save();
+                foreach($request->inventaris_mobil['tipe_mobil'] as $k => $item)
+                {
+                    $inventaris                 = new UserInventarisMobil();
+                    $inventaris->user_id        = $data->id;
+                    $inventaris->tipe_mobil     = $request->inventaris_mobil['tipe_mobil'][$k];
+                    $inventaris->tahun          = $request->inventaris_mobil['tahun'][$k];
+                    $inventaris->no_polisi      = $request->inventaris_mobil['no_polisi'][$k];
+                    $inventaris->status_mobil   = $request->inventaris_mobil['status_mobil'][$k];
+                    $inventaris->save();
+                }
+            }
+
+            if(isset($request->education))
+            {
+                // user Education
+                foreach($request->education['pendidikan'] as $key => $item)
+                {
+                    $edu = new UserEducation();
+                    $edu->user_id = $data->id;
+                    $edu->pendidikan    = $request->education['pendidikan'][$key];
+                    $edu->tahun_awal    = $request->education['tahun_awal'][$key];
+                    $edu->tahun_akhir   = $request->education['tahun_akhir'][$key];
+                    $edu->fakultas      = $request->education['fakultas'][$key];
+                    $edu->jurusan       = $request->education['jurusan'][$key];
+                    $edu->nilai         = $request->education['nilai'][$key];
+                    $edu->kota          = $request->education['kota'][$key];
+                    $edu->save();
+                }
+            }
+
+            if(isset($request->cuti))
+            {
+                // user Cuti
+                foreach($request->cuti['cuti_id'] as $key => $item)
+                {
+                    $c = new UserCuti();
+                    $c->user_id = $data->id;
+                    $c->cuti_id    = $request->cuti['cuti_id'][$key];
+                    $c->kuota    = $request->cuti['kuota'][$key];
+                    $c->save();
+                }
+            }else{
+                $masterCuti = Cuti::where('jenis_cuti','Leave')->get();
+                foreach ($masterCuti as $key => $value) {
+                    # code...
+                    $userCuti = UserCuti::where('user_id',$data->id)->where('cuti_id',$value->id)->first();
+                    if(!$userCuti)
+                    {
+                        $c = new UserCuti();
+                        $c->user_id     = $data->id;
+                        $c->cuti_id     = $value->id;
+                        $c->kuota      = $value->kuota;
+                        $c->sisa_cuti   = $value->kuota;
+                        $c->save();
+                    }
+                }
+            }
+
+            if(isset($request->inventaris_lainnya['jenis']))
+            {
+                foreach($request->inventaris_lainnya['jenis'] as $k => $i)
+                {
+                    $i              = new UserInventaris();
+                    $i->user_id     = $data->id;
+                    $i->jenis       = $request->inventaris_lainnya['jenis'][$key];
+                    $i->description = $request->inventaris_lainnya['description'][$key];
+                    $i->save();
+                }
             }
         }
 

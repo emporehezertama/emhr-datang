@@ -127,6 +127,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('attendance/index', 'AttendanceController@index')->name('attendance.index');
 	Route::get('attendance/detail-attendance/{SN}', 'AttendanceController@AttendanceList')->name('attendance.detail-attendance');
 	Route::post('ajax/get-year-pay-slip', 'AjaxController@getYearPaySlip')->name('ajax.get-year-pay-slip');		
+	Route::post('ajax/get-year-pay-slip-all', 'AjaxController@getYearPaySlipAll')->name('ajax.get-year-pay-slip-all');	
+	Route::post('ajax/get-bulan-pay-slip-all', 'AjaxController@getBulanPaySlipAll')->name('ajax.get-bulan-pay-slip-all');		
+
 });
 
 /**

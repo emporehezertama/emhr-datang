@@ -34,7 +34,9 @@
                             <i class="fa fa-gear"></i>
                         </a>
                         <ul role="menu" class="dropdown-menu">
+                            @if(checkUserLimit())
                             <li><a href="{{ route('administrator.karyawan.create') }}"> <i class="fa fa-plus"></i> Add Employee</a></li>
+                            @endif
                             <li><a href="javascript:void(0)" id="add-import-karyawan"> <i class="fa fa-upload"></i> Import</a></li>
                             <li><a onclick="submit_filter_download()"><i class="fa fa-download"></i> Download </a></li>
                         </ul>
@@ -173,9 +175,6 @@
                                                     </li>
                                                     <li>
                                                         <a onclick="confirm_loginas('{{ $item->name }}','{{ route('administrator.karyawan.autologin', $item->id) }}')"><i class="fa fa-key"></i> Autologin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)" onclick="send_payslip({{ $item->id }})"><i class="fa fa-send"></i> Send Pay Slip</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -373,36 +372,6 @@
     <!-- /.modal-dialog -->
 </div>
 
-<!-- modal send pay slip  -->
-<div id="modal_send_pay_slip" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title" id="myModalLabel">Send Pay Slip</h4> </div>
-            <form method="POST" class="form-horizontal" action="{{ route('administrator.karyawan.send-pay-slip') }}">
-                {{ csrf_field() }}
-                <input type="hidden" name="modal_user_id" />
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="col-md-6">Year</label>
-                        <label class="col-md-6">Month</label>
-                        <div class="col-md-6">
-                            <select class="form-control modal-select-year" required name="tahun">
-                                <option value="">- Select -</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 modal-select-month"></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-info btn-sm">Send</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 @section('footer-script')
 <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
 <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
@@ -418,52 +387,6 @@
         $("#filter-form input[name='action']").val('download');
         $("#filter-form").submit();
     }
-
-    var send_payslip = function(id){
-       $("#modal_send_pay_slip").modal("show");
-
-       $.ajax({
-            type: 'POST',
-            url: '{{ route('ajax.get-year-pay-slip') }}',
-            data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
-            dataType: 'json',
-            success: function (data) {
-                var el = '<option value="">- Select -</option>';
-                    
-                $.each(data.result, function(k,v){
-                    el += '<option value="'+ v.tahun +'">'+ v.tahun +'</option>';
-                });              
-
-                $("#modal_send_pay_slip input[name='modal_user_id']").val(id);
-                $("#modal_send_pay_slip .modal-select-year").html(el);
-            }
-        }); 
-    }
-
-    $("#modal_send_pay_slip .modal-select-year").on('change', function(){
-
-       var tahun = $(this).val();
-
-        if($(this).val() != "")
-        {
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('ajax.get-bulan-pay-slip') }}',
-                data: {'tahun': tahun, 'user_id': $("#modal_send_pay_slip input[name='modal_user_id']").val(), '_token' : $("meta[name='csrf-token']").attr('content')},
-                dataType: 'json',
-                success: function (data) {
-                    var el = '';
-
-                    $.each(data, function(k, v){
-                        el += '<label><input type="checkbox" value="'+ v.id +'" name="bulan[]" /> '+ v.name +'</label> &nbsp; ';
-
-                    });
-
-                    $('#modal_send_pay_slip .modal-select-month').html(el);
-                }
-            });
-        }
-    });
 
     function confirm_loginas(name, url)
     {

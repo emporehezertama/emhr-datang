@@ -133,7 +133,7 @@
                                             <th style="background: #eee;">2. Hotel and Meal Allowance</th>
                                             <th style="background: #eee;">Plafond</th>
                                             <th style="background: #eee;">Nominal / days</th>
-                                            <th style="background: #eee;">QTY (days)</th>
+                                            <th style="background: #eee;">Amount (days)</th>
                                             <th style="background: #eee;">Total Request</th>
                                             <th style="background: #eee;">Nominal Approved</th>
                                             <th style="background: #eee;">Receipt Transaction</th>
@@ -148,7 +148,7 @@
                                                 <input type="hidden" name="uang_hotel_plafond" value="{{ $item->hotel }}">
                                             </td>
                                             <td><input type="number" class="form-control" name="uang_hotel_nominal" placeholder="IDR " value="{{ $data->uang_hotel_nominal }}" readonly="true" ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" name="uang_hotel_qty"  value="{{ $data->uang_hotel_qty }}" readonly="true"></td>
+                                            <td><input type="number" class="form-control" placeholder="AMOUNT" name="uang_hotel_qty"  value="{{ $data->uang_hotel_qty }}" readonly="true"></td>
                                             <td>{{ $data->uang_hotel_nominal * $data->uang_hotel_qty }}</td>
                                             <td><input type="text" name="uang_hotel_nominal_disetujui"  readonly="true" value="{{ $data->uang_hotel_nominal_disetujui }}" class="form-control"></td>
                                             <td>
@@ -166,7 +166,7 @@
                                                 <input type="hidden" class="form-control" name="uang_makan_plafond" value="{{ $item->tunjangan_makan }}" >
                                                 <input type="number" class="form-control" name="uang_makan_nominal" value="{{ $data->uang_makan_nominal }}" placeholder="Rp. " readonly="" >
                                             </td>
-                                            <td><input type="number" class="form-control" value="{{ $data->uang_makan_qty }}" name="uang_makan_qty" readonly="true" placeholder="QTY" ></td>
+                                            <td><input type="number" class="form-control" value="{{ $data->uang_makan_qty }}" name="uang_makan_qty" readonly="true" placeholder="AMOUNT" ></td>
                                             <td>{{ $data->uang_makan_nominal * $data->uang_makan_qty }}</td>
                                             <td><input type="text" name="uang_makan_nominal_disetujui" value="{{ $data->uang_makan_nominal_disetujui }}" class="form-control" readonly="true"></td>
                                             <td>
@@ -183,7 +183,7 @@
                                                 <input type="hidden" class="form-control" name="uang_harian_plafond" value="{{ $item->hotel }}" >
                                                 <input type="number" class="form-control" value="{{ $data->uang_harian_nominal }}" name="uang_harian_nominal" placeholder="IDR " readonly="true" >
                                             </td>
-                                            <td><input type="number" class="form-control" name="uang_harian_qty" value="{{ $data->uang_harian_qty }}" placeholder="QTY" readonly="true" ></td>
+                                            <td><input type="number" class="form-control" name="uang_harian_qty" value="{{ $data->uang_harian_qty }}" placeholder="AMOUNT" readonly="true" ></td>
                                             <td>{{ $data->uang_harian_nominal * $data->uang_harian_qty }}</td>
                                             <td><input type="text" class="form-control" name="uang_harian_nominal_disetujui" readonly="true"></td>
                                             <td>
@@ -200,7 +200,7 @@
                                                 <input type="hidden" class="form-control" name="uang_pesawat_plafond" value="{{ $item->pesawat }}" >
                                                 <input type="number" class="form-control" value="{{ $data->uang_pesawat_nominal }}"å name="uang_pesawat_nominal" placeholder="IDR " readonly="true" >
                                             </td>
-                                            <td><input type="number" class="form-control" name="uang_pesawat_qty" value="{{ $data->uang_pesawat_qty }}" placeholder="QTY" readonly="true" ></td>
+                                            <td><input type="number" class="form-control" name="uang_pesawat_qty" value="{{ $data->uang_pesawat_qty }}" placeholder="AMOUNT" readonly="true" ></td>
                                             <td>{{ $data->uang_pesawat_nominal * $data->uang_pesawat_qty }}</td>
                                             <td><input type="text" name="uang_pesawat_nominal_disetujui" class="form-control" readonly="true"></td>
                                             <td>

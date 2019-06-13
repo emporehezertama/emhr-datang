@@ -673,6 +673,11 @@ var calculate_allAllowance  = function(){
 
 $("#addAllowance").click(function(){
     @php ($plafond_dinas = getPlafondTraining($data->lokasi_kegiatan,$data->tempat_tujuan))
+    @if($plafond_dinas->tunjangan_makanan == 0)
+    {
+        alert('Plafond your meal allowance and type of location not define yet. Please contact your admin !');
+    }
+    @endif
     var no = $('.table-content-allowance tr').length;
     var html = '<tr>';
         html += '<td><input type="date" name="dateAllowance[]" required class="form-control" placeholder="Date"></td>';
@@ -723,6 +728,11 @@ var calculate_nominalDaily  = function(){
 }
 $("#addDaily").click(function(){
     @php ($plafond_dinas = getPlafondTraining($data->lokasi_kegiatan,$data->tempat_tujuan))
+    @if($plafond_dinas->tunjangan_harian == 0)
+    {
+        alert('Plafond your daily allowance and type of location not define yet. Please contact your admin !');
+    }
+    @endif
     var no = $('.table-content-daily tr').length;
     var html = '<tr>';
         html += '<td><input type="date" name="dateDaily[]" required class="form-control" \

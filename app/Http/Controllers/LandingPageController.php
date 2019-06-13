@@ -28,10 +28,10 @@ class LandingPageController extends Controller
         $this->validate($request,[
             'nama' => 'required',
             'jabatan' => 'required',
-            'email' => 'email',
-            'perusahaan' => 'perusahaan',
-            'bidang_usaha' => 'bidang_usaha',
-            'handphone' => 'handphone',
+            'email' => 'email:required',
+            'perusahaan' => 'required',
+            'bidang_usaha' => 'required',
+            'handphone' => 'required',
             'confirmation'      => 'same:password',
         ]);
 
@@ -45,6 +45,6 @@ class LandingPageController extends Controller
         $data->handphone    = $request->handphone; 
         $data->save();
 
-        return redirect()->route('landing-page1')->with('message-success', 'Form Submited.');
+        return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products and registering for trial licenses, we have received your data and we will contact you immediately for trial account information');
     }
 }
