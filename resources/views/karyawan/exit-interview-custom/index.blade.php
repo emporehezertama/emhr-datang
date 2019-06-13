@@ -39,8 +39,9 @@
                                     <th width="70" class="text-center">#</th>
                                     <th>RESIGN DATE</th>
                                     <th>REASON FOR LEAVING</th>
-                                    <th>STATUS</th>
+                                    <th>STATUS EXIT INTERVIEW</th>
                                     <th>CREATED</th>
+                                    <th>STATUS EXIT CLEARANCE</th>
                                     <th width="100">MANAGE</th>
                                 </tr>
                             </thead> 
@@ -62,6 +63,13 @@
                                             </a>
                                         </td>
                                         <td>{{ $item->created_at }}</td>
+                                        <td>
+                                            @if(count($item->countAssets) >= 1)
+                                            <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                            @else
+                                            <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
+                                            @endif
+                                        </td>
                                         <td>
                                            <a href="{{ route('karyawan.exit-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>
                                            @if($item->status < 3)

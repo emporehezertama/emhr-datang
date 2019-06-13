@@ -34,7 +34,9 @@
                             <i class="fa fa-gear"></i>
                         </a>
                         <ul role="menu" class="dropdown-menu">
+                            @if(checkUserLimit())
                             <li><a href="{{ route('administrator.karyawan.create') }}"> <i class="fa fa-plus"></i> Add Employee</a></li>
+                            @endif
                             <li><a href="javascript:void(0)" id="add-import-karyawan"> <i class="fa fa-upload"></i> Import</a></li>
                             <li><a onclick="submit_filter_download()"><i class="fa fa-download"></i> Download </a></li>
                         </ul>

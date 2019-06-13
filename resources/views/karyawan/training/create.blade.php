@@ -124,7 +124,7 @@
                                             <th style="background: #eee;">2. Hotel and Meal Allowance</th>
                                             <th style="background: #eee;">Plafond</th>
                                             <th style="background: #eee;">Nominal / days</th>
-                                            <th style="background: #eee;">QTY (days)</th>
+                                            <th style="background: #eee;">Amount (days)</th>
                                             <th style="background: #eee;">Total Request</th>
                                             <th style="background: #eee;">Nominal Approved</th>
                                             <th style="background: #eee;">Receipt Transaction</th>
@@ -136,7 +136,7 @@
                                             <td>Hotel</td>
                                             <td>IDR {{ number_format($item->hotel) }}</td>
                                             <td><input type="number" class="form-control" placeholder="IDR " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
+                                            <td><input type="number" class="form-control" placeholder="AMOUNT" ></td>
                                             <td></td>
                                             <td><input type="text" readonly="true" class="form-control"></td>
                                             <td><input type="file" class="form-control"></td>
@@ -147,7 +147,7 @@
                                             <td>Meal Allowance</td>
                                             <td>IDR  {{ number_format($item->tunjangan_makanan) }}</td>
                                             <td><input type="number" class="form-control" placeholder="IDR " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
+                                            <td><input type="number" class="form-control" placeholder="AMOUNT" ></td>
                                             <td></td>
                                             <td><input type="text" readonly="true" class="form-control"></td>
                                             <td><input type="file" class="form-control"></td>
@@ -157,7 +157,7 @@
                                             <td>Daily Allowance</td>
                                             <td>IDR {{ number_format($item->hotel) }}</td>
                                             <td><input type="number" class="form-control" placeholder="Rp. " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
+                                            <td><input type="number" class="form-control" placeholder="AMOUNT" ></td>
                                             <td></td>
                                             <td><input type="text" readonly="true" class="form-control"></td>
                                             <td><input type="file" class="form-control"></td>
@@ -167,7 +167,7 @@
                                             <td>Plane</td>
                                             <td>{{ $item->pesawat }}</td>
                                             <td><input type="number" class="form-control" placeholder="IDR " ></td>
-                                            <td><input type="number" class="form-control" placeholder="QTY" ></td>
+                                            <td><input type="number" class="form-control" placeholder="AMOUNT" ></td>
                                             <td></td>
                                             <td><input type="text" readonly="true" class="form-control"></td>
                                             <td><input type="file" class="form-control"></td>

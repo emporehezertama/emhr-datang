@@ -1549,6 +1549,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = CutiKaryawan::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1556,9 +1557,16 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1570,6 +1578,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = PaymentRequest::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1577,9 +1586,16 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1591,6 +1607,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = OvertimeSheet::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1598,9 +1615,16 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1612,6 +1636,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = OvertimeSheet::where('id', $request->foreign_id)->first();
             $history =[];
+            $user=[];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1619,9 +1644,15 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApprovedClaim)?$value->userApprovedClaim->name:'';
                 $history[$key]['date']          = $value->date_approved_claim;
                 $history[$key]['is_approved']   = $value->is_approved_claim;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
-            
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1629,10 +1660,11 @@ public function getCalculatePayrollGross(Request $request)
 
     public function getHistoryApprovalTrainingCustom(Request $request)
     {
-        if($request->ajax())
+        if($request->ajax()) 
         {
             $data = Training::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1640,9 +1672,15 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
-            
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1653,6 +1691,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = Training::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1660,9 +1699,15 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApprovedClaim)?$value->userApprovedClaim->name:'';
                 $history[$key]['date']          = $value->date_approved_claim;
                 $history[$key]['is_approved']   = $value->is_approved_claim;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
-            
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1673,6 +1718,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = MedicalReimbursement::where('id', $request->foreign_id)->first();
             $history =[];
+            $user =[];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1680,9 +1726,16 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history,'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1693,6 +1746,7 @@ public function getCalculatePayrollGross(Request $request)
         {
             $data = ExitInterview::where('id', $request->foreign_id)->first();
             $history =[];
+            $user=[];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1700,9 +1754,16 @@ public function getCalculatePayrollGross(Request $request)
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history,'user'=>$user]);
         }
 
         return response()->json($this->respon);

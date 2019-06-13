@@ -98,7 +98,7 @@
                                       <th>RELATIONSHIP</th>
                                       <th>PATIENT NAME</th>
                                       <th>GENDER</th>
-                                      <th>QTY</th>
+                                      <th>AMOUNT</th>
                                   </tr>
                               </thead>
                               <tbody class="table-claim">

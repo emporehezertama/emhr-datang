@@ -6,18 +6,24 @@ function getPlafondTraining($lokasi_kegiatan,$tempat_tujuan)
 	$position = \Auth::user()->structure->position->id;
 	$plafond = \App\Models\Kabupaten::select('provinsi.type')->where('kabupaten.nama',$tempat_tujuan)->join('provinsi','provinsi.id_prov','=','kabupaten.id_prov')->first();
 
+	//dd($plafond);
+
 	if($lokasi_kegiatan == 'Dalam Negeri'){
 		if($plafond == null)
 		{
 			$data = new \App\Models\PlafondDinas();
 			$data->tunjangan_makanan = 0;
 			$data->tunjangan_harian = 0;
-
 		}else{
-			$data = \App\Models\PlafondDinas::where('organisasi_position_id',$position)->where('plafond_type',$plafond->type)->first();
+			if($plafond->type == null)
+			{
+				$data = new \App\Models\PlafondDinas();
+				$data->tunjangan_makanan = 0;
+				$data->tunjangan_harian = 0;
+			} else{
+				$data = \App\Models\PlafondDinas::where('organisasi_position_id',$position)->where('plafond_type',$plafond->type)->first();
+			}
 		}
-		
-
 	}elseif ($lokasi_kegiatan == 'Luar Negeri') {
 		# code...
 		$data = \App\Models\PlafondDinasLuarNegeri::where('organisasi_position_id',$position)->first();

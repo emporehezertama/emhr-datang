@@ -38,6 +38,7 @@
                                     <th>NAME</th>
                                     <th>RESIGN DATE</th>
                                     <th>REASON FOR LEAVING</th>
+                                    <!--<th>STATUS</th>-->
                                     <th width="100">MANAGE</th>
                                 </tr>
                             </thead>
@@ -58,6 +59,10 @@
                                                 {!! $item->exitInterviewReason->label !!}
                                             @endif
                                         </td>
+                                        <!--<td>
+                                        <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                        </td>
+                                        -->
                                         <td>
                                             <a href="{{ route('karyawan.approval.clearance-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">Exit Clearance<i class="fa fa-search-plus"></i> 
                                         </td>

@@ -99,7 +99,7 @@
                                       <th>PATIENT NAME</th>
                                       <th>CLAIM TYPE</th>
                                       <th>RECEIPT NO/ KWITANSI NO</th>
-                                      <th>QTY</th>
+                                      <th>AMOUNT</th>
                                       <th>FILE</th>
                                       <th></th>
                                   </tr>
@@ -225,7 +225,7 @@
                         '<td><input type="text" class="form-control datepicker input" required name="tanggal_kwitansi[]" /></td>'+
                         '<td>'+
                             '<select name="user_family_id[]" class="form-control input" onchange="select_hubungan(this)" required>'+
-                                '<option value="">Pilih Hubungan</option><option value="{{ \Auth::user()->id }}" data-nama="{{ \Auth::user()->name }}">My Self</option>@foreach(Auth::user()->userFamily as $item)<option value="{{ $item->id }}" data-nama="{{ $item->nama }}">{{ $item->hubungan }}</option>@endforeach'+
+                                '<option value="">Choose relationship</option><option value="{{ \Auth::user()->id }}" data-nama="{{ \Auth::user()->name }}">My Self</option>@foreach(Auth::user()->userFamily as $item)<option value="{{ $item->id }}" data-nama="{{ $item->nama }}">{{ $item->hubungan }}</option>@endforeach'+
                             '</select>'+
                         '</td>'+
                         '<td><input type="text" readonly="true" class="form-control nama_hubungan" /></td>'+

@@ -99,7 +99,7 @@
                                       <th>PATIENT NAME</th>
                                       <th>CLAIM TYPE</th>
                                       <th>RECEIPT NO/ KWITANSI NO</th>
-                                      <th>QTY</th>
+                                      <th>AMOUNT</th>
                                       <th>AMOUNT APPROVED</th>
                                       <th>FILE</th>
                                   </tr>
@@ -115,7 +115,7 @@
                                         @if($data->user->id == $f->user_family_id)
                                             <input type="text" readonly="true" class="form-control" value="Employee">
                                         @else
-                                            <input type="text" readonly="true" class="form-control" value="{{ $f->UserFamily->hubungan }}">
+                                            <input type="text" readonly="true" class="form-control" value="{{ isset($f->UserFamily->hubungan) ? $f->UserFamily->hubungan : ''  }}">
                                         @endif
                                     </td>
                                     <td>
@@ -228,7 +228,7 @@
             html += '<td>'+ (no+1) +'</td>';
             html += '<td><input type="text" class="form-control datepicker" name="tanggal_kwitansi[]" /></td>';
             html += '<td><input type="text" class="form-control" name="nama_pasien[]" required /></td>';
-            html += '<td><select name="hubungan[]" class="form-control" required=""><option value="">Pilih Hubungan</option><option>Suami</option><option>Istri</option><option>Anak ke 1</option><option>Anak ke 2</option><option>Anak ke 3</option><option>Anak ke 4</option></select></td>';
+            html += '<td><select name="hubungan[]" class="form-control" required=""><option value="">Choose relationship</option><option>Suami</option><option>Istri</option><option>Anak ke 1</option><option>Anak ke 2</option><option>Anak ke 3</option><option>Anak ke 4</option></select></td>';
             html += '<td><select name="jenis_klaim[]" class="form-control"><option value="">Pilih Jenis Klaim</option><option value="RJ">RJ (Rawat Jalan)</option><option value="RI">RI (Rawat Inap)</option><option value="MA">MA (Melahirkan)</option></select></td>';
             html += '<td><input type="number" class="form-control" name="jumlah[]" /></td>';
             html += '</tr>';

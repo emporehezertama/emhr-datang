@@ -656,8 +656,6 @@
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-
                     $("#modal_content_history_approval").html(el);
                 }
             });
@@ -691,23 +689,22 @@
                     {
                         el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
                     }
-                                    
-
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                    if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-                    
-
                     });
                     $("#modal_content_history_approval").html(el);
-
-                    
                 }
             });
 
@@ -740,23 +737,22 @@
                     {
                         el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
                     }
-                                    
-
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                    if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-                    
-
                     });
                     $("#modal_content_history_approval").html(el);
-
-                    
                 }
             });
 
@@ -777,7 +773,6 @@
                     el += '<div class="panel-body">'+
                             '<div class="steamline">'+
                                 '<div class="sl-item">';
-
                     if(value.is_approved == 1)
                     {
                         el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
@@ -790,19 +785,20 @@
                     {
                         el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
                     }
-                                    
-
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                    if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el +='<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-                    
-
                     });
                     $("#modal_content_history_approval").html(el);
 
@@ -843,8 +839,14 @@
                                     
 
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                    if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
@@ -884,24 +886,23 @@
                     else if(value.is_approved === null)
                     {
                         el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
-                    }
-                                    
-
+                    }            
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                        if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                        el +='<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-                    
-
                     });
                     $("#modal_content_history_approval").html(el);
-
-                    
                 }
             });
 
@@ -935,16 +936,23 @@
                     {
                         el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
                     }
-                                    
-
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+
+                        if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el +='<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
+
+                        
                     });
                     $("#modal_content_history_approval").html(el);
                 }
@@ -983,20 +991,21 @@
                                     
 
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                    if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-                    
-
                     });
                     $("#modal_content_history_approval").html(el);
-
-                    
                 }
             });
 
@@ -1017,7 +1026,6 @@
                     el += '<div class="panel-body">'+
                             '<div class="steamline">'+
                                 '<div class="sl-item">';
-
                     if(value.is_approved == 1)
                     {
                         el += '<div class="sl-left bg-success"> <i class="fa fa-check"></i></div>';
@@ -1030,30 +1038,26 @@
                     {
                         el += '<div class="sl-left bg-warning"> <i class="fa fa-info"></i></div>';
                     }
-                                    
-
                     el += '<div class="sl-right">'+
-                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>'+
-                                        '<div>'+value.user+'<br></div>'+
+                                        '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
+                    if(value.is_approved === null)
+                        {
+                             $.each(data.user, function(k,v){
+                                el +='<p>'+v.name+'</p>';
+                            });
+                        }
+                    el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
-
-                    
-
                     });
                     $("#modal_content_history_approval").html(el);
-
-                    
                 }
             });
-
             $("#modal_history_approval").modal('show');
         }
-
-
     </script>
 
     <!-- ============================================================== -->

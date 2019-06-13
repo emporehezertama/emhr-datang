@@ -14,7 +14,7 @@
 			<th style="text-align: left;"> : {{ medical_type_string($data->id) }}</th>
 		</tr>
 		<tr>
-			<th style="text-align: left;">Qty</th>
+			<th style="text-align: left;">Amount</th>
 			<th style="text-align: left;"> : {{ number_format(total_medical_nominal($data->id)) }}</th>
 		</tr>
 	</thead>

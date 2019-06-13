@@ -225,7 +225,7 @@
                         el += '<td>'+ (data.telepon == null ? '' : data.telepon ) +'</td>';
                         el += '<td>'+ (data.email == null ? '' : data.email) +'</td>';
                         el += '<td>'+ (data.ext ==null ? '' : data.ext) +'</td>';
-                        el += '<td>'+ data.organisasi_job_role +'</td>';
+                        el += '<td>'+ data.position +'</td>';
                         el += '</tr></tbody>';
                         el += '</table>';
                         el += '</div></div></div>'
