@@ -59,9 +59,10 @@
                                     <tr>
                                         <th colspan="3"></th>
                                         <th colspan="3" style="text-align: center;">PRE</th>
+                                        <th colspan="3" style="text-align: center;">PRE APPROVED</th>
                                         <th colspan="2" style="text-align: center;">FINGER PRINT</th>
                                         <th colspan="3" style="text-align: center;">CLAIM</th>
-                                        <th colspan="3" style="text-align: center;">APPROVED</th>
+                                        <th colspan="3" style="text-align: center;">CLAIM APPROVED</th>
                                         <th>OT APPROVED</th>
                                         <th></th>
                                     </tr>
@@ -69,6 +70,9 @@
                                         <th>NO</th>
                                         <th>DATE</th>
                                         <th>DESCRIPTION</th>
+                                        <th>START</th>
+                                        <th>END</th>
+                                        <th>OT (HOURS)</th>
                                         <th>START</th>
                                         <th>END</th>
                                         <th>OT (HOURS)</th>
@@ -94,6 +98,9 @@
                                         <td><input type="text" style="width: 70px" readonly="true" name="awal[]" class="form-control" value="{{ $item->awal }}" /></td>
                                         <td><input type="text" style="width: 70px" readonly="true" name="akhir[]" class="form-control" value="{{ $item->akhir }}" /></td>
                                         <td><input type="text" readonly="true" name="total_lembur[]" class="form-control" value="{{ $item->total_lembur }}" /></td>
+                                        <td><input type="text" style="width: 70px" readonly="true" name="pre_awal_approved[]" class="form-control" value="{{ $item->pre_awal_approved }}" /></td>
+                                        <td><input type="text" style="width: 70px" readonly="true" name="pre_akhir_approved[]" class="form-control" value="{{ $item->pre_akhir_approved }}" /></td>
+                                        <td><input type="text" readonly="true" name="pre_total_approved[]" class="form-control" value="{{ $item->pre_total_approved }}" /></td>
                                         @php($in = overtime_absensi($item->tanggal,$data->user_id))
                                         <td><input type="text" style="width: 70px" readonly="true" class="form-control" value="{{ isset($in) ? $in->clock_in :''}}" /></td>
                                         <td><input type="text" style="width: 70px" readonly="true" class="form-control" value="{{ isset($in) ? $in->clock_out :''}}" /></td>
@@ -130,9 +137,7 @@
                                     <input type="text" readonly="true" class="form-control note" value="{{ $item->note_claim }}">
                                 </div>
                             </div>
-
                         @endforeach
-
                         <input type="hidden" name="status" value="0" />
                         <input type="hidden" name="id" value="{{ $data->id }}">
                         <div class="clearfix"></div>
@@ -229,8 +234,6 @@
             });
         });
     }
-              
-
 
     $("#add").click(function(){
         var disabledDates = [];

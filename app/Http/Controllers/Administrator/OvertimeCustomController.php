@@ -171,6 +171,9 @@ class OvertimeCustomController extends Controller
                 $params[$no]['START PRE '.$type]                = $form->awal;
                 $params[$no]['END PRE '.$type]                  = $form->akhir;
                 $params[$no]['OT (HOURS) PRE '.$type]           = $form->total_lembur;
+                $params[$no]['START PRE APPROVED '.$type]       = $form->pre_awal_approved;
+                $params[$no]['END PRE APPROVED '.$type]         = $form->pre_akhir_approved;
+                $params[$no]['OT (HOURS) PRE APPROVED '.$type]  = $form->pre_total_approved;
                 $params[$no]['START CLAIM '.$type]              = $form->awal_claim;
                 $params[$no]['END CLAIM '.$type]                = $form->akhir_claim;
                 $params[$no]['OT (HOURS) CLAIM '.$type]         = $form->total_lembur_claim;
@@ -188,6 +191,9 @@ class OvertimeCustomController extends Controller
                 $params[$no]['START PRE '.($v+1)]                   = '-';
                 $params[$no]['END PRE '.($v+1)]                     = '-';
                 $params[$no]['OT (HOURS) PRE '.($v+1)]              = '-';
+                $params[$no]['START PRE APPROVED '.($v+1)]          = '-';
+                $params[$no]['END PRE APPROVED '.($v+1)]            = '-';
+                $params[$no]['OT (HOURS) PRE APPROVED '.($v+1)]     = '-';
                 $params[$no]['START CLAIM '.($v+1)]                 = '-';
                 $params[$no]['END CLAIM '.($v+1)]                   = '-';
                 $params[$no]['OT (HOURS) CLAIM '.($v+1)]            = '-';

@@ -55,8 +55,10 @@
                                         <th>DESCRIPTION</th>
                                         <th>START</th>
                                         <th>END</th>
-                                        <th>TOTAL OVERTIME (HOURS)</th>
-                                        <th></th>
+                                        <th>OT (HOURS)</th>
+                                        <th>START APPROVED</th>
+                                        <th>END APPROVED</th>
+                                        <th>OT (HOURS) APPROVED</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-content-lembur">
@@ -68,6 +70,9 @@
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->awal }}" /></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->akhir }}" /></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->total_lembur }}" /></td>
+                                        <td><input type="text" readonly="true" class="form-control" value="{{ $item->pre_awal_approved }}" /></td>
+                                        <td><input type="text" readonly="true" class="form-control" value="{{ $item->pre_akhir_approved }}" /></td>
+                                        <td><input type="text" readonly="true" class="form-control" value="{{ $item->pre_total_approved }}" /></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

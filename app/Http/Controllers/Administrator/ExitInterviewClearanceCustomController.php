@@ -63,8 +63,7 @@ class ExitInterviewClearanceCustomController extends Controller
         }
 
         $params['data'] = $data->get();
-
-
+      
         return view('administrator.exitcustom.index')->with($params);
 
     }

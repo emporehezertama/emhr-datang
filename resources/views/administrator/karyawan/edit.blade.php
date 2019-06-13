@@ -28,7 +28,7 @@
                         </div>
                     @endif
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#biodata" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Biodata</span></a></li>
+                        <li role="presentation" class="active"><a href="#biodata" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Personal Information</span></a></li>
 
                         <li role="presentation" class=""><a href="#dependent" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Dependent</span></a></li>
 
@@ -38,7 +38,7 @@
 
                         <li role="presentation" class=""><a href="#rekening_bank" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Bank Account</span></a></li>
 
-                        <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventaris</span></a></li>
+                        <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventory</span></a></li>
 
                         <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Cuti</span></a></li>
                         @if(isset($payroll->salary))
@@ -494,7 +494,7 @@
                                         <input type="text" name="employee_number" class="form-control " value="{{ $data->employee_number }}"> </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Absensi Number</label>
+                                    <label class="col-md-12">Attendance Number</label>
                                     <div class="col-md-10">
                                         <input type="text" name="absensi_number" class="form-control " value="{{ $data->absensi_number }}"> </div>
                                 </div>
