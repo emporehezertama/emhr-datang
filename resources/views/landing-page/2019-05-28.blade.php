@@ -200,7 +200,7 @@
 							</div> -->
 						</div>
 						<div class="form-group text-center">
-							<button class="btn_trial_2" type="submit">Create an Free Trial Account</button>
+							<button class="btn_trial_2" type="submit">Create Free Trial Account</button>
 						</div>
 					</form>
 				</div>
