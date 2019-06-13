@@ -1242,7 +1242,8 @@ class KaryawanController extends Controller
     {
         $data               = new User();
 
-        if(checkUserLimit()){
+        if(checkUserLimit())
+        {
             $this->validate($request,[
             'nik'               => 'required|unique:users',
             //'email'               => 'required|unique:users',
@@ -1311,7 +1312,12 @@ class KaryawanController extends Controller
 
                 $data->foto_ktp = $fileNameKtp;
             }
+            $projectId = \Auth::user()->project_id;
 
+            if(!empty($projectId))
+            {
+                $data->project_id = $projectId;
+            }
             $data->save();
 
             // user Dependent
@@ -1346,7 +1352,6 @@ class KaryawanController extends Controller
                     $inventaris->save();
                 }
             }
-
             if(isset($request->education))
             {
                 // user Education
@@ -1364,7 +1369,6 @@ class KaryawanController extends Controller
                     $edu->save();
                 }
             }
-
             if(isset($request->cuti))
             {
                 // user Cuti
@@ -1392,7 +1396,6 @@ class KaryawanController extends Controller
                     }
                 }
             }
-
             if(isset($request->inventaris_lainnya['jenis']))
             {
                 foreach($request->inventaris_lainnya['jenis'] as $k => $i)
@@ -1404,9 +1407,10 @@ class KaryawanController extends Controller
                     $i->save();
                 }
             }
+            return redirect()->route('administrator.karyawan.index')->with('message-success', 'Data saved successfully !');
+        } else{
+            return redirect()->route('administrator.karyawan.index')->with('message-error', ' You can not add a user anymore. You have reached the limit!');
         }
-
-        return redirect()->route('administrator.karyawan.index')->with('message-success', 'Data saved successfully !');
     }
     /**
      * [deleteInvetaris description]

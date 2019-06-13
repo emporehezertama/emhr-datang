@@ -44,6 +44,13 @@
                         @endif
 
                         {{ csrf_field() }}
+                         <?php
+                            $readonly = ''; 
+                            if($history->is_approved != NULL)
+                            {
+                                $readonly = ' readonly="true"'; 
+                            }
+                        ?>
                         
                         <div class="form-group">
                             <label class="col-md-12">NIK / Employee Name</label>
@@ -68,19 +75,51 @@
                                         <th>DESCRIPTION</th>
                                         <th>START</th>
                                         <th>END</th>
-                                        <th>TOTAL OVERTIME (HOUR'S)</th>
+                                        <th>OT (HOURS)</th>
+                                        <th>START APPROVED</th>
+                                        <th>END APPROVED</th>
+                                        <th>OT (HOURS) APPROVED</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-content-lembur">
                                     @foreach($data->overtime_form as $no => $item)
                                     <tr>
+                                        <input type="hidden" name="id_overtime_form[]" class="form-control"  value="{{ $item->id }}" readonly="true">
                                         <td>{{ $no+1 }}</td>
                                         <td><input type="text" readonly="true" value="{{ $item->tanggal }}" class="form-control"></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->description }}"></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->awal }}" /></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->akhir }}" /></td>
                                         <td><input type="text" readonly="true" class="form-control" value="{{ $item->total_lembur }}" /></td>
+
+                                        @if($item->pre_awal_approved != null)
+                                        <td>
+                                            <input type="text" name="pre_awal_approved[]" class="form-control time-picker pre_awal_approved" {{$readonly}} value="{{ $item->pre_awal_approved }}" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="pre_akhir_approved[]" class="form-control time-picker pre_akhir_approved" {{$readonly}} value="{{ $item->pre_akhir_approved }}" />
+                                        </td>
+                                        <td>
+                                            <input type="text" id ="pre_total_approved[]" name="pre_total_approved[]" readonly="true" class="form-control pre_total_approved" value="{{ $item->pre_total_approved }}" />
+                                        </td>
+                                        @endif
+                                        @if($item->pre_awal_approved == null)
+                                         <td>
+                                            <input type="text" name="pre_awal_approved[]" class="form-control time-picker pre_awal_approved" value="{{ $item->awal }}" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="pre_akhir_approved[]" class="form-control time-picker pre_akhir_approved" value="{{ $item->akhir }}" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="pre_total_approved[]" readonly="true" class="form-control pre_total_approved" value="{{ $item->total_lembur }}" />
+                                        </td>
+                                        @endif
+                                         <td>
+                                            @if($data->status < 2)
+                                            <a class="btn btn-danger btn-xs" onclick="cancel_(this)"><i class="fa fa-trash"></i>Cancel</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -123,7 +162,62 @@
     @extends('layouts.footer')
 </div>
 @section('footer-script')
+<link href="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css') }}" rel="stylesheet">
+<script src="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
+
 <script type="text/javascript">
+    function cancel_(el)
+    {
+        var result = "00:00";
+        $(el).parent().parent().find('.pre_awal_approved').val(result);
+        $(el).parent().parent().find('.pre_akhir_approved').val(result);
+        $(el).parent().parent().find('.pre_total_approved').val(result);
+        //$(el).parent().parent().find('.awal_claim').setAttribute('value','My default value');
+    }
+</script>
+
+<script type="text/javascript">
+    $('.time-picker').clockpicker({
+        placement: 'bottom',
+        align: 'left',
+        autoclose: true,
+        'default': 'now'
+    });
+    sum_total_pre();
+
+    function sum_total_pre()
+    {
+        $("input.pre_awal_approved, input.pre_akhir_approved").each(function(){
+
+            $(this).on('change', function(){
+
+                var start = $(this).parent().parent().find('.pre_awal_approved').val(),
+                    end = $(this).parent().parent().find('.pre_akhir_approved').val();
+
+                if(start =="" || end == "") { return false; } 
+                
+                start = start.split(":");
+                end = end.split(":");
+                var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+                var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+                var diff = endDate.getTime() - startDate.getTime();
+                var hours = Math.floor(diff / 1000 / 60 / 60);
+                diff -= hours * 1000 * 60 * 60;
+                var minutes = Math.floor(diff / 1000 / 60);
+
+                // If using time pickers with 24 hours format, add the below line get exact hours
+                if (hours < 0)
+                    hours = hours + 24;
+
+                var result =  (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
+
+                $(this).parent().parent().find('.pre_total_approved').val(result);
+           
+            });
+        });
+    }
+
+   
     $("#btn_approved").click(function(){
         bootbox.confirm('Approve Employee Overtime ?', function(result){
 
@@ -146,6 +240,7 @@
 
         });
     });
+
 </script>
 
 
