@@ -64,11 +64,13 @@
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            @if(count($item->countAssets) >= 1)
-                                            <label class="btn btn-warning btn-xs">Waiting Approval</label>
-                                            @else
-                                            <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
-                                            @endif
+                                            <a onclick="detail_approval_clearanceCustom({{ $item->id }})">
+                                                @if(count($item->countAssets) >= 1)
+                                                <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @else
+                                                <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
+                                                @endif
+                                            </a>
                                         </td>
                                         <td>
                                            <a href="{{ route('karyawan.exit-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>

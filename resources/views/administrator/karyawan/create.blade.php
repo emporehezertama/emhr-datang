@@ -392,7 +392,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Foto KTP</label>
+                                    <label class="col-md-12">ID Picture</label>
                                     <div class="col-md-10">
                                         <input type="file" name="foto_ktp" class="form-control " />
                                     </div>

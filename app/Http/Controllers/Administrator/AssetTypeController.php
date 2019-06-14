@@ -58,8 +58,9 @@ class AssetTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data           = AssetType::where('id', $id)->first();
-        $data->name     = $request->name; 
+        $data                       = AssetType::where('id', $id)->first();
+        $data->name                 = $request->name;
+        $data->pic_department       = $request->pic_department; 
         $data->save();
 
         return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data saved successfully');
@@ -85,8 +86,9 @@ class AssetTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $data           = new AssetType();
-        $data->name     = $request->name; 
+        $data                       = new AssetType();
+        $data->name                 = $request->name; 
+        $data->pic_department       = $request->pic_department;
         $data->save();
 
         return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data saved successfully !');

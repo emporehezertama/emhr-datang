@@ -1740,6 +1740,7 @@ public function getCalculatePayrollGross(Request $request)
 
         return response()->json($this->respon);
     }
+
     public function getHistoryApprovalExitCustom(Request $request)
     {
         if($request->ajax())
@@ -1764,6 +1765,36 @@ public function getCalculatePayrollGross(Request $request)
             } 
             
             return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history,'user'=>$user]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getHistoryApprovalClearanceCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = ExitInterview::where('id', $request->foreign_id)->first();
+            
+            $history =[];
+            $user=[];
+            foreach ($data->assets as $key => $value) {
+                $history[$key]['level']         = $value->asset->asset_name;
+                $history[$key]['position']      = $value->asset->asset_type->pic_department;
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->approval_check;
+
+                $dataSetting = SettingApprovalClearance::where('nama_approval',$value->asset->asset_type->pic_department)->get();
+                if($value->approval_check == null)
+                {
+                    foreach ($dataSetting as $k => $v) { 
+                        $user[$key]['child'][$k]['name']         = $v->user->name;
+                    }
+                }
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);

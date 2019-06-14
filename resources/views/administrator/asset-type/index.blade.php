@@ -1,6 +1,6 @@
 @extends('layouts.administrator')
 
-@section('title', 'Asset Type')
+@section('title', 'Facilities Type')
 
 @section('sidebar')
 

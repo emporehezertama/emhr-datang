@@ -40,7 +40,7 @@
 
                         <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventory</span></a></li>
 
-                        <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Cuti</span></a></li>
+                        <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Leave</span></a></li>
                         @if(isset($payroll->salary))
                         <li role="presentation" class=""><a href="#payroll" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Payroll</span></a></li>
                         @endif
@@ -669,7 +669,7 @@
                                     </div>
                                 </div> -->
                                 <div class="form-group">
-                                    <label class="col-md-12">Foto Ktp</label>
+                                    <label class="col-md-12">ID Picture</label>
                                     <div class="col-md-12">
                                         <input type="file" name="foto_ktp" class="form-control " />
                                         @if(!empty($data->foto_ktp))

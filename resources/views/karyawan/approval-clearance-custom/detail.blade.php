@@ -41,6 +41,9 @@
                             </div>
                         @endif
                         {{ csrf_field() }}
+                        <?php
+
+                        ?>
                         <div class="form-group">
                             <label class="col-md-12">INVENTORY RETURN</label>
                             <div class="col-md-12">
@@ -87,9 +90,16 @@
                                                 <label class="bt btn-danger btn-xs"><i class="fa fa-close"></i> </label>
                                                 @endif
                                             </td>
-                                            <td style="text-align: center;">
+                                            @if($item->asset->asset_type->pic_department == $type->nama_approval)
+                                                <td style="text-align: center;">
                                                 <input type="checkbox" value="1" {{ $item->approval_check == 1 ? 'checked' : '' }} name="approval_check[{{$no}}]">
-                                            </td>
+                                                </td>
+                                            @else
+                                                <td style="text-align: center;">
+                                                    <input type="checkbox" value="1" disabled="true" {{ $item->approval_check == 1 ? 'checked' : '' }} name="approval_check[{{$no}}]">
+                                                </td>
+                                            @endif
+                                        
                                             <td>
                                                 <input type="text" name="catatan[{{$no}}]" class="form-control catatan" value="{{ $item->catatan }}" />
                                             </td>

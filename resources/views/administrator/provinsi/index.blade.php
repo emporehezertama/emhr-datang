@@ -1,6 +1,6 @@
 @extends('layouts.administrator')
 
-@section('title', 'Provinsi')
+@section('title', 'Province')
 
 @section('content')
 <div id="page-wrapper">
