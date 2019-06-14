@@ -25,8 +25,14 @@ class CabangController extends Controller
      */
     public function index()
     {
-        $params['data'] = Cabang::all();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = Cabang::join('users','users.id','=','cabang.user_created')->where('users.project_id', $user->project_id)->get();
+        }else{
+            $params['data'] = Cabang::all();
+        }
+        
         return view('administrator.cabang.index')->with($params);
     }
 

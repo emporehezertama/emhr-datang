@@ -28,7 +28,15 @@ class MedicalCustomController extends Controller
     public function index()
     {
         //
-        $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id')->where('users.project_id', $user->project_id);
+        } else
+        {
+            $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id');
+        }
+
         $params['structure'] = getStructureName();
         $params['division'] = OrganisasiDivision::all();
         $params['position'] = OrganisasiPosition::all();

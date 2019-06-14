@@ -84,7 +84,7 @@
                                             <th>NO</th>
                                             <th>POSITION</th>
                                             <th>TYPE</th>
-                                            <th>NOMINAL</th>
+                                            <th>AMOUNT</th>
                                             <th>DESCRIPTION</th>
                                             <th>#</th>
                                         </tr>

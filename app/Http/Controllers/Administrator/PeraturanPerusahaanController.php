@@ -15,8 +15,14 @@ class PeraturanPerusahaanController extends Controller
      */
     public function index()
     {
-        $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->join('users','users.id','=','peraturan_perusahaan.user_created')->where('users.project_id', $user->project_id)->get();
+        } else
+        {
+            $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.peraturan-perusahaan.index')->with($params);
     }
 
@@ -99,6 +105,11 @@ class PeraturanPerusahaanController extends Controller
             $file->move($destinationPath, $fileName);
 
             $data->file = $fileName;
+        }
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
         }
 
         $data->save();

@@ -18,7 +18,7 @@
                 <div class="col-md-6 p-l-0">
                     <div class="white-box">
                         <div class="form-group">
-                            <label class="col-md-2">Email Notifikasi</label>
+                            <label class="col-md-2">Notification Email</label>
                             <div class="col-md-5">
                                 <input type="email" class="form-control" name="setting[backup_mail]" value="{{ get_setting('backup_mail') }}" />
                             </div>
