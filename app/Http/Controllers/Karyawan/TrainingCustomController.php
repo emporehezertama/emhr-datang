@@ -187,8 +187,8 @@ class TrainingCustomController extends Controller
         $params['allowance']        = TrainingAllowance::where('training_id',$id)->get();
         $params['daily']        = TrainingDaily::where('training_id',$id)->get();
         $params['other']        = TrainingOther::where('training_id',$id)->get();
-
         return view('karyawan.training-custom.biaya')->with($params);
+
     }
      public function prosesclaim(Request $request)
     {

@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-history-approval-training-claim-custom', 'AjaxController@getHistoryApprovalTrainingClaimCustom')->name('ajax.get-history-approval-training-claim-custom');
 	Route::post('ajax/get-history-approval-medical-custom', 'AjaxController@getHistoryApprovalMedicalCustom')->name('ajax.get-history-approval-medical-custom');
 	Route::post('ajax/get-history-approval-exit-custom', 'AjaxController@getHistoryApprovalExitCustom')->name('ajax.get-history-approval-exit-custom');
+	Route::post('ajax/get-history-approval-clearance-custom', 'AjaxController@getHistoryApprovalClearanceCustom')->name('ajax.get-history-approval-clearance-custom');
 
 	Route::post('ajax/get-karyawan-approval', 'AjaxController@getKaryawanApproval')->name('ajax.get-karyawan-approval');
 	Route::post('ajax/add-setting-clearance-hrd', 'AjaxController@addSettingClearanceHrd')->name('ajax.add-setting-clearance-hrd');

@@ -122,6 +122,8 @@ class ApprovalExitClearanceCustomController extends Controller
           ->orWhereNull('approval_check');  
         })->get();
 
+        $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+        $params['type'] = $approval;
         $params['data']      = ExitInterviewAssets::where('exit_interview_id', $id)->get();
         $params['check']      = count($count);
 

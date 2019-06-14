@@ -95,12 +95,13 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if(count($item->countAssets) >= 1)
-                                            <label class="btn btn-warning btn-xs">Waiting Approval</label>
-
-                                            @else
-                                            <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
-                                            @endif
+                                            <a onclick="detail_approval_clearance_custom({{ $item->id }})">
+                                                @if(count($item->countAssets) >= 1)
+                                                    <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @else
+                                                <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
+                                                @endif
+                                            </a>
                                         </td>
                                         <td>
                                             <a href="{{ route('administrator.exitCustom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> Detail</button></a>

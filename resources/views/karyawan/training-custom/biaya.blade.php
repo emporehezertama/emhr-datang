@@ -689,7 +689,7 @@ $("#addAllowance").click(function(){
         html += '<td><input type="text" name="evening[]" class="form-control evening price_format"></td>';
         html += '<td><input type="text" name="evening_approved[]" class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteAllowance[]" class="form-control noteAllowance"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukAllowance[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukAllowance[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemAllowance(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 
@@ -778,7 +778,7 @@ $("#addOther").click(function(){
         html += '<td><input type="text" class="form-control nominalOther price_format" name="nominalOther[]"></td>';
         html += '<td><input type="text" name="nominalOther_approved[]"  class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteOther[]" class="form-control noteOther"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukOther[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukOther[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemOther(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 

@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Overtime Sheet')
+@section('title', 'Approval Overtime Sheet')
 
 @section('sidebar')
 

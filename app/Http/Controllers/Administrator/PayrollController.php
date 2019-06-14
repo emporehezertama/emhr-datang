@@ -147,7 +147,7 @@ class PayrollController extends Controller
         $params['data'] = Payroll::whereIn('id', $data->payroll_id)->get();
 
         $view = view('administrator.payroll.bukti-potong')->with($params);
-        return $view;
+        #return $view;
         $pdf = \App::make('dompdf.wrapper');
 
         $pdf->loadHTML($view);

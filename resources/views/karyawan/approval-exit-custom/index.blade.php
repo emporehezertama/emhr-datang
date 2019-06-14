@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Exit Interview')
+@section('title', 'Approval Exit Interview')
 
 @section('sidebar')
 

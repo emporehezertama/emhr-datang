@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Medical Reimbursement')
+@section('title', 'Approval Medical Reimbursement')
 
 @section('sidebar')
 

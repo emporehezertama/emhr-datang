@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Business Trip')
+@section('title', 'Approval Business Trip')
 
 @section('content')
 <div id="page-wrapper">

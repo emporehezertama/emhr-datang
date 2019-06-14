@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Employee Leave')
+@section('title', 'Approval Employee Leave')
 
 @section('sidebar')
 

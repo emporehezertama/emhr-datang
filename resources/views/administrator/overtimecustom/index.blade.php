@@ -99,7 +99,7 @@
                                         </td>
                                         <td>
                                             @if($item->status == 2 and $item->status_claim >= 1) 
-                                                <a href="{{ route('administrator.overtimeCustom.claim', $item->id) }}" class="btn btn-info btn-xs">Detail Claim<i class="fa fa-search-plus"></i></a>
+                                                <a href="{{ route('administrator.overtimeCustom.claim', $item->id) }}" class="btn btn-info btn-xs">Claimed Detail<i class="fa fa-search-plus"></i></a>
                                             @endif
                                         </td>
                                     </tr>

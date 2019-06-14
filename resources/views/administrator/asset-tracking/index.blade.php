@@ -1,6 +1,6 @@
 @extends('layouts.administrator')
 
-@section('title', 'Asset Tracking')
+@section('title', 'Facilities Tracking')
 
 @section('content')
 <div id="page-wrapper">
