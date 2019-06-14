@@ -610,7 +610,7 @@ $("#addAcomodation").click(function(){
         html += '<td><input type="text" class="form-control price_format nominalAcomodation" name="nominalAcomodation[]"></td>';
         html += '<td><input type="text" name="nominalAcomodation_approved[]"  class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteAcomodation[]" class="form-control noteAcomodation"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukAcomodation[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukAcomodation[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemAcomodation(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 

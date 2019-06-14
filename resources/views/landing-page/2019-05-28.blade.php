@@ -119,11 +119,9 @@
 			</div>
 			<h1 class="text-right"><label style="color: #0e9a88;font-size: 29px;">There is ease in</label> <label style="color: #acce22">EM-HR</label> <label  style="color: #0e9a88">Application</label></h1>
 			<div class="col-md-6 float-right">
-
 				<div class="form">
 					<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
-
 						<div class="bg-form-title">
 							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 13px !important;" class="py-2 px-0 mx-0 mt-0">Start Free Register</h3>
 						</div>
@@ -165,60 +163,27 @@
 							<div class="form-group">
 								<select class="form-control" name="bidang_usaha" required>
 									<option value=""> - Choose Business Specialization - </option>
-									<option>Asuransi</option>
-									<option>Barang Hasil Kerajinan</option>
-									<option>Barang-Barang Konsumen</option>
-									<option>Bunga dan Tanaman Hias</option>
-									<option>Distribusi dan Pemasaran</option>
-									<option>Elektronika</option>
-									<option>Event Organizer</option>
-									<option>Farmasi</option>
-									<option>Furniture</option>
-									<option>Hewan Peliharaan</option>
-									<option>Kayu dan Pengolahannya</option>
-									<option>Keramik  Porselen dan Kaca</option>
-									<option>Klinik dan Rumah Sakit</option>
-									<option>Komputer dan Perangkatnya</option>
-									<option>Konsultan</option>
-									<option>Koperasi</option>
-									<option>Kosmetik</option>
-									<option>Lembaga Keuangan Lain</option>
-									<option>Lembaga Pemerintah</option>
-									<option>Lembaga Sosial</option>
-									<option>Mainan</option>
-									<option>Makanan dan Minuman</option>
-									<option>Manufaktur</option>
-									<option>Otomotif</option>
-									<option>Pakan Ternak </option>
-									<option>Pemasok</option>
-									<option>Pendidikan dan Pelatihan</option>
-									<option>Peralatan Kantor</option>
-									<option>Peralatan Rumah Tangga</option>
-									<option>Percetakan dan Media Massa</option>
-									<option>Perdagangan Eceran</option>
-									<option>Perhiasan</option>
-									<option>Perhotelan dan Pariwisata</option>
-									<option>Perikanan</option>
-									<option>Periklanan</option>
-									<option>Perkebunan</option>
-									<option>Pertanian</option>
-									<option>Perusahaan Investasi </option>
-									<option>Peternakan</option>
-									<option>Plastik dan Kemasan</option>
-									<option>Promosi dan Periklanan </option>
-									<option>Property and Real Estate</option>
-									<option>Restoran dan Katering </option>
-									<option>Rokok </option>
-									<option>Salon dan Spa</option>
-									<option>Teknologi Informatika</option>
-									<option>Telekomunikasi </option>
-									<option>Transportasi dan Ekspedisi </option>
-									<option>Kontraktor dan Industrial</option>
-									<option>Wedding Organizer</option>
-									<option>Bisnis Retail</option>
-									<option>Industri Jamu dan Wisata Herbal</option>
-									<option>Bisnis Laundry</option>
-									<option>Konstruksi dan Pembangunan</option>
+									<option>Agriculture / Mining</option>
+									<option>Business Services</option>
+									<option>Computers and Electronics</option>
+									<option>Consumer Services</option>
+									<option>Education</option>
+									<option>Energy & Utilities</option>
+									<option>Financial Services</option>
+									<option>Government</option>
+									<option>Healtcare, Pharmaceuticals, & Biotech</option>
+									<option>Manufacturing</option>
+									<option>Media & Entertainment</option>
+									<option>Non Profit</option>
+									<option>Real Estate & Contruction</option>
+									<option>Retail</option>
+									<option>Software & Internet</option>
+									<option>Telecommunications</option>
+									<option>Transportation & Storage</option>
+									<option>Travel, Recreation, & Leisure</option>
+									<option>Wholesale & Distribution</option>
+									<option>Consumer Products</option>
+									<option>Others</option>
 								</select>
 							</div>
 							<div class="form-group">
@@ -235,7 +200,7 @@
 							</div> -->
 						</div>
 						<div class="form-group text-center">
-							<button class="btn_trial_2" type="submit">Create an Free Trial Account</button>
+							<button class="btn_trial_2" type="submit">Create Free Trial Account</button>
 						</div>
 					</form>
 				</div>

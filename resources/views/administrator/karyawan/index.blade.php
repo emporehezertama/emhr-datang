@@ -100,7 +100,7 @@
                                     <tr>
                                         <td class="text-center">{{ $no+1 }}</td>
                                         <td>{{ $item->nik }}</td>
-                                        <td>{{ strtoupper($item->name) }}</td>
+                                        <td><a href="{{ route('administrator.karyawan.edit', ['id' => $item->id]) }}">{{ strtoupper($item->name) }}</a></td>
                                         <td>{{ $item->jenis_kelamin }}</td>
                                         <td>{{ $item->telepon }}</td>
                                         <td>{{ $item->email }}</td>

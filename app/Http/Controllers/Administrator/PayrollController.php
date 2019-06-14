@@ -51,6 +51,28 @@ class PayrollController extends Controller
                 }
             }
 
+            if(!empty(request()->year))
+            {
+                if(request()->year != date('Y'))
+                {
+                    if(!empty(request()->month))
+                    {
+                        $result = PayrollHistory::select('payroll_history.*')
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->whereMonth('payroll_history.created_at', '=', request()->month)
+                                                ->whereYear('payroll_history.created_at', '=', request()->year)
+                                                ->orderBy('payroll_history.id', 'DESC');
+                    }
+                    else
+                    {
+                        $result = PayrollHistory::select('payroll_history.*')
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->whereYear('payroll_history.created_at', '=', request()->year)
+                                                ->orderBy('payroll_history.id', 'DESC');
+                    }
+                }   
+            }
+
             if(!empty(request()->is_calculate))
             {
                 $result = $result->where('is_calculate', request()->is_calculate );
@@ -125,7 +147,7 @@ class PayrollController extends Controller
         $params['data'] = Payroll::whereIn('id', $data->payroll_id)->get();
 
         $view = view('administrator.payroll.bukti-potong')->with($params);
-
+        #return $view;
         $pdf = \App::make('dompdf.wrapper');
 
         $pdf->loadHTML($view);
@@ -398,11 +420,11 @@ class PayrollController extends Controller
         {
             foreach($request->earning as $key => $value)
             {
-                $earning = PayrollEarningsEmployee::where('payroll_id', $temp->id)->where('payroll_earning_id', $value)->first();
+                $earning = PayrollEarningsEmployee::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
                 if(!$earning)
                 {
                     $earning                        = new PayrollEarningsEmployee();
-                    $earning->payroll_id            = $temp->id;
+                    $earning->payroll_id            = $id;
                     $earning->payroll_earning_id    = $value;
                 }
                 $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
@@ -415,11 +437,11 @@ class PayrollController extends Controller
         {
             foreach($request->deduction as $key => $value)
             {
-                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $temp->id)->where('payroll_deduction_id', $value)->first();
+                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
                 if(!$deduction)
                 {
                     $deduction                        = new PayrollDeductionsEmployee();
-                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_id            = $id;
                     $deduction->payroll_deduction_id  = $value;
                 }
                 
@@ -439,7 +461,7 @@ class PayrollController extends Controller
         $history->bpjs_jht_company             = get_setting('bpjs_jht_company');
         $history->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
         $history->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-        $history->bpjs_kesehatan_employee      = $temp->bpjs_kesehatan_employee;
+        $history->bpjs_kesehatan_employee      = replace_idr($request->bpjs_kesehatan_employee);
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
@@ -450,7 +472,7 @@ class PayrollController extends Controller
             foreach($temp->payrollDeductionsEmployee as $i)
             {
                 $deduction                        = new PayrollDeductionsEmployeeHistory();
-                $deduction->payroll_id            = $temp->id;
+                $deduction->payroll_id            = $id;
                 $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
                 $deduction->save();
@@ -462,7 +484,7 @@ class PayrollController extends Controller
             foreach($temp->payrollEarningsEmployee as $i)
             {
                 $deduction                        = new PayrollEarningsEmployeeHistory();
-                $deduction->payroll_id            = $temp->id;
+                $deduction->payroll_id            = $id;
                 $deduction->payroll_earning_id    = $i->payroll_earning_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
                 $deduction->save();
@@ -862,7 +884,7 @@ class PayrollController extends Controller
                 foreach($item->payrollDeductionsEmployee as $i)
                 {
                     $deduction                        = new PayrollDeductionsEmployeeHistory();
-                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_id            = $payroll_id;
                     $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                     $deduction->nominal               = replace_idr($i->nominal); 
                     $deduction->save();
@@ -874,7 +896,7 @@ class PayrollController extends Controller
                 foreach($item->payrollEarningsEmployee as $i)
                 {
                     $deduction                        = new PayrollEarningsEmployeeHistory();
-                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_id            = $payroll_id;
                     $deduction->payroll_earning_id    = $i->payroll_earning_id;   
                     $deduction->nominal               = replace_idr($i->nominal); 
                     $deduction->save();

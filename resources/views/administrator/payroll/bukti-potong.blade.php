@@ -15,9 +15,22 @@
 			font-size: 10px;
 			font-family: Tahoma, Geneva, sans-serif;
 		}
+  		.page_break { 
+  			page-break-before: always; 
+  		}
+		.text-blue {
+			color: #327b7b
+		}
+		small {
+			font-size: 8px;
+		}
 	</style>
 </head>
 <body>
+  @foreach($data as $item)
+  	@if(!isset($item->user->name))
+  	<?php continue; ?>
+  	@endif
 	<table style="width: 100%;border-top:1px dotted black;">
 		<tr>
 			<td style="width: 23%;text-align: center;" rowspan="2">
@@ -29,74 +42,86 @@
 					BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI TETAP ATAU PENERIMA PENSIUN ATAU TUNJANGAN HARI TUA/JAMINAN HARI TUA BERKALA
 				</h5>	
 			</td>
-			<td style="width: 25%">
-				<h4 style="padding-bottom:0;margin-bottom:0;">FOMULIR 1721 - A1</h4>
-				<p style="padding-top:0;margin-top:0;">Lembar ke-1 : untuk Penerima Penghasilan</p>
-				<p>Lembar ke-2 : untuk Pemotong</p>
+			<td style="width: 25%;" rowspan="2">
+				<h2 style="padding-bottom:0;margin-bottom:0;font-size: 13px;text-align: center;">FOMULIR 1721 - A1</h2>
+				<div style="width: 80%; margin: auto;">
+					<p style="padding-top:0;margin-top:0;">Lembar ke-1 : untuk Penerima Penghasilan</p>
+					<p>Lembar ke-2 : untuk Pemotong</p>
+				</div>
+				<p><strong>MASA PEROLEHAN PENGHASILAN</strong></p>
+				<p>
+					<small class="text-blue">H02</small>
+					<label style="border-bottom: 1px solid; width: 40px;">11</label> - <u style="width: 30px;">12</u>
+				</p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border-left: 1px solid black;border-bottom:1px solid black;">NOMOR : </td>	
+			<td style="border-left: 1px solid black;border-right: 1px solid black;border-bottom:1px solid black;">NOMOR : <small class="text-blue">H01</small></td>	
 		</tr>
 	</table>
 	<table style="border: 1px solid;width: 100%;">
 		<tr>
-			<th style="padding-top:5px;padding-bottom:5px;">NPWP<br /> PEMOTONG</th>
+			<th style="padding-top:5px;padding-bottom:5px; width: 100px; text-align: left;">NPWP<br /> PEMOTONG</th>
 			<td> : </td>
 		</tr>
 		<tr>
-			<th>NAMA<br /> PEMOTONG</th>
+			<th style="text-align: left;">NAMA<br /> PEMOTONG</th>
 			<td> : </td>
 		</tr>
 	</table>
-	<p>A. IDENTITAS PENERIMA PENGHASILAN YANG DIPOTONG</p>
+	<p><strong>A. IDENTITAS PENERIMA PENGHASILAN YANG DIPOTONG</strong></p>
 	<table style="border: 1px solid black; width: 100%;">
 		<tr>
 			<td>1. NPWP</td>
-			<td>: </td>
+			<td>: {{ $item->user->npwp_number }}</td>
 		</tr>
 		<tr>
 			<td>2. NIK / NO PASPOR</td>
-			<td>: </td>
+			<td>: {{ $item->user->nik }}</td>
 		</tr>
 		<tr>
 			<td>3. NAMA</td>
-			<td>: </td>
+			<td>: {{ $item->user->name }}</td>
 		</tr>
 		<tr>
 			<td>4. ALAMAT</td>
-			<td>: </td>
+			<td>: {{ $item->user->current_address }}</td>
 		</tr>
 	</table>
-	<p>B. RINCIAN PENGHASILAN DAN PENGHITUNGAN PPh PASAL 21</p>
+	<p><strong>B. RINCIAN PENGHASILAN DAN PENGHITUNGAN PPh PASAL 21</strong></p>
 
 	<table style="width: 100%;" class="bordered">
 		<tr>
 			<th colspan="2" style="text-align: center;">URAIAN</th>
-			<th>JUMLAH</th>
+			<th>JUMLAH (Rp)</th>
 		</tr>
 		<tr>
-			<th colspan="2">KODE OBJEK PAJAK</th>
-			<td></td>
+			<th colspan="2" style="text-align: left;">
+				<label style="float: left;">KODE OBJEK PAJAK : </label>
+				<div style="height: 15px; width: 25px; border: 1px solid; float: left; margin-left: 10px;margin-right: 5px;"></div> <label style="float: left;">21-100-01</label>
+				<div style="height: 15px; width: 25px; border: 1px solid; float: left; margin-left: 10px;margin-right: 5px;"></div> <label style="float: left;">21-100-02</label> 
+			</th>
+			<td>
+			</td>
 		</tr>
 		<tr>
-			<th colspan="2">PENGHASILAN BRUTO</th>
+			<th colspan="2" style="text-align: left;">PENGHASILAN BRUTO</th>
 			<td></td>
 		</tr>
 		<tr>
 			<td style="width: 25px;text-align: center;">1.</td>
 			<td>GAJI/PENSIUN ATAU THT/JHT</td>
-			<td></td>
+			<td style="text-align: right;">{{ format_idr(bukti_potong($item->id, 'gaji')) }}</td>
 		</tr>
 		<tr>
 			<td style="text-align: center;">2.</td>
 			<td>TUNJANGAN PPh</td>
-			<td></td>
+			<td style="text-align: right;">{{ format_idr(bukti_potong($item->id, 'pph21')) }}</td>
 		</tr>
 		<tr>
 			<td style="text-align: center;">3.</td>
 			<td>TUNJANGAN LAINNYA, UANG LEMBUR DAN SEBAGAINYA</td>
-			<td></td>
+			<td style="text-align: right;">{{ format_idr(bukti_potong($item->id, 'tunjangan')) }}</td>
 		</tr>
 		<tr>
 			<td style="text-align: center;">4.</td>
@@ -106,7 +131,7 @@
 		<tr>
 			<td style="text-align: center;">5.</td>
 			<td>PREMI ASURANSI YANG DIBAYAR PEMBERI KERJA</td>
-			<td></td>
+			<td style="text-align: right;">{{ format_idr(bukti_potong($item->id, 'premi')) }}</td>
 		</tr>
 		<tr>
 			<td style="text-align: center;">6.</td>
@@ -116,12 +141,12 @@
 		<tr>
 			<td style="text-align: center;">7.</td>
 			<td>TANTIEM, BONUS, GRATIFIKASI, JASA PRODUKSI DAN THR</td>
-			<td></td>
+			<td style="text-align: right;">{{ format_idr(bukti_potong($item->id, 'bonus')) }}</td>
 		</tr>
 		<tr>
 			<td style="text-align: center;">8.</td>
 			<td>JUMLAH PENGHASILAN BRUTO (1 S.D.7)</td>
-			<td></td>
+			<td style="text-align: right;">{{ format_idr(bukti_potong($item->id, 'bruto')) }}</td>
 		</tr>
 		<tr>
 			<th colspan="2">PENGURANGAN : </th>
@@ -192,10 +217,10 @@
 			<td></td>
 		</tr>
 	</table>
-	<p>C. IDENTITAS PEMOTONG </p>
+	<p><strong>C. IDENTITAS PEMOTONG</strong></p>
 	<table style="width: 100%;border: 1px solid black;">
 		<tr>
-			<td>1. NPWP </td>
+			<td style="width: 100px">1. NPWP </td>
 			<td style="border-bottom: 1px solid black;"></td>
 		</tr>
 		<tr>
@@ -203,5 +228,7 @@
 			<td style="border-bottom: 1px solid black;"></td>
 		</tr>
 	</table>
+	<div class="page_break"></div>
+  @endforeach
 </body>
 </html>
