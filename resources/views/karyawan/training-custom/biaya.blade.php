@@ -741,7 +741,7 @@ $("#addDaily").click(function(){
           html += '<td><input type="text" name="nominalDaily[]"  class="form-control price_format nominalDaily"></td>';
         html += '<td><input type="text" name="nominalDaily_approved[]"  class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteDaily[]" class="form-control noteDaily"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukDaily[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukDaily[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemDaily(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 
