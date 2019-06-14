@@ -32,7 +32,15 @@ class OvertimeCustomController extends Controller
         //
         $params['division'] = OrganisasiDivision::all();
         $params['position'] = OrganisasiPosition::all();
-        $data = OvertimeSheet::select('overtime_sheet.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'overtime_sheet.user_id');
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = OvertimeSheet::select('overtime_sheet.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'overtime_sheet.user_id')->where('users.project_id', $user->project_id);
+        } else
+        {
+            $data = OvertimeSheet::select('overtime_sheet.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'overtime_sheet.user_id');
+        }
 
         if(request())
         {

@@ -30,7 +30,14 @@ class ExitInterviewClearanceCustomController extends Controller
     public function index()
     {
         //
-        $data = ExitInterview::select('exit_interview.*')->orderBy('id', 'DESC')->join('users','users.id','=','exit_interview.user_id');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = ExitInterview::select('exit_interview.*')->orderBy('id', 'DESC')->join('users','users.id','=','exit_interview.user_id')->where('users.project_id', $user->project_id);
+        } else
+        {
+            $data = ExitInterview::select('exit_interview.*')->orderBy('id', 'DESC')->join('users','users.id','=','exit_interview.user_id');
+        }
 
         $params['structure'] = getStructureName();
         $params['division'] = OrganisasiDivision::all();

@@ -36,6 +36,7 @@ class PayrollController extends Controller
      */
     public function index()
     {
+        
         $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
 
         if(request())

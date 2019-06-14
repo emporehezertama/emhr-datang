@@ -15,8 +15,14 @@ class InternalMemoController extends Controller
      */
     public function index()
     {
-        $params['data'] = InternalMemo::orderBy('id', 'DESC')->get();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = InternalMemo::orderBy('id', 'DESC')->join('users','users.id','=','internal_memo.user_created')->where('users.project_id', $user->project_id)->get();
+        } else
+        {
+            $params['data'] = InternalMemo::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.internal-memo.index')->with($params);
     }
 
