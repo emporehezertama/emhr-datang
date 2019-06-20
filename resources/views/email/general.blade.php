@@ -11,8 +11,12 @@
     <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; margin-bottom: 10px">
       <tbody>
         <tr>
-          <td style="vertical-align: top;">
-            <a href="#" target="_blank" style="text-decoration: none;color: #484848;"><img src="http://emp-app.com/empore.png" style="border:none; width: 150px; ">
+          <td style="vertical-align: top;"> 
+            @if(get_setting('logo') != "")
+
+             <a href="#" target="_blank" style="text-decoration: none;color: #484848;"><img src="http://em-hr.co.id/upload/setting/7304ce78b27e37e4a6c1bbcd9070261c.png" style="border:none; width: 150px; height: 40px;">
+              
+            @endif
           </td>
         </tr>
       </tbody>

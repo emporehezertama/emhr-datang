@@ -32,7 +32,14 @@ class TrainingCustomController extends Controller
         $params['division'] = OrganisasiDivision::all();
         $params['position'] = OrganisasiPosition::all();
 
-        $data = Training::orderBy('id', 'DESC')->select('training.*')->join('users', 'users.id', '=', 'training.user_id');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = Training::orderBy('id', 'DESC')->select('training.*')->join('users', 'users.id', '=', 'training.user_id')->where('users.project_id', $user->project_id);
+        } else
+        {
+            $data = Training::orderBy('id', 'DESC')->select('training.*')->join('users', 'users.id', '=', 'training.user_id');
+        }
 
         if(request())
         {

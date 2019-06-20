@@ -28,7 +28,15 @@ class MedicalCustomController extends Controller
     public function index()
     {
         //
-        $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id')->where('users.project_id', $user->project_id);
+        } else
+        {
+            $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id');
+        }
+
         $params['structure'] = getStructureName();
         $params['division'] = OrganisasiDivision::all();
         $params['position'] = OrganisasiPosition::all();
@@ -198,7 +206,7 @@ class MedicalCustomController extends Controller
                 $params[$no]['PATIENT NAME '.$type]      = $nama_pasien;
                 $params[$no]['CLAIM TYPE '.$type]        = isset($form->medicalType)? $form->medicalType->name:'' ;
                 $params[$no]['RECEIPT NO/ KWITANSI NO '.$type]    = $form->no_kwitansi;
-                $params[$no]['QTY '.$type]           = $form->jumlah;
+                $params[$no]['AMOUNT '.$type]           = $form->jumlah;
                 $total++;       
                 $total_klaim    += $form->jumlah;
                 $total_approve  += $form->nominal_approve;
@@ -211,7 +219,7 @@ class MedicalCustomController extends Controller
                 $params[$no]['PATIENT NAME '.($v+1)]     = "-";
                 $params[$no]['CLAIM TYPE '.($v+1)]     = "-";
                 $params[$no]['RECEIPT NO/ KWITANSI NO '.($v+1)]    = "-";
-                $params[$no]['QTY '.($v+1)]          = "-";
+                $params[$no]['AMOUNT '.($v+1)]          = "-";
             }
             $params[$no]['TOTAL CLAIM']      = $total_klaim;
             $params[$no]['TOTAL APPROVED']= $total_approve;

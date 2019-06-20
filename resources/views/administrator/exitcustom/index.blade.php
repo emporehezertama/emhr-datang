@@ -70,7 +70,8 @@
                                     <th>NAMA</th>
                                     <th>RESIGN DATE</th>
                                     <th>REASON FOR LEAVING</th>
-                                    <th>STATUS</th>
+                                    <th>STATUS EXIT INTERVIEW</th>
+                                    <th>STATUS EXIT CLEARANCE</th>
                                     <th width="100">MANAGE</th>
                                 </tr>
                             </thead>
@@ -91,6 +92,15 @@
                                         </td>
                                         <td>
                                             <a onclick="detail_approval_exit_custom({{ $item->id }})">  {!! status_exit_interview($item->status) !!}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a onclick="detail_approval_clearance_custom({{ $item->id }})">
+                                                @if(count($item->countAssets) >= 1)
+                                                    <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @else
+                                                <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
+                                                @endif
                                             </a>
                                         </td>
                                         <td>

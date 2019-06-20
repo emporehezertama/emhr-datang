@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <label class="col-md-12">Note</label>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="note" placeholder="Note here ..." {{ $datamaster->status == 2 ? 'readonly' : '' }}>{{ $datamaster->note }}</textarea>
+                                    <textarea class="form-control" name="note"  {{ $datamaster->status == 2 ? 'readonly' : '' }}>{{ $datamaster->note }}</textarea>
                                 </div>
                             </div>
                         </div>

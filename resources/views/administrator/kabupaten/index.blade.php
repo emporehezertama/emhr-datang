@@ -61,7 +61,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Provinsi</h4> </div>
+                <h4 class="modal-title" id="myModalLabel">City</h4> </div>
                 <form method="POST" class="form-horizontal" action="{{ route('administrator.kabupaten.store') }}">
                     {{ csrf_field() }}
                     <div class="modal-body">
@@ -98,7 +98,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Provinsi</h4> </div>
+                <h4 class="modal-title" id="myModalLabel">City</h4> </div>
                 <form method="POST" class="form-horizontal" id="form-modal-edit" action="">
                     {{ csrf_field() }}
                     <input type="hidden" name="_method" value="PUT">

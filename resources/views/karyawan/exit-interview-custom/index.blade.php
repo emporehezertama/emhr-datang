@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title hidden-xs hidden-sm">Dashboard</h4> 
+                <h4 class="page-title hidden-xs hidden-sm">Manage Exit Interview<</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 @if(cek_create_exit_interview(\Auth::user()->id))
@@ -32,8 +32,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="white-box">
-                    <h3 class="box-title m-b-0">Manage Exit Interview</h3>
-                    <br />
                     <div class="table-responsive">
                         <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
@@ -41,8 +39,9 @@
                                     <th width="70" class="text-center">#</th>
                                     <th>RESIGN DATE</th>
                                     <th>REASON FOR LEAVING</th>
-                                    <th>STATUS</th>
+                                    <th>STATUS EXIT INTERVIEW</th>
                                     <th>CREATED</th>
+                                    <th>STATUS EXIT CLEARANCE</th>
                                     <th width="100">MANAGE</th>
                                 </tr>
                             </thead> 
@@ -64,6 +63,15 @@
                                             </a>
                                         </td>
                                         <td>{{ $item->created_at }}</td>
+                                        <td>
+                                            <a onclick="detail_approval_clearanceCustom({{ $item->id }})">
+                                                @if(count($item->countAssets) >= 1)
+                                                <label class="btn btn-warning btn-xs">Waiting Approval</label>
+                                                @else
+                                                <label class="btn btn-success btn-xs"><i class="fa fa-chceck"></i>Approved</label>
+                                                @endif
+                                            </a>
+                                        </td>
                                         <td>
                                            <a href="{{ route('karyawan.exit-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>
                                            @if($item->status < 3)

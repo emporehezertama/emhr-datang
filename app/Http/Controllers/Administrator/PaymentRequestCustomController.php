@@ -26,8 +26,14 @@ class PaymentRequestCustomController extends Controller
      */
     public function index()
     {
-        
-        $data = PaymentRequest::select('payment_request.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'payment_request.user_id');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = PaymentRequest::select('payment_request.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'payment_request.user_id')->where('users.project_id', $user->project_id);
+        } else
+        {
+            $data = PaymentRequest::select('payment_request.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'payment_request.user_id');
+        }
         $params['structure'] = getStructureName();
         $params['division'] = OrganisasiDivision::all();
         $params['position'] = OrganisasiPosition::all();

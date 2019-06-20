@@ -1,19 +1,19 @@
 @extends('layouts.administrator')
 
-@section('title', 'Provinsi')
+@section('title', 'Province')
 
 @section('content')
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Provinsi</h4> 
+                <h4 class="page-title">Province</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a href="javascript:void(0)" id="form_add_modal" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> TAMBAH</a>
+                <a href="javascript:void(0)" id="form_add_modal" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD</a>
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Provinsi</li>
+                    <li class="active">Province</li>
                 </ol>
             </div>
         </div>
@@ -25,7 +25,7 @@
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
-                                    <th>NAMA PROVINSI</th>
+                                    <th>PROVINCE</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -59,7 +59,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Provinsi</h4> </div>
+                <h4 class="modal-title" id="myModalLabel">Province</h4> </div>
                 <form method="POST" class="form-horizontal" action="{{ route('administrator.provinsi.store') }}">
                     {{ csrf_field() }}
                     <div class="modal-body">
@@ -95,7 +95,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Provinsi</h4> </div>
+                <h4 class="modal-title" id="myModalLabel">Province</h4> </div>
                 <form method="POST" class="form-horizontal" id="form-modal-edit" action="">
                     {{ csrf_field() }}
                     <input type="hidden" name="_method" value="PUT">

@@ -101,7 +101,7 @@
                                       <th>RELATIONSHIP</th>
                                       <th>PATIENT NAME</th>
                                       <th>CLAIM TYPE</th>
-                                      <th>QTY</th>
+                                      <th>AMOUNT</th>
                                       <th>FILE</th>
                                       <th>AMOUNT APPROVED</th>
                                   </tr>

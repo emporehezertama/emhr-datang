@@ -21,5 +21,10 @@ class ExitInterviewAssets extends Model
     {
         return $this->hasOne('\App\User', 'id', 'approval_id');
     }
+
+    public function userApproval()
+    {
+        return $this->hasOne('\App\Models\SettingApprovalClearance', 'user_id', 'approval_id');
+    }
     
 }

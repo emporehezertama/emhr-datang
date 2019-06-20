@@ -26,7 +26,14 @@ class RequestPaySlipController extends Controller
      */
     public function index()
     {
-        $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->paginate(50);
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+             $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->join('users','users.id','=','request_pay_slip.user_id')->where('users.project_id', $user->project_id)->paginate(50);
+        } else
+        {
+             $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->paginate(50);
+        }
 
         return view('administrator.request-pay-slip.index')->with($params);
     }
@@ -121,6 +128,6 @@ class RequestPaySlipController extends Controller
         $data->status   = 2;
         $data->save();
 
-        return redirect()->route('administrator.request-pay-slip.index')->with('message-success', 'Request Pay Slip berhasil diproses');
+        return redirect()->route('administrator.request-pay-slip.index')->with('message-success', 'Request Pay Slip successfully  processed');
     }
 }

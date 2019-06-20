@@ -19,6 +19,8 @@ use App\Models\PayrollDeductionsEmployee;
 use App\Models\PayrollDeductionsEmployeeHistory;
 use App\Models\PayrollEarnings;
 use App\Models\PayrollDeductions;
+use App\Models\RequestPaySlip;
+use App\Models\RequestPaySlipItem;
 
 class PayrollController extends Controller
 {   
@@ -34,6 +36,7 @@ class PayrollController extends Controller
      */
     public function index()
     {
+        
         $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
 
         if(request())
@@ -47,6 +50,28 @@ class PayrollController extends Controller
                                                 ->whereMonth('payroll_history.created_at', '=', request()->month)
                                                 ->orderBy('payroll_history.id', 'DESC');
                 }
+            }
+
+            if(!empty(request()->year))
+            {
+                if(request()->year != date('Y'))
+                {
+                    if(!empty(request()->month))
+                    {
+                        $result = PayrollHistory::select('payroll_history.*')
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->whereMonth('payroll_history.created_at', '=', request()->month)
+                                                ->whereYear('payroll_history.created_at', '=', request()->year)
+                                                ->orderBy('payroll_history.id', 'DESC');
+                    }
+                    else
+                    {
+                        $result = PayrollHistory::select('payroll_history.*')
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->whereYear('payroll_history.created_at', '=', request()->year)
+                                                ->orderBy('payroll_history.id', 'DESC');
+                    }
+                }   
             }
 
             if(!empty(request()->is_calculate))
@@ -77,6 +102,15 @@ class PayrollController extends Controller
                 }
             }
 
+            if(!empty(request()->name))
+            {
+                $result = $result->where(function($table){
+                  $table->where('users.name', 'LIKE', '%'. request()->name .'%')
+                        ->orWhere('users.nik', 'LIKE', '%'. request()->name .'%');  
+                });
+            }
+
+
             if(request()->action == 'download')
             {
                 $this->downloadExcel($result->get());
@@ -85,6 +119,11 @@ class PayrollController extends Controller
             if(request()->action == 'bukti-potong')
             {
                 return $this->buktiPotong();
+            }
+
+            if(request()->action == 'send-pay-slip')
+            {
+                return $this->sendPaySlip();
             }
         }
 
@@ -109,8 +148,9 @@ class PayrollController extends Controller
         $params['data'] = Payroll::whereIn('id', $data->payroll_id)->get();
 
         $view = view('administrator.payroll.bukti-potong')->with($params);
-        
+        #return $view;
         $pdf = \App::make('dompdf.wrapper');
+
         $pdf->loadHTML($view);
 
         return $pdf->stream();
@@ -381,11 +421,11 @@ class PayrollController extends Controller
         {
             foreach($request->earning as $key => $value)
             {
-                $earning = PayrollEarningsEmployee::where('payroll_id', $temp->id)->where('payroll_earning_id', $value)->first();
+                $earning = PayrollEarningsEmployee::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
                 if(!$earning)
                 {
                     $earning                        = new PayrollEarningsEmployee();
-                    $earning->payroll_id            = $temp->id;
+                    $earning->payroll_id            = $id;
                     $earning->payroll_earning_id    = $value;
                 }
                 $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
@@ -398,11 +438,11 @@ class PayrollController extends Controller
         {
             foreach($request->deduction as $key => $value)
             {
-                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $temp->id)->where('payroll_deduction_id', $value)->first();
+                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
                 if(!$deduction)
                 {
                     $deduction                        = new PayrollDeductionsEmployee();
-                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_id            = $id;
                     $deduction->payroll_deduction_id  = $value;
                 }
                 
@@ -422,7 +462,7 @@ class PayrollController extends Controller
         $history->bpjs_jht_company             = get_setting('bpjs_jht_company');
         $history->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
         $history->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-        $history->bpjs_kesehatan_employee      = $temp->bpjs_kesehatan_employee;
+        $history->bpjs_kesehatan_employee      = replace_idr($request->bpjs_kesehatan_employee);
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
@@ -433,7 +473,7 @@ class PayrollController extends Controller
             foreach($temp->payrollDeductionsEmployee as $i)
             {
                 $deduction                        = new PayrollDeductionsEmployeeHistory();
-                $deduction->payroll_id            = $temp->id;
+                $deduction->payroll_id            = $id;
                 $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
                 $deduction->save();
@@ -445,7 +485,7 @@ class PayrollController extends Controller
             foreach($temp->payrollEarningsEmployee as $i)
             {
                 $deduction                        = new PayrollEarningsEmployeeHistory();
-                $deduction->payroll_id            = $temp->id;
+                $deduction->payroll_id            = $id;
                 $deduction->payroll_earning_id    = $i->payroll_earning_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
                 $deduction->save();
@@ -1087,7 +1127,7 @@ class PayrollController extends Controller
                 foreach($item->payrollDeductionsEmployee as $i)
                 {
                     $deduction                        = new PayrollDeductionsEmployeeHistory();
-                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_id            = $payroll_id;
                     $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                     $deduction->nominal               = replace_idr($i->nominal); 
                     $deduction->save();
@@ -1099,7 +1139,7 @@ class PayrollController extends Controller
                 foreach($item->payrollEarningsEmployee as $i)
                 {
                     $deduction                        = new PayrollEarningsEmployeeHistory();
-                    $deduction->payroll_id            = $temp->id;
+                    $deduction->payroll_id            = $payroll_id;
                     $deduction->payroll_earning_id    = $i->payroll_earning_id;   
                     $deduction->nominal               = replace_idr($i->nominal); 
                     $deduction->save();
@@ -1109,6 +1149,117 @@ class PayrollController extends Controller
     }
 
 
+<<<<<<< HEAD
+=======
+    /**
+     * Send Pay Slip
+     * @return email
+     */
+    public function sendPaySlip()
+    {
+        $request = request();
+
+        if(isset($request->user_id))
+        {
+            foreach($request->user_id as $user_id)
+            {
+                $data                       = new RequestPaySlip();
+                $data->user_id              = $user_id;
+                $data->status               = 1;   
+                $data->save();
+
+                if(!isset($data->user->nik))
+                {
+                    continue;
+                }
+
+                foreach($request->bulan as $key => $i)
+                {   
+                    $item               = new RequestPaySlipItem();
+                    $item->tahun        = $request->tahun;
+                    $item->request_pay_slip_id = $data->id;
+                    $item->bulan        = $i;
+                    $item->status       = 1; 
+                    $item->user_id      = $user_id;
+                    $item->save();
+                }
+
+
+                $bulanItem = RequestPaySlipItem::where('request_pay_slip_id', $data->id)->get();
+                $bulan = [];
+                $total = 0;
+                $dataArray = [];
+                $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+                foreach($bulanItem as $k => $i)
+                {
+                    $bulan[$k] = $bulanArray[$i->bulan]; $total++;
+
+                    $items   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $i->bulan ." and user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun. ' ORDER BY id DESC'));
+                    
+                    if(!$items)
+                    {
+                        $items   = \DB::select(\DB::raw("SELECT * FROM payroll_history WHERE user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun ." ORDER BY id DESC"));
+                        if(!$items)
+                        {
+                            continue;
+                        }
+                        $dataArray[$k] = $items[0];
+                    }
+                    else
+                    {
+                        $dataArray[$k] = $items[0];
+                    }
+                }
+
+                $params['total']        = $total;
+                $params['dataArray']    = $dataArray;
+                $params['data']         = $data;
+                $params['bulan']        = $bulan;
+                $params['tahun']        = $request->tahun;
+
+                $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);
+
+                $pdf = \App::make('dompdf.wrapper');
+                $pdf->loadHTML($view);
+
+                $pdf->stream();
+
+                $output = $pdf->output();
+                $destinationPath = public_path('/storage/temp/');
+
+                file_put_contents( $destinationPath . $data->user->nik .'.pdf', $output);
+
+                $file = $destinationPath . $data->user->nik .'.pdf';
+
+                // send email
+                $objDemo = new \stdClass();
+                $objDemo->content = view('administrator.request-pay-slip.email-pay-slip'); 
+                
+                if($data->user->email != "")
+                { 
+                    \Mail::send('administrator.request-pay-slip.email-pay-slip', $params,
+                        function($message) use($file, $data, $bulan) {
+                            $message->from('info@system.com');
+                            $message->to($data->user->email);
+                            $message->subject('Request Pay-Slip Bulan ('. implode('/', $bulan) .')');
+                            $message->attach($file, array(
+                                    'as' => 'Payslip-'. $data->user->nik .'('. implode('/', $bulan) .').pdf', 
+                                    'mime' => 'application/pdf')
+                            );
+                            $message->setBody('');
+                        }
+                    );
+                }
+                
+                $data->note     = $request->note;
+                $data->status   = 2;
+                $data->save();
+            }
+        }
+
+        return redirect()->route('administrator.payroll.index')->with('message-success', 'Pay Slip Send successfully');
+    }
+>>>>>>> 065d426c17cca51fdb08f5570054d92f35cba139
 
     /**
      * [import description]

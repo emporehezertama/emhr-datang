@@ -24,12 +24,14 @@ date_default_timezone_set($timezone);
 
 Route::get('/', function () 
 {
-	return redirect('login');
+	return redirect()->route('landing-page1');
 });
 
 Auth::routes();
 
 Route::get('asset-accept/{id}', 'IndexController@acceptAsset')->name('accept-asset');
+Route::get('em-hris-application-system', 'LandingPageController@page1')->name('landing-page1');
+Route::post('post-em-hris-application-system', 'LandingPageController@storePage1')->name('post-landing-page1');
 
 Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-division-by-directorate', 'AjaxController@getDivisionByDirectorate')->name('ajax.get-division-by-directorate');
@@ -82,6 +84,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-history-approval-training-claim-custom', 'AjaxController@getHistoryApprovalTrainingClaimCustom')->name('ajax.get-history-approval-training-claim-custom');
 	Route::post('ajax/get-history-approval-medical-custom', 'AjaxController@getHistoryApprovalMedicalCustom')->name('ajax.get-history-approval-medical-custom');
 	Route::post('ajax/get-history-approval-exit-custom', 'AjaxController@getHistoryApprovalExitCustom')->name('ajax.get-history-approval-exit-custom');
+	Route::post('ajax/get-history-approval-clearance-custom', 'AjaxController@getHistoryApprovalClearanceCustom')->name('ajax.get-history-approval-clearance-custom');
 
 	Route::post('ajax/get-karyawan-approval', 'AjaxController@getKaryawanApproval')->name('ajax.get-karyawan-approval');
 	Route::post('ajax/add-setting-clearance-hrd', 'AjaxController@addSettingClearanceHrd')->name('ajax.add-setting-clearance-hrd');
@@ -125,6 +128,9 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('attendance/index', 'AttendanceController@index')->name('attendance.index');
 	Route::get('attendance/detail-attendance/{SN}', 'AttendanceController@AttendanceList')->name('attendance.detail-attendance');
 	Route::post('ajax/get-year-pay-slip', 'AjaxController@getYearPaySlip')->name('ajax.get-year-pay-slip');		
+	Route::post('ajax/get-year-pay-slip-all', 'AjaxController@getYearPaySlipAll')->name('ajax.get-year-pay-slip-all');	
+	Route::post('ajax/get-bulan-pay-slip-all', 'AjaxController@getBulanPaySlipAll')->name('ajax.get-bulan-pay-slip-all');		
+
 });
 
 /**

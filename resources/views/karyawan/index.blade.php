@@ -19,7 +19,7 @@
                 <form method="GET" action="" style="float: right; width: 40%;">
                     <div class="form-group">
                         <i class="fa fa-search-plus" style="float: left;font-size: 20px;margin-top: 9px;margin-right: 12px;"></i>
-                        <input type="text" name="keyword-karyawan" class="form-control autocomplete-karyawan" style="float:left;width: 80%;margin-right: 5px;" placeholder="Search Karyawan Here...">
+                        <input type="text" name="keyword-karyawan" class="form-control autocomplete-karyawan" style="float:left;width: 80%;margin-right: 5px;" placeholder="Search Employee Here">
                     </div>
                 </form>
             </div>
@@ -225,7 +225,7 @@
                         el += '<td>'+ (data.telepon == null ? '' : data.telepon ) +'</td>';
                         el += '<td>'+ (data.email == null ? '' : data.email) +'</td>';
                         el += '<td>'+ (data.ext ==null ? '' : data.ext) +'</td>';
-                        el += '<td>'+ data.organisasi_job_role +'</td>';
+                        el += '<td>'+ data.position +'</td>';
                         el += '</tr></tbody>';
                         el += '</table>';
                         el += '</div></div></div>'

@@ -112,6 +112,15 @@ class ApprovalOvertimeCustomController extends Controller
     {
 
         $data = OvertimeSheet::where('id', $request->id)->first();
+
+        foreach($request->id_overtime_form as $key => $item)
+        {
+            $form = \App\Models\OvertimeSheetForm::where('id', $request->id_overtime_form[$key])->first();
+            $form->pre_awal_approved          = $request->pre_awal_approved[$key];
+            $form->pre_akhir_approved         = $request->pre_akhir_approved[$key];
+            $form->pre_total_approved         = $request->pre_total_approved[$key];
+            $form->save();
+        }
         
         $historyApprov      = HistoryApprovalOvertime::where('overtime_sheet_id',$data->id)->get();
         $params['data']     = $data;

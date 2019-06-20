@@ -610,7 +610,7 @@ $("#addAcomodation").click(function(){
         html += '<td><input type="text" class="form-control price_format nominalAcomodation" name="nominalAcomodation[]"></td>';
         html += '<td><input type="text" name="nominalAcomodation_approved[]"  class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteAcomodation[]" class="form-control noteAcomodation"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukAcomodation[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukAcomodation[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemAcomodation(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 
@@ -673,6 +673,11 @@ var calculate_allAllowance  = function(){
 
 $("#addAllowance").click(function(){
     @php ($plafond_dinas = getPlafondTraining($data->lokasi_kegiatan,$data->tempat_tujuan))
+    @if($plafond_dinas->tunjangan_makanan == 0)
+    {
+        alert('Plafond your meal allowance and type of location not define yet. Please contact your admin !');
+    }
+    @endif
     var no = $('.table-content-allowance tr').length;
     var html = '<tr>';
         html += '<td><input type="date" name="dateAllowance[]" required class="form-control" placeholder="Date"></td>';
@@ -684,7 +689,7 @@ $("#addAllowance").click(function(){
         html += '<td><input type="text" name="evening[]" class="form-control evening price_format"></td>';
         html += '<td><input type="text" name="evening_approved[]" class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteAllowance[]" class="form-control noteAllowance"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukAllowance[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukAllowance[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemAllowance(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 
@@ -723,6 +728,11 @@ var calculate_nominalDaily  = function(){
 }
 $("#addDaily").click(function(){
     @php ($plafond_dinas = getPlafondTraining($data->lokasi_kegiatan,$data->tempat_tujuan))
+    @if($plafond_dinas->tunjangan_harian == 0)
+    {
+        alert('Plafond your daily allowance and type of location not define yet. Please contact your admin !');
+    }
+    @endif
     var no = $('.table-content-daily tr').length;
     var html = '<tr>';
         html += '<td><input type="date" name="dateDaily[]" required class="form-control" \
@@ -731,7 +741,7 @@ $("#addDaily").click(function(){
           html += '<td><input type="text" name="nominalDaily[]"  class="form-control price_format nominalDaily"></td>';
         html += '<td><input type="text" name="nominalDaily_approved[]"  class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteDaily[]" class="form-control noteDaily"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukDaily[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukDaily[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemDaily(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 
@@ -768,7 +778,7 @@ $("#addOther").click(function(){
         html += '<td><input type="text" class="form-control nominalOther price_format" name="nominalOther[]"></td>';
         html += '<td><input type="text" name="nominalOther_approved[]"  class="form-control price_format" readonly="true"></td>';
         html += '<td><input type="text" style="width: 150px" name="noteOther[]" class="form-control noteOther"></td>';
-        html += '<td><input type="file" style="width: 70px" name="file_strukOther[]" class="form-control input"></td>';
+        html += '<td><input type="file" name="file_strukOther[]" class="form-control input"></td>';
         html += '<td><a class="btn btn-xs btn-danger" onclick="delete_itemOther(this);"><i class="fa fa-trash"></i></a></td>';
         html += '</tr>';
 

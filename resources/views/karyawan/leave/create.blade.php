@@ -191,7 +191,7 @@
                         <tr>
                            <td>{{ $no + 1 }}</td>
                            <td>{{ $item->tanggal_cuti_start }} - {{ $item->tanggal_cuti_end }}</td>
-                           <td>{{ $item->cuti->jenis_cuti }}</td>
+                           <td>{{ $item->cuti->description }}</td>
                            <td>{{ $item->total_cuti}}</td>
                            <!--<td>{{ lama_hari($item->tanggal_cuti_start, $item->tanggal_cuti_end) }}</td>-->
                            <td>{{ $item->keperluan }}</td>

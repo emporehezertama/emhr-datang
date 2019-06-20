@@ -27,11 +27,17 @@ class LeaveCustomController extends Controller
     public function index()
     {
         //
-        $data = CutiKaryawan::select('cuti_karyawan.*')->join('users', 'users.id','=','cuti_karyawan.user_id')->orderBy('id', 'DESC');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = CutiKaryawan::select('cuti_karyawan.*')->join('users', 'users.id','=','cuti_karyawan.user_id')->where('users.project_id', $user->project_id)->orderBy('id', 'DESC');
+        } else
+        {
+            $data = CutiKaryawan::select('cuti_karyawan.*')->join('users', 'users.id','=','cuti_karyawan.user_id')->orderBy('id', 'DESC');
+        }
         $params['structure'] = getStructureName();
         $params['division'] = OrganisasiDivision::all();
         $params['position'] = OrganisasiPosition::all();
-        
         
         if(request())
         {

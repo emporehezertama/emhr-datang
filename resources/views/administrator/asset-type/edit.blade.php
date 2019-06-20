@@ -53,6 +53,18 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="col-md-12">PIC Department</label>
+                            <div class="col-md-6">
+                               <select class="form-control" name="pic_department" required="true">
+                                    <option value="">- Select - </option>
+                                    @foreach(['HRD', 'GA', 'IT', 'Accounting'] as $item)
+                                    <option {{ $data->pic_department == $item ? 'selected' : '' }}>{{ $item }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="clearfix"></div>
                         <br />
                         <div class="col-md-12">

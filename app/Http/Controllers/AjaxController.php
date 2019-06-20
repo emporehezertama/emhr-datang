@@ -79,6 +79,48 @@ class AjaxController extends Controller
     }
 
     /**
+     * Get All Year Payslip
+     * @return [type] [description]
+     */
+    public function getYearPaySlipAll(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = \App\Models\PayrollHistory::select(\DB::raw('year(created_at) as tahun'))->groupBy('tahun')->get();
+
+            return response()->json(['result'=> $data]);
+        }
+    }
+
+    /**
+     * get month
+     * @param  Request $request
+     * @return json
+     */
+    public function getBulanPaySlipAll(Request $request)
+    {
+        $params = [];
+        if($request->ajax())
+        {
+            $params = User::select(\DB::raw('month(join_date) as bulan'))->whereYear('join_date', '=', $request->tahun)->first();
+
+            $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+            
+            $bulan = [];
+            if($params)
+            {
+                for($b = $params->bulan; $b <= date('m'); $b++)
+                {
+                    $bulan[$b]['id'] = $b;
+                    $bulan[$b]['name'] = $bulanArray[$b];
+                }    
+            }
+        }
+
+        return response()->json($bulan);
+    }
+
+    /**
      * Get Year Pay Slip
      * @param  Request $request
      * @return json
@@ -1359,6 +1401,7 @@ class AjaxController extends Controller
         {
             $data = CutiKaryawan::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1366,9 +1409,16 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1380,6 +1430,7 @@ class AjaxController extends Controller
         {
             $data = PaymentRequest::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1387,9 +1438,16 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1401,6 +1459,7 @@ class AjaxController extends Controller
         {
             $data = OvertimeSheet::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1408,9 +1467,16 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1422,6 +1488,7 @@ class AjaxController extends Controller
         {
             $data = OvertimeSheet::where('id', $request->foreign_id)->first();
             $history =[];
+            $user=[];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1429,9 +1496,15 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApprovedClaim)?$value->userApprovedClaim->name:'';
                 $history[$key]['date']          = $value->date_approved_claim;
                 $history[$key]['is_approved']   = $value->is_approved_claim;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
-            
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1439,10 +1512,11 @@ class AjaxController extends Controller
 
     public function getHistoryApprovalTrainingCustom(Request $request)
     {
-        if($request->ajax())
+        if($request->ajax()) 
         {
             $data = Training::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1450,9 +1524,15 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
-            
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1463,6 +1543,7 @@ class AjaxController extends Controller
         {
             $data = Training::where('id', $request->foreign_id)->first();
             $history =[];
+            $user = [];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1470,9 +1551,15 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApprovedClaim)?$value->userApprovedClaim->name:'';
                 $history[$key]['date']          = $value->date_approved_claim;
                 $history[$key]['is_approved']   = $value->is_approved_claim;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
-            
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);
@@ -1483,6 +1570,7 @@ class AjaxController extends Controller
         {
             $data = MedicalReimbursement::where('id', $request->foreign_id)->first();
             $history =[];
+            $user =[];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1490,19 +1578,28 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history,'user'=>$user]);
         }
 
         return response()->json($this->respon);
     }
+
     public function getHistoryApprovalExitCustom(Request $request)
     {
         if($request->ajax())
         {
             $data = ExitInterview::where('id', $request->foreign_id)->first();
             $history =[];
+            $user=[];
            foreach ($data->historyApproval as $key => $value) {
                 # code...
                 $history[$key]['level']         = $value->level->name;
@@ -1510,9 +1607,46 @@ class AjaxController extends Controller
                 $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
                 $history[$key]['date']          = $value->date_approved;
                 $history[$key]['is_approved']   = $value->is_approved;
+                $dataUser = user_approval_custom($value->structure_organization_custom_id);
+                if($value->userApprovedClaim == null)
+                {
+                    foreach ($dataUser as $k => $v) { 
+                        $user[$k]['name']         = $v->name;
+                    }
+                }
             } 
             
-            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history]);
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history,'user'=>$user]);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getHistoryApprovalClearanceCustom(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data = ExitInterview::where('id', $request->foreign_id)->first();
+            
+            $history =[];
+            $user=[];
+            foreach ($data->assets as $key => $value) {
+                $history[$key]['level']         = $value->asset->asset_name;
+                $history[$key]['position']      = $value->asset->asset_type->pic_department;
+                $history[$key]['user']          = isset($value->userApproved)?$value->userApproved->name:'';
+                $history[$key]['date']          = $value->date_approved;
+                $history[$key]['is_approved']   = $value->approval_check;
+
+                $dataSetting = SettingApprovalClearance::where('nama_approval',$value->asset->asset_type->pic_department)->get();
+                if($value->approval_check == null)
+                {
+                    foreach ($dataSetting as $k => $v) { 
+                        $user[$key]['child'][$k]['name']         = $v->user->name;
+                    }
+                }
+            } 
+            
+            return response()->json(['message' => 'success', 'data' => $data, 'history'=> $history, 'user'=>$user]);
         }
 
         return response()->json($this->respon);

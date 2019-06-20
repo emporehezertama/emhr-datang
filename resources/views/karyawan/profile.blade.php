@@ -84,7 +84,7 @@
                             <li role="presentation" class=""><a href="#education" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Education</span></a></li>
                             <li role="presentation" class=""><a href="#department" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Department / Division</span></a></li>
                             <li role="presentation" class=""><a href="#rekening_bank" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Bank Account</span></a></li>
-                            <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventaris</span></a></li>
+                            <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventory</span></a></li>
                             <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Leave</span></a></li>
                         </ul>
                         <div class="tab-content">
@@ -193,11 +193,13 @@
                                     <div class="col-md-6">
                                        <input type="text" name="position" class="form-control"  readonly="true" value="{{ $data->structure->position->name }}" />
                                     </div>
+                                    <div class="clearfix"></div>
                                 </div>
+                                <div class="clearfix"></div>
                                 <div class="form-group">
                                     <label class="col-md-12">Division</label>
                                     <div class="col-md-6">
-                                       <input type="text" name="division" class="form-control"  readonly="true" value="{{ $data->structure->division->name }}" />
+                                       <input type="text" name="division" class="form-control"  readonly="true" value="{{ isset($data->structure->division->name) }}" />
                                     </div>
                                 </div>
                                 @else

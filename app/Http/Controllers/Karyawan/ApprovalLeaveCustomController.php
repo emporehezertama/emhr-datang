@@ -175,6 +175,10 @@ class ApprovalLeaveCustomController extends Controller
                                 $user_cuti->save();
                             }
                         }else {
+                            $user_cuti->cuti_terpakai   = $user_cuti->cuti_terpakai + $cuti->total_cuti;
+                            $user_cuti->sisa_cuti       = $user_cuti->kuota - $user_cuti->cuti_terpakai;
+                            $user_cuti->save();
+                            /*
                            // jika cuti maka kurangi kuota
                             if(strpos($user_cuti->cuti->jenis_cuti, 'Cuti') !== false)
                             {
@@ -183,6 +187,7 @@ class ApprovalLeaveCustomController extends Controller
                                 $user_cuti->sisa_cuti       = $user_cuti->kuota - $user_cuti->cuti_terpakai;
                                 $user_cuti->save();
                             }
+                            */
                         }
                         $cuti->temp_sisa_cuti           = $cuti->temp_sisa_cuti - $cuti->total_cuti;
                         $cuti->temp_cuti_terpakai       = $cuti->total_cuti + $cuti->temp_cuti_terpakai;

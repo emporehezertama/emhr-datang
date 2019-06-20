@@ -19,9 +19,10 @@
                             <ul role="menu" class="dropdown-menu">
                                 <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
-                                <li><a href="#" onclick="submit_bukti_potong()"><i class="fa fa-download"></i> Bukti Potong</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
+                                <li><a href="#" onclick="submit_bukti_potong()" title="Download Bukti Potong"><i class="fa fa-download"></i> Bukti Potong</a></li>
+                                <li><a href="javascript:void(0)" onclick="send_payslip()" title="Send Payslip"><i class="fa fa-send-o"></i> Send Payslip</a></li>
                             </ul>
                         </div>
                     </div>
@@ -53,7 +54,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="col-md-2 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="month">
@@ -62,6 +62,21 @@
                                 <option value="{{ $key }}" {{ (request() and request()->month == $key) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="year">
+                                <option value="">- Year - </option>
+                                @foreach(get_year_payroll() as $key => $item)
+                                <option {{ (request() and request()->year == $item) ? 'selected' : '' }}>{{ $item }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <div class="form-group m-b-0">
+                            <input type="text" class="form-control  form-control-line" name="name" value="{{ isset(request()->name) ? request()->name : '' }}" placeholder="Nik / Name">
                         </div>
                     </div>
                     <input type="hidden" name="action" value="view">
@@ -91,13 +106,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                            	@php ($i = 1)
                             @if(isset($data))	
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
 			                            <tr>
-                                            <td><input type="checkbox" name="payroll_id[]" value="{{ $item->id }}"></td>
+                                            <td><input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
 			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
 			                                <td>{{ $item->user->name }}</td>
@@ -164,16 +178,145 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<!-- modal send pay slip  -->
+<div id="modal_send_pay_slip" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">Send Pay Slip</h4> </div>
+            <form method="POST" class="form-horizontal form_send_payslip" action="{{ route('administrator.payroll.index') }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="send-pay-slip">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-6">Year</label>
+                        <label class="col-md-6">Month</label>
+                        <div class="col-md-6">
+                            <select class="form-control modal-select-year" required name="tahun">
+                                <option value="">- Select -</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 modal-select-month"></div>
+                        <div class="section-user-id"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="submit_payslip()"><i class="fa fa-send-o"></i> Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section('footer-script')
 <script type="text/javascript">
+    var payroll_selected = 0;
+    var send_payslip = function(){
+       $("#modal_send_pay_slip").modal("show");
+
+       $.ajax({
+            type: 'POST',
+            url: '{{ route('ajax.get-year-pay-slip-all') }}',
+            data: {'_token' : $("meta[name='csrf-token']").attr('content')},
+            dataType: 'json',
+            success: function (data) {
+                var el = '<option value="">- Select -</option>';
+                    
+                $.each(data.result, function(k,v){
+                    el += '<option value="'+ v.tahun +'">'+ v.tahun +'</option>';
+                });              
+
+                $("#modal_send_pay_slip .modal-select-year").html(el);
+            }
+        }); 
+
+        var count   = $("input[name='payroll_id[]']").filter(':checked');
+        var html    = '';
+
+        $(count).each(function(k,v){
+            html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
+
+        });
+
+        $('.section-user-id').html(html);
+    }
+
+
+    function submit_payslip()
+    {
+        var year    = $('.modal-select-year').val();
+        var bulan   = $("input[name='bulan[]']").filter(':checked').length;
+
+        if(year == "" || bulan <= 0)
+        {
+            _alert('Year / Month required.');
+            return false;
+        }
+
+        if(payroll_selected > 0)
+        {
+            _confirm_submit('Send payslip ?', $('form.form_send_payslip'));
+        }
+        else
+        {
+            _alert('Select payroll !');
+        }
+    }
+
+    $("#modal_send_pay_slip .modal-select-year").on('change', function(){
+
+       var tahun = $(this).val();
+
+        if($(this).val() != "")
+        {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-bulan-pay-slip-all') }}',
+                data: {'tahun': tahun, '_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = '';
+
+                    $.each(data, function(k, v){
+                        el += '<label><input type="checkbox" value="'+ v.id +'" name="bulan[]" /> '+ v.name +'</label> &nbsp; ';
+
+                    });
+
+                    $('#modal_send_pay_slip .modal-select-month').html(el);
+                }
+            });
+        }
+    });
+
     
     function submit_bukti_potong()
     {
-        $("#form_table_payroll").submit();
+        if(payroll_selected > 0)
+        {
+            $("#form_table_payroll").submit();
+        }
+        else
+        {
+            _alert('Select payroll !');
+        }
     }
 
     $("input[name='check_all']").click(function () {    
-        $('input:checkbox').prop('checked', this.checked);    
+        $('input:checkbox').prop('checked', this.checked);  
+
+        check_button_payslip();
+    });
+
+    function check_button_payslip()
+    {
+        payroll_selected = $("input:checkbox").filter(':checked').length; 
+    }
+
+    $('input:checkbox').click(function(){
+        check_button_payslip();
     });
 
     $("#filter_view").click(function(){

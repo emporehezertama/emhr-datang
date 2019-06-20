@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Nominal</label>
+                            <label class="col-md-12">Amount</label>
                             <div class="col-md-6">
                                 <input type="number" class="form-control" name="nominal"> 
                             </div>
