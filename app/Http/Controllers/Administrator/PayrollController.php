@@ -1148,9 +1148,6 @@ class PayrollController extends Controller
         }
     }
 
-
-<<<<<<< HEAD
-=======
     /**
      * Send Pay Slip
      * @return email
@@ -1259,7 +1256,6 @@ class PayrollController extends Controller
 
         return redirect()->route('administrator.payroll.index')->with('message-success', 'Pay Slip Send successfully');
     }
->>>>>>> 065d426c17cca51fdb08f5570054d92f35cba139
 
     /**
      * [import description]
