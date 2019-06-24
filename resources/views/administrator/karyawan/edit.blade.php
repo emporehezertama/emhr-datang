@@ -671,10 +671,14 @@
                                 <div class="form-group">
                                     <label class="col-md-12">ID Picture</label>
                                     <div class="col-md-12">
-                                        <input type="file" name="foto_ktp" class="form-control " />
-                                        @if(!empty($data->foto_ktp))
-                                        <img src="{{ asset('storage/fotoktp/'. $data->foto_ktp) }}" style="width: 200px;" />
-                                        @endif
+                                        <div class="col-md-6">
+                                            <input type="file" name="foto_ktp" class="form-control " />
+                                        </div>
+                                        <div class="col-md-6">
+                                            @if(!empty($data->foto_ktp))
+                                                <a onclick="show_image('{{ $data->foto_ktp }}')" class="btn btn-default btn-xs" style="height: 35px;width: 100px"><i class="fa fa-search-plus"></i>View</a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -1119,6 +1123,13 @@
     <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Date Picker Plugin JavaScript -->
     <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script type="text/javascript">
+        function show_image(img)
+        {
+            bootbox.alert('<img src="{{ asset('storage/fotoktp/') }}/'+ img +'" style = \'width: 100%;\' />');
+        }
+    </script>
+
     <script type="text/javascript">
         var el_dependent;
         var el_education;

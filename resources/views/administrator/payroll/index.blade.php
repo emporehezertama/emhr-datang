@@ -37,11 +37,21 @@
                     </div>
                     <div class="col-md-1 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
-                            <select class="form-control form-control-line" name="jabatan">
-                                <option value="">- Position - </option>
-                                <option {{ (request() and request()->jabatan == 'Staff') ? 'selected' : '' }}>Staff</option>
-                                <option {{ (request() and request()->jabatan == 'Manager') ? 'selected' : '' }}>Manager</option>
-                                <option {{ (request() and request()->jabatan == 'Direktur') ? 'selected' : '' }}>Director</option>
+                            <select class="form-control" name="division_id">
+                                <option value=""> - choose Division - </option>
+                                @foreach($division as $item)
+                                <option value="{{ $item->id }}" {{ $item->id== request()->division_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control" name="position_id">
+                                <option value=""> - choose Position - </option>
+                                @foreach($position as $item)
+                                <option value="{{ $item->id }}" {{ $item->id== request()->position_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

@@ -21,6 +21,8 @@ use App\Models\PayrollEarnings;
 use App\Models\PayrollDeductions;
 use App\Models\RequestPaySlip;
 use App\Models\RequestPaySlipItem;
+use App\Models\OrganisasiDivision;
+use App\Models\OrganisasiPosition;
 
 class PayrollController extends Controller
 {   
@@ -36,9 +38,18 @@ class PayrollController extends Controller
      */
     public function index()
     {
-        
-        $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->where('users.project_id', $user->project_id)->orderBy('payroll.id', 'DESC');
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        } else
+        {
+            $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
+        }
         if(request())
         {
             if(!empty(request()->month))
@@ -84,22 +95,17 @@ class PayrollController extends Controller
                 $result = $result->where('users.organisasi_status', request()->employee_status);
             }
 
-            if(!empty(request()->jabatan))
+            if((!empty(request()->division_id)) and (empty(request()->position_id))) 
             {   
-                if(request()->jabatan == 'Direktur')
-                {
-                    $result = $result->whereNull('users.empore_organisasi_staff_id')->whereNull('users.empore_organisasi_manager_id')->where('users.empore_organisasi_direktur', '<>', '');
-                }
-
-                if(request()->jabatan == 'Manager')
-                {
-                    $result = $result->whereNull('users.empore_organisasi_staff_id')->where('users.empore_organisasi_manager_id', '<>', '');
-                }
-
-                if(request()->jabatan == 'Staff')
-                {
-                    $result = $result->where('users.empore_organisasi_staff_id', '<>', '');
-                }
+                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_division_id',request()->division_id);
+            }
+            if((!empty(request()->position_id)) and (empty(request()->division_id)))
+            {   
+                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id);
+            }
+            if((!empty(request()->position_id)) and (!empty(request()->division_id)))
+            {
+                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id)->where('structure_organization_custom.organisasi_division_id',request()->division_id);
             }
 
             if(!empty(request()->name))
@@ -986,7 +992,7 @@ class PayrollController extends Controller
                 }
             }
 
-            $gross_income = ($item->salary + $earnings + $bpjspenambahan) * 12 + $item->bonus;
+            $gross_income = (($item->salary + $earnings + $bpjspenambahan) * 12 )+ $item->bonus;
 
             // burdern allowance
             $burden_allow = 5 * ($item->salary + $earnings + $bpjspenambahan + $item->bonus) / 100;

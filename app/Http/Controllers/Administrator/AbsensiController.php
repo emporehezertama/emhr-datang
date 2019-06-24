@@ -21,9 +21,15 @@ class AbsensiController extends Controller
      * @return [type] [description]
      */
     public function index()
-    {   
-        $data = Absensi::all();
-        
+    {  
+        $user = \Auth::user(); 
+        if($user->project_id != NULL)
+        {
+            $data = Absensi::join('users','users.id','=','absensi.user_created')->where('users.project_id', $user->project_id)->select('absensi.*')->get();
+        }else{
+            $data = Absensi::all();
+        }
+
         return view('administrator.absensi.index')->with(['data' => $data]);
     }
 
@@ -49,6 +55,12 @@ class AbsensiController extends Controller
 
         $absensi                    = new Absensi();
         $absensi->tanggal_upload    = date('Y-m-d');
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $absensi->user_created    = $user->id;
+        }
         $absensi->save();
 
         foreach ($data as $k => $v) 

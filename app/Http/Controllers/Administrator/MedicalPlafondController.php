@@ -29,8 +29,15 @@ class MedicalPlafondController extends Controller
     public function index()
     {
         //
-        $params['type']      = MedicalType::all();
-        $params['plafond']   = MedicalPlafond::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['type']      = MedicalType::join('users','users.id','=','medical_type.user_created')->where('users.project_id', $user->project_id)->select('medical_type.*')->get();
+            $params['plafond']   = MedicalPlafond::join('users','users.id','=','medical_plafond.user_created')->where('users.project_id', $user->project_id)->select('medical_plafond.*')->get();
+        }else{
+            $params['type']      = MedicalType::all();
+            $params['plafond']   = MedicalPlafond::all();
+        }
 
         return view('administrator.medical-plafond.index')->with($params);
     }
@@ -57,6 +64,11 @@ class MedicalPlafondController extends Controller
         //
         $data = new MedicalType();
         $data->name            = $request->name;
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully saved');
@@ -124,8 +136,16 @@ class MedicalPlafondController extends Controller
      */
     public function createMedicalPlafond()
     {
-        $params['type'] = MedicalType::all();
-        $params['position'] = OrganisasiPosition::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['type'] = MedicalType::join('users','users.id','=','medical_type.user_created')->where('users.project_id', $user->project_id)->select('medical_type.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['type'] = MedicalType::all();
+            $params['position'] = OrganisasiPosition::all();
+        }
+        
         return view('administrator.medical-plafond.createPlafond')->with($params);
     }
 
@@ -136,6 +156,11 @@ class MedicalPlafondController extends Controller
         $data->position_id         = $request->position_id;
         $data->nominal             = $request->nominal;
         $data->description         = $request->description;
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         return redirect()->route('administrator.medical-plafond.index')->with('message-success', 'Data successfully saved');
@@ -144,9 +169,15 @@ class MedicalPlafondController extends Controller
     public function editMedicalPlafond($id)
     {
         $params['data'] = MedicalPlafond::where('id', $id)->first();
-        $params['type'] = MedicalType::all();
-        $params['position'] = OrganisasiPosition::all();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['type'] = MedicalType::join('users','users.id','=','medical_type.user_created')->where('users.project_id', $user->project_id)->select('medical_type.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['type'] = MedicalType::all();
+            $params['position'] = OrganisasiPosition::all();
+        }
         return view('administrator.medical-plafond.editPlafond')->with($params);
     }
 

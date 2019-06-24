@@ -18,7 +18,7 @@ class PeraturanPerusahaanController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-            $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->join('users','users.id','=','peraturan_perusahaan.user_created')->where('users.project_id', $user->project_id)->get();
+            $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->join('users','users.id','=','peraturan_perusahaan.user_created')->where('users.project_id', $user->project_id)->select('peraturan_perusahaan.*')->get();
         } else
         {
             $params['data'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
@@ -70,7 +70,7 @@ class PeraturanPerusahaanController extends Controller
 
         $data->save();
 
-        return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-success', 'Data successfully saved !');
     }   
 
     /**
@@ -83,7 +83,7 @@ class PeraturanPerusahaanController extends Controller
         $data = PeraturanPerusahaan::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-sucess', 'Data successfully deleted !');
     } 
 
     /**
@@ -114,6 +114,6 @@ class PeraturanPerusahaanController extends Controller
 
         $data->save();
 
-        return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.peraturan-perusahaan.index')->with('message-success', 'Data successfully saved !');
     }
 }

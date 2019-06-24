@@ -23,7 +23,13 @@ class SettingApprovalMedicalController extends Controller
     public function index()
     {
         //
-        $params['data']  = SettingApprovalLeave::orderBy('id', 'DESC')->get();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {   
+            $params['data']  = SettingApprovalLeave::orderBy('setting_approval_leave.id', 'DESC')->join('structure_organization_custom','structure_organization_custom.id','=','setting_approval_leave.structure_organization_custom_id')->join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_leave.*')->get();
+        }else{
+            $params['data']  = SettingApprovalLeave::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.setting-approvalMedical.index')->with($params);
     }
 
@@ -169,7 +175,7 @@ class SettingApprovalMedicalController extends Controller
     {
         // check data
         $data                       = SettingApprovalMedicalItem::where('id', $id)->first();
-        $checkdata = SettingApprovalMedicalItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
+        //$checkdata = SettingApprovalMedicalItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
         $checkDataStruktur = SettingApprovalMedicalItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('structure_organization_custom_id', $request->structure_organization_custom_id)->first();
 
         //dd($request->setting_approval_level_id, $request->structure_organization_custom_id);
@@ -181,7 +187,9 @@ class SettingApprovalMedicalController extends Controller
         {
             if(isset($checkDataStruktur))
             {
-                if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
+                return redirect()->route('administrator.setting-approvalMedical.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+
+               /* if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
                 {
                     //$data->setting_approval_level_id  = $request->setting_approval_level_id;
                     $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
@@ -191,8 +199,8 @@ class SettingApprovalMedicalController extends Controller
                 } else
                 {
                     return redirect()->route('administrator.setting-approvalMedical.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-                }            
-            } elseif(isset($checkdata))
+                }    */        
+            } /*elseif(isset($checkdata))
             {
                 if($checkdata->structure_organization_custom_id != $request->structure_organization_custom_id){
                     $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
@@ -201,9 +209,8 @@ class SettingApprovalMedicalController extends Controller
                     return redirect()->route('administrator.setting-approvalMedical.indexItem', $data->setting_approval_leave_id)->with('message-success', 'Data successfully saved');
                 } else{
                     return redirect()->route('administrator.setting-approvalMedical.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-                }
-                
-            }else
+                }   
+            }*/else
             {
                  //$data->setting_approval_level_id  = $request->setting_approval_level_id;
                  $data->structure_organization_custom_id  = $request->structure_organization_custom_id;

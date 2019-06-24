@@ -27,8 +27,14 @@ class AssetController extends Controller
      */
     public function index()
     {
-        $data   = Asset::orderBy('id', 'DESC');
-    
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data   = Asset::orderBy('asset.id', 'DESC')->join('users','users.id','=','asset.user_id')->where('users.project_id', $user->project_id)->select('asset.*');
+        }else {
+            $data   = Asset::orderBy('id', 'DESC');
+        }
+
         if(isset($_GET['asset_type_id']))
         {
             if(!empty($_GET['asset_type_id']))

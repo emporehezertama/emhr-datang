@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-md-6">
-                <h4 class="page-title">Setting Approval Leave For</h4> </div>
+                <h4 class="page-title">Setting Approval Leave</h4> </div>
             <div class="col-md-6">
                <a href="{{ route('administrator.setting-approvalLeave.createItem', ['id' => $data->id]) }}" class="btn btn-sm btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD APPROVAL</a>
                 <a href="{{ route('administrator.setting-approvalLeave.index') }}" class="btn btn-sm btn-default pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-arrow-left"></i> BACK</a>

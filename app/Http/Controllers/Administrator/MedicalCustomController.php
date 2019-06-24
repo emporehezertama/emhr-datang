@@ -32,14 +32,16 @@ class MedicalCustomController extends Controller
         if($user->project_id != NULL)
         {
             $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id')->where('users.project_id', $user->project_id);
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
         } else
         {
             $data = MedicalReimbursement::select('medical_reimbursement.*')->orderBy('id', 'DESC')->join('users','users.id','=','medical_reimbursement.user_id');
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
         }
 
         $params['structure'] = getStructureName();
-        $params['division'] = OrganisasiDivision::all();
-        $params['position'] = OrganisasiPosition::all();
 
         if(request())
         {
@@ -141,13 +143,10 @@ class MedicalCustomController extends Controller
 
     public function proses($id)
     {   
-        
-
         $test = MedicalReimbursement::where('id', $id)->first();
         $userPos = $test->user->structure->organisasi_position_id;
         $plafond = MedicalPlafond::where('position_id',$userPos);
         
-
         $params['data'] = MedicalReimbursement::where('id', $id)->first();
         $params['form'] = MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
         return view('administrator.medicalcustom.edit')->with($params);

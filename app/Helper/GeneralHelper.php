@@ -87,15 +87,21 @@ function get_exit_header()
  */
 function getStructureName()
 {
-	$all = \App\Models\StructureOrganizationCustom::orderBy('organisasi_division_id','ASC')->get();
-        $data = [];
-        foreach ($all as $key => $item) 
-        {
-            $data[$key]['id']       = $item->id;
-            $data[$key]['name']     = isset($item->position) ? $item->position->name:'';
-            $data[$key]['name']     = isset($item->division) ? $data[$key]['name'] .' - '. $item->division->name: $data[$key]['name'];
-        }
-        return $data;
+	$user = \Auth::user();
+    if($user->project_id != NULL)
+    {
+    	$all = \App\Models\StructureOrganizationCustom::orderBy('structure_organization_custom.organisasi_division_id','ASC')->join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->select('structure_organization_custom.*')->get();
+    }else {
+    	$all = \App\Models\StructureOrganizationCustom::orderBy('organisasi_division_id','ASC')->get();
+    }
+    $data = [];
+    foreach ($all as $key => $item) 
+    {
+        $data[$key]['id']       = $item->id;
+        $data[$key]['name']     = isset($item->position) ? $item->position->name:'';
+        $data[$key]['name']     = isset($item->division) ? $data[$key]['name'] .' - '. $item->division->name: $data[$key]['name'];
+    }
+    return $data;
 }
 function cek_level_leave_up($id)
 {
@@ -701,9 +707,16 @@ function cek_level_exit_up($id)
 function count_clearance_approval()
 {
 	// cek jenis user
-    $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
-   	$data = \App\Models\ExitInterviewAssets::join('exit_interview','exit_interview.id','=','exit_interview_assets.exit_interview_id')->where('exit_interview.status','<',3)->get();
-   	
+	$user = \Auth::user();
+    if($user->project_id != NULL)
+    {
+    	$approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+   		$data = \App\Models\ExitInterviewAssets::join('exit_interview','exit_interview.id','=','exit_interview_assets.exit_interview_id')->where('exit_interview.status','<',3)->join('users','users.id','=','exit_interview.user_id')->where('users.project_id', $user->project_id)->select('exit_interview_assets.*')->get();
+    }else{
+    	$approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+   		$data = \App\Models\ExitInterviewAssets::join('exit_interview','exit_interview.id','=','exit_interview_assets.exit_interview_id')->where('exit_interview.status','<',3)->get();
+    }
+    
    	$params['approved'] 	= 0;
 	$params['waiting'] 		= 0;
 	$params['reject'] 		= 0;
