@@ -8,8 +8,11 @@
 		}	
 	</style>
 </head>
+@php($user = \App\User::where('id', $user_id)->first())
 <body>
-	<h2>PPh 21 Calculation</h2>
+	<h2>{{ $user->nik }} / {{ $user->name }}</h2>
+	<br />
+	<h3>PPh 21 Calculation</h3>
 	<br />
 	<table class="border">
 		<tbody>
@@ -231,7 +234,6 @@
 				<td style="border: 1px solid #000000;"> PTKP Status</td>
 				@for ($month = 1; $month <= 12; $month++) 
 	        		<th style="border: 1px solid #000000; width: 15px;">
-					@php($user = \App\User::where('id', $user_id)->first())
 					@if($user->marital_status == 'Bujangan/Wanita')
 	        			TK/0
 	        		@endif
