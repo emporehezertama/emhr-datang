@@ -530,12 +530,8 @@ class AjaxController extends Controller
             }
 
             $taxable_yearly_income = $net_yearly_income - $untaxable_income;
-<<<<<<< HEAD
-            
-=======
 
             $pph_setting_1  = \App\Models\PayrollPPH::where('id', 1)->first();
->>>>>>> b54009840db02ab924a968a29013fcae91e961dc
             // Perhitungan 5 persen
             $income_tax_calculation_5 = 0;
             if($taxable_yearly_income < 0)
