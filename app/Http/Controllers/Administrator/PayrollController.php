@@ -113,7 +113,15 @@ class PayrollController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($result->get());
+
+                if(!empty(request()->year) and empty(request()->month))
+                {
+                   return $this->downloadExcelYear($result->get());
+                }
+                else
+                {
+                    return $this->downloadExcel($result->get());
+                }                    
             }
 
             if(request()->action == 'bukti-potong')
@@ -157,6 +165,17 @@ class PayrollController extends Controller
     }
 
     /**
+     * Download excel year
+     * @return object
+     */
+    public function downloadExcelYear($data)
+    {
+        $request = request();
+
+        return (new \App\Models\PayrollExportYear($request->year))->download('EM-HR.Payroll-'. $request->year .'.xlsx');
+    }
+
+    /**
      * [downloadExlce description]
      * @param  Request $request [description]
      * @return [type]           [description]
@@ -164,6 +183,8 @@ class PayrollController extends Controller
     public function downloadExcel($data)
     {
         $params = [];
+        $request = request();
+
 
         foreach($data as $k =>  $item)
         {
@@ -230,39 +251,43 @@ class PayrollController extends Controller
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
         }
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
+        
+        return (new \App\Models\PayrollExportMonth(request()->year, request()->month, $params))->download('EM-HR.Payroll-'. $request->year .'-'. $request->month.'.xlsx');
 
-        return \Excel::create('Report-Payroll-'.date('Y-m-d'),  function($excel) use($params, $styleHeader){
+        /*
+        return \Excel::store('Report-Payroll-'.date('Y-m-d'),  function($excel) use($params, $styleHeader){
               $excel->sheet('Payroll',  function($sheet) use($params){
                 $sheet->fromArray($params);
             });
 
             $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
         })->download('xls');
+        */
     }
 
     /**
@@ -466,6 +491,7 @@ class PayrollController extends Controller
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
+        $history->bonus                        = replace_idr($request->bonus);
         $history->save();
 
         if(isset($temp->payrollDeductionsEmployee))
@@ -1101,6 +1127,7 @@ class PayrollController extends Controller
             $temp->yearly_income_tax            = $yearly_income_tax;   
             $temp->save(); 
 
+            $bonus = $temp->bonus;
             $user_id        = $temp->user_id;
             $payroll_id     = $temp->id;
 
@@ -1120,6 +1147,7 @@ class PayrollController extends Controller
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
             $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2;
             $temp->pph21                        = $monthly_income_tax;
+            $temp->bonus                        = replace_idr($bonus);
             $temp->save();
 
             if(isset($item->payrollDeductionsEmployee))
