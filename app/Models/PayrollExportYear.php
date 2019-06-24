@@ -31,7 +31,7 @@ class PayrollExportYear implements WithMultipleSheets
       	{
       		if(!isset($item->user->name)) continue;
 
-      		$sheets[] = new \App\Models\PayrollPerEmployeeSheet($this->year, $item->user->name .'-'.  $item->user->nik, $item->user_id);
+      		$sheets[] = new \App\Models\PayrollPerEmployeeSheet($this->year, $item->user->nik, $item->user_id);
       	}
       	
         return $sheets;
