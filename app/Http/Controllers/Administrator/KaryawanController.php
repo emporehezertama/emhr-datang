@@ -274,7 +274,7 @@ class KaryawanController extends Controller
             $user->mobile_1         = empty($item->mobile_1) ? $user->mobile_1 : $item->mobile_1;
             $user->mobile_2         = empty($item->mobile_2) ? $user->mobile_2 : $item->mobile_2;
             $user->access_id        = 2;
-            $user->status           = 1;
+            #$user->status           = 1;
             $user->blood_type       = empty($item->blood_type) ? $user->blood_type : $item->blood_type;
             $user->ktp_number       = empty($item->ktp_number) ? $user->ktp_number : $item->ktp_number;
             $user->passport_number  = empty($item->passport_number) ? $user->passport_number : $item->passport_number;

@@ -52,7 +52,6 @@ use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
 use App\Models\SettingApprovalClearance;
 
-
 class AjaxController extends Controller
 {
     protected $respon;
@@ -411,13 +410,6 @@ class AjaxController extends Controller
                     $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);                    
                 }
             }
-            else
-            {
-                // if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
-                // {
-                //     $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);                    
-                // }
-            }
             // end custom
 
             $bpjs_kesehatan         = 0;
@@ -450,13 +442,6 @@ class AjaxController extends Controller
                 {
                     $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
                 }
-            }
-            else
-            {
-                // if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
-                // {
-                //     $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
-                // }   
             }
             // end custom
 
@@ -491,13 +476,6 @@ class AjaxController extends Controller
                     $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
                 }
             }
-            else
-            {
-                // if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
-                // {
-                //     $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
-                // }   
-            }
             // end custom
 
             $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
@@ -511,21 +489,20 @@ class AjaxController extends Controller
                     $earnings += replace_idr($item);
                 }
             }
-            
-            $gross_income = ($request->salary + $earnings + $bpjspenambahan) * 12 + $request->bonus;
 
-            $gross_income2 = ($request->salary + $earnings + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
+            $gross_income           = ($request->salary + $earnings + $bpjspenambahan) * 12 + $request->bonus;
 
             // burdern allowance
-            $burden_allow = 5 *  ($request->salary + $earnings + $bpjspenambahan + $request->bonus) / 100;
-            $biaya_jabatan_bulan = $biaya_jabatan / 12;
+            $burden_allow           = 5 *  $gross_income / 100;
+            $biaya_jabatan_bulan    = $biaya_jabatan / 12;
+
             if($burden_allow > $biaya_jabatan_bulan)
             {
                 $burden_allow = $biaya_jabatan_bulan;
             }
  
-            $total_deduction = ($bpjspengurangan * 12) + ($burden_allow*12);
-
+            $total_deduction = ($bpjspengurangan * 12) + $burden_allow * 12;
+            
             $net_yearly_income          = $gross_income - $total_deduction;
 
             $untaxable_income = 0;
@@ -553,60 +530,66 @@ class AjaxController extends Controller
             }
 
             $taxable_yearly_income = $net_yearly_income - $untaxable_income;
+<<<<<<< HEAD
             
+=======
+
+            $pph_setting_1  = \App\Models\PayrollPPH::where('id', 1)->first();
+>>>>>>> b54009840db02ab924a968a29013fcae91e961dc
             // Perhitungan 5 persen
             $income_tax_calculation_5 = 0;
             if($taxable_yearly_income < 0)
             {
                 $income_tax_calculation_5 = 0;   
             }
-            elseif($taxable_yearly_income <= 50000000)
+            elseif($taxable_yearly_income <= $pph_setting_1->batas_atas)
             {
-                $income_tax_calculation_5 = 0.05 * $taxable_yearly_income;
+                $income_tax_calculation_5 = ($pph_setting_1->tarif / 100) * $taxable_yearly_income;
             }
-            if($taxable_yearly_income >= 50000000)
+            if($taxable_yearly_income >= $pph_setting_1->batas_atas)
             {
-                $income_tax_calculation_5 = 0.05 * 50000000;
+                $income_tax_calculation_5 = ($pph_setting_1->tarif / 100) * $pph_setting_1->batas_atas;
             }
 
+            $pph_setting_2  = \App\Models\PayrollPPH::where('id', 2)->first();
             // Perhitungan 15 persen
             $income_tax_calculation_15 = 0;
-            if($taxable_yearly_income >= 250000000 )
+            if($taxable_yearly_income >= $pph_setting_2->batas_atas)
             {
-                $income_tax_calculation_15 = 0.15 * (250000000 - 50000000);
+                $income_tax_calculation_15 = ($pph_setting_2->tarif / 100) * ($pph_setting_2->batas_atas - $pph_setting_2->batas_bawah);
             }
-            if($taxable_yearly_income >= 50000000 and $taxable_yearly_income <= 250000000)
+            if($taxable_yearly_income >= $pph_setting_2->batas_bawah and $taxable_yearly_income <= $pph_setting_2->batas_atas)
             {
-                $income_tax_calculation_15 = 0.15 * ($taxable_yearly_income - 50000000);
+                $income_tax_calculation_15 = ($pph_setting_2->tarif / 100) * ($taxable_yearly_income - $pph_setting_2->batas_bawah);
             }
 
+            $pph_setting_3  = \App\Models\PayrollPPH::where('id', 3)->first();
             // Perhitungan 25 persen
             $income_tax_calculation_25 = 0;
-            if($taxable_yearly_income >= 500000000)
+            if($taxable_yearly_income >= $pph_setting_3->batas_atas)
             {
-                $income_tax_calculation_25 = 0.25 * (500000000 - 250000000);
+                $income_tax_calculation_25 = ($pph_setting_3->tarif / 100)  * ($pph_setting_3->batas_atas - $pph_setting_3->batas_bawah);
             }
  
-            if($taxable_yearly_income <= 500000000 and $taxable_yearly_income >= 250000000)
+            if($taxable_yearly_income <= $pph_setting_3->batas_atas and $taxable_yearly_income >= $pph_setting_3->batas_bawah)
             {
-                $income_tax_calculation_25 = 0.25 * ($taxable_yearly_income - 250000000);
+                $income_tax_calculation_25 = ($pph_setting_3->tarif / 100) * ($taxable_yearly_income - $pph_setting_3->batas_bawah);
             }
 
+            $pph_setting_4  = \App\Models\PayrollPPH::where('id', 4)->first();
             $income_tax_calculation_30 = 0;
-            if($taxable_yearly_income >= 500000000)
+            if($taxable_yearly_income >= $pph_setting_4->batas_atas)
             {
-                $income_tax_calculation_30 = 0.35 * ($taxable_yearly_income - 500000000);
+                $income_tax_calculation_30 = ($pph_setting_4->tarif / 100) * ($taxable_yearly_income - $pph_setting_4->batas_bawah);
             }
 
-            $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax = $yearly_income_tax / 12;
-            $gross_income_per_month       = $gross_income / 12;
+            $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
+            $monthly_income_tax             = $yearly_income_tax / 12;
+            $gross_income_per_month         = ($request->salary + $earnings + $bpjspenambahan)  + $request->bonus;//$gross_income / 12;
 
             $less               = $bpjspengurangan + $monthly_income_tax; 
-
-            $gross_thp = ($request->salary + $earnings + $request->bonus);
-
-            $deductions = 0;
+            $gross_thp          = ($request->salary + $earnings + $request->bonus);
+            $deductions         = 0;
             if(isset($request->deductions))
             {
                 foreach($request->deductions as $item)
@@ -614,8 +597,6 @@ class AjaxController extends Controller
                     $deductions += replace_idr($item);
                 }
             }
-            
-            #$thp                = $gross_thp - $less - $deductions;
             
             $thp = ($request->salary + $request->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
 
@@ -639,12 +620,15 @@ class AjaxController extends Controller
             $params['monthly_income_tax']           = number_format($monthly_income_tax);
             $params['gross_income_per_month']                 = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
+
+            $non_bonus = $this->getCalculatePayrollNonBonus($request);
             
+            $params['yearly_income_tax_non_bonus']  = $non_bonus['yearly_income_tax'];
+            $params['monthly_income_tax']           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
+            $params['monthly_income_tax']           = number_format($params['monthly_income_tax']);
             // start custom
-            // $params['thp']                          = number_format($thp);
             $params['thp']                          = number_format($thp + $monthly_income_tax);
             // end custom
-            
             $params['bpjs_pengurang']                          = number_format($bpjspengurangan);
             $params['bpjs_penambahan']                          = number_format($bpjspenambahan);
         }
@@ -652,6 +636,253 @@ class AjaxController extends Controller
         return response()->json($params);
     }
 
+     /**
+     * Calcualte Payroll Non Bonus
+     * @param  Request $request
+     * @return json
+     */
+    public function getCalculatePayrollNonBonus($request)
+    {
+        $biaya_jabatan  = PayrollOthers::where('id', 1)->first()->value;
+        $upah_minimum   = PayrollOthers::where('id', 2)->first()->value;
+        $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
+        $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
+        
+        $params = [];
+        if($request->ajax())
+        {
+            $request->salary    = replace_idr($request->salary);
+            $request->bonus     = replace_idr($request->bonus);
+
+            $bpjs_ketenagakerjaan_persen = get_setting('bpjs_jkk_company') + get_setting('bpjs_jkm_company');
+            $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
+            $bpjs_ketenagakerjaan2_persen = get_setting('bpjs_jaminan_jht_employee');
+            $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
+
+            // start custom
+            if($request->edit_bpjs_ketenagakerjaan_employee != 0 )
+            {
+                if(replace_idr($request->bpjs_ketenagakerjaan_employee) != $bpjs_ketenagakerjaan2)
+                {
+                    $bpjs_ketenagakerjaan2 = replace_idr($request->bpjs_ketenagakerjaan_employee);                    
+                }
+            }
+            // end custom
+
+            $bpjs_kesehatan         = 0;
+            $bpjs_kesehatan2        = 0;
+            $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
+            $bpjs_kesehatan2_persen = 1;
+
+            if($request->salary <= $bpjs_kesehatan_batas)
+            {
+                $bpjs_kesehatan     = ($request->salary * $bpjs_kesehatan_persen / 100); 
+            }
+            else 
+            {
+                $bpjs_kesehatan     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_persen / 100);
+            }
+
+            if($request->salary <= $bpjs_kesehatan_batas)
+            {
+                $bpjs_kesehatan2     = ($request->salary * $bpjs_kesehatan2_persen / 100); 
+            }
+            else
+            {
+                $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
+            }
+
+            // start custom
+            if($request->edit_bpjs_kesehatan_employee !=0 )
+            {
+                if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
+                {
+                    $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
+                }
+            }
+            // end custom
+
+            $bpjs_pensiun         = 0;
+            $bpjs_pensiun2        = 0;
+            $bpjs_pensiun_persen  = 2;
+            $bpjs_pensiun2_persen = get_setting('bpjs_jaminan_jp_employee');
+
+            if($request->salary <= $bpjs_pensiunan_batas)
+            {
+                $bpjs_pensiun     = ($request->salary * $bpjs_pensiun_persen / 100); 
+            }
+            else
+            {
+                $bpjs_pensiun     = ($bpjs_pensiunan_batas * $bpjs_pensiun_persen / 100);
+            }
+
+            if($request->salary <= $bpjs_pensiunan_batas)
+            {
+                $bpjs_pensiun2     = ($request->salary * $bpjs_pensiun2_persen / 100); 
+            }
+            else
+            {
+                $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
+            }
+
+            // start custom
+            if($request->edit_edit_bpjs_pensiun_employee != 0)
+            {
+                if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
+                {
+                    $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
+                }
+            }
+            // end custom
+
+            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
+            $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
+
+            $earnings = 0;
+            if(isset($request->earnings))
+            {
+                foreach($request->earnings as $item)
+                {   
+                    $earnings += replace_idr($item);
+                }
+            }
+
+            $gross_income           = ($request->salary + $earnings + $bpjspenambahan) * 12;
+
+            // burdern allowance
+            #$burden_allow           = 5 *  ($request->salary + $earnings + $bpjspenambahan + $request->bonus) / 100;
+            $burden_allow           = 5 *  $gross_income / 100;
+            $biaya_jabatan_bulan    = $biaya_jabatan / 12;
+
+            if($burden_allow > $biaya_jabatan_bulan)
+            {
+                $burden_allow = $biaya_jabatan_bulan;
+            }
+ 
+            $total_deduction = ($bpjspengurangan * 12) + $burden_allow * 12;
+            
+            $net_yearly_income          = $gross_income - $total_deduction;
+
+            $untaxable_income = 0;
+
+            $ptkp = \App\Models\PayrollPtkp::where('id', 1)->first();
+            if($request->marital_status == 'Bujangan/Wanita' || $request->marital_status == "")
+            {
+                $untaxable_income = $ptkp->bujangan_wanita;
+            }
+            if($request->marital_status == 'Menikah')
+            {
+                $untaxable_income = $ptkp->menikah;
+            }
+            if($request->marital_status == 'Menikah Anak 1')
+            {
+                $untaxable_income = $ptkp->menikah_anak_1;
+            }
+            if($request->marital_status == 'Menikah Anak 2')
+            {
+                $untaxable_income = $ptkp->menikah_anak_2;
+            }
+            if($request->marital_status == 'Menikah Anak 3')
+            {
+                $untaxable_income = $ptkp->menikah_anak_3;
+            }
+
+            $taxable_yearly_income = $net_yearly_income - $untaxable_income;
+
+            $pph_setting_1  = \App\Models\PayrollPPH::where('id', 1)->first();
+            // Perhitungan 5 persen
+            $income_tax_calculation_5 = 0;
+            if($taxable_yearly_income < 0)
+            {
+                $income_tax_calculation_5 = 0;   
+            }
+            elseif($taxable_yearly_income <= $pph_setting_1->batas_atas)
+            {
+                $income_tax_calculation_5 = ($pph_setting_1->tarif / 100) * $taxable_yearly_income;
+            }
+            if($taxable_yearly_income >= $pph_setting_1->batas_atas)
+            {
+                $income_tax_calculation_5 = ($pph_setting_1->tarif / 100) * $pph_setting_1->batas_atas;
+            }
+
+            $pph_setting_2  = \App\Models\PayrollPPH::where('id', 2)->first();
+            // Perhitungan 15 persen
+            $income_tax_calculation_15 = 0;
+            if($taxable_yearly_income >= $pph_setting_2->batas_atas)
+            {
+                $income_tax_calculation_15 = ($pph_setting_2->tarif / 100) * ($pph_setting_2->batas_atas - $pph_setting_2->batas_bawah);
+            }
+            if($taxable_yearly_income >= $pph_setting_2->batas_bawah and $taxable_yearly_income <= $pph_setting_2->batas_atas)
+            {
+                $income_tax_calculation_15 = ($pph_setting_2->tarif / 100) * ($taxable_yearly_income - $pph_setting_2->batas_bawah);
+            }
+
+            $pph_setting_3  = \App\Models\PayrollPPH::where('id', 3)->first();
+            // Perhitungan 25 persen
+            $income_tax_calculation_25 = 0;
+            if($taxable_yearly_income >= $pph_setting_3->batas_atas)
+            {
+                $income_tax_calculation_25 = ($pph_setting_3->tarif / 100)  * ($pph_setting_3->batas_atas - $pph_setting_3->batas_bawah);
+            }
+ 
+            if($taxable_yearly_income <= $pph_setting_3->batas_atas and $taxable_yearly_income >= $pph_setting_3->batas_bawah)
+            {
+                $income_tax_calculation_25 = ($pph_setting_3->tarif / 100) * ($taxable_yearly_income - $pph_setting_3->batas_bawah);
+            }
+
+            $pph_setting_4  = \App\Models\PayrollPPH::where('id', 4)->first();
+            $income_tax_calculation_30 = 0;
+            if($taxable_yearly_income >= $pph_setting_4->batas_atas)
+            {
+                $income_tax_calculation_30 = ($pph_setting_4->tarif / 100) * ($taxable_yearly_income - $pph_setting_4->batas_bawah);
+            }
+
+            $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
+            $monthly_income_tax             = $yearly_income_tax / 12;
+            $gross_income_per_month         = ($request->salary + $earnings + $bpjspenambahan);//$gross_income / 12;
+
+            $less               = $bpjspengurangan + $monthly_income_tax; 
+
+            $gross_thp = ($request->salary + $earnings);
+
+            $deductions = 0;
+            if(isset($request->deductions))
+            {
+                foreach($request->deductions as $item)
+                {   
+                    $deductions += replace_idr($item);
+                }
+            }
+            
+            $thp = ($request->salary + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
+
+            $params['gross_income']         = number_format($gross_income); 
+            $params['burden_allow']         = number_format($burden_allow);
+            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
+            $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan2);
+            $params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
+            $params['bpjs_kesehatan2']        = number_format($bpjs_kesehatan2);
+            $params['bpjs_pensiun']         = number_format($bpjs_pensiun);
+            $params['bpjs_pensiun2']        = number_format($bpjs_pensiun2);
+            $params['total_deduction']      = number_format($total_deduction);
+            $params['net_yearly_income']    = number_format($net_yearly_income);
+            $params['untaxable_income']     = number_format($untaxable_income);
+            $params['taxable_yearly_income']        = number_format($taxable_yearly_income);
+            $params['income_tax_calculation_5']     = number_format($income_tax_calculation_5); 
+            $params['income_tax_calculation_15']    = number_format($income_tax_calculation_15); 
+            $params['income_tax_calculation_25']    = number_format($income_tax_calculation_25); 
+            $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
+            $params['yearly_income_tax']            = number_format($yearly_income_tax);
+            $params['monthly_income_tax']           = number_format($monthly_income_tax);
+            $params['gross_income_per_month']                 = number_format($gross_income_per_month);
+            $params['less']                         = number_format($less);
+            $params['thp']                          = number_format($thp + $monthly_income_tax);
+            $params['bpjs_pengurang']                          = number_format($bpjspengurangan);
+            $params['bpjs_penambahan']                          = number_format($bpjspenambahan);
+        }
+
+        return $params;
+    }
 
 
     /**
@@ -871,381 +1102,6 @@ class AjaxController extends Controller
         
         return response()->json($params);
     }
-
-    public function getCalculatePayrollNet(Request $request)
-    {
-        $biaya_jabatan = PayrollOthers::where('id', 1)->first()->value;
-        $upah_minimum = PayrollOthers::where('id', 2)->first()->value;
-        $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
-        $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
-        
-        $params = [];
-        if($request->ajax())
-        {
-            $bpjs_ketenagakerjaan_persen = 4.24;
-            $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
-            $bpjs_ketenagakerjaan2_persen = 2;
-            $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
-
-            $bpjs_kesehatan         = 0;
-            $bpjs_kesehatan2        = 0;
-            $bpjs_kesehatan_persen  = 4;
-            $bpjs_kesehatan2_persen = 1;
-
-            if($request->salary <= $bpjs_kesehatan_batas)
-            {
-                $bpjs_kesehatan     = ($request->salary * $bpjs_kesehatan_persen / 100); 
-            }
-            else
-            {
-                $bpjs_kesehatan     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_persen / 100);
-            }
-
-            if($request->salary <= $bpjs_kesehatan_batas)
-            {
-                $bpjs_kesehatan2     = ($request->salary * $bpjs_kesehatan2_persen / 100); 
-            }
-            else
-            {
-                $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
-            }
-
-            $bpjs_pensiun         = 0;
-            $bpjs_pensiun2        = 0;
-            $bpjs_pensiun_persen  = 2;
-            $bpjs_pensiun2_persen = 1;
-
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun     = ($request->salary * $bpjs_pensiun_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun     = ($bpjs_pensiunan_batas * $bpjs_pensiun_persen / 100);
-            }
-
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun2     = ($request->salary * $bpjs_pensiun2_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
-            }
-
-
-            $overtime = $request->ot_normal_hours / 173 * $request->salary;
-
-            $total_income= $request->salary +$request->call_allowance+ $request->transport_allowance+$request->meal_allow + $request->homebase_allowance +$request->laptop_allowance +$overtime +$request->bonus + $request->medical_claim + $request->other_income + $request->other_income2 ;
-
-            $total_deduction = ($request->deduction1 + $request->deduction2 + $request->deduction3);
-
-            $thp = $total_income - $total_deduction;
-
-
-            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan + $bpjs_pensiun;
-            $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2;
-
-            $gross_income = ($request->salary +$request->call_allowance+ $request->transport_allowance+$request->meal_allow + $request->homebase_allowance +$request->laptop_allowance +$overtime + $bpjspenambahan) * 12 + $request->bonus;
-
-            $gross_income2 = ($request->salary +$request->call_allowance+ $request->transport_allowance+$request->meal_allow + $request->homebase_allowance +$request->laptop_allowance +$overtime + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
-
-
-            // burdern allowance
-            $burden_allow = 5 * $gross_income2 / 100;
-            $biaya_jabatan_bulan = $biaya_jabatan / 12;
-            if($burden_allow > $biaya_jabatan_bulan)
-            {
-                $burden_allow = $biaya_jabatan_bulan;
-            }
- 
-            $total_deductionPer = ($bpjspengurangan * 12) + ($burden_allow*12);
-
-            $net_yearly_income          = $gross_income - $total_deductionPer;
-
-            $untaxable_income = 0;
-
-            $ptkp = PayrollPtkp::where('id', 1)->first();
-            if($request->marital_status == 'Bujangan/Wanita' || $request->marital_status == "")
-            {
-                $untaxable_income = $ptkp->bujangan_wanita;
-            }
-            if($request->marital_status == 'Menikah')
-            {
-                $untaxable_income = $ptkp->menikah;
-            }
-            if($request->marital_status == 'Menikah Anak 1')
-            {
-                $untaxable_income = $ptkp->menikah_anak_1;
-            }
-            if($request->marital_status == 'Menikah Anak 2')
-            {
-                $untaxable_income = $ptkp->menikah_anak_2;
-            }
-            if($request->marital_status == 'Menikah Anak 3')
-            {
-                $untaxable_income = $ptkp->menikah_anak_3;
-            }
-
-            $taxable_yearly_income = $net_yearly_income - $untaxable_income;
-
-            // Perhitungan 5 persen
-            $income_tax_calculation_5 = 0;
-            if($taxable_yearly_income < 0)
-            {
-                $income_tax_calculation_5 = 0;   
-            }
-            elseif($taxable_yearly_income <= 50000000)
-            {
-                $income_tax_calculation_5 = 0.05 * $taxable_yearly_income;
-            }
-            if($taxable_yearly_income >= 50000000)
-            {
-                $income_tax_calculation_5 = 0.05 * 50000000;
-            }
-
-            // Perhitungan 15 persen
-            $income_tax_calculation_15 = 0;
-            if($taxable_yearly_income >= 250000000 )
-            {
-                $income_tax_calculation_15 = 0.15 * (250000000 - 50000000);
-            }
-            if($taxable_yearly_income >= 50000000 and $taxable_yearly_income <= 250000000)
-            {
-                $income_tax_calculation_15 = 0.15 * ($taxable_yearly_income - 50000000);
-            }
-
-            // Perhitungan 25 persen
-            $income_tax_calculation_25 = 0;
-            if($taxable_yearly_income >= 500000000)
-            {
-                $income_tax_calculation_25 = 0.25 * (500000000 - 250000000);
-            }
- 
-            if($taxable_yearly_income <= 500000000 and $taxable_yearly_income >= 250000000)
-            {
-                $income_tax_calculation_25 = 0.25 * ($taxable_yearly_income - 250000000);
-            }
-
-            $income_tax_calculation_30 = 0;
-            if($taxable_yearly_income >= 500000000)
-            {
-                $income_tax_calculation_30 = 0.35 * ($taxable_yearly_income - 500000000);
-            }
-
-            $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax = $yearly_income_tax / 12;
-
-            
-            $params['overtime']      = number_format($overtime);
-            $params['total_income']      = number_format($total_income);
-            $params['total_deduction']   = number_format($total_deduction);
-            $params['thp']               = number_format($thp);
-            $params['yearly_income_tax']      = number_format($yearly_income_tax);
-            $params['monthly_income_tax']      = number_format($monthly_income_tax);
-            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
-            $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan2);
-            $params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
-            $params['bpjs_kesehatan2']        = number_format($bpjs_kesehatan2);
-            $params['bpjs_pensiun']         = number_format($bpjs_pensiun);
-            $params['bpjs_pensiun2']        = number_format($bpjs_pensiun2);
-
-        }
-        
-        return response()->json($params);
-    }
-
-public function getCalculatePayrollGross(Request $request)
-    {
-        $biaya_jabatan  = PayrollOthers::where('id', 1)->first()->value;
-        $upah_minimum   = PayrollOthers::where('id', 2)->first()->value;
-        $bpjs_pensiunan_batas = PayrollOthers::where('id', 3)->first()->value;
-        $bpjs_kesehatan_batas = PayrollOthers::where('id', 4)->first()->value;
-        
-        $params = [];
-        if($request->ajax())
-        {
-            $bpjs_ketenagakerjaan_persen = 4.24;
-            $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
-            $bpjs_ketenagakerjaan2_persen = 2;
-            $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
-
-            $bpjs_kesehatan         = 0;
-            $bpjs_kesehatan2        = 0;
-            $bpjs_kesehatan_persen  = 4;
-            $bpjs_kesehatan2_persen = 1;
-
-            if($request->salary <= $bpjs_kesehatan_batas)
-            {
-                $bpjs_kesehatan     = ($request->salary * $bpjs_kesehatan_persen / 100); 
-            }
-            else
-            {
-                $bpjs_kesehatan     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_persen / 100);
-            }
-
-            if($request->salary <= $bpjs_kesehatan_batas)
-            {
-                $bpjs_kesehatan2     = ($request->salary * $bpjs_kesehatan2_persen / 100); 
-            }
-            else
-            {
-                $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
-            }
-
-            $bpjs_pensiun         = 0;
-            $bpjs_pensiun2        = 0;
-            $bpjs_pensiun_persen  = 2;
-            $bpjs_pensiun2_persen = 1;
-
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun     = ($request->salary * $bpjs_pensiun_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun     = ($bpjs_pensiunan_batas * $bpjs_pensiun_persen / 100);
-            }
-
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun2     = ($request->salary * $bpjs_pensiun2_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
-            }
-
-            $overtime_claim = $request->ot_multiple_hours / 173 * $request->salary;
-            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan + $bpjs_pensiun;
-            $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2;
-
-            $gross_income = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan) * 12 + $request->bonus;
-
-            $gross_income2 = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $overtime_claim + $bpjspenambahan + $request->bonus) - $bpjspengurangan;
-
-
-            // burdern allowance
-            $burden_allow = 5 * $gross_income2 / 100;
-            $biaya_jabatan_bulan = $biaya_jabatan / 12;
-            if($burden_allow > $biaya_jabatan_bulan)
-            {
-                $burden_allow = $biaya_jabatan_bulan;
-            }
- 
-            $total_deduction = ($bpjspengurangan * 12) + ($burden_allow*12);
-
-            $net_yearly_income          = $gross_income - $total_deduction;
-
-            $untaxable_income = 0;
-
-            $ptkp = PayrollPtkp::where('id', 1)->first();
-            if($request->marital_status == 'Bujangan/Wanita' || $request->marital_status == "")
-            {
-                $untaxable_income = $ptkp->bujangan_wanita;
-            }
-            if($request->marital_status == 'Menikah')
-            {
-                $untaxable_income = $ptkp->menikah;
-            }
-            if($request->marital_status == 'Menikah Anak 1')
-            {
-                $untaxable_income = $ptkp->menikah_anak_1;
-            }
-            if($request->marital_status == 'Menikah Anak 2')
-            {
-                $untaxable_income = $ptkp->menikah_anak_2;
-            }
-            if($request->marital_status == 'Menikah Anak 3')
-            {
-                $untaxable_income = $ptkp->menikah_anak_3;
-            }
-
-            $taxable_yearly_income = $net_yearly_income - $untaxable_income;
-
-            // Perhitungan 5 persen
-            $income_tax_calculation_5 = 0;
-            if($taxable_yearly_income < 0)
-            {
-                $income_tax_calculation_5 = 0;   
-            }
-            elseif($taxable_yearly_income <= 50000000)
-            {
-                $income_tax_calculation_5 = 0.05 * $taxable_yearly_income;
-            }
-            if($taxable_yearly_income >= 50000000)
-            {
-                $income_tax_calculation_5 = 0.05 * 50000000;
-            }
-
-            // Perhitungan 15 persen
-            $income_tax_calculation_15 = 0;
-            if($taxable_yearly_income >= 250000000 )
-            {
-                $income_tax_calculation_15 = 0.15 * (250000000 - 50000000);
-            }
-            if($taxable_yearly_income >= 50000000 and $taxable_yearly_income <= 250000000)
-            {
-                $income_tax_calculation_15 = 0.15 * ($taxable_yearly_income - 50000000);
-            }
-
-            // Perhitungan 25 persen
-            $income_tax_calculation_25 = 0;
-            if($taxable_yearly_income >= 500000000)
-            {
-                $income_tax_calculation_25 = 0.25 * (500000000 - 250000000);
-            }
- 
-            if($taxable_yearly_income <= 500000000 and $taxable_yearly_income >= 250000000)
-            {
-                $income_tax_calculation_25 = 0.25 * ($taxable_yearly_income - 250000000);
-            }
-
-            $income_tax_calculation_30 = 0;
-            if($taxable_yearly_income >= 500000000)
-            {
-                $income_tax_calculation_30 = 0.35 * ($taxable_yearly_income - 500000000);
-            }
-
-            $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax = $yearly_income_tax / 12;
-            $gross_income_per_month       = $gross_income / 12;
-
-            $less               = $bpjspengurangan; 
-
-             $gross_thp = ($request->salary + $request->call_allow + $request->transport_allowance + $request->homebase_allowance + $request->laptop_allowance + $request->other_income + $overtime_claim + $request->other_income+ $request->medical_claim+ $request->bonus);
-
-            $thp                = $gross_thp - $less - $request->other_deduction;
-
-
-            $params['gross_income']         = number_format($gross_income); 
-            $params['burden_allow']         = number_format($burden_allow);
-            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
-            $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan2);
-            $params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
-            $params['bpjs_kesehatan2']        = number_format($bpjs_kesehatan2);
-            $params['bpjs_pensiun']         = number_format($bpjs_pensiun);
-            $params['bpjs_pensiun2']        = number_format($bpjs_pensiun2);
-            $params['total_deduction']      = number_format($total_deduction);
-            $params['net_yearly_income']    = number_format($net_yearly_income);
-            $params['untaxable_income']     = number_format($untaxable_income);
-            $params['taxable_yearly_income']        = number_format($taxable_yearly_income);
-            $params['income_tax_calculation_5']     = number_format($income_tax_calculation_5); 
-            $params['income_tax_calculation_15']    = number_format($income_tax_calculation_15); 
-            $params['income_tax_calculation_25']    = number_format($income_tax_calculation_25); 
-            $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
-            $params['yearly_income_tax']            = number_format($yearly_income_tax);
-            $params['monthly_income_tax']           = number_format($monthly_income_tax);
-            $params['pph21']                        = number_format($monthly_income_tax);
-            $params['gross_income_per_month']                 = number_format($gross_income_per_month);
-            $params['less']                         = number_format($less);
-            $params['thp']                          = number_format($thp);
-            $params['overtime_claim']               = number_format($overtime_claim);
-        }
-        
-        return response()->json($params);
-    }
-
 
     /**
      * [getKaryawan description]

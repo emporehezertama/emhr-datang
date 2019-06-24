@@ -1,5 +1,83 @@
 <?php 
-	
+
+function roundDown($decimal, $precision)
+{
+    $sign = $decimal > 0 ? 1 : -1;
+    $base = pow(10, $precision);
+    return floor(abs($decimal) * $base) / $base * $sign;
+}
+
+/**
+ * Get PTKP
+ */
+function get_ptkp($user_id)
+{
+	$user = \App\User::where('id', $user_id)->first();
+
+	$ptkp = \App\Models\PayrollPtkp::where('id', 1)->first();
+    
+    if($user->marital_status == 'Bujangan/Wanita' || $user->marital_status == "")
+    {
+        $data = $ptkp->bujangan_wanita;
+    }
+    if($user->marital_status == 'Menikah')
+    {
+        $data = $ptkp->menikah;
+    }
+    if($user->marital_status == 'Menikah Anak 1')
+    {
+        $data = $ptkp->menikah_anak_1;
+    }
+    if($user->marital_status == 'Menikah Anak 2')
+    {
+        $data = $ptkp->menikah_anak_2;
+    }
+    if($user->marital_status == 'Menikah Anak 3')
+    {
+        $data = $ptkp->menikah_anak_3;
+    }
+
+    return $data;
+}
+
+/**
+ * Get History Earning
+ */
+function get_payroll_earning_history_param($payroll_id, $year, $month)
+{
+	if(!isset($payroll_id)) return 0;
+
+	$data = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_id', $payroll_id->payroll_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
+
+	if($data)
+	{
+		return $data->nominal;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+ * Get Payroll pph21
+ */
+function get_payroll_history_param($user_id, $year, $month, $field="")
+{
+	$data = \App\Models\PayrollHistory::where('user_id', $user_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
+
+	if(empty($field)) return $data;
+
+	if($data)
+	{
+		return $data->$field;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 /**
  * Bukti Potong
  * Integer / String
