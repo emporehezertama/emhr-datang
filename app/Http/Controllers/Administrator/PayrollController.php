@@ -113,7 +113,10 @@ class PayrollController extends Controller
 
             if(request()->action == 'download')
             {
-
+                if(empty(request()->year) and empty(request()->month))
+                {
+                    return redirect()->route('administrator.payroll.index')->with('message-error', 'Year / Month required.');
+                }
                 if(!empty(request()->year) and empty(request()->month))
                 {
                    return $this->downloadExcelYear($result->get());
@@ -432,9 +435,9 @@ class PayrollController extends Controller
         $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
         $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
         $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
-        $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
+        $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
         $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-        $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
+        $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
         $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
         $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
@@ -482,9 +485,9 @@ class PayrollController extends Controller
         $history->salary                = str_replace(',', '', $request->salary);
         $history->total_deduction       = str_replace(',', '', $request->total_deduction);
         $history->thp                          = str_replace(',', '', $request->thp);
-        $history->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
+        $history->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
         $history->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-        $history->bpjs_jht_company             = get_setting('bpjs_jht_company');
+        $history->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
         $history->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
         $history->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $history->bpjs_kesehatan_employee      = replace_idr($request->bpjs_kesehatan_employee);
@@ -1117,9 +1120,9 @@ class PayrollController extends Controller
             $temp->bpjs_kesehatan_employee          = $bpjs_kesehatan2;
             $temp->bpjs_pensiun_employee            = $bpjs_pensiun2;
             
-            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
-            $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
+            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * $item->salary / 100;
+            $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company') * $item->salary / 100;
+            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * $item->salary / 100;
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
@@ -1136,9 +1139,9 @@ class PayrollController extends Controller
             $temp->user_id                      = $user_id;
             $temp->salary                       = replace_idr($item->salary);
             $temp->thp                          = $thp;
-            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company');
+            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * $item->salary / 100;
             $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company');
+            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * $item->salary / 100;
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
             $temp->bpjs_kesehatan_employee      = $bpjs_kesehatan2;
