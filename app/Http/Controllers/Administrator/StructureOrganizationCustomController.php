@@ -42,7 +42,6 @@ class StructureOrganizationCustomController extends Controller
             $params['data']   = StructureOrganizationCustom::orderBy('id', 'DESC');
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
-            dd('BCD');
         }
 
         return view('administrator.structure-organization-custom.index')->with($params);
