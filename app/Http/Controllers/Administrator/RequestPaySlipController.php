@@ -29,7 +29,7 @@ class RequestPaySlipController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-             $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->join('users','users.id','=','request_pay_slip.user_id')->where('users.project_id', $user->project_id)->paginate(50);
+             $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->join('users','users.id','=','request_pay_slip.user_id')->where('users.project_id', $user->project_id)->select('request_pay_slip.*')->paginate(50);
         } else
         {
              $params['data'] = RequestPaySlip::orderBy('id', 'DESC')->paginate(50);

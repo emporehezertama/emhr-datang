@@ -166,17 +166,27 @@ function plafond_perjalanan_dinas($name, $jenis = 'domestik')
 function get_backup_cuti()
 {
 	$user = \Auth::user();
-
-	if($user->branch_type == 'BRANCH')
-	{
-		$karyawan = \App\User::where('cabang_id', $user->cabang_id)->where('id', '<>', $user->id)->whereNull('resign_date')->get();
-	}
-	else
-	{
-		$karyawan = \App\User::where('division_id', $user->division_id)->where('id', '<>', $user->id)->whereNull('resign_date')->get();
-	}
-
-	$karyawan = \App\User::where('id', '<>', $user->id)->where('access_id', '2')->whereNull('resign_date')->get();
+	if($user->project_id != NULL)
+    {
+    	if($user->branch_type == 'BRANCH')
+		{
+			$karyawan = \App\User::where('cabang_id', $user->cabang_id)->where('id', '<>', $user->id)->where('project_id',$user->project_id)->whereNull('resign_date');
+		}
+		else
+		{
+			$karyawan = \App\User::where('division_id', $user->division_id)->where('id', '<>', $user->id)->where('project_id',$user->project_id)->whereNull('resign_date');
+		}
+    }else{
+    	if($user->branch_type == 'BRANCH')
+		{
+			$karyawan = \App\User::where('cabang_id', $user->cabang_id)->where('id', '<>', $user->id)->whereNull('resign_date');
+		}
+		else
+		{
+			$karyawan = \App\User::where('division_id', $user->division_id)->where('id', '<>', $user->id)->whereNull('resign_date');
+		}
+    }
+		$karyawan = $karyawan->where('id', '<>', $user->id)->where('access_id', '2')->whereNull('resign_date')->get();
 
 	return $karyawan;
 }
@@ -187,7 +197,14 @@ function get_backup_cuti()
  */
 function list_user_cuti()
 {
-	return \App\Models\Cuti::orderBy('jenis_cuti','ASC')->get();
+	$user = \Auth::user();
+    if($user->project_id != NULL)
+    {
+    	return \App\Models\Cuti::orderBy('cuti.jenis_cuti','ASC')->join('users', 'users.id','=', 'cuti.user_created')->where('users.project_id', $user->project_id)->select('cuti.*')->get();
+    }else{
+    	return \App\Models\Cuti::orderBy('jenis_cuti','ASC')->get();
+    }
+	
 }
 
 /**

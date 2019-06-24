@@ -24,7 +24,13 @@ class SettingApprovalOvertimeController extends Controller
     public function index()
     {
         //
-        $params['data']  = SettingApprovalLeave::orderBy('id', 'DESC')->get();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {   
+            $params['data']  = SettingApprovalLeave::orderBy('setting_approval_leave.id', 'DESC')->join('structure_organization_custom','structure_organization_custom.id','=','setting_approval_leave.structure_organization_custom_id')->join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_leave.*')->get();
+        }else{
+            $params['data']  = SettingApprovalLeave::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.setting-approvalOvertime.index')->with($params);
     }
     /**
@@ -169,10 +175,8 @@ class SettingApprovalOvertimeController extends Controller
     {
         // check data
         $data                       = SettingApprovalOvertimeItem::where('id', $id)->first();
-        $checkdata = SettingApprovalOvertimeItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
+        //$checkdata = SettingApprovalOvertimeItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
         $checkDataStruktur = SettingApprovalOvertimeItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('structure_organization_custom_id', $request->structure_organization_custom_id)->first();
-
-        //dd($request->setting_approval_level_id, $request->structure_organization_custom_id);
 
         if ($request->structure_organization_custom_id == NULL) {
             # code...
@@ -181,7 +185,9 @@ class SettingApprovalOvertimeController extends Controller
         {
             if(isset($checkDataStruktur))
             {
-                if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
+                return redirect()->route('administrator.setting-approvalOvertime.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+
+                /*if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
                 {
                     //$data->setting_approval_level_id  = $request->setting_approval_level_id;
                     $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
@@ -191,8 +197,8 @@ class SettingApprovalOvertimeController extends Controller
                 } else
                 {
                     return redirect()->route('administrator.setting-approvalOvertime.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-                }            
-            } elseif(isset($checkdata))
+                }     */       
+            } /*elseif(isset($checkdata))
             {
                 if($checkdata->structure_organization_custom_id != $request->structure_organization_custom_id){
                     $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
@@ -203,7 +209,7 @@ class SettingApprovalOvertimeController extends Controller
                     return redirect()->route('administrator.setting-approvalOvertime.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
                 }
                 
-            }else
+            }*/else
             {
                  //$data->setting_approval_level_id  = $request->setting_approval_level_id;
                  $data->structure_organization_custom_id  = $request->structure_organization_custom_id;

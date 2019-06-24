@@ -553,7 +553,7 @@ class AjaxController extends Controller
             }
 
             $taxable_yearly_income = $net_yearly_income - $untaxable_income;
-
+            
             // Perhitungan 5 persen
             $income_tax_calculation_5 = 0;
             if($taxable_yearly_income < 0)
@@ -1256,16 +1256,21 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-                $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                 $data =  User::where('project_id', $user->project_id)->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            } else{
+                 $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            }
+            $params = [];
+            foreach($data as $k => $item)
+            {
+                if($k >= 10) continue;
 
-                $params = [];
-                foreach($data as $k => $item)
-                {
-                    if($k >= 10) continue;
-
-                    $params[$k]['id'] = $item->id;
-                    $params[$k]['value'] = $item->nik .' - '. $item->name;
-                }
+                $params[$k]['id'] = $item->id;
+                $params[$k]['value'] = $item->nik .' - '. $item->name;
+            }
         }
         
         return response()->json($params); 
@@ -1281,7 +1286,15 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-            $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                 $data =  User::where('project_id', $user->project_id)->where(function($table) use ($request) {
+                    $table->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
+                 })->get();
+            } else{
+                 $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+            }
 
             $karyawan = [];
             foreach($data as $k => $i)
@@ -2712,9 +2725,14 @@ public function getCalculatePayrollGross(Request $request)
      */
     public function getStructureCustome()
     {
-        $all = \App\Models\StructureOrganizationCustom::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $all = \App\Models\StructureOrganizationCustom::join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->select('structure_organization_custom.*')->get();
+        } else{
+            $all = \App\Models\StructureOrganizationCustom::all();
+        }
         $data = [];
-
         foreach ($all as $key => $item) 
         {
             $data[$key]['id']       = $item->id;
@@ -2797,15 +2815,30 @@ public function getCalculatePayrollGross(Request $request)
         $params = [];
         if($request->ajax())
         {
-            // Skip Exist User
-            $approvalExistUser = SettingApprovalClearance::select('user_id')->get()->toArray();
-            
-            // SKIP SUPERADMIN, ACCESS_ID 1
-            $data =  \App\User::whereNotIn('id', $approvalExistUser)->whereNull('resign_date')->where(function($table) use ($request) {
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                // Skip Exist User
+                $approvalExistUser = SettingApprovalClearance::join('users','users.id','=','setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)
+                ->select('setting_approval_clearance.user_id')->get()->toArray();
+                
+                // SKIP SUPERADMIN, ACCESS_ID 1
+                $data =  \App\User::whereNotIn('id', $approvalExistUser)->whereNull('resign_date')->where('project_id',$user->project_id)->where(function($table) use ($request) {
+                    $table->where('name', 'LIKE', "%". $request->name . "%")
+                    ->orWhere('nik', 'LIKE', '%'. $request->name .'%');  
+                })->where('access_id', 2)->get();
 
-                $table->where('name', 'LIKE', "%". $request->name . "%")
-                ->orWhere('nik', 'LIKE', '%'. $request->name .'%');  
-            })->where('access_id', 2)->get();
+            }else {
+                // Skip Exist User
+                $approvalExistUser = SettingApprovalClearance::select('user_id')->get()->toArray();
+                
+                // SKIP SUPERADMIN, ACCESS_ID 1
+                $data =  \App\User::whereNotIn('id', $approvalExistUser)->whereNull('resign_date')->where(function($table) use ($request) {
+
+                    $table->where('name', 'LIKE', "%". $request->name . "%")
+                    ->orWhere('nik', 'LIKE', '%'. $request->name .'%');  
+                })->where('access_id', 2)->get();
+            }
 
             $params = [];
             foreach($data as $k => $item)
@@ -2828,6 +2861,12 @@ public function getCalculatePayrollGross(Request $request)
             $data               = new SettingApprovalClearance();
             $data->user_id      = $request->id;
             $data->nama_approval= 'HRD';
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                $data->user_created = $user->id;
+            } 
+
             $data->save();
 
             Session::flash('message-success', 'User Approval successfully add');
@@ -2845,6 +2884,11 @@ public function getCalculatePayrollGross(Request $request)
             $data               = new SettingApprovalClearance();
             $data->user_id      = $request->id;
             $data->nama_approval= 'GA';
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                $data->user_created = $user->id;
+            } 
             $data->save();
 
             Session::flash('message-success', 'User Approval successfully add');
@@ -2862,6 +2906,11 @@ public function getCalculatePayrollGross(Request $request)
             $data               = new SettingApprovalClearance();
             $data->user_id      = $request->id;
             $data->nama_approval= 'IT';
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                $data->user_created = $user->id;
+            } 
             $data->save();
 
             Session::flash('message-success', 'User Approval successfully add');
@@ -2879,6 +2928,11 @@ public function getCalculatePayrollGross(Request $request)
             $data               = new SettingApprovalClearance();
             $data->user_id      = $request->id;
             $data->nama_approval= 'Accounting';
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                $data->user_created = $user->id;
+            } 
             $data->save();
 
             Session::flash('message-success', 'User Approval successfully add');

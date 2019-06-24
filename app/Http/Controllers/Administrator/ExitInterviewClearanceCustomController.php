@@ -34,14 +34,16 @@ class ExitInterviewClearanceCustomController extends Controller
         if($user->project_id != NULL)
         {
             $data = ExitInterview::select('exit_interview.*')->orderBy('id', 'DESC')->join('users','users.id','=','exit_interview.user_id')->where('users.project_id', $user->project_id);
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
         } else
         {
             $data = ExitInterview::select('exit_interview.*')->orderBy('id', 'DESC')->join('users','users.id','=','exit_interview.user_id');
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
         }
 
         $params['structure'] = getStructureName();
-        $params['division'] = OrganisasiDivision::all();
-        $params['position'] = OrganisasiPosition::all();
 
        if(request())
         {

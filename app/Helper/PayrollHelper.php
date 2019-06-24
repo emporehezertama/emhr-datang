@@ -132,7 +132,13 @@ function payrollEarningsEmployeeHistory($id)
  */
 function get_earnings()
 {
-	return \App\Models\PayrollEarnings::all();
+	$user = \Auth::user();
+    if($user->project_id != NULL)
+    {
+    	return \App\Models\PayrollEarnings::join('users', 'users.id','=', 'payroll_earnings.user_created')->where('users.project_id', $user->project_id)->select('payroll_earnings.*')->get();
+    }else{
+    	return \App\Models\PayrollEarnings::all();
+    }
 }
 
 /**
@@ -141,5 +147,11 @@ function get_earnings()
  */
 function get_deductions()
 {
-	return \App\Models\PayrollDeductions::all();
+	$user = \Auth::user();
+    if($user->project_id != NULL)
+    {
+    	return \App\Models\PayrollDeductions::join('users', 'users.id','=', 'payroll_deductions.user_created')->where('users.project_id', $user->project_id)->select('payroll_deductions.*')->get();
+    }else{
+    	return \App\Models\PayrollDeductions::all();
+    }
 }

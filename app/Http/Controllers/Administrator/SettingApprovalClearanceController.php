@@ -20,11 +20,21 @@ class SettingApprovalClearanceController extends Controller
     public function index()
     {
         //
-        $params['hrd'] = SettingApprovalClearance::where('nama_approval', 'HRD')->orderBy('id', 'DESC')->get();
-        $params['ga'] = SettingApprovalClearance::where('nama_approval', 'GA')->orderBy('id', 'DESC')->get();
-        $params['it'] = SettingApprovalClearance::where('nama_approval', 'IT')->orderBy('id', 'DESC')->get();
-        $params['accounting_finance'] = SettingApprovalClearance::where('nama_approval', 'Accounting')->orderBy('id', 'DESC')->get();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
 
+            $params['hrd'] = SettingApprovalClearance::where('nama_approval', 'HRD')->orderBy('setting_approval_clearance.id', 'DESC')->join('users','users.id','=','setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_clearance.*')->get();
+            $params['ga'] = SettingApprovalClearance::where('nama_approval', 'GA')->orderBy('setting_approval_clearance.id', 'DESC')->join('users','users.id','=','setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_clearance.*')->get();
+            $params['it'] = SettingApprovalClearance::where('nama_approval', 'IT')->orderBy('setting_approval_clearance.id', 'DESC')->join('users','users.id','=','setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_clearance.*')->get();
+            $params['accounting_finance'] = SettingApprovalClearance::where('nama_approval', 'Accounting')->orderBy('setting_approval_clearance.id', 'DESC')->join('users','users.id','=','setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_clearance.*')->get();
+
+        }else{
+            $params['hrd'] = SettingApprovalClearance::where('nama_approval', 'HRD')->orderBy('id', 'DESC')->get();
+            $params['ga'] = SettingApprovalClearance::where('nama_approval', 'GA')->orderBy('id', 'DESC')->get();
+            $params['it'] = SettingApprovalClearance::where('nama_approval', 'IT')->orderBy('id', 'DESC')->get();
+            $params['accounting_finance'] = SettingApprovalClearance::where('nama_approval', 'Accounting')->orderBy('id', 'DESC')->get();
+        }
         return view('administrator.setting-approvalClearance.index')->with($params);
 
         

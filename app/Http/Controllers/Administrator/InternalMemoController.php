@@ -18,7 +18,7 @@ class InternalMemoController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-            $params['data'] = InternalMemo::orderBy('id', 'DESC')->join('users','users.id','=','internal_memo.user_created')->where('users.project_id', $user->project_id)->get();
+            $params['data'] = InternalMemo::orderBy('id', 'DESC')->join('users','users.id','=','internal_memo.user_created')->where('users.project_id', $user->project_id)->select('internal_memo.*')->get();
         } else
         {
             $params['data'] = InternalMemo::orderBy('id', 'DESC')->get();
@@ -70,7 +70,7 @@ class InternalMemoController extends Controller
 
         $data->save();
 
-        return redirect()->route('administrator.internal-memo.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.internal-memo.index')->with('message-success', 'Data successfully saved !');
     }   
 
     /**
@@ -83,7 +83,7 @@ class InternalMemoController extends Controller
         $data = InternalMemo::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.internal-memo.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.internal-memo.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -95,6 +95,12 @@ class InternalMemoController extends Controller
     {
         $data                   = new InternalMemo();
         $data->title            = $request->title;
+        
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        }
 
         if (request()->hasFile('file'))
         {
@@ -106,9 +112,8 @@ class InternalMemoController extends Controller
 
             $data->file = $fileName;
         }
-
         $data->save();
 
-        return redirect()->route('administrator.internal-memo.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.internal-memo.index')->with('message-success', 'Data successfully saved !');
     }
 }

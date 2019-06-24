@@ -32,14 +32,18 @@ class StructureOrganizationCustomController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-            $params['data']   = StructureOrganizationCustom::orderBy('id', 'DESC')->join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id);
+            $params['data']   = StructureOrganizationCustom::orderBy('structure_organization_custom.id', 'DESC')->join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->select('structure_organization_custom.*')->get();
+
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+            //dd($params['data']);
         } else
         {
             $params['data']   = StructureOrganizationCustom::orderBy('id', 'DESC');
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
+            dd('BCD');
         }
-
-        $params['division'] = OrganisasiDivision::all();
-        $params['position'] = OrganisasiPosition::all();
 
         return view('administrator.structure-organization-custom.index')->with($params);
     }
