@@ -583,6 +583,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3">School Name/University</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control modal-fakultas" name="modal-fakultas" id="modal-fakultas"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3">Year of Start</label>
                             <div class="col-md-9">
                                 <input type="number" class="form-control modal-tahun_awal" />
@@ -592,12 +598,6 @@
                             <label class="col-md-3">Year of Graduate</label>
                             <div class="col-md-9">
                                 <input type="number" class="form-control modal-tahun_akhir" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3">School Name</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control modal-fakultas" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -755,17 +755,43 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-
+<style type="text/css">
+    .ui-autocomplete{
+            z-index: 9999999 !important;
+        }
+</style>
 @section('footer-script')
     <style type="text/css">
         .staff-branch-select, .head-branch-select {
             display: none;
         }
+        
     </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Date picker plugins css -->
     <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+
+        $("#modal-fakultas").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-university') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-fakultas']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
         
         function open_dialog_photo()
         {
@@ -952,28 +978,27 @@
         });
 
         $("#add_modal_education").click(function(){
-
             var el = '<tr>';
             var modal_pendidikan            = $('.modal-pendidikan').val();
+            var modal_fakultas              = $('.modal-fakultas').val();
             var modal_tahun_awal            = $('.modal-tahun_awal').val();
             var modal_tahun_akhir           = $('.modal-tahun_akhir').val();
-            var modal_fakultas              = $('.modal-fakultas').val();
             var modal_jurusan               = $('.modal-jurusan').val();
             var modal_nilai                 = $('.modal-nilai').val();
             var modal_kota                  = $('.modal-kota').val();
             
             el += '<td>'+ (parseInt($('.education_table tr').length) + 1 )  +'</td>';
             el +='<td>'+ modal_pendidikan +'</td>';
+             el +='<td>'+ modal_fakultas +'</td>';
             el +='<td>'+ modal_tahun_awal +'</td>';
             el +='<td>'+ modal_tahun_akhir +'</td>';
-            el +='<td>'+ modal_fakultas +'</td>';
             el +='<td>'+ modal_jurusan +'</td>';
             el +='<td>'+ modal_nilai +'</td>';
             el +='<td>'+ modal_kota +'</td>';
             el +='<input type="hidden" name="education[pendidikan][]" value="'+ modal_pendidikan +'" />';
+            el +='<input type="hidden" name="education[fakultas][]" value="'+ modal_fakultas +'" />';
             el +='<input type="hidden" name="education[tahun_awal][]" value="'+ modal_tahun_awal +'" />';
             el +='<input type="hidden" name="education[tahun_akhir][]" value="'+ modal_tahun_akhir +'" />';
-            el +='<input type="hidden" name="education[fakultas][]" value="'+ modal_fakultas +'" />';
             el +='<input type="hidden" name="education[jurusan][]" value="'+ modal_jurusan +'" />';
             el +='<input type="hidden" name="education[nilai][]" value="'+ modal_nilai +'" />';
             el +='<input type="hidden" name="education[kota][]" value="'+ modal_kota +'" />';

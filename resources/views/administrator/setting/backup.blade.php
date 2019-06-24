@@ -71,7 +71,7 @@
                                                 </td>
                                                 <td>{{ $item->date }}</td>
                                                 <td>
-                                                    <a href="{{ route('administrator.setting.delete-backup-schedule', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> </a>
+                                                    <a href="{{ route('administrator.setting.delete-backup-schedule', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> delete </a>
                                                 </td>
                                             </tr>
                                         @endforeach

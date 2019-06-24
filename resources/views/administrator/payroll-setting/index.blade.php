@@ -122,7 +122,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->title }}</td>
-                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-earnings', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a></td>
+                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-earnings', $item->id) }}')" <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -144,7 +144,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->title }}</td>
-                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-deductions', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a></td>
+                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-deductions', $item->id) }}')" <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -177,7 +177,7 @@
                                             <td>{{ number_format($item->akumulasi_pajak) }}</td>
                                             <td>
                                                 <!-- <a href="{{ route('administrator.payroll-setting.delete-pph', $item->id) }}" onclick="return confirm('Delete this data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a> -->
-                                                <a href="{{ route('administrator.payroll-setting.edit-pph', $item->id) }}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('administrator.payroll-setting.edit-pph', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -237,7 +237,7 @@
                                             <td>{{ number_format($item->value) }}</td>
                                             <td>
                                                 <!-- <a href="{{ route('administrator.payroll-setting.delete-others', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs "><i class="fa fa-trash"></i> </a> -->
-                                                <a href="{{ route('administrator.payroll-setting.edit-others', $item->id) }}" class="btn btn-default btn-xs "><i class="fa fa-edit"></i> </a>
+                                                <a href="{{ route('administrator.payroll-setting.edit-others', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
                                         </tr>
                                        @endforeach

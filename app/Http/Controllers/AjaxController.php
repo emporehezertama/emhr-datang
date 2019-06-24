@@ -51,6 +51,7 @@ use App\Models\CutiBersama;
 use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
 use App\Models\SettingApprovalClearance;
+use App\Models\Universitas;
 
 class AjaxController extends Controller
 {
@@ -1262,6 +1263,27 @@ class AjaxController extends Controller
         return response()->json($params);   
     }
 
+    public function getUniversity(Request $request)
+    {
+        $data = [];
+        if($request->ajax())
+        {
+            if(strlen($request->word) >=2 ) 
+            { 
+                $data =  Universitas::where('name', 'LIKE', "%". $request->word . "%")->get();
+
+                $params = [];
+                foreach($data as $k => $item)
+                {
+                    if($k == 10) continue;
+                    $params[$k] = $item;
+                    $params[$k]['value'] = $item->name;
+                }
+            }
+        }
+        return response()->json($params);   
+    }
+    
 
     /**
      * [getHistoryApprovalOvertime description]

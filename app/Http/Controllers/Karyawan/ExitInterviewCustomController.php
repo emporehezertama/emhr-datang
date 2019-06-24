@@ -208,7 +208,8 @@ class ExitInterviewCustomController extends Controller
             }
 
             foreach ($clearanceApproval as $key => $value) 
-                # code...{
+            {
+
                 if($value->user->email == "") continue;
                 $params['data']     = $data;
                 $params['text']     = '<p><strong>Dear Sir/Madam '. $value->user->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Exit Clearance and currently waiting your approval.</p>';
