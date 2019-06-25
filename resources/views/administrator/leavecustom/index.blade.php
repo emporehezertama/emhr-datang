@@ -85,7 +85,7 @@
                                         <td>{{ $item->user->name }}</td>
                                         <td>{{ date('d F Y', strtotime($item->tanggal_cuti_start)) }} - {{ date('d F Y', strtotime($item->tanggal_cuti_end)) }}</td>
                                         <td>{{ isset($item->cuti) ? $item->cuti->description : '' }}</td>
-                                        <td>{{ $item->total_cuti }}</td>
+                                        <td>{{ $item->total_cuti }} Day/s</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
                                             <a onclick="detail_approval_leave_custom('cuti', {{ $item->id }})">

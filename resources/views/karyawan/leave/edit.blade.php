@@ -117,7 +117,7 @@
                                     <input type="text" name="tanggal_cuti_end"  readonly="true" value="{{ $data->tanggal_cuti_end }}" class="form-control" placeholder="End Date">
                                 </div>
                                 <div class="col-md-2">
-                                    <h3 class="btn btn-info total_hari_cuti" style="margin-top:0;">{{ $data->total_cuti }} Day's</h3>
+                                    <h3 class="btn btn-info total_hari_cuti" style="margin-top:0;">{{ $data->total_cuti }} Day/s</h3>
                                     <h3 class="btn btn-warning btn_hari_libur" style="margin-top:0;">Public Holiday</h3>
                                 </div>
                             </div>
