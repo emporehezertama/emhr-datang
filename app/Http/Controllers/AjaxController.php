@@ -626,8 +626,8 @@ class AjaxController extends Controller
             // start custom
             $params['thp']                          = number_format($thp + $monthly_income_tax);
             // end custom
-            $params['bpjs_pengurang']                          = number_format($bpjspengurangan);
-            $params['bpjs_penambahan']                          = number_format($bpjspenambahan);
+            $params['bpjs_pengurang']               = number_format($bpjspengurangan);
+            $params['bpjs_penambahan']              = number_format($bpjspenambahan);
         }
         
         return response()->json($params);

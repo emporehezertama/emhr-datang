@@ -17,19 +17,19 @@
 	<table class="border">
 		<tbody>
 			<tr>
-				<th style="width: 45px;border: 1px solid #000000"><strong>Month</strong></th>
-				<th  style="width: 30px;background:#7f7f7f;border: 1px solid #000000; color: #ffffff;">EM - HR</th>
+				<th style="width: 45px;border: 1px solid #000000;background: #7f7f7f;color: #ffffff;"><strong>Month</strong></th>
+				<th  style="width: 30px;background:#7f7f7f;border: 1px solid #000000;color: #ffffff;">EM - HR</th>
         		@for ($month = 1; $month <= 12; $month++) 
-        		<th style="color: #ffffff;background: #002060;text-align: center;border: 1px solid #000000; width: 15px">{{ date('M', mktime(0, 0, 0, $month, 10)) }}</th>
+        		<th style="color: #ffffff;background: #7f7f7f;text-align: center;border: 1px solid #000000; width: 15px">{{ date('M', mktime(0, 0, 0, $month, 10)) }}</th>
 				@endfor
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td style="background: #002060;color: #ffffff;border: 1px solid #000000">PPH21</td>	
 				<td style="background: #002060;color: #ffffff;border: 1px solid #000000"></td>	
 				@for ($month = 1; $month <= 12; $month++) 
         		<th style="color: #ffffff;background: #44546a;text-align: center;border: 1px solid #000000; width: 15px"> </th>
 				@endfor
-			</tr>
+			</tr> -->
 			<tr>
 				<td style="border: 1px solid #000000">Monthly PPH 21</td>	
 				<td style="border: 1px solid #000000">MONTHLY INCOME TAX</td>	
@@ -37,18 +37,22 @@
         		<th style="border: 1px solid #000000; width: 25px">{{ format_idr( isset($data[$month]->pph21) ? $data[$month]->pph21 : 0 ) }}</th>
 				@endfor
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td style="background: #ffff00;border: 1px solid #000000">Paid</td>
 				<td style="border: 1px solid #000000;">MONTHLY INCOME TAX - PAID</td>
 				@for ($month = 1; $month <= 12; $month++) 
         		<th style="border: 1px solid #000000;background: #ffff00;"><strong> 0 </strong></th>
 				@endfor
-			</tr>
+			</tr> -->
 			<tr>
 				<td style="border: 1px solid #000000;">Cummulative PP21 (PAID)</td>
 				<td style="border: 1px solid #000000;"></td>
-				@for ($month = 1; $month <= 12; $month++) 
-        		<th style="text-align: center;border: 1px solid #000000; width: 15px"> </th>
+				@php($commulative_pph21 = 0)
+				@for ($month = 1; $month <= 11; $month++) 
+				@php($commulative_pph21 += isset($data[$month]->pph21) ? $data[$month]->pph21 : 0)
+        		<th style="text-align: center;border: 1px solid #000000; width: 15px">
+        			{{ format_idr( $commulative_pph21 ) }}
+        		</th>
 				@endfor
 			</tr>
 			<tr>
@@ -71,16 +75,8 @@
 			<tr>
 				<td style="background: #7f7f7f;border: 1px solid #000000;width: 32px;color: #ffffff;"> Earnings (Salary and Overtime) </td>
 				<td style="background: #7f7f7f;border: 1px solid #000000; width: 30px;color: #ffffff;">  EM - HR </td>
-				@php($str_month = 'akumulasi')
 				@for ($month = 1; $month <= 12; $month++) 
-					@if($month == 1)
-					<th style="border: 1px solid #000000;background: #7f7f7f; width: 15px;color: #ffffff;">salary January</th>
-						@php($str_month .= ' Jan +')
-					@else
-						@php($str_month .= date('M', mktime(0, 0, 0, $month, 10)) )
-	        			<th style="border: 1px solid #000000;background: #7f7f7f; width: 15px;color: #ffffff;">{{ $str_month }}</th>
-	        			@php($str_month .= " + ")
-	        		@endif
+	        		<th style="border: 1px solid #000000;background: #7f7f7f; width: 15px;color: #ffffff;">{{ date('M', mktime(0, 0, 0, $month, 10)) }}</th>
 				@endfor
 			</tr>
 			<tr>
@@ -284,6 +280,7 @@
 				</td>
 				@endfor
 			</tr>
+
 		<!--
 			<tr>
 				<td> </td>
