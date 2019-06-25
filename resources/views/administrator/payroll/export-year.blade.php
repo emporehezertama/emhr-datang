@@ -17,10 +17,10 @@
 	<table class="border">
 		<tbody>
 			<tr>
-				<th style="width: 45px;border: 1px solid #000000"><strong>Month</strong></th>
+				<th style="width: 45px;border: 1px solid #000000;background: #7f7f7f;"><strong>Month</strong></th>
 				<th  style="width: 30px;background:#7f7f7f;border: 1px solid #000000; color: #ffffff;">EM - HR</th>
         		@for ($month = 1; $month <= 12; $month++) 
-        		<th style="color: #ffffff;background: #002060;text-align: center;border: 1px solid #000000; width: 15px">{{ date('M', mktime(0, 0, 0, $month, 10)) }}</th>
+        		<th style="color: #ffffff;background: #7f7f7f;text-align: center;border: 1px solid #000000; width: 15px">{{ date('M', mktime(0, 0, 0, $month, 10)) }}</th>
 				@endfor
 			</tr>
 			<!-- <tr>
