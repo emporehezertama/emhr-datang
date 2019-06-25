@@ -1132,7 +1132,7 @@ class PayrollController extends Controller
             $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2; //get_setting('bpjs_kesehatan_company');
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan; //get_setting('bpjs_kesehatan_company');
             $temp->yearly_income_tax            = $yearly_income_tax;   
             $temp->save(); 
 
@@ -1154,7 +1154,7 @@ class PayrollController extends Controller
             $temp->bpjs_ketenagakerjaan_employee= $bpjs_ketenagakerjaan2;
             $temp->bpjs_pensiun_employee        = $bpjs_pensiun2;
             $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan2;
+            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan;
             $temp->pph21                        = $monthly_income_tax;
             $temp->bonus                        = replace_idr($bonus);
             $temp->save();
