@@ -246,7 +246,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Date of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tanggal_lahir" value="{{ old('tanggal_lahir')}}" class="form-control  datepicker"> </div>
+                                        <input type="text" name="tanggal_lahir" value="{{ old('tanggal_lahir')}}" class="form-control datepicker2"> </div>
 
                                 </div>
                                 <div class="form-group">
@@ -300,7 +300,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Join Date</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="join_date" value="{{ old('join_date') }}" class="form-control  datepicker">
+                                        <input type="text" name="join_date" value="{{ old('join_date') }}" class="form-control  datepicker2">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -504,13 +504,13 @@
                         <div class="form-group">
                             <label class="col-md-12">Date of birth</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control datepicker modal-tanggal_lahir">
+                                <input type="text" class="form-control datepicker2 modal-tanggal_lahir">
                             </div>
                         </div>
                          <div class="form-group">
                             <label class="col-md-12">Date of death</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control datepicker modal-tanggal_meninggal">
+                                <input type="text" class="form-control datepicker2 modal-tanggal_meninggal">
                             </div>
                         </div>
                         <div class="form-group">
@@ -770,9 +770,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Date picker plugins css -->
-    <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
-    <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker-employee/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker-employee/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+
+        jQuery('.datepicker2').datepicker({
+            format: 'yyyy-mm-dd',
+        });
 
         $("#modal-fakultas").autocomplete({
             source: function (request, response) {

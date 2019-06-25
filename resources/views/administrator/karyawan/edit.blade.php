@@ -516,7 +516,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Date of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control datepicker"> </div>
+                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control datepicker2"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Marital Status</label>
@@ -569,7 +569,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Join Date</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="join_date" class="form-control  datepicker" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
+                                        <input type="text" name="join_date" class="form-control  datepicker2" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -821,13 +821,13 @@
                         <div class="form-group">
                             <label class="col-md-12">Date of birth</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control datepicker modal-tanggal_lahir">
+                                <input type="text" class="form-control datepicker2 modal-tanggal_lahir">
                             </div>
                         </div>
                          <div class="form-group">
                             <label class="col-md-12">Date of death</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control datepicker modal-tanggal_meninggal">
+                                <input type="text" class="form-control datepicker2 modal-tanggal_meninggal">
                             </div>
                         </div>
                         <div class="form-group">
@@ -1124,9 +1124,9 @@
 
     </style>
     <!-- Date picker plugins css -->
-    <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker-employee/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Date Picker Plugin JavaScript -->
-    <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker-employee/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
         function show_image(img)
         {
@@ -1135,6 +1135,10 @@
     </script>
 
     <script type="text/javascript">
+        jQuery('.datepicker2').datepicker({
+            format: 'yyyy-mm-dd',
+        });
+
         $("#modal-fakultas").autocomplete({
             source: function (request, response) {
                 $.ajax({
