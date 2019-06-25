@@ -1448,7 +1448,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
@@ -1477,7 +1477,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
@@ -1506,7 +1506,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
@@ -1535,7 +1535,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
@@ -1563,7 +1563,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']        = $v->name;
                     }
                 }
             } 
@@ -1590,7 +1590,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
@@ -1617,7 +1617,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
@@ -1646,7 +1646,7 @@ class AjaxController extends Controller
                 if($value->userApprovedClaim == null)
                 {
                     foreach ($dataUser as $k => $v) { 
-                        $user[$k]['name']         = $v->name;
+                        $user[$key]['child'][$k]['name']         = $v->name;
                     }
                 }
             } 
