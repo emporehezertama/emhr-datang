@@ -255,7 +255,6 @@ class IndexController extends Controller
         if(\Session::get('is_login_administrator'))
         {
             \Auth::loginUsingId(4);
-        
             return redirect()->route('administrator.dashboard')->with('message-success', 'Welcome Back Administrator');
         }
         else

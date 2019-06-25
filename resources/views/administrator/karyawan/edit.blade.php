@@ -942,7 +942,7 @@
                         <div class="form-group">
                             <label class="col-md-3">City</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control modal-kota" placeholder="City / District" name="kota">
+                                <input type="text" class="form-control modal-kota" placeholder="City / District"  name="modal-kota" id="modal-kota">
                             </div>
                         </div>
                         <input type="hidden" name="action_education" value="insert" />
@@ -1150,6 +1150,25 @@
             },
             select: function( event, ui ) {
                 $("input[name='modal-fakultas']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
+
+        $("#modal-kota").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-city') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-kota']").val(ui.item.id)
             },
             showAutocompleteOnFocus: true
         });

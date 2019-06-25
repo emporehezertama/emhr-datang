@@ -137,7 +137,7 @@
 			                                </td>
 			                                <td>
                                                 @if(!isset(request()->month))
-			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail</a>
+			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
 			                                    @endif
                                             </td>
 			                            </tr>

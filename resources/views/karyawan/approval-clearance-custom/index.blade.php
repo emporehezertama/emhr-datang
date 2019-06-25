@@ -69,7 +69,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('karyawan.approval.clearance-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5">Exit Clearance<i class="fa fa-search-plus"></i> 
+                                            <a href="{{ route('karyawan.approval.clearance-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> exit clearance </button></a>
                                         </td>
                                     </tr>
                                 @endforeach

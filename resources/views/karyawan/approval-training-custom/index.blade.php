@@ -68,9 +68,9 @@
                                         <td>{{ $item->created_at }}</td>
                                         <td>
                                                 @if($item->is_approved === NULL and $item->status < 2)
-                                                <a href="{{ route('karyawan.approval.training-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Process</a>
+                                                <a href="{{ route('karyawan.approval.training-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-arrow-right"></i> process</a>
                                                 @else
-                                                <a href="{{ route('karyawan.approval.training-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Detail</a>
+                                                <a href="{{ route('karyawan.approval.training-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-search-plus"></i> detail</a>
                                                 @endif
                                         </td>
                                         <td>
@@ -78,10 +78,10 @@
                                                 @if($item->is_approved_claim === NULL and $item->status_actual_bill == 1)
                                                 @if(cek_level_training_up($item->training->id))
 
-                                                    <a href="{{ route('karyawan.approval.training-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Process Claim</a>
+                                                    <a href="{{ route('karyawan.approval.training-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-arrow-right"></i> process claim</a>
                                                 @endif
                                                 @elseif($item->is_approved_claim != NULL and $item->status_actual_bill >= 1)
-                                                    <a href="{{ route('karyawan.approval.training-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Detail Claim</a>
+                                                    <a href="{{ route('karyawan.approval.training-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-search-plus"></i> claimed detail</a>
                                                 @endif
                                             @endif
                                         </td>

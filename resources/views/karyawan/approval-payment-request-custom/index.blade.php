@@ -70,12 +70,12 @@
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>
-                                            <a href="{{ route('karyawan.approval.payment-request-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> 
+                                            
                                         
                                             @if($item->is_approved === NULL and $item->status < 2)
-                                                Process
+                                                <a href="{{ route('karyawan.approval.payment-request-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> process </button></a>
                                             @else
-                                                Detail
+                                                <a href="{{ route('karyawan.approval.payment-request-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail </button></a>
                                             @endif
 
                                         </td>

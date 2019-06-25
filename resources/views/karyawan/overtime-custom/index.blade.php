@@ -45,16 +45,16 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('karyawan.overtime-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>
+                                            <a href="{{ route('karyawan.overtime-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                         </td>
                                         <td>
                                             @if($item->status == 2)
                                                 @if(empty($item->status_claim) or $item->status_claim < 1)
-                                                    <a href="{{ route('karyawan.overtime-custom.claim', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-book"></i> Claim</a>
+                                                    <a href="{{ route('karyawan.overtime-custom.claim', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-book"></i> claim</a>
                                                 @else
                                                     @if($item->status_claim >= 1)
                                                     <a href="{{ route('karyawan.overtime-custom.claim', $item->id) }}">
-                                                    <label class="btn btn-info btn-xs"><i class="fa fa-history"></i> Detail Claim</label></a>
+                                                    <label class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> claimed detail</label></a>
                                                     @endif
 
                                                 @endif

@@ -70,11 +70,11 @@
                                         <td>
                                             @if($item->status == 2)
                                                 @if(empty($item->status_actual_bill) or $item->status_actual_bill < 1)
-                                                    <a href="{{ route('karyawan.training-custom.claim', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-book"></i> Reimbursement</a>
+                                                    <a href="{{ route('karyawan.training-custom.claim', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-book"></i> claim</a>
                                                 @else
                                                     @if($item->status_actual_bill >= 1)
                                                     <a href="{{ route('karyawan.training-custom.claim', $item->id) }}">
-                                                    <label class="btn btn-info btn-xs"><i class="fa fa-history"></i> Detail Actual Bill</label></a>
+                                                    <label class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> claimed detail</label></a>
                                                     @endif
                                                 @endif
                                             @endif

@@ -620,7 +620,7 @@
                         <div class="form-group">
                             <label class="col-md-3">City</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control modal-kota" />
+                                <input type="text" class="form-control modal-kota" name="modal-kota" id="modal-kota"/>
                             </div>
                         </div>
                    </form>
@@ -792,6 +792,26 @@
             },
             showAutocompleteOnFocus: true
         });
+
+        $("#modal-kota").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-city') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-kota']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
+
         
         function open_dialog_photo()
         {

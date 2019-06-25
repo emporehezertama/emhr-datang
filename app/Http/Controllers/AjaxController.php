@@ -1248,7 +1248,7 @@ class AjaxController extends Controller
         {
             if(strlen($request->word) >=2 ) 
             { 
-                $data =  Kabupaten::where('nama', 'LIKE', "%". $request->word . "%")->groupBy('id_prov')->get();
+                $data =  Kabupaten::where('nama', 'LIKE', "%". $request->word . "%")->get();
 
                 $params = [];
                 foreach($data as $k => $item)

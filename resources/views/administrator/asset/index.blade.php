@@ -100,7 +100,7 @@
                                                     @endif                                                  
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('administrator.asset.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Edit</button></a>
+                                                    <a href="{{ route('administrator.asset.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
                                                 </td>
                                             </tr>
                                         @endforeach
