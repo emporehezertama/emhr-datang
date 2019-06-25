@@ -52,7 +52,7 @@
                                         <form action="{{ route('administrator.setting-approvalClearance.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}                                               
-                                            <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i></button>
+                                            <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete</button>
                                         </form>
                                     </td>
                                 </tr>

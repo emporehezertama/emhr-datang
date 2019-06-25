@@ -47,11 +47,11 @@
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.asset-type.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
-                                            <form action="{{ route('administrator.asset-type.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
+                                            <a href="{{ route('administrator.asset-type.edit', ['id' => $item->id]) }}" style="float: left; margin-right:5px"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
+                                            <form action="{{ route('administrator.asset-type.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}                                               
-                                                <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete</button>
+                                                <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete </button>
                                             </form>
                                         </td>
                                     </tr>

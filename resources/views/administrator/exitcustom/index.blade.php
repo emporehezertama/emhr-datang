@@ -104,8 +104,8 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('administrator.exitCustom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> Detail</button></a>
-                                            <a href="{{ route('administrator.exitCustom.clearance', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> Exit Clearance</button></a>
+                                            <a href="{{ route('administrator.exitCustom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
+                                            <a href="{{ route('administrator.exitCustom.clearance', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> exit clearance</button></a>
                                         </td>
                                     </tr>
                                   @endif

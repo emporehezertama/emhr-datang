@@ -94,7 +94,7 @@
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.leaveCustom.proses', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-arrow-right"></i> Detail</a>
+                                            <a href="{{ route('administrator.leaveCustom.proses', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                         </td>
                                     </tr>
                                     @php ($i++)

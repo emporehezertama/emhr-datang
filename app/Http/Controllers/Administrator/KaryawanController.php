@@ -63,14 +63,15 @@ class KaryawanController extends Controller
             $data = User::where('access_id', 2)->where('project_id', $user->project_id);
             $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
             $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+            $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->where('users.project_id', $user->project_id)->get();
         } else
         {
             $data = User::where('access_id', 2);
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
+            $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->get();
         }
-        
-        $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->get();
+
         $params['countPos'] = count($notDefinePos);
         if(isset($_GET["position"]) and $_GET["position"] ==1)
         {

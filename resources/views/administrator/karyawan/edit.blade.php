@@ -13,7 +13,7 @@
             </div>
         </div>
     <div class="row">
-        <form class="form-horizontal" id="form-karyawan" enctype="multipart/form-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
+        <form class="form-horizontal" id="form-karyawan" enctype="multipart/fmodaorm-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
             <input type="hidden" name="_method" value="PUT">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
@@ -902,6 +902,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3">School Name / University</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control modal-fakultas" name="modal-fakultas" id="modal-fakultas"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3">Year of Start</label>
                             <div class="col-md-9">
                                 <input type="number" class="form-control modal-tahun_awal" />
@@ -911,12 +917,6 @@
                             <label class="col-md-3">Year of Graduate</label>
                             <div class="col-md-9">
                                 <input type="number" class="form-control modal-tahun_akhir" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3">School Name</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control modal-fakultas" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -942,7 +942,7 @@
                         <div class="form-group">
                             <label class="col-md-3">City</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control modal-kota" placeholder="City / District" name="kota">
+                                <input type="text" class="form-control modal-kota" placeholder="City / District"  name="modal-kota" id="modal-kota">
                             </div>
                         </div>
                         <input type="hidden" name="action_education" value="insert" />
@@ -1099,7 +1099,11 @@
 <!-- ============================================================== -->
 <!-- End Page Content -->
 <!-- ============================================================== -->
-
+<style type="text/css">
+    .ui-autocomplete{
+            z-index: 9999999 !important;
+        }
+</style>
 @section('footer-script')
     <style type="text/css">
         .no-padding-td td {
@@ -1131,6 +1135,44 @@
     </script>
 
     <script type="text/javascript">
+        $("#modal-fakultas").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-university') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-fakultas']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
+
+        $("#modal-kota").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-city') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-kota']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
+
         var el_dependent;
         var el_education;
         var el_cuti;
@@ -1191,9 +1233,9 @@
         function edit_education(id, pendidikan, tahun_awal, tahun_akhir, fakultas, jurusan, nilai, kota)
         {
             $('.modal-pendidikan').val(pendidikan);
+            $('.modal-fakultas').val(fakultas);
             $('.modal-tahun_awal').val(tahun_awal);
             $('.modal-tahun_akhir').val(tahun_akhir);
-            $('.modal-fakultas').val(fakultas);
             $('.modal-jurusan').val(jurusan);
             $('.modal-nilai').val(nilai);
             $('.modal-kota').val(kota);
@@ -1209,9 +1251,9 @@
             el_education = el;
 
             $('.modal-pendidikan').val(pendidikan);
+            $('.modal-fakultas').val(fakultas);
             $('.modal-tahun_awal').val(tahun_awal);
             $('.modal-tahun_akhir').val(tahun_akhir);
-            $('.modal-fakultas').val(fakultas);
             $('.modal-jurusan').val(jurusan);
             $('.modal-nilai').val(nilai);
             $('.modal-kota').val(kota);
@@ -1586,9 +1628,9 @@
 
             var el = '<tr>';
             var modal_pendidikan            = $('.modal-pendidikan').val();
+            var modal_fakultas              = $('.modal-fakultas').val();
             var modal_tahun_awal            = $('.modal-tahun_awal').val();
             var modal_tahun_akhir           = $('.modal-tahun_akhir').val();
-            var modal_fakultas              = $('.modal-fakultas').val();
             var modal_jurusan               = $('.modal-jurusan').val();
             var modal_nilai                 = $('.modal-nilai').val();
             var modal_kota                  = $('.modal-kota').val();

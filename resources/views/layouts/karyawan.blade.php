@@ -692,11 +692,15 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
                     if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -740,11 +744,15 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
                     if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -788,11 +796,15 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
                     if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el +='<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -841,11 +853,15 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
                     if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -889,12 +905,16 @@
                     }            
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
-                        if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    if(value.is_approved === null)
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                         el +='<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -939,12 +959,16 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
 
-                        if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    if(value.is_approved === null)
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el +='<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -993,11 +1017,15 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
                     if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
@@ -1041,11 +1069,15 @@
                     el += '<div class="sl-right">'+
                                         '<div><strong>'+value.level+'</strong><br><a href="#">'+ value.position +'</a> </div>';
                     if(value.is_approved === null)
-                        {
-                             $.each(data.user, function(k,v){
-                                el +='<p>'+v.name+'</p>';
-                            });
-                        }
+                    {
+                        $.each(data.user, function(k,v){
+                            if(k==key){
+                                $.each(v.child, function(s,t){
+                                el +='<p>'+t.name+'</p>';
+                            }); 
+                            }
+                        });
+                    }
                     el += '<div>'+value.user+'<br></div>'+
                                         '<div class="desc">'+ (value.date != null ? value.date : '' )  +'</p></div>'+
                                     '</div>'+
