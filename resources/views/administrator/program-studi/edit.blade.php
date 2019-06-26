@@ -20,7 +20,7 @@
 
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Major's List</li>
+                    <li class="active">Major List</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -31,7 +31,7 @@
                 <input type="hidden" name="_method" value="PUT">
                 <div class="col-md-12">
                     <div class="white-box">
-                        <h3 class="box-title m-b-0">Add Major's List</h3>
+                        <h3 class="box-title m-b-0">Update Major List</h3>
                         <hr />
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">

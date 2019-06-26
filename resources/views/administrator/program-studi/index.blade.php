@@ -17,13 +17,13 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Manage Major's List</h4> 
+                <h4 class="page-title">Manage Major List</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <a href="{{ route('administrator.program-studi.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD MAJOR'S LIST </a>
+                <a href="{{ route('administrator.program-studi.create') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD MAJOR LIST </a>
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Major's List</li>
+                    <li class="active">Major List</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->

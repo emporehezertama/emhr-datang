@@ -38,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
-                                    <th>UNIVERSITAS</th>
+                                    <th>UNIVERSITY</th>
                                     <th>DESCRIPTION</th>
                                     <th>CREATED</th>
                                     <th>MANAGE</th>

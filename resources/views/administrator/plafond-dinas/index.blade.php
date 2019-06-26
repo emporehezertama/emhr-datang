@@ -56,8 +56,8 @@
                                             <th>POSITION</th>
                                             <!--<th>HOTEL (IDR)</th>-->
                                             <th>PLAFOND TYPE</th>
-                                            <th>MEAL ALLOWANCE/DAY'S (IDR)</th>
-                                            <th>DAILY ALLOWANCE (IDR / DAY'S)</th>
+                                            <th>MEAL ALLOWANCE/DAY (IDR)</th>
+                                            <th>DAILY ALLOWANCE (IDR / DAY)</th>
                                             <th>DESCRIPTION</th>
                                             <th>#</th>
                                         </tr>
@@ -98,8 +98,8 @@
                                             <th>POSITION</th>
                                             <!--<th>PLAFOND TYPE</th>-->
                                             <!--<th>HOTEL TYPE</th>-->
-                                            <th>MEAL ALLOWANCE/DAY'S (USD)</th>
-                                            <th>DAILY ALLOWANCE (USD / DAY'S)</th>
+                                            <th>MEAL ALLOWANCE/DAY (USD)</th>
+                                            <th>DAILY ALLOWANCE (USD / DAY)</th>
                                             <th>DESCRIPTION</th>
                                             <th>#</th>
                                         </tr>

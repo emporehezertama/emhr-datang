@@ -47,7 +47,7 @@
                         {{ csrf_field() }}
                         
                         <div class="form-group">
-                            <label class="col-md-12">Universitas</label>
+                            <label class="col-md-12">University</label>
                             <div class="col-md-6">
                                <input type="text" name="name" class="form-control" value="{{ $data->name }}">
                             </div>
