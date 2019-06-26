@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <div class="col-md-6 p-l-0">
-                                    <h4>Schedule Backup</h4>
+                                    <h4>Backup Schedule</h4>
                                 </div>
                                 <table class="table table-stripped">
                                     <thead>
