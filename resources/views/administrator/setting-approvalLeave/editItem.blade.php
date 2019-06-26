@@ -52,12 +52,10 @@
                                 <label class="col-md-12">Level</label>
                                 <div class="col-md-10">
                                     <select class="form-control" name="setting_approval_level_id" disabled="true">
-                                        <option value=""> - choose - </option>
                                         @foreach($level as $item)
-                                         <option value="{{ $item->id }}" {{ $item->id== $data->setting_approval_level_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                         <option value="{{ $item->id }}" {{ $item->id== $data->setting_approval_level_id ? 'selected' : '' }} >{{ $item->name }}</option>
                                         @endforeach
                                     </select>
-                                    
                                 </div>
                             </div>
                             <div class="form-group">

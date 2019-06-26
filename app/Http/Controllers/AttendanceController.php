@@ -27,9 +27,14 @@ class AttendanceController extends Controller
     public function index()
     {
         getAttendanceDevice();
-        
-        $params['data']     = Absensi::all();
-        
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data']     = Absensi::join('users','users.id','=','absensi.user_created')->where('users.project_id', $user->project_id)->select('absensi.*')->get();
+        }else{
+            $params['data']     = Absensi::all();
+        }
         $params['device']   = AbsensiDevice::all();
 
         return view('attendance.index')->with($params);

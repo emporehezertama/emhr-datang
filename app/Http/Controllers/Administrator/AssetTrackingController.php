@@ -25,8 +25,14 @@ class AssetTrackingController extends Controller
      */
     public function index()
     {
-        $data   = AssetTracking::orderBy('id', 'DESC');
-    
+         $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data   = AssetTracking::orderBy('asset_tracking.id', 'DESC')->join('users','users.id','=','asset_tracking.user_id')->where('users.project_id', $user->project_id)->select('asset_tracking.*');
+        }else {
+           $data   = AssetTracking::orderBy('id', 'DESC');
+        }
+
         if(isset($_GET['asset_type_id']))
         {
             if(!empty($_GET['asset_type_id']))

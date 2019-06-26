@@ -74,12 +74,10 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('karyawan.approval.exit-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> 
-                                        
                                             @if($item->is_approved === NULL and $item->status < 2)
-                                                Process
+                                                <a href="{{ route('karyawan.approval.exit-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> process </button></a>
                                             @else
-                                                Detail
+                                                <a href="{{ route('karyawan.approval.exit-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail </button></a>
                                             @endif
 
                                         </td>

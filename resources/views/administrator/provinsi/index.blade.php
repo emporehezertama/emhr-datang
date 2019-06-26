@@ -35,12 +35,14 @@
                                         <td class="text-center">{{ $no+1 }}</td>   
                                         <td>{{ $item->nama }}</td>
                                         <td>
-                                            <form action="{{ route('administrator.provinsi.destroy', $item->id_prov) }}" method="post" style="float: left;">
+                                             <a href="javascript:void(0)" class="btn btn-info btn-xs" style="float: left; margin-right:5px" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" data-type="{{ $item->type }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> edit </a>
+
+                                            <form action="{{ route('administrator.provinsi.destroy', $item->id_prov) }}" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}                                               
-                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="confirm_delete('Delete this data ?', this)" class="text-danger"><i class="ti-trash"></i> </a>
+                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="confirm_delete('Delete this data ?', this)" class="text-danger"><i class="ti-trash"></i> delete </a>
                                             </form> 
-                                            <a href="javascript:void(0)" class="btn btn-info btn-xs" style="margin-left: 5px;" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" data-type="{{ $item->type }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> </a>
+                                           
                                         </td>
                                     </tr>
                                 @endforeach

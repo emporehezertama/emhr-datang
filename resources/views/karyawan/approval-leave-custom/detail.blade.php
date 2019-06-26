@@ -97,7 +97,7 @@
                                     <input type="text" class="form-control datepicker" value="{{ $datas->tanggal_cuti_end }}" readonly="true">
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="text" class="form-control" value="{{ $datas->total_cuti }} Days" readonly="true">
+                                    <input type="text" class="form-control" value="{{ $datas->total_cuti }} Day/s" readonly="true">
                                 </div>
                             </div>
                             <div class="form-group">

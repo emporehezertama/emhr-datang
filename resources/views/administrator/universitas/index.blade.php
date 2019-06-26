@@ -38,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
-                                    <th>UNIVERSITAS</th>
+                                    <th>UNIVERSITY</th>
                                     <th>DESCRIPTION</th>
                                     <th>CREATED</th>
                                     <th>MANAGE</th>
@@ -52,8 +52,8 @@
                                         <td>{{ $item->description }}</td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.universitas.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
-                                            <form action="{{ route('administrator.universitas.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
+                                            <a href="{{ route('administrator.universitas.edit', ['id' => $item->id]) }}" style="float: left; margin-right:5px"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
+                                            <form action="{{ route('administrator.universitas.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}                                               
                                                 <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete</button>

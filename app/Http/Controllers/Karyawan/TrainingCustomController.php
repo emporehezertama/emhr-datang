@@ -47,7 +47,14 @@ class TrainingCustomController extends Controller
     public function create()
     {
         //
-         $params['trainingType'] = TrainingType::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['trainingType'] = TrainingType::join('users', 'users.id','=', 'training_type.user_created')->where('users.project_id', $user->project_id)->select('training_type.*')->get();
+        }else{
+            $params['trainingType'] = TrainingType::all();
+        }
+
         return view('karyawan.training-custom.create')->with($params);
     }
 

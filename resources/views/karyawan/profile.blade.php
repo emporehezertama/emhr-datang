@@ -199,7 +199,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Division</label>
                                     <div class="col-md-6">
-                                       <input type="text" name="division" class="form-control"  readonly="true" value="{{ isset($data->structure->division->name) }}" />
+                                       <input type="text" name="division" class="form-control"  readonly="true" value="{{ isset($data->structure->division) ? $data->structure->division->name:'' }}" />
                                     </div>
                                 </div>
                                 @else

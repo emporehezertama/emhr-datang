@@ -1,6 +1,6 @@
 @extends('layouts.administrator')
 
-@section('title', 'Preview Import Karyawan')
+@section('title', 'Preview Import Employee')
 
 @section('sidebar')
 
@@ -22,7 +22,7 @@
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Karyawan</li>
+                    <li class="active">Employee</li>
                 </ol>
             </div>
             <!-- /.col-lg-12 -->
@@ -32,7 +32,7 @@
             <div class="col-md-12">
                 <div class="white-box">
                     <h3 class="box-title m-b-0">Manage Preview Import </h3>
-                    <a href="{{ route('administrator.karyawan.import-all') }}" onclick="return confirm('Proses semua data ini?')" class="btn btn-info btn-sm">Proses Semua Data</a>
+                    <a href="{{ route('administrator.karyawan.import-all') }}" onclick="return confirm('Process all data?')" class="btn btn-info btn-sm">Process All Data</a>
                     <br / >
                     <br / >
                     <br />

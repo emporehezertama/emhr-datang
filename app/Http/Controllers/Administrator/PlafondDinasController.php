@@ -22,9 +22,15 @@ class PlafondDinasController extends Controller
      */
     public function index()
     {
-        $params['data']             = PlafondDinas::orderby('organisasi_position_id','DESC')->get();
-        $params['data_luarnegeri']  = PlafondDinasLuarNegeri::all();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data']             = PlafondDinas::orderby('plafond_dinas.organisasi_position_id','DESC')->join('users','users.id','=','plafond_dinas.user_created')->where('users.project_id', $user->project_id)->select('plafond_dinas.*')->get();
+            $params['data_luarnegeri']  = PlafondDinasLuarNegeri::join('users','users.id','=','plafond_dinas_luar_negeri.user_created')->where('users.project_id', $user->project_id)->select('plafond_dinas_luar_negeri.*')->get();
+        }else{
+            $params['data']             = PlafondDinas::orderby('organisasi_position_id','DESC')->get();
+            $params['data_luarnegeri']  = PlafondDinasLuarNegeri::all();
+        }
         return view('administrator.plafond-dinas.index')->with($params);
     }
 
@@ -34,7 +40,14 @@ class PlafondDinasController extends Controller
      */
     public function create()
     {
-        $params['position'] = OrganisasiPosition::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['position'] = OrganisasiPosition::all();
+        }
+
         return view('administrator.plafond-dinas.create')->with($params);
     }
 
@@ -46,7 +59,15 @@ class PlafondDinasController extends Controller
     public function edit($id)
     {
         $params['data'] = PlafondDinas::where('id', $id)->first();
-        $params['position'] = OrganisasiPosition::all();
+        
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['position'] = OrganisasiPosition::all();
+        }
+
         return view('administrator.plafond-dinas.edit')->with($params);
     }
 
@@ -163,6 +184,12 @@ class PlafondDinasController extends Controller
         $data->organisasi_position_id       = $request->organisasi_position_id;
         $data->plafond_type                 = $request->plafond_type;
         
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
+
         $data->save();
 
         return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully saved');
@@ -173,7 +200,13 @@ class PlafondDinasController extends Controller
      */
     public function createLuarNegeri()
     {
-        $params['position'] = OrganisasiPosition::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['position'] = OrganisasiPosition::all();
+        }
         return view('administrator.plafond-dinas.createLuar')->with($params);
     }
     /**
@@ -191,7 +224,11 @@ class PlafondDinasController extends Controller
         $data->keterangan                   = $request->keterangan;
         $data->organisasi_position_id       = $request->organisasi_position_id;
         //$data->plafond_type                 = $request->plafond_type;
-        
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        }
         $data->save();
 
         return redirect()->route('administrator.plafond-dinas.index')->with('message-success', 'Data successfully saved');
@@ -200,7 +237,15 @@ class PlafondDinasController extends Controller
     public function editLuarNegeri($id)
     {
         $params['data'] = PlafondDinasLuarNegeri::where('id', $id)->first();
-        $params['position'] = OrganisasiPosition::all();
+        
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['position'] = OrganisasiPosition::all();
+        }
+        
         return view('administrator.plafond-dinas.editLuar')->with($params);
     }
 

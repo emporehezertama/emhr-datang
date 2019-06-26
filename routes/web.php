@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 	Route::post('ajax/get-city', 'AjaxController@getCity')->name('ajax.get-city');
+	Route::post('ajax/get-university', 'AjaxController@getUniversity')->name('ajax.get-university');
 	Route::post('ajax/get-history-approval', 'AjaxController@getHistoryApproval')->name('ajax.get-history-approval');
 	Route::post('ajax/get-airports', 'AjaxController@getAirports')->name('ajax.get-airports');
 	Route::post('ajax/get-history-approval-cuti', 'AjaxController@getHistoryApprovalCuti')->name('ajax.get-history-approval-cuti');	

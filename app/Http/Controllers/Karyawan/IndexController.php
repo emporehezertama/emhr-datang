@@ -51,10 +51,22 @@ class IndexController extends Controller
         $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
         $params['division']         = OrganisasiDivision::all();
         $params['section']          = OrganisasiSection::where('division_id', $params['data']['division_id'])->get();
-        $params['news']             = News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
-        $params['internal_memo']    = InternalMemo::orderBy('id', 'DESC')->limit(5)->get();
-        $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('id', 'DESC')->limit(5)->get();
-        $params['ulang_tahun']      = User::whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['news']             = News::where('news.status', 1)->orderBy('news.id', 'DESC')->join('users','users.id','=','news.user_created')->where('users.project_id', $user->project_id)->select('news.*')->limit(4)->get();
+            $params['internal_memo']    = InternalMemo::orderBy('internal_memo.id', 'DESC')->join('users','users.id','=','internal_memo.user_created')->where('users.project_id', $user->project_id)->select('internal_memo.*')->limit(5)->get();
+            $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('peraturan_perusahaan.id', 'DESC')->join('users','users.id','=','peraturan_perusahaan.user_created')->where('users.project_id', $user->project_id)->select('peraturan_perusahaan.*')->limit(5)->get();
+            $params['ulang_tahun']      = User::where('project_id',$user->project_id)->whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
+
+        } else
+        {
+            $params['news']             = News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
+            $params['internal_memo']    = InternalMemo::orderBy('id', 'DESC')->limit(5)->get();
+            $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('id', 'DESC')->limit(5)->get();
+            $params['ulang_tahun']      = User::whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
+        }
 
         $data = User::orderBy('name', 'ASC')->limit(1); 
 
@@ -243,7 +255,6 @@ class IndexController extends Controller
         if(\Session::get('is_login_administrator'))
         {
             \Auth::loginUsingId(4);
-        
             return redirect()->route('administrator.dashboard')->with('message-success', 'Welcome Back Administrator');
         }
         else

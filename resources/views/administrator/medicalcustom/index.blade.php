@@ -89,7 +89,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="{{ route('administrator.medicalCustom.proses', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Detail</button></a>
+                                            <a href="{{ route('administrator.medicalCustom.proses', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
                                             
                                         </td>
                                     </tr>

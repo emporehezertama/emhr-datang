@@ -53,7 +53,7 @@
                                         <td class="text-center">{{ $no+1 }}</td>   
                                         <td>{{ date('d F Y', strtotime($item->tanggal_cuti_start)) }} - {{ date('d F Y', strtotime($item->tanggal_cuti_end)) }}</td>
                                         <td>{{ isset($item->cuti) ? $item->cuti->description : '' }}</td>
-                                        <td>{{ $item->total_cuti }} Hari</td>
+                                        <td>{{ $item->total_cuti }} Day/s</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
                                             <a onclick="detail_approval_leaveCustom({{ $item->id }})">
@@ -62,7 +62,7 @@
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('karyawan.leave.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> Detail</button></a>
+                                            <a href="{{ route('karyawan.leave.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail</button></a>
                                         </td>
                                     </tr>
                                 @endforeach

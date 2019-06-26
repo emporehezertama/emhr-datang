@@ -27,8 +27,13 @@ class CutiBersamaController extends Controller
      */
     public function index()
     {
-        $params['data'] = CutiBersama::orderBy('id', 'DESC')->get();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = CutiBersama::orderBy('cuti_bersama.id', 'DESC')->join('users','users.id','=','cuti_bersama.user_created')->where('users.project_id', $user->project_id)->select('cuti_bersama.*')->get();
+        }else{
+            $params['data'] = CutiBersama::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.cuti-bersama.index')->with($params);
     }
 
@@ -76,10 +81,22 @@ class CutiBersamaController extends Controller
         $data->dari_tanggal     = $request->dari_tanggal;
         $data->sampai_tanggal   = $request->sampai_tanggal;
         $data->total_cuti       = $request->total_cuti;
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         // minus cuti bersama semua karyawan
-        $cuti_karyawan = UserCuti::where('cuti_id', 1)->get();
+        if($user->project_id != NULL)
+        {
+            $cuti_karyawan = UserCuti::join('users','users.id','=','user_cuti.user_id')->where('user_cuti.cuti_id', 1)->where('users.project_id', $user->project_id)->select('user_cuti.*')->get();
+        }else{
+            $cuti_karyawan = UserCuti::where('cuti_id', 1)->get();
+        }
+        
         foreach($cuti_karyawan as $item)
         {
             // update cuti karyawan

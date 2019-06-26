@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-md-6">
-                <h4 class="page-title">Setting Approval Leave For</h4> </div>
+                <h4 class="page-title">Setting Approval Leave</h4> </div>
             <div class="col-md-6">
                <a href="{{ route('administrator.setting-approvalLeave.createItem', ['id' => $data->id]) }}" class="btn btn-sm btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD APPROVAL</a>
                 <a href="{{ route('administrator.setting-approvalLeave.index') }}" class="btn btn-sm btn-default pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-arrow-left"></i> BACK</a>
@@ -45,11 +45,11 @@
                                     </td>
                                         <td>{{ $item->description }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.setting-approvalLeave.editItem', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
+                                            <a href="{{ route('administrator.setting-approvalLeave.editItem', ['id' => $item->id]) }}" style="float: left; margin-right:5px"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
                                             
-                                            <form action="{{ route('administrator.setting-approvalLeave.destroyItem',['id' => $item->id])}}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
+                                            <form action="{{ route('administrator.setting-approvalLeave.destroyItem',['id' => $item->id])}}" onsubmit="return confirm('Delete this data?')" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}                                              
-                                                <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> Delete</button>
+                                                <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete</button>
                                             </form>
                                         </td>
                                     </tr>

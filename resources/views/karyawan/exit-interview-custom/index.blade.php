@@ -73,9 +73,9 @@
                                             </a>
                                         </td>
                                         <td>
-                                           <a href="{{ route('karyawan.exit-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>
+                                           <a href="{{ route('karyawan.exit-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                            @if($item->status < 3)
-                                                <a href="{{ route('karyawan.exit-custom.clearance', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Exit Clearance</a>
+                                                <a href="{{ route('karyawan.exit-custom.clearance', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> exit clearance</a>
                                             @endif
                                            
                                         </td>

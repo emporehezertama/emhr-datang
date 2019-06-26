@@ -38,7 +38,7 @@
                                         <td>{{ $item->label }}</td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.alasan-pengunduran-diri.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
+                                            <a href="{{ route('administrator.alasan-pengunduran-diri.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
                                             <!--
                                             <form action="{{ route('administrator.alasan-pengunduran-diri.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
                                                 {{ csrf_field() }}

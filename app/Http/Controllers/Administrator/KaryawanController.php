@@ -32,6 +32,8 @@ use App\Models\StructureOrganizationCustom;
 use App\Models\RequestPaySlip;
 use App\Models\RequestPaySlipItem;
 use App\Models\Cuti;
+use App\Models\OrganisasiDivision;
+use App\Models\OrganisasiPosition;
 use PHPExcel_Worksheet_Drawing;
 
 class KaryawanController extends Controller
@@ -53,16 +55,23 @@ class KaryawanController extends Controller
      */
     public function index()
     {
+        $params['structure'] = getStructureName();
+        
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
             $data = User::where('access_id', 2)->where('project_id', $user->project_id);
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+            $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->where('users.project_id', $user->project_id)->get();
         } else
         {
             $data = User::where('access_id', 2);
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
+            $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->get();
         }
-        
-        $notDefinePos = User::where('access_id', 2)->whereNull('structure_organization_custom_id')->get();
+
         $params['countPos'] = count($notDefinePos);
         if(isset($_GET["position"]) and $_GET["position"] ==1)
         {
@@ -83,22 +92,17 @@ class KaryawanController extends Controller
                 $data = $data->where('users.organisasi_status', request()->employee_status);
             }
 
-            if(!empty(request()->jabatan))
+            if((!empty(request()->division_id)) and (empty(request()->position_id))) 
             {   
-                if(request()->jabatan == 'Direktur')
-                {
-                    $data = $data->whereNull('users.empore_organisasi_staff_id')->whereNull('users.empore_organisasi_manager_id')->where('users.empore_organisasi_direktur', '<>', '');
-                }
-
-                if(request()->jabatan == 'Manager')
-                {
-                    $data = $data->whereNull('users.empore_organisasi_staff_id')->where('users.empore_organisasi_manager_id', '<>', '');
-                }
-
-                if(request()->jabatan == 'Staff')
-                {
-                    $data = $data->where('users.empore_organisasi_staff_id', '<>', '');
-                }
+                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_division_id',request()->division_id);
+            }
+            if((!empty(request()->position_id)) and (empty(request()->division_id)))
+            {   
+                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id);
+            }
+            if((!empty(request()->position_id)) and (!empty(request()->division_id)))
+            {
+                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id)->where('structure_organization_custom.organisasi_division_id',request()->division_id);
             }
 
             if(request()->action == 'download')
@@ -229,6 +233,35 @@ class KaryawanController extends Controller
     public function importAll()
     {
         $temp = UserTemp::all();
+        
+        $userLogin = \Auth::user();
+
+        if($userLogin->project_id != NULL)
+        {
+            $countUpdate=0;
+            $countNew = 0;
+            foreach($temp as $item)
+            {
+                $cekuserTemp = User::where('nik', $item->nik)->first();
+                if($cekuserTemp) {
+                    $countUpdate = $countUpdate+1;
+                }else{
+                    $countNew = $countNew+1;
+                }
+            }
+
+            $module = \App\Models\CrmModule::where('project_id', $userLogin->project_id)->where('crm_product_id', 3)->first();
+            $User = \App\User::where('project_id', $userLogin->project_id)->where('access_id',2)->count();
+
+            if($countNew > (($module->limit_user)-$User)){
+                UserTemp::truncate();
+                UserEducationTemp::truncate();
+                UserFamilyTemp::truncate();
+
+                return redirect()->route('administrator.karyawan.index')->with('message-error', 'You can not import user anymore. You have reached the limit!');
+            }
+        }
+
         foreach($temp as $item)
         {
             $cekuser = User::where('nik', $item->nik)->first();
@@ -313,7 +346,11 @@ class KaryawanController extends Controller
                 $user->empore_organisasi_staff_id   = $item->empore_organisasi_staff_id;
             }
             */
-
+            $projectId = \Auth::user()->project_id;
+            if(!empty($projectId))
+            {
+                $user->project_id = $projectId;
+            }
             $user->save();
 
             //add user cuti sesuai master cuti
@@ -1312,8 +1349,8 @@ class KaryawanController extends Controller
 
                 $data->foto_ktp = $fileNameKtp;
             }
-            $projectId = \Auth::user()->project_id;
 
+            $projectId = \Auth::user()->project_id;
             if(!empty($projectId))
             {
                 $data->project_id = $projectId;

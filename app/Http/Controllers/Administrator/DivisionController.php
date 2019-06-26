@@ -26,7 +26,13 @@ class DivisionController extends Controller
      */
     public function index()
     {
-        $params['data'] = OrganisasiDivision::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+        }else{
+            $params['data'] = OrganisasiDivision::all();
+        }
 
         return view('administrator.division.index')->with($params);
     }
@@ -87,6 +93,11 @@ class DivisionController extends Controller
     {
         $data                               = new OrganisasiDivision();
         $data->name                         = $request->name;
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         return redirect()->route('administrator.division.index')->with('message-success', 'Data successfully saved!');

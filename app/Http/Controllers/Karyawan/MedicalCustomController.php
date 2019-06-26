@@ -44,7 +44,13 @@ class MedicalCustomController extends Controller
     public function create()
     {
         //
-        $params['type'] = MedicalType::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['type'] = MedicalType::join('users', 'users.id','=', 'medical_type.user_created')->where('users.project_id', $user->project_id)->select('medical_type.*')->get();
+        }else{
+            $params['type'] = MedicalType::all();
+        }
         $params['karyawan'] = User::where('access_id', 2)->get();
 
         return view('karyawan.medical-custom.create')->with($params);

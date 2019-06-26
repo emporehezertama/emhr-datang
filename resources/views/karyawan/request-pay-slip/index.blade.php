@@ -46,7 +46,7 @@
                                             @if($item->status == 1)
                                                 <label class="btn btn-warning btn-xs">Waiting Proses Admin</label>
                                             @else
-                                                <label class="btn btn-success btn-xs" onclick="bootbox.alert('Pay Slip anda sudah dikirim ke email anda, silahkan di cek email anda !')">Success Send Email</label>
+                                                <label class="btn btn-success btn-xs" onclick="bootbox.alert('Your Pay Slip has been sent to your email, please check your email !')">Success Send Email</label>
                                             @endif
                                         </td>
                                         <td>
