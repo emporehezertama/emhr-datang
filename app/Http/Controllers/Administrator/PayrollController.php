@@ -52,6 +52,7 @@ class PayrollController extends Controller
         }
         if(request())
         {
+            /*
             if(!empty(request()->month))
             {
                 if(request()->month != date('m'))
@@ -84,6 +85,7 @@ class PayrollController extends Controller
                     }
                 }   
             }
+            */
 
             if(!empty(request()->is_calculate))
             {
@@ -116,9 +118,10 @@ class PayrollController extends Controller
                 });
             }
 
-
             if(request()->action == 'download')
             {
+                if(!isset(request()->user_id)) return redirect()->route('administrator.payroll.index')->with('message-error', 'Payroll item required.');
+
                 if(empty(request()->year) and empty(request()->month))
                 {
                     return redirect()->route('administrator.payroll.index')->with('message-error', 'Year / Month required.');
@@ -129,7 +132,7 @@ class PayrollController extends Controller
                 }
                 else
                 {
-                    return $this->downloadExcel($result->get());
+                    return $this->downloadExcel($result->whereIn('user_id', request()->user_id)->get());
                 }                    
             }
 
@@ -144,10 +147,45 @@ class PayrollController extends Controller
             }
         }
 
+        if(!empty(request()->year) and !empty(request()->month))
+        {
+            $temp = clone $result;
+            if($temp->count() == 0)
+            {
+                $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');   
+            } 
+        }
+
         $params['data'] = $result->get();
         
         return view('administrator.payroll.index')->with($params);
-    } 
+    }
+
+    /**
+     * Create Payroll History
+     * @param  $id
+     * @return void
+     */
+    public function detailHistory($id)
+    {
+        $params['data'] = PayrollHistory::where('id', $id)->first();
+        $params['update_history'] = true;
+
+        return view('administrator.payroll.detail')->with($params);
+    }
+
+    /**
+     * Create Payroll By ID
+     * @param  $id
+     * @return void
+     */
+    public function createByPayrollId($id)
+    {
+        $params['data'] = Payroll::where('id', $id)->first();
+        $params['create_by_payroll_id'] = true;
+
+        return view('administrator.payroll.detail')->with($params);
+    }
 
     /**
      * 
@@ -181,7 +219,7 @@ class PayrollController extends Controller
     {
         $request = request();
 
-        return (new \App\Models\PayrollExportYear($request->year))->download('EM-HR.Payroll-'. $request->year .'.xlsx');
+        return (new \App\Models\PayrollExportYear($request->year, $request->user_id))->download('EM-HR.Payroll-'. $request->year .'.xlsx');
     }
 
     /**
@@ -260,43 +298,7 @@ class PayrollController extends Controller
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
         }
 
-        // $styleHeader = [
-        //     'font' => [
-        //         'bold' => true,
-        //     ],
-        //     'alignment' => [
-        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
-        //     ],
-        //     'borders' => [
-        //         'allBorders' => [
-        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        //             'color' => ['argb' => '000000'],
-        //         ],
-        //     ],
-        //     'fill' => [
-        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-        //         'rotation' => 90,
-        //         'startColor' => [
-        //             'argb' => 'FFA0A0A0',
-        //         ],
-        //         'endColor' => [
-        //             'argb' => 'FFFFFFFF',
-        //         ],
-        //     ],
-        //     ''
-        // ];
-        
         return (new \App\Models\PayrollExportMonth(request()->year, request()->month, $params))->download('EM-HR.Payroll-'. $request->year .'-'. $request->month.'.xlsx');
-
-        /*
-        return \Excel::store('Report-Payroll-'.date('Y-m-d'),  function($excel) use($params, $styleHeader){
-              $excel->sheet('Payroll',  function($sheet) use($params){
-                $sheet->fromArray($params);
-            });
-
-            $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
-        })->download('xls');
-        */
     }
 
     /**
@@ -430,11 +432,9 @@ class PayrollController extends Controller
         $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
         $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
         $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
-
         $temp->total_deduction                  = $request->total_deductions;
         $temp->total_earnings                   = $request->total_earnings;
         $temp->pph21                            = replace_idr($request->pph21);
-
         $temp->bpjs_ketenagakerjaan_company     = replace_idr($request->bpjs_ketenagakerjaan_company);
         $temp->bpjs_kesehatan_company           = replace_idr($request->bpjs_kesehatan_company);
         $temp->bpjs_pensiun_company             = replace_idr($request->bpjs_pensiun_company);
@@ -448,7 +448,11 @@ class PayrollController extends Controller
         $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
         $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $temp->bonus                        = replace_idr($request->bonus);
-        $temp->save(); 
+        
+        if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
+        {
+            $temp->save();
+        } 
 
         // save earnings
         if(isset($request->earning))
@@ -462,8 +466,13 @@ class PayrollController extends Controller
                     $earning->payroll_id            = $id;
                     $earning->payroll_earning_id    = $value;
                 }
+
                 $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
-                $earning->save();
+
+                if(!isset($request->create_by_payroll_id))
+                {
+                    $earning->save();
+                }
             }
         }
 
@@ -481,16 +490,19 @@ class PayrollController extends Controller
                 }
                 
                 $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
-                $deduction->save();
+                if(!isset($request->create_by_payroll_id))
+                {
+                    $deduction->save();
+                }
             }
         }
         
         $history                        = new PayrollHistory();
         $history->payroll_id            = $id;
         $history->user_id               = $request->user_id;
-        $history->salary                = str_replace(',', '', $request->salary);
-        $history->total_deduction       = str_replace(',', '', $request->total_deduction);
-        $history->thp                          = str_replace(',', '', $request->thp);
+        $history->salary                = replace_idr($request->salary);
+        $history->total_deduction       = replace_idr($request->total_deduction);
+        $history->thp                          = replace_idr($request->thp);
         $history->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
         $history->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
         $history->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
@@ -501,7 +513,16 @@ class PayrollController extends Controller
         $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
         $history->bonus                        = replace_idr($request->bonus);
-        $history->save();
+        $history->total_deduction              = $request->total_deductions;
+        $history->total_earnings               = $request->total_earnings;
+
+        if(isset($request->create_by_payroll_id))
+        {
+            $history->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
+            $history->save(['timestamps' => false]);
+        }
+        else
+            $history->save();
 
         if(isset($temp->payrollDeductionsEmployee))
         {
@@ -511,7 +532,14 @@ class PayrollController extends Controller
                 $deduction->payroll_id            = $id;
                 $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
-                $deduction->save();
+
+                if(isset($request->create_by_payroll_id))
+                {
+                    $deduction->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
+                    $deduction->save(['timestamps' => false]);
+                }
+                else
+                    $deduction->save();
             }
         }
 
@@ -523,13 +551,27 @@ class PayrollController extends Controller
                 $deduction->payroll_id            = $id;
                 $deduction->payroll_earning_id    = $i->payroll_earning_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
-                $deduction->save();
+                
+                if(isset($request->create_by_payroll_id))
+                {
+                    $deduction->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
+                    $deduction->save(['timestamps' => false]);
+                }
+                else
+                    $deduction->save();
             }
         }
 
         $this->init_calculate();
 
-        return redirect()->route('administrator.payroll.detail', $id)->with('message-success', __('general.message-data-saved-success'));
+        if(isset($request->create_by_payroll_id) || isset($request->update_history))
+        {
+            return redirect()->route('administrator.payroll.detail-history', $history->id)->with('message-success', __('general.message-data-saved-success'));
+        }
+        else
+        {
+            return redirect()->route('administrator.payroll.detail', $id)->with('message-success', __('general.message-data-saved-success'));
+        }
     }
 
     /**

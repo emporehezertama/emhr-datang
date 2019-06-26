@@ -37,8 +37,8 @@
                     </div>
                     <div class="col-md-1 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
-                            <select class="form-control" name="division_id">
-                                <option value=""> - choose Division - </option>
+                            <select class="form-control form-control-line" name="division_id">
+                                <option value=""> - Division - </option>
                                 @foreach($division as $item)
                                 <option value="{{ $item->id }}" {{ $item->id== request()->division_id ? 'selected' : '' }}>{{ $item->name }}</option>
                                 @endforeach
@@ -47,8 +47,8 @@
                     </div>
                     <div class="col-md-1 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
-                            <select class="form-control" name="position_id">
-                                <option value=""> - choose Position - </option>
+                            <select class="form-control form-control-line" name="position_id">
+                                <option value=""> - Position - </option>
                                 @foreach($position as $item)
                                 <option value="{{ $item->id }}" {{ $item->id== request()->position_id ? 'selected' : '' }}>{{ $item->name }}</option>
                                 @endforeach
@@ -91,6 +91,7 @@
                     </div>
                     <input type="hidden" name="action" value="view">
                     <div class="clearfix"></div>
+                    <div id="filter-form-user"></div>
                 </form>
             </div>
         </div>
@@ -120,8 +121,19 @@
                             @if(isset($data))	
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
+                                        @if(isset(request()->month) and isset(request()->year))
+                                            @if(request()->month != (Int)date('m') || request()->year != date('Y'))
+                                                @php($history = get_payroll_history($item->user_id, request()->month, request()->year))
+                                                @if($history)
+                                                    @php($item = $history)
+                                                    @php($item->is_calculate = 1)
+                                                @endif
+                                            @endif
+                                        @endif
 			                            <tr>
-                                            <td><input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
+                                            <td>
+                                                <input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}">
+                                            </td>
 			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
 			                                <td>{{ $item->user->name }}</td>
@@ -136,11 +148,23 @@
 			                                    @endif
 			                                </td>
 			                                <td>
-                                                @if(!isset(request()->month))
-			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
-			                                    @endif
+                                                @if(isset(request()->month) and isset(request()->year))
+                                                    @if(request()->month == date('m') and request()->year == date('Y'))
+    			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                                    @elseif(isset($history))
+                                                     <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                                    @endif
+                                                @else
+                                                    <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                                @endif
+                                                
+                                                @if(isset(request()->month) and isset(request()->year))
+                                                    @if(cek_payroll_user_id($item->user_id, request()->month, request()->year ) == FALSE)
+                                                     <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ request()->year }}-{{ request()->month }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
+                                                    @endif
+                                                @endif
                                             </td>
-			                            </tr>
+			                            </tr> 
 			                            @php ($i ++)
 			                        @endIf
 	                            @endforeach
@@ -254,7 +278,6 @@
         $('.section-user-id').html(html);
     }
 
-
     function submit_payslip()
     {
         var year    = $('.modal-select-year').val();
@@ -301,7 +324,6 @@
         }
     });
 
-    
     function submit_bukti_potong()
     {
         if(payroll_selected > 0)
@@ -335,8 +357,20 @@
 
     });
 
+    $("input[type='checkbox']").click(function(){
+        var count   = $("input[name='payroll_id[]']").filter(':checked');
+        var html    = '';
+
+        $(count).each(function(k,v){
+            html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
+        });
+
+        $("#filter-form-user").html(html); 
+    });
+
     var submit_filter_download = function(){
         $("#filter-form input[name='action']").val('download');
+
         $("#filter-form").submit();
     }
 

@@ -284,4 +284,7 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::post('karyawan/send-pay-slip', 'KaryawanController@sendPaySlip')->name('administrator.karyawan.send-pay-slip');
 	Route::post('setting/store-backup-schedule', 'SettingController@storeBackupSchedule')->name('administrator.setting.store-backup-schedule');
 	Route::get('setting/delete-backup-schedule/{id}', 'SettingController@deleteBackupSchedule')->name('administrator.setting.delete-backup-schedule');
+	Route::get('payroll/create-by-payroll-id/{id}', 'PayrollController@createByPayrollId')->name('administrator.payroll.create-by-payroll-id');
+	Route::get('payroll/detail-history/{id}', 'PayrollController@detailHistory')->name('administrator.payroll.detail-history');
+
 });

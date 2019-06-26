@@ -9,11 +9,24 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Employee Payroll </h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                @if(isset($create_by_payroll_id))
+                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Create Payroll </button>
+                @else
                 <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
+                @endif
             </div>
         </div>
         <div class="row">
             <form class="form-horizontal" id="form-payroll" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.payroll.update', $data->id) }}" method="POST">
+               @if(isset($create_by_payroll_id))
+               <input type="hidden" name="create_by_payroll_id" value="1">
+               <input type="hidden" name="date" value="{{ isset($_GET['date']) ? $_GET['date'] : '' }}">
+               @endif
+
+               @if(isset($update_history))
+               <input type="hidden" name="update_history" value="1">
+               @endif
+
                <div class="col-md-4 p-l-0">
                     <div class="white-box" style="min-height: 440px;">
                          @if (count($errors) > 0)
