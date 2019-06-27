@@ -452,51 +452,59 @@ class PayrollController extends Controller
             $temp->bonus                        = replace_idr($request->bonus);
             $temp->save();
         } 
-
-        // save earnings
-        if(isset($request->earning))
+        // if history
+        if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
-            foreach($request->earning as $key => $value)
+            // save earnings
+            if(isset($request->earning))
             {
-                $earning = PayrollEarningsEmployee::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
-                if(!$earning)
+                foreach($request->earning as $key => $value)
                 {
-                    $earning                        = new PayrollEarningsEmployee();
-                    $earning->payroll_id            = $id;
-                    $earning->payroll_earning_id    = $value;
-                }
+                    $earning = PayrollEarningsEmployee::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
+                    if(!$earning)
+                    {
+                        $earning                        = new PayrollEarningsEmployee();
+                        $earning->payroll_id            = $id;
+                        $earning->payroll_earning_id    = $value;
+                    }
 
-                $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
+                    $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
 
-                if(!isset($request->create_by_payroll_id))
-                {
-                    $earning->save();
+                    if(!isset($request->create_by_payroll_id))
+                    {
+                        $earning->save();
+                    }
                 }
             }
-        }
-
-        // save deductions
-        if(isset($request->deduction))
-        {
-            foreach($request->deduction as $key => $value)
+            // save deductions
+            if(isset($request->deduction))
             {
-                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
-                if(!$deduction)
+                foreach($request->deduction as $key => $value)
                 {
-                    $deduction                        = new PayrollDeductionsEmployee();
-                    $deduction->payroll_id            = $id;
-                    $deduction->payroll_deduction_id  = $value;
-                }
-                
-                $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
-                if(!isset($request->create_by_payroll_id))
-                {
-                    $deduction->save();
+                    $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
+                    if(!$deduction)
+                    {
+                        $deduction                        = new PayrollDeductionsEmployee();
+                        $deduction->payroll_id            = $id;
+                        $deduction->payroll_deduction_id  = $value;
+                    }
+                    
+                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
+                    if(!isset($request->create_by_payroll_id))
+                    {
+                        $deduction->save();
+                    }
                 }
             }
         }
         
-        $history                        = new PayrollHistory();
+        if(isset($request->update_history))
+        {
+            $history                        = PayrollHistory::where('id', $id)->first();
+        }
+        else
+            $history                        = new PayrollHistory();
+        
         $history->payroll_id            = $id;
         $history->user_id               = $request->user_id;
         $history->salary                = replace_idr($request->salary);
@@ -515,6 +523,7 @@ class PayrollController extends Controller
         $history->total_deduction              = $request->total_deductions;
         $history->total_earnings               = $request->total_earnings;
 
+        // if create baru
         if(isset($request->create_by_payroll_id))
         {
             $history->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
@@ -523,6 +532,45 @@ class PayrollController extends Controller
         else
             $history->save();
 
+        // update history earning and deduction
+        if(isset($request->update_history))
+        {
+            // save earnings
+            if(isset($request->earning))
+            {
+                foreach($request->earning as $key => $value)
+                {
+                    $earning = PayrollEarningsEmployeeHistory::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
+                    if(!$earning)
+                    {
+                        $earning                        = new PayrollEarningsEmployeeHistory();
+                        $earning->payroll_id            = $id;
+                        $earning->payroll_earning_id    = $value;
+                    }
+
+                    $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
+                    $earning->save();
+                }
+            }
+            // save deductions
+            if(isset($request->deduction))
+            {
+                foreach($request->deduction as $key => $value)
+                {
+                    $deduction                        = PayrollDeductionsEmployeeHistory::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
+                    if(!$deduction)
+                    {
+                        $deduction                        = new PayrollDeductionsEmployeeHistory();
+                        $deduction->payroll_id            = $id;
+                        $deduction->payroll_deduction_id  = $value;
+                    }
+                    
+                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
+                    $deduction->save();
+                }
+            }
+        }
+        
         if(isset($temp->payrollDeductionsEmployee))
         {
             foreach($temp->payrollDeductionsEmployee as $i)
