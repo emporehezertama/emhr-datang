@@ -161,11 +161,12 @@
                                                 
                                                 @if(isset(request()->month) and isset(request()->year))
                                                     @if(cek_payroll_user_id($item->user_id, request()->month, request()->year ) == FALSE)
-                                                     <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ request()->year }}-{{ request()->month }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
+                                                        <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ request()->year }}-{{ request()->month }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
+                                                        @php($new = true)
                                                     @endif
                                                 @endif
                                                 
-                                                @if($item->is_lock==1)
+                                                @if($item->is_lock==1 and !isset($new))
                                                     <a href="" class="pull-right text-danger" title="Lock Payroll" style="font-size: 25px;"><i class="fa fa-lock"></i></a> 
                                                 @endif
                                             </td>
@@ -394,6 +395,7 @@
     {
         if(payroll_selected > 0)
         {
+            $("#form_table_payroll").attr('target', '_blank')
             $("#form_table_payroll").submit();
         }
         else

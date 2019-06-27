@@ -138,7 +138,13 @@ class PayrollController extends Controller
 
         if(request()->reset == 1)
         { 
-            \Session::flush();
+            \Session::forget('is_calculate');
+            \Session::forget('employee_status');
+            \Session::forget('position_id');
+            \Session::forget('division_id');
+            \Session::forget('name');
+            \Session::forget('month');
+            \Session::forget('year');
 
             return redirect()->route('administrator.payroll.index');
         }
@@ -214,7 +220,7 @@ class PayrollController extends Controller
 
         $pdf->loadHTML($view);
 
-        return $pdf->download();
+        return $pdf->stream();
     }
 
     /**
@@ -1261,7 +1267,7 @@ class PayrollController extends Controller
                 foreach($item->payrollDeductionsEmployee as $i)
                 {
                     $deduction                        = new PayrollDeductionsEmployeeHistory();
-                    $deduction->payroll_id            = $payroll_id;
+                    $deduction->payroll_id            = $temp->id;
                     $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                     $deduction->nominal               = replace_idr($i->nominal); 
                     $deduction->save();
@@ -1273,7 +1279,7 @@ class PayrollController extends Controller
                 foreach($item->payrollEarningsEmployee as $i)
                 {
                     $deduction                        = new PayrollEarningsEmployeeHistory();
-                    $deduction->payroll_id            = $payroll_id;
+                    $deduction->payroll_id            = $temp->id;
                     $deduction->payroll_earning_id    = $i->payroll_earning_id;   
                     $deduction->nominal               = replace_idr($i->nominal); 
                     $deduction->save();
