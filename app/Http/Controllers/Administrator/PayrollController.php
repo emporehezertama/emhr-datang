@@ -52,41 +52,6 @@ class PayrollController extends Controller
         }
         if(request())
         {
-            /*
-            if(!empty(request()->month))
-            {
-                if(request()->month != date('m'))
-                {
-                    $result = PayrollHistory::select('payroll_history.*')
-                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                                ->whereMonth('payroll_history.created_at', '=', request()->month)
-                                                ->orderBy('payroll_history.id', 'DESC');
-                }
-            }
-
-            if(!empty(request()->year))
-            {
-                if(request()->year != date('Y'))
-                {
-                    if(!empty(request()->month))
-                    {
-                        $result = PayrollHistory::select('payroll_history.*')
-                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                                ->whereMonth('payroll_history.created_at', '=', request()->month)
-                                                ->whereYear('payroll_history.created_at', '=', request()->year)
-                                                ->orderBy('payroll_history.id', 'DESC');
-                    }
-                    else
-                    {
-                        $result = PayrollHistory::select('payroll_history.*')
-                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                                ->whereYear('payroll_history.created_at', '=', request()->year)
-                                                ->orderBy('payroll_history.id', 'DESC');
-                    }
-                }   
-            }
-            */
-
             if(!empty(request()->is_calculate))
             {
                 $result = $result->where('is_calculate', request()->is_calculate );
@@ -118,6 +83,10 @@ class PayrollController extends Controller
                 });
             }
 
+            if(request()->action == 'lock')
+            {
+                $this->lock_payroll();
+            }
             if(request()->action == 'download')
             {
                 if(!isset(request()->user_id)) return redirect()->route('administrator.payroll.index')->with('message-error', 'Payroll item required.');
@@ -156,9 +125,46 @@ class PayrollController extends Controller
             } 
         }
 
+        if(request()->is_calculate || request()->employee_status || request()->position_id || request()->division_id || request()->name || request()->month || request()->year)
+        {
+            \Session::put('is_calculate', request()->is_calculate);
+            \Session::put('employee_status', request()->employee_status);
+            \Session::put('position_id', request()->position_id);
+            \Session::put('division_id', request()->division_id);
+            \Session::put('name', request()->name);
+            \Session::put('month', request()->month);
+            \Session::put('year', request()->year);
+        }
+
+        if(request()->reset == 1)
+        { 
+            \Session::flush();
+
+            return redirect()->route('administrator.payroll.index');
+        }
+
         $params['data'] = $result->get();
         
         return view('administrator.payroll.index')->with($params);
+    }
+
+    /**
+     * Lock Payroll
+     * @return return void
+     */
+    public function lock_payroll()
+    {
+        if(!isset(request()->payroll_id))
+        {
+            return redirect()->route('administrator.payroll.index')->with('message-error', 'Select Payroll !.');
+        }
+
+        foreach(request()->payroll_id as $item)
+        {
+            $payroll = Payroll::where('id', $item)->update(['is_lock' => 1]);
+        }
+
+        return redirect()->route('administrator.payroll.index')->with('message-success', 'Payroll Lock.');
     }
 
     /**
@@ -208,7 +214,7 @@ class PayrollController extends Controller
 
         $pdf->loadHTML($view);
 
-        return $pdf->stream();
+        return $pdf->download();
     }
 
     /**
@@ -450,6 +456,7 @@ class PayrollController extends Controller
             $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
             $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
             $temp->bonus                        = replace_idr($request->bonus);
+            $temp->is_lock                      = $request->is_lock;
             $temp->save();
         } 
         // if history
@@ -522,6 +529,7 @@ class PayrollController extends Controller
         $history->bonus                        = replace_idr($request->bonus);
         $history->total_deduction              = $request->total_deductions;
         $history->total_earnings               = $request->total_earnings;
+        #$history->is_lock                      = $request->is_lock;
 
         // if create baru
         if(isset($request->create_by_payroll_id))
@@ -1291,10 +1299,7 @@ class PayrollController extends Controller
                 $data->status               = 1;   
                 $data->save();
 
-                if(!isset($data->user->nik))
-                {
-                    continue;
-                }
+                if(!isset($data->user->nik)) continue;
 
                 foreach($request->bulan as $key => $i)
                 {   
@@ -1307,7 +1312,6 @@ class PayrollController extends Controller
                     $item->save();
                 }
 
-
                 $bulanItem = RequestPaySlipItem::where('request_pay_slip_id', $data->id)->get();
                 $bulan = [];
                 $total = 0;
@@ -1317,8 +1321,19 @@ class PayrollController extends Controller
                 {
                     $bulan[$k] = $bulanArray[$i->bulan]; $total++;
 
-                    $items   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $i->bulan ." and user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun. ' ORDER BY id DESC'));
-                    
+
+                    if($i->bulan == (Int)date('m') and $request->tahun == date('Y'))
+                    {
+                        $items   = \DB::select(\DB::raw("SELECT payroll.*, month(created_at) as bulan FROM payroll WHERE MONTH(created_at)=". $i->bulan ." and user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun. ' ORDER BY id DESC'));
+                        
+                        if($items)
+                        {
+                            if($items->is_lock == 0) continue; // jika payroll belum di lock payslip jangan dikirim
+                        }
+                    }
+                    else
+                        $items   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $i->bulan ." and user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun. ' ORDER BY id DESC'));
+
                     if(!$items)
                     {
                         $items   = \DB::select(\DB::raw("SELECT * FROM payroll_history WHERE user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun ." ORDER BY id DESC"));

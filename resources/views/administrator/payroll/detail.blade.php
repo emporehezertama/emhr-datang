@@ -7,15 +7,19 @@
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Employee Payroll </h4> </div>
+                <h4 class="page-title">Employee Payroll </h4> 
+            </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                @if(isset($create_by_payroll_id))
-                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Create Payroll </button>
-                @else
-                <button type="submit" class="btn btn-sm btn-danger waves-effect waves-light m-r-10 pull-right" onclick="form_finalized()"><i class="fa fa-lock"></i> Finalized </button>
-                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
+                @php($is_lock = ($data->is_lock == 1 ? true : false));
+                @if(!$is_lock)
+                    @if(isset($create_by_payroll_id))
+                        <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Create Payroll </button>
+                    @else
+                        <button type="submit" class="btn btn-sm btn-danger waves-effect waves-light m-r-10 pull-right" onclick="form_finalized()"><i class="fa fa-lock"></i> Finalized </button>
+                        <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
+                    @endif
                 @endif
-
+                <a href="{{ route('administrator.payroll.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10 pull-right"><i class="fa fa-arrow-left"></i> Back </a>
             </div>
         </div>
         <div class="row">
@@ -24,11 +28,11 @@
                <input type="hidden" name="create_by_payroll_id" value="1">
                <input type="hidden" name="date" value="{{ isset($_GET['date']) ? $_GET['date'] : '' }}">
                @endif
-
+    
                @if(isset($update_history))
                <input type="hidden" name="update_history" value="1">
                @endif
-
+               <input type="hidden" name="is_lock" value="0" />
                <div class="col-md-4 p-l-0">
                     <div class="white-box" style="min-height: 440px;">
                          @if (count($errors) > 0)
@@ -49,8 +53,8 @@
                             <div class="form-group">
                                 <label class="col-md-12">NIK / Name</label>
                                 <div class="col-md-12">
-                                   <input type="text" class="form-control autocomplete-karyawan" value="{{ $data->user->nik }} - {{ $data->user->name }}" placeholder="Select Employee..">
-                                   <input type="hidden" name="user_id" value="{{ $data->user_id }}">
+                                   <input type="text" class="form-control autocomplete-karyawan" {{ $is_lock ? 'disabled' : '' }} value="{{ $data->user->nik }} - {{ $data->user->name }}" placeholder="Select Employee..">
+                                   <input type="hidden" name="user_id" value="{{ $data->user_id }}" {{ $is_lock ? 'disabled' : '' }}>
                                 </div>
                             </div>
                         </div>
@@ -81,11 +85,11 @@
                             <thead>
                                 <tr>
                                     <td style="vertical-align: middle;">Salary</td>
-                                    <td><input type="text" class="form-control price_format calculate" name="salary" placeholder="Rp. " value="{{ number_format($data->salary) }}" /></td> 
+                                    <td><input type="text" class="form-control price_format calculate" {{ $is_lock ? 'disabled' : '' }} name="salary" placeholder="Rp. " value="{{ number_format($data->salary) }}" /></td> 
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">Bonus / THR</td>
-                                    <td><input type="text" class="form-control price_format calculate" name="bonus" value="{{ $data->bonus }}" placeholder="Rp. " /></td> 
+                                    <td><input type="text" class="form-control price_format calculate" {{ $is_lock ? 'disabled' : '' }} name="bonus" value="{{ $data->bonus }}" placeholder="Rp. " /></td> 
                                 </tr>
 
                                 @foreach(get_earnings() as $item)
@@ -94,8 +98,8 @@
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $earning->payrollEarnings->title }}</td>
                                             <td>
-                                                <input type="hidden" name="earning[]" value="{{ $earning->payrollEarnings->id }}" /> 
-                                                <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($earning->nominal) }}" />
+                                                <input type="hidden" name="earning[]" {{ $is_lock ? 'disabled' : '' }} value="{{ $earning->payrollEarnings->id }}" /> 
+                                                <input type="text" class="form-control calculate price_format" {{ $is_lock ? 'disabled' : '' }} name="earning_nominal[]" value="{{ number_format($earning->nominal) }}" />
                                             </td>
                                         </tr>
                                     @else
@@ -103,7 +107,7 @@
                                             <td style="vertical-align: middle;">{{ $item->title }}</td>
                                             <td>
                                                 <input type="hidden" name="earning[]" value="{{ $item->id }}" /> 
-                                                <input type="text" class="form-control calculate price_format" name="earning_nominal[]" value="{{ number_format($item->nominal) }}" />
+                                                <input type="text" class="form-control calculate price_format" {{ $is_lock ? 'disabled' : '' }} name="earning_nominal[]" value="{{ number_format($item->nominal) }}" />
                                             </td>
                                         </tr>
                                     @endif
@@ -137,7 +141,7 @@
                                     <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td colspan="2">
                                         <div class="col-md-12 p-r-0 p-l-0">
-                                            <input type="text" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
+                                            <input type="text" name="bpjs_ketenagakerjaan_employee" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
                                         </div>
                                     </td>
                                 </tr>
@@ -145,21 +149,15 @@
                                     <td style="vertical-align: middle;">BPJS Kesehatan (Employee)</td>
                                     <td colspan="2">
                                         <div class="col-md-12 p-r-0 p-l-0">
-                                            <input type="text" name="bpjs_kesehatan_employee" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
+                                            <input type="text" name="bpjs_kesehatan_employee" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Pensiun (Employee)</td>
                                     <td colspan="2">
-                                       <!--  <div class="col-md-4 p-l-0">
-                                            <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_pensiun_employee') }}" class="form-control" />
-                                                <span class="input-group-addon" id="basic-addon2">%</span>
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-12 p-r-0 p-l-0">
-                                            <input type="text" name="bpjs_pensiun_employee" value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
+                                            <input type="text" name="bpjs_pensiun_employee" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_pensiun_employee) }}" class="form-control bpjs_pensiun_employee" />
                                         </div>
                                     </td>
                                 </tr>
@@ -169,15 +167,15 @@
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $deduction->payrollDeductions->title }}</td>
                                             <td>
-                                                <input type="hidden" name="deduction[]" value="{{ $deduction->payrollDeductions->id }}" /> 
-                                                <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ $deduction->nominal }}" />
+                                                <input type="hidden" name="deduction[]" {{ $is_lock ? 'disabled' : '' }} value="{{ $deduction->payrollDeductions->id }}" /> 
+                                                <input type="text" class="form-control calculate price_format" {{ $is_lock ? 'disabled' : '' }} name="deduction_nominal[]" value="{{ $deduction->nominal }}" />
                                             </td>
                                         </tr>
                                     @else
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $item->title }}</td>
                                             <td>
-                                                <input type="hidden" name="deduction[]" value="{{ $item->id }}" /> 
+                                                <input type="hidden" name="deduction[]" {{ $is_lock ? 'disabled' : '' }} value="{{ $item->id }}" /> 
                                                 <input type="text" class="form-control calculate price_format" name="deduction_nominal[]" value="{{ number_format($item->nominal) }}" />
                                             </td>
                                         </tr>
@@ -228,6 +226,7 @@
     
     function form_finalized()
     {
+        $("input[name='is_lock']").val(1);
         $("#form-payroll").submit();
     }
 

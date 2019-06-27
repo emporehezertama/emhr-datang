@@ -10,6 +10,7 @@
                 <h4 class="page-title pull-left m-r-10">Payroll</h4>
                 <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form" autocomplete="off">
                     {{ csrf_field() }}
+                    <input type="hidden" name="reset" value="0">
                     <div class="pull-right" style="padding-left:0;">
                         <button type="button" id="filter_view" class="btn btn-default btn-sm btn-outline"> <i class="fa fa-search-plus"></i></button>
                         <div class="btn-group m-r-10">
@@ -17,12 +18,14 @@
                                 <i class="fa fa-gear"></i>
                             </button>
                             <ul role="menu" class="dropdown-menu">
+                                <li><a href="javascript:void(0)" onclick="reset_filter()"> <i class="fa fa-refresh"></i> Reset Filter</a></li>
                                 <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
                                 <li><a href="#" onclick="submit_bukti_potong()" title="Download Bukti Potong"><i class="fa fa-download"></i> Bukti Potong</a></li>
                                 <li><a href="javascript:void(0)" onclick="send_payslip()" title="Send Payslip"><i class="fa fa-send-o"></i> Send Payslip</a></li>
+                                <li><a href="javascript:void(0)" onclick="submit_lock()" title="Lock Payslip"><i class="fa fa-lock"></i> Lock Payslip</a></li>
                             </ul>
                         </div>
                     </div>
@@ -30,8 +33,8 @@
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="is_calculate">
                                 <option value="">- Status -</option>
-                                <option value="0" {{ (request() and request()->is_calculate == '0') ? 'selected' : '' }}>No Calculated</option>
-                                <option value="1" {{ (request() and request()->is_calculate == '1') ? 'selected' : '' }}>Calculated</option>
+                                <option value="0" {{ (\Session::get('is_calculate') == '0') ? 'selected' : '' }}>No Calculated</option>
+                                <option value="1" {{ (\Session::get('is_calculate') == '1') ? 'selected' : '' }}>Calculated</option>
                             </select>
                         </div>
                     </div>
@@ -40,7 +43,7 @@
                             <select class="form-control form-control-line" name="division_id">
                                 <option value=""> - Division - </option>
                                 @foreach($division as $item)
-                                <option value="{{ $item->id }}" {{ $item->id== request()->division_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                <option value="{{ $item->id }}" {{ $item->id== \Session::get('division_id') ? 'selected' : '' }}>{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -50,7 +53,7 @@
                             <select class="form-control form-control-line" name="position_id">
                                 <option value=""> - Position - </option>
                                 @foreach($position as $item)
-                                <option value="{{ $item->id }}" {{ $item->id== request()->position_id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                <option value="{{ $item->id }}" {{ $item->id== \Session::get('position_id') ? 'selected' : '' }}>{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,8 +62,8 @@
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="employee_status">
                                 <option value="">- Employee Status - </option>
-                                <option {{ (request() and request()->employee_status == 'Permanent') ? 'selected' : '' }}>Permanent</option>
-                                <option {{ (request() and request()->employee_status == 'Contract') ? 'selected' : '' }}>Contract</option>
+                                <option {{ (\Session::get('employee_status') == 'Permanent') ? 'selected' : '' }}>Permanent</option>
+                                <option {{ (\Session::get('employee_status') == 'Contract') ? 'selected' : '' }}>Contract</option>
                             </select>
                         </div>
                     </div>
@@ -69,19 +72,24 @@
                             <select class="form-control form-control-line" name="month">
                                 <option value="">- Month - </option>
                                 @foreach(month_name() as $key => $item)
-                                <option value="{{ $key }}" {{ (request() and request()->month == $key) ? 'selected' : '' }}>{{ $item }}</option>
+                                <option value="{{ $key }}" {{ (\Session::get('month') == $key) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="col-md-1 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
-                            <input type="text" class="form-control form-control-line" value="{{ isset(request()->year) ? request()->year : '' }}" placeholder="- Year -" name="year" id="dpYears" data-date="{{ date('d-m-Y') }}" data-date-format="dd-mm-yyyy" data-date-viewmode="years" />
+                            <select class="form-control form-control-line" name="year">
+                                <option value="">- Year - </option>
+                                @for($year=2019; $year <= ((Int)date('Y') + 5); $year++))
+                                <option {{ (\Session::get('year') == $year) ? 'selected' : '' }}>{{ $year }}</option>
+                                @endfor
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <input type="text" class="form-control form-control-line" name="name" value="{{ isset(request()->name) ? request()->name : '' }}" placeholder="Nik / Name">
+                            <input type="text" class="form-control form-control-line" name="name" value="{{ \Session::get('name') }}" placeholder="Nik / Name">
                         </div>
                     </div>
                     <input type="hidden" name="action" value="view">
@@ -133,28 +141,32 @@
                                             <td>{{ number_format($item->total_earnings) }}</td>
 			                                <td>{{ number_format($item->total_deduction) }}</td>
 			                                <td>{{ number_format($item->thp) }}</td>
-			                                <td>
+			                                <td class="">
 			                                    @if($item->is_calculate == 0)
 			                                        <label class="btn btn-warning btn-xs btn-circle" title="Not Calculate"><i class="fa fa-close"></i></label>
 			                                    @else
-			                                        <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
+			                                         <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
 			                                    @endif
 			                                </td>
 			                                <td>
                                                 @if(isset(request()->month) and isset(request()->year))
                                                     @if(request()->month == date('m') and request()->year == date('Y'))
-    			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+    			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                     @elseif(isset($history))
-                                                     <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                                     <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                     @endif
                                                 @else
-                                                    <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                                    <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                 @endif
                                                 
                                                 @if(isset(request()->month) and isset(request()->year))
                                                     @if(cek_payroll_user_id($item->user_id, request()->month, request()->year ) == FALSE)
                                                      <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ request()->year }}-{{ request()->month }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
                                                     @endif
+                                                @endif
+                                                
+                                                @if($item->is_lock==1)
+                                                    <a href="" class="pull-right text-danger" title="Lock Payroll" style="font-size: 25px;"><i class="fa fa-lock"></i></a> 
                                                 @endif
                                             </td>
 			                            </tr> 
@@ -247,6 +259,21 @@
     }
 </style>
 <script type="text/javascript">
+    
+    function submit_lock()
+    {
+        $("#filter-form input[name='action']").val('lock');
+
+        $("#filter-form").submit();
+    }
+
+    function reset_filter()
+    {
+        $("#filter-form input.form-control, #filter-form select").val("");
+        $("input[name='reset']").val(1);
+        $("#filter-form").submit();
+    }
+
     $('#dpYears').datepicker( {
         //yearRange: "c-100:c",
         changeMonth: false,
@@ -259,10 +286,19 @@
           $(this).val($.datepicker.formatDate("yy", new Date(year, 0, 1)));
         },
         beforeShow: function(input, inst){
-          // if ($(this).val()!=''){
-          //   var tmpyear = $(this).val();
-          //   $(this).datepicker('option','defaultDate',new Date(tmpyear, 0, 1));
-          // }
+          if ($(this).val()!='')
+          {
+            var year = $(this).val();
+            //$(this).datepicker('option','defaultDate', new Date(tmpyear, 0, 1));
+            $(this).datepicker( {
+                changeMonth: false,
+                changeYear: true,
+                showButtonPanel: true,
+                closeText:'Select',
+                currentText: 'This year',
+                setDate: new Date(year, 0, 1)
+            });
+          }
         }
       }).focus(function () {
         $(".ui-datepicker-month").hide();
@@ -393,6 +429,7 @@
 
         $(count).each(function(k,v){
             html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
+            html += '<input type="hidden" name="payroll_id[]" value="'+ $(v).val() +'" />';
         });
 
         $("#filter-form-user").html(html); 
