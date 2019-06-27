@@ -8,7 +8,7 @@
         <div class="row bg-title" style="overflow: inherit; ">
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <h4 class="page-title pull-left m-r-10">Payroll</h4>
-                <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form">
+                <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form" autocomplete="off">
                     {{ csrf_field() }}
                     <div class="pull-right" style="padding-left:0;">
                         <button type="button" id="filter_view" class="btn btn-default btn-sm btn-outline"> <i class="fa fa-search-plus"></i></button>
@@ -259,10 +259,10 @@
           $(this).val($.datepicker.formatDate("yy", new Date(year, 0, 1)));
         },
         beforeShow: function(input, inst){
-          if ($(this).val()!=''){
-            var tmpyear = $(this).val();
-            $(this).datepicker('option','defaultDate',new Date(tmpyear, 0, 1));
-          }
+          // if ($(this).val()!=''){
+          //   var tmpyear = $(this).val();
+          //   $(this).datepicker('option','defaultDate',new Date(tmpyear, 0, 1));
+          // }
         }
       }).focus(function () {
         $(".ui-datepicker-month").hide();

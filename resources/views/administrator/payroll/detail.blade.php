@@ -12,8 +12,10 @@
                 @if(isset($create_by_payroll_id))
                 <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Create Payroll </button>
                 @else
+                <button type="submit" class="btn btn-sm btn-danger waves-effect waves-light m-r-10 pull-right" onclick="form_finalized()"><i class="fa fa-lock"></i> Finalized </button>
                 <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
                 @endif
+
             </div>
         </div>
         <div class="row">
@@ -134,12 +136,6 @@
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td colspan="2">
-                                        <!-- <div class="col-md-4 p-l-0">
-                                            <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_jaminan_jht_employee') }}" class="form-control" />
-                                                <span class="input-group-addon" id="basic-addon2">%</span>
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-12 p-r-0 p-l-0">
                                             <input type="text" name="bpjs_ketenagakerjaan_employee" value="{{ number_format($data->bpjs_ketenagakerjaan_employee) }}"  class="form-control bpjs_ketenagakerjaan_employee" />
                                         </div>
@@ -148,12 +144,6 @@
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Kesehatan (Employee)</td>
                                     <td colspan="2">
-                                       <!--  <div class="col-md-4 p-l-0">
-                                            <div class="input-group">
-                                                <input type="text" readonly="true" value="{{ get_setting('bpjs_kesehatan_employee') }}" class="form-control" />
-                                                <span class="input-group-addon" id="basic-addon2">%</span>
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-12 p-r-0 p-l-0">
                                             <input type="text" name="bpjs_kesehatan_employee" value="{{ number_format($data->bpjs_kesehatan_employee) }}"  class="form-control bpjs_kesehatan_employee" />
                                         </div>
@@ -236,6 +226,11 @@
     var var_edit_bpjs_kesehatan_employee             = 0;
     var var_edit_bpjs_pensiun_employee               = 0;
     
+    function form_finalized()
+    {
+        $("#form-payroll").submit();
+    }
+
     function form_submit()
     {
         if($("input[name='user_id']").val() == "" || $("input[name='salary']").val() == "")
