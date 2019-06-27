@@ -418,39 +418,38 @@ class PayrollController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $temp = Payroll::where('id', $id)->first();
-
-        if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
-        if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
-
-        $temp->salary                           = replace_idr($request->salary);
-        $temp->thp                              = replace_idr($request->thp);
-        
-        $temp->bpjs_ketenagakerjaan             = replace_idr($request->bpjs_ketenagakerjaan);
-        $temp->bpjs_kesehatan                   = replace_idr($request->bpjs_kesehatan);
-        $temp->bpjs_pensiun                     = replace_idr($request->bpjs_pensiun);
-        $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
-        $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
-        $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
-        $temp->total_deduction                  = $request->total_deductions;
-        $temp->total_earnings                   = $request->total_earnings;
-        $temp->pph21                            = replace_idr($request->pph21);
-        $temp->bpjs_ketenagakerjaan_company     = replace_idr($request->bpjs_ketenagakerjaan_company);
-        $temp->bpjs_kesehatan_company           = replace_idr($request->bpjs_kesehatan_company);
-        $temp->bpjs_pensiun_company             = replace_idr($request->bpjs_pensiun_company);
-        $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
-        $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
-        $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
-        $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
-        $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-        $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
-        $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
-        $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-        $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
-        $temp->bonus                        = replace_idr($request->bonus);
-        
         if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
+            $temp = Payroll::where('id', $id)->first();
+
+            if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
+            if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
+
+            $temp->salary                           = replace_idr($request->salary);
+            $temp->thp                              = replace_idr($request->thp);
+            
+            $temp->bpjs_ketenagakerjaan             = replace_idr($request->bpjs_ketenagakerjaan);
+            $temp->bpjs_kesehatan                   = replace_idr($request->bpjs_kesehatan);
+            $temp->bpjs_pensiun                     = replace_idr($request->bpjs_pensiun);
+            $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
+            $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
+            $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
+            $temp->total_deduction                  = $request->total_deductions;
+            $temp->total_earnings                   = $request->total_earnings;
+            $temp->pph21                            = replace_idr($request->pph21);
+            $temp->bpjs_ketenagakerjaan_company     = replace_idr($request->bpjs_ketenagakerjaan_company);
+            $temp->bpjs_kesehatan_company           = replace_idr($request->bpjs_kesehatan_company);
+            $temp->bpjs_pensiun_company             = replace_idr($request->bpjs_pensiun_company);
+            $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
+            $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
+            $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
+            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
+            $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
+            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
+            $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
+            $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
+            $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
+            $temp->bonus                        = replace_idr($request->bonus);
             $temp->save();
         } 
 
