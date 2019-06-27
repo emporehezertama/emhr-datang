@@ -50,39 +50,94 @@ class PayrollController extends Controller
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
         }
+
+        if(request()->is_calculate || request()->employee_status || request()->position_id || request()->division_id || request()->name || request()->month || request()->year)
+        {
+            \Session::put('is_calculate', request()->is_calculate);
+            \Session::put('employee_status', request()->employee_status);
+            \Session::put('position_id', request()->position_id);
+            \Session::put('division_id', request()->division_id);
+            \Session::put('name', request()->name);
+            \Session::put('month', request()->month);
+            \Session::put('year', request()->year);
+        }
+
+        $is_calculate       = \Session::get('is_calculate');
+        $employee_status    = \Session::get('employee_status');
+        $position_id        = \Session::get('position_id');
+        $division_id        = \Session::get('division_id');
+        $name               = \Session::get('name');
+        $month              = \Session::get('month');
+        $year               = \Session::get('year');
+
+        if(!empty($is_calculate))
+        {
+            $result = $result->where('is_calculate', request()->is_calculate );
+        }
+
+        /*
+        if(!empty($month))
+        {
+            if($month != date('m'))
+            {
+                $result = PayrollHistory::select('payroll_history.*')
+                                            ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                            ->whereMonth('payroll_history.created_at', '=', $month)
+                                            ->orderBy('payroll_history.id', 'DESC');
+            }
+        }
+        if(!empty($year))
+        {
+            if($year != date('Y'))
+            {
+                if(!empty($month))
+                {
+                    $result = PayrollHistory::select('payroll_history.*')
+                                            ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                            ->whereMonth('payroll_history.created_at', '=', $month)
+                                            ->whereYear('payroll_history.created_at', '=', $year)
+                                            ->orderBy('payroll_history.id', 'DESC');
+                }
+                else
+                {
+                    $result = PayrollHistory::select('payroll_history.*')
+                                            ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                            ->whereYear('payroll_history.created_at', '=', $year)
+                                            ->orderBy('payroll_history.id', 'DESC');
+                }
+            }   
+        }
+        */
+
+        if($employee_status)
+        {
+            $result = $result->where('users.organisasi_status', $employee_status);
+        }
+
+        if((!empty($division_id)) and (empty($position_id))) 
+        {   
+            $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_division_id',$division_id);
+        }
+        if((!empty($position_id)) and (empty($division_id)))
+        {   
+            $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',$position_id);
+        }
+        if((!empty($position_id)) and (!empty($division_id)))
+        {
+            $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',$position_id)->where('structure_organization_custom.organisasi_division_id',$division_id);
+        }
+
+        if(!empty($name))
+        {
+            $result = $result->where(function($table) use($name){
+              $table->where('users.name', 'LIKE', '%'. $name .'%')
+                    ->orWhere('users.nik', 'LIKE', '%'. $name .'%');  
+            });
+        }
+
+
         if(request())
         {
-            if(!empty(request()->is_calculate))
-            {
-                $result = $result->where('is_calculate', request()->is_calculate );
-            }
-
-            if(!empty(request()->employee_status))
-            {
-                $result = $result->where('users.organisasi_status', request()->employee_status);
-            }
-
-            if((!empty(request()->division_id)) and (empty(request()->position_id))) 
-            {   
-                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_division_id',request()->division_id);
-            }
-            if((!empty(request()->position_id)) and (empty(request()->division_id)))
-            {   
-                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id);
-            }
-            if((!empty(request()->position_id)) and (!empty(request()->division_id)))
-            {
-                $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id)->where('structure_organization_custom.organisasi_division_id',request()->division_id);
-            }
-
-            if(!empty(request()->name))
-            {
-                $result = $result->where(function($table){
-                  $table->where('users.name', 'LIKE', '%'. request()->name .'%')
-                        ->orWhere('users.nik', 'LIKE', '%'. request()->name .'%');  
-                });
-            }
-
             if(request()->action == 'lock')
             {
                 $this->lock_payroll();
@@ -91,11 +146,11 @@ class PayrollController extends Controller
             {
                 if(!isset(request()->user_id)) return redirect()->route('administrator.payroll.index')->with('message-error', 'Payroll item required.');
 
-                if(empty(request()->year) and empty(request()->month))
+                if(empty($year) and empty($month))
                 {
                     return redirect()->route('administrator.payroll.index')->with('message-error', 'Year / Month required.');
                 }
-                if(!empty(request()->year) and empty(request()->month))
+                if(!empty($year) and empty($month))
                 {
                    return $this->downloadExcelYear($result->get());
                 }
@@ -116,24 +171,13 @@ class PayrollController extends Controller
             }
         }
 
-        if(!empty(request()->year) and !empty(request()->month))
+        if(!empty($year) and !empty($month))
         {
             $temp = clone $result;
             if($temp->count() == 0)
             {
                 $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');   
             } 
-        }
-
-        if(request()->is_calculate || request()->employee_status || request()->position_id || request()->division_id || request()->name || request()->month || request()->year)
-        {
-            \Session::put('is_calculate', request()->is_calculate);
-            \Session::put('employee_status', request()->employee_status);
-            \Session::put('position_id', request()->position_id);
-            \Session::put('division_id', request()->division_id);
-            \Session::put('name', request()->name);
-            \Session::put('month', request()->month);
-            \Session::put('year', request()->year);
         }
 
         if(request()->reset == 1)
