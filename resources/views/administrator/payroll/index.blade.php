@@ -76,17 +76,12 @@
                     </div>
                     <div class="col-md-1 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
-                            <select class="form-control form-control-line" name="year">
-                                <option value="">- Year - </option>
-                                @foreach(get_year_payroll() as $key => $item)
-                                <option {{ (request() and request()->year == $item) ? 'selected' : '' }}>{{ $item }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control form-control-line" value="{{ isset(request()->year) ? request()->year : '' }}" placeholder="- Year -" name="year" id="dpYears" data-date="{{ date('d-m-Y') }}" data-date-format="dd-mm-yyyy" data-date-viewmode="years" />
                         </div>
                     </div>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <input type="text" class="form-control  form-control-line" name="name" value="{{ isset(request()->name) ? request()->name : '' }}" placeholder="Nik / Name">
+                            <input type="text" class="form-control form-control-line" name="name" value="{{ isset(request()->name) ? request()->name : '' }}" placeholder="Nik / Name">
                         </div>
                     </div>
                     <input type="hidden" name="action" value="view">
@@ -131,9 +126,7 @@
                                             @endif
                                         @endif
 			                            <tr>
-                                            <td>
-                                                <input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}">
-                                            </td>
+                                            <td><input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
 			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
 			                                <td>{{ $item->user->name }}</td>
@@ -246,10 +239,47 @@
 </div>
 
 @section('footer-script')
+<style type="text/css" media="screen">
+    .ui-datepicker-year {
+        width: 97% !important;
+        height: 28px !important;
+        border: 1px solid #e9e9e9;
+    }
+</style>
 <script type="text/javascript">
+    $('#dpYears').datepicker( {
+        //yearRange: "c-100:c",
+        changeMonth: false,
+        changeYear: true,
+        showButtonPanel: true,
+        closeText:'Select',
+        currentText: 'This year',
+        onClose: function(dateText, inst) {
+          var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).val($.datepicker.formatDate("yy", new Date(year, 0, 1)));
+        },
+        beforeShow: function(input, inst){
+          if ($(this).val()!=''){
+            var tmpyear = $(this).val();
+            $(this).datepicker('option','defaultDate',new Date(tmpyear, 0, 1));
+          }
+        }
+      }).focus(function () {
+        $(".ui-datepicker-month").hide();
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+        $(".ui-datepicker-prev").hide();
+        $(".ui-datepicker-next").hide();
+        $("#ui-datepicker-div").position({
+          my: "left top",
+          at: "left bottom",
+          of: $(this)
+        });
+      }).attr("readonly", false);
+
     var payroll_selected = 0;
     var send_payslip = function(){
-       $("#modal_send_pay_slip").modal("show");
+        $("#modal_send_pay_slip").modal("show");
 
        $.ajax({
             type: 'POST',

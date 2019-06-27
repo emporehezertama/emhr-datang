@@ -418,86 +418,93 @@ class PayrollController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $temp = Payroll::where('id', $id)->first();
-
-        if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
-        if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
-
-        $temp->salary                           = replace_idr($request->salary);
-        $temp->thp                              = replace_idr($request->thp);
-        
-        $temp->bpjs_ketenagakerjaan             = replace_idr($request->bpjs_ketenagakerjaan);
-        $temp->bpjs_kesehatan                   = replace_idr($request->bpjs_kesehatan);
-        $temp->bpjs_pensiun                     = replace_idr($request->bpjs_pensiun);
-        $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
-        $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
-        $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
-        $temp->total_deduction                  = $request->total_deductions;
-        $temp->total_earnings                   = $request->total_earnings;
-        $temp->pph21                            = replace_idr($request->pph21);
-        $temp->bpjs_ketenagakerjaan_company     = replace_idr($request->bpjs_ketenagakerjaan_company);
-        $temp->bpjs_kesehatan_company           = replace_idr($request->bpjs_kesehatan_company);
-        $temp->bpjs_pensiun_company             = replace_idr($request->bpjs_pensiun_company);
-        $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
-        $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
-        $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
-        $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
-        $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-        $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
-        $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
-        $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-        $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
-        $temp->bonus                        = replace_idr($request->bonus);
-        
         if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
+            $temp = Payroll::where('id', $id)->first();
+
+            if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
+            if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
+
+            $temp->salary                           = replace_idr($request->salary);
+            $temp->thp                              = replace_idr($request->thp);
+            
+            $temp->bpjs_ketenagakerjaan             = replace_idr($request->bpjs_ketenagakerjaan);
+            $temp->bpjs_kesehatan                   = replace_idr($request->bpjs_kesehatan);
+            $temp->bpjs_pensiun                     = replace_idr($request->bpjs_pensiun);
+            $temp->bpjs_ketenagakerjaan2            = replace_idr($request->bpjs_ketenagakerjaan2);
+            $temp->bpjs_kesehatan2                  = replace_idr($request->bpjs_kesehatan2);
+            $temp->bpjs_pensiun2                    = replace_idr($request->bpjs_pensiun2);
+            $temp->total_deduction                  = $request->total_deductions;
+            $temp->total_earnings                   = $request->total_earnings;
+            $temp->pph21                            = replace_idr($request->pph21);
+            $temp->bpjs_ketenagakerjaan_company     = replace_idr($request->bpjs_ketenagakerjaan_company);
+            $temp->bpjs_kesehatan_company           = replace_idr($request->bpjs_kesehatan_company);
+            $temp->bpjs_pensiun_company             = replace_idr($request->bpjs_pensiun_company);
+            $temp->bpjs_ketenagakerjaan_employee    = replace_idr($request->bpjs_ketenagakerjaan_employee);
+            $temp->bpjs_kesehatan_employee          = replace_idr($request->bpjs_kesehatan_employee);
+            $temp->bpjs_pensiun_employee            = replace_idr($request->bpjs_pensiun_employee);
+            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * replace_idr($request->salary) / 100;
+            $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
+            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * replace_idr($request->salary) / 100;
+            $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
+            $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
+            $temp->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
+            $temp->bonus                        = replace_idr($request->bonus);
             $temp->save();
         } 
-
-        // save earnings
-        if(isset($request->earning))
+        // if history
+        if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
-            foreach($request->earning as $key => $value)
+            // save earnings
+            if(isset($request->earning))
             {
-                $earning = PayrollEarningsEmployee::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
-                if(!$earning)
+                foreach($request->earning as $key => $value)
                 {
-                    $earning                        = new PayrollEarningsEmployee();
-                    $earning->payroll_id            = $id;
-                    $earning->payroll_earning_id    = $value;
-                }
+                    $earning = PayrollEarningsEmployee::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
+                    if(!$earning)
+                    {
+                        $earning                        = new PayrollEarningsEmployee();
+                        $earning->payroll_id            = $id;
+                        $earning->payroll_earning_id    = $value;
+                    }
 
-                $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
+                    $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
 
-                if(!isset($request->create_by_payroll_id))
-                {
-                    $earning->save();
+                    if(!isset($request->create_by_payroll_id))
+                    {
+                        $earning->save();
+                    }
                 }
             }
-        }
-
-        // save deductions
-        if(isset($request->deduction))
-        {
-            foreach($request->deduction as $key => $value)
+            // save deductions
+            if(isset($request->deduction))
             {
-                $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
-                if(!$deduction)
+                foreach($request->deduction as $key => $value)
                 {
-                    $deduction                        = new PayrollDeductionsEmployee();
-                    $deduction->payroll_id            = $id;
-                    $deduction->payroll_deduction_id  = $value;
-                }
-                
-                $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
-                if(!isset($request->create_by_payroll_id))
-                {
-                    $deduction->save();
+                    $deduction                        = PayrollDeductionsEmployee::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
+                    if(!$deduction)
+                    {
+                        $deduction                        = new PayrollDeductionsEmployee();
+                        $deduction->payroll_id            = $id;
+                        $deduction->payroll_deduction_id  = $value;
+                    }
+                    
+                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
+                    if(!isset($request->create_by_payroll_id))
+                    {
+                        $deduction->save();
+                    }
                 }
             }
         }
         
-        $history                        = new PayrollHistory();
+        if(isset($request->update_history))
+        {
+            $history                        = PayrollHistory::where('id', $id)->first();
+        }
+        else
+            $history                        = new PayrollHistory();
+        
         $history->payroll_id            = $id;
         $history->user_id               = $request->user_id;
         $history->salary                = replace_idr($request->salary);
@@ -516,6 +523,7 @@ class PayrollController extends Controller
         $history->total_deduction              = $request->total_deductions;
         $history->total_earnings               = $request->total_earnings;
 
+        // if create baru
         if(isset($request->create_by_payroll_id))
         {
             $history->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
@@ -524,6 +532,45 @@ class PayrollController extends Controller
         else
             $history->save();
 
+        // update history earning and deduction
+        if(isset($request->update_history))
+        {
+            // save earnings
+            if(isset($request->earning))
+            {
+                foreach($request->earning as $key => $value)
+                {
+                    $earning = PayrollEarningsEmployeeHistory::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
+                    if(!$earning)
+                    {
+                        $earning                        = new PayrollEarningsEmployeeHistory();
+                        $earning->payroll_id            = $id;
+                        $earning->payroll_earning_id    = $value;
+                    }
+
+                    $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
+                    $earning->save();
+                }
+            }
+            // save deductions
+            if(isset($request->deduction))
+            {
+                foreach($request->deduction as $key => $value)
+                {
+                    $deduction                        = PayrollDeductionsEmployeeHistory::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
+                    if(!$deduction)
+                    {
+                        $deduction                        = new PayrollDeductionsEmployeeHistory();
+                        $deduction->payroll_id            = $id;
+                        $deduction->payroll_deduction_id  = $value;
+                    }
+                    
+                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
+                    $deduction->save();
+                }
+            }
+        }
+        
         if(isset($temp->payrollDeductionsEmployee))
         {
             foreach($temp->payrollDeductionsEmployee as $i)

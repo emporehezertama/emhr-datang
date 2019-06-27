@@ -55,7 +55,7 @@
                             <div class="clearfix"></div>
                             <hr style="margin-top:10px; margin-bottom:10px;" />
                         @endforeach
-                        <a href="{{ route('karyawan.news.more') }}" class="btn btn-rounded btn-danger btn-block p-10" style="color: white;"><i class="fa fa-list"></i> More News</a>
+                        <a href="{{ route('karyawan.news.more') }}" class="btn btn-rounded btn-danger btn-block p-10" style="color: white;"><i class="fa fa-list"></i> More</a>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                             <hr style="margin-top: 5px; margin-bottom:5px;" />
                         @endforeach
                         <br />
-                        <a href="{{ route('karyawan.internal-memo.more') }}" class="btn btn-rounded btn-info btn-block p-10" style="color: white;"><i class="fa fa-info-circle"></i> More Internal Memo</a>
+                        <a href="{{ route('karyawan.internal-memo.more') }}" class="btn btn-rounded btn-info btn-block p-10" style="color: white;"><i class="fa fa-info-circle"></i> More</a>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                             <hr style="margin-top: 5px; margin-bottom:5px;" />
                         @endforeach
                         <br />
-                        <a href="" class="btn btn-rounded btn-success btn-block p-10" style="color: white;"><i class="fa fa-gavel"></i> More Product Information</a>
+                        <a href="" class="btn btn-rounded btn-success btn-block p-10" style="color: white;"><i class="fa fa-gavel"></i> More </a>
                     </div>
                 </div>
             </div>
