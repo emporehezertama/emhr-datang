@@ -1224,7 +1224,7 @@ class PayrollController extends Controller
             $thp                         = $thp + $monthly_income_tax;
 
             $non_bonus = $this->init_calculate_non_bonus($item);
-            $monthly_income_tax           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
+            $monthly_income_tax = $yearly_income_tax - $non_bonus['yearly_income_tax'] + ($non_bonus['yearly_income_tax'] / 12);
 
             $earnings                     = $earnings + $monthly_income_tax;    
 
