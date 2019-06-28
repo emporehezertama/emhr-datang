@@ -12,10 +12,14 @@ class PayrollExportYear implements WithMultipleSheets
     use Exportable;
 
     protected $year;
+
+    protected $user;
     
-    public function __construct(int $year)
+    public function __construct(int $year, array $user)
     {
         $this->year = $year;
+
+        $this->user = $user;
     }
 
     /**
@@ -25,7 +29,7 @@ class PayrollExportYear implements WithMultipleSheets
     {
         $sheets = [];
 
-      	$data = \App\Models\PayrollHistory::groupBy('user_id')->get();
+      	$data = \App\Models\PayrollHistory::groupBy('user_id')->whereIn('user_id', $this->user)->get();
 
       	foreach($data as $item)
       	{

@@ -1,5 +1,36 @@
 <?php 
 
+/**
+ * Cek Payroll User ID
+ */
+function get_payroll_history($user_id, $month, $year)
+{
+	// Payroll History
+	$row = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->orderBy('id', 'DESC')->first();
+
+	return $row;
+}
+
+/**
+ * Cek Payroll User ID
+ */
+function cek_payroll_user_id($user_id, $month, $year)
+{
+	// Payroll History
+	$count = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->count();
+
+	if($count) return true;
+
+	$count = \App\Models\Payroll::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->count();
+
+	if($count) return true;
+
+	return false;
+}
+
+/**
+ * Round Down
+ */
 function roundDown($decimal, $precision)
 {
     $sign = $decimal > 0 ? 1 : -1;
