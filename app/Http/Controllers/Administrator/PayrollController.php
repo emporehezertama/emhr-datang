@@ -135,7 +135,6 @@ class PayrollController extends Controller
             });
         }
 
-
         if(request())
         {
             if(request()->action == 'lock')
@@ -509,6 +508,8 @@ class PayrollController extends Controller
             $temp->is_lock                      = $request->is_lock;
             $temp->save();
         } 
+
+
         // if history
         if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
@@ -1260,11 +1261,11 @@ class PayrollController extends Controller
             $monthly_income_tax           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
 
             $earnings                     = $earnings + $monthly_income_tax;    
-            // end custom
 
             #$temp->total_deduction              = $total_deduction + $deductions; 
             $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax; 
             $temp->total_earnings               = $item->salary + $item->bonus + $earnings;
+
             $temp->thp                          = $thp;
             $temp->pph21                        = $monthly_income_tax;
             $temp->is_calculate                 = 1;

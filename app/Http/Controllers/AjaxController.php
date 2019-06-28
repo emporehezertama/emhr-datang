@@ -614,7 +614,6 @@ class AjaxController extends Controller
             $params['income_tax_calculation_25']    = number_format($income_tax_calculation_25); 
             $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
             $params['yearly_income_tax']            = number_format($yearly_income_tax);
-            $params['monthly_income_tax']           = number_format($monthly_income_tax);
             $params['gross_income_per_month']                 = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
 
