@@ -75,40 +75,6 @@ class PayrollController extends Controller
             $result = $result->where('is_calculate', request()->is_calculate );
         }
 
-        /*
-        if(!empty($month))
-        {
-            if($month != date('m'))
-            {
-                $result = PayrollHistory::select('payroll_history.*')
-                                            ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                            ->whereMonth('payroll_history.created_at', '=', $month)
-                                            ->orderBy('payroll_history.id', 'DESC');
-            }
-        }
-        if(!empty($year))
-        {
-            if($year != date('Y'))
-            {
-                if(!empty($month))
-                {
-                    $result = PayrollHistory::select('payroll_history.*')
-                                            ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                            ->whereMonth('payroll_history.created_at', '=', $month)
-                                            ->whereYear('payroll_history.created_at', '=', $year)
-                                            ->orderBy('payroll_history.id', 'DESC');
-                }
-                else
-                {
-                    $result = PayrollHistory::select('payroll_history.*')
-                                            ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                            ->whereYear('payroll_history.created_at', '=', $year)
-                                            ->orderBy('payroll_history.id', 'DESC');
-                }
-            }   
-        }
-        */
-
         if($employee_status)
         {
             $result = $result->where('users.organisasi_status', $employee_status);
