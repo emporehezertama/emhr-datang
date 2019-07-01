@@ -1476,6 +1476,11 @@ class KaryawanController extends Controller
     {   
         \Auth::loginUsingId($id);
         \Session::put('is_login_administrator', true);
+
+
+        $user = User::where('id', $id)->first();
+        $user->last_logged_in_at = date('Y-m-d H:i:s');
+        $user->save();
         
         return redirect()->route('karyawan.dashboard');
     }

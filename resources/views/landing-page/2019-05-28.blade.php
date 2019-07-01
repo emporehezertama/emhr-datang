@@ -151,12 +151,12 @@
 							<div class="form-group">
 								<input type="email" class="form-control" name="email" placeholder="Email" value="{{ old('email') }}" required>
 							</div>
-							<div class="form-group">
+							<!--div class="form-group">
 								<input type="password" class="form-control" name="password" placeholder="Password"  value="{{ old('password') }}" required>
 							</div>
 							<div class="form-group">
 								<input type="password" class="form-control" name="confirm" placeholder="Confirm Password" value="{{ old('confirm') }}" required>
-							</div>
+							</div-->
 							<div class="form-group">
 								<input type="input" class="form-control" name="nama_perusahaan" placeholder="Company" value="{{ old('company') }}" required>
 							</div>

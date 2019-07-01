@@ -51,6 +51,8 @@ use App\Models\CutiBersama;
 use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
 use App\Models\SettingApprovalClearance;
+use App\Helpers\DashboardHelper;
+
 
 
 class AjaxController extends Controller
@@ -2855,6 +2857,127 @@ public function getCalculatePayrollGross(Request $request)
             return response()->json(['message' => 'success', 'data' => $data]);
         }
 
+        return response()->json($this->respon);
+    }
+
+    public function deleteKaryawan(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = \App\User::where('id', $request->id)->first();
+            $data->delete();
+
+            \App\UserFamily::where('user_id',  $request->id)->delete();
+            \App\UserEducation::where('user_id',  $request->id)->delete();
+
+            return response()->json($data->id);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getLiburNasional(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = LiburNasional::all();
+            $params = [];
+            foreach($data as $k =>  $item){
+                $tanggal[$k] = $item->tanggal;
+                $keterangan[$k] = $item->keterangan;
+            }
+            $hasil = json_encode(array("tanggal"=>$tanggal, "keterangan"=>$keterangan));
+            return response()->json($hasil);
+        }
+
+          return response()->json($this->respon);
+    }
+
+/*    public function getFilterJoinResign(Request $request){
+        if($request->ajax())
+        {
+            $tahun = $request->tahun;
+            $monthlyjoin = [];
+            $monthlyresign = [];
+
+            $a = 0;
+            $b = 0;
+            for($i=1; $i<=12; $i++){
+                $monthlyjoin[$a] = employee_get_joinees($i, $tahun);
+                $monthlyresign[$b] = employee_get_resigness($i, $tahun);
+                $monthlyjoin[$a++];
+                $monthlyresign[$b++];
+            }
+            $monthly_join = $monthlyjoin;
+            $monthly_resign = $monthlyresign;
+
+            $hasil = json_encode(array("monthly_join"=>$monthly_join, "monthly_resign"=>$monthly_resign));
+            return response()->json($hasil);
+        }
+        return response()->json($this->respon);
+    }
+
+    public function getFilterAttrition(Request $request){
+        if($request->ajax())
+        {
+            $tahun = $request->tahun;
+            $value_attrition = employee_attrition($tahun);
+            return response()->json($value_attrition);
+        }
+        return response()->json($this->respon);
+    }   */
+
+    public function getUserActive(Request $request){
+        if($request->ajax())
+        {
+            $data = User::where('access_id', '2')
+                        ->where('status', '1')
+                    //    ->where('last_logged_in_at', '<=', date('Y-m-d H:i:s'))
+                        ->whereRaw('last_logged_in_at >= last_logged_out_at')
+                        ->count();
+
+            return response()->json($data);
+        }
+        return response()->json($this->respon);
+    }
+
+    public function getDataDashboard(Request $request){
+        if($request->ajax())
+        {
+            $StartDate = strtotime(str_replace('/', '-', $request->filter_start));
+            $StopDate = strtotime(str_replace('/', '-', $request->filter_end));
+            $filterStart = str_replace('/', '-', $request->filter_start);
+            $filterEnd = str_replace('/', '-', $request->filter_end);
+            $current = $StartDate;
+            $ret = array();
+            $bulan_val = array();
+            $employee_join = array();
+            $employee_resign = array();
+            $attrition = array();
+
+            while($current<$StopDate){
+                $month = date('M y', $current);
+                $bulan_val[] = $month;
+
+                $next = date('Y-m', $current) . "+1 month";
+                $current = strtotime($next);
+                $replacetext = str_replace('+1 month', '', $next);
+                $ret[] = $replacetext;
+
+                $nextmonth = date('Y-m', $current)."+1 month";
+                $next_month = str_replace('+1 month', '', $nextmonth);
+                
+                $employee_join[] = employee_get_joinees($filterStart, $filterEnd, $replacetext);
+                $employee_resign[] = employee_get_resigness($filterStart, $filterEnd, $replacetext);
+                $attrition[] = employee_attrition($filterStart, $filterEnd, $replacetext, $next_month);
+                
+            }
+
+            $hasil = json_encode(array("bulan_val"=>$bulan_val, "employee_join"=>$employee_join, 
+                                        "employee_resign"=>$employee_resign, "attrition"=>$attrition));
+
+            return response()->json($hasil);
+        }
         return response()->json($this->respon);
     }
 }

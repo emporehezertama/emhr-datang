@@ -822,7 +822,7 @@ function total_payment_request()
  */
 function total_karyawan()
 {
-	return \App\User::where('access_id', 2)->count();
+	return \App\User::where('access_id', 2)->where('status', 1)->count();
 }
 
 /**

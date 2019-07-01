@@ -33,7 +33,9 @@ Route::get('asset-accept/{id}', 'IndexController@acceptAsset')->name('accept-ass
 Route::get('em-hris-application-system', 'LandingPageController@page1')->name('landing-page1');
 Route::post('post-em-hris-application-system', 'LandingPageController@storePage1')->name('post-landing-page1');
 
+
 Route::group(['middleware' => ['auth']], function(){
+//	Route::post('logout', 'LoginController@Logout')->name('logout');
 	Route::post('ajax/get-division-by-directorate', 'AjaxController@getDivisionByDirectorate')->name('ajax.get-division-by-directorate');
 	Route::post('ajax/get-department-by-division', 'AjaxController@getDepartmentByDivision')->name('ajax.get-department-by-division');
 	Route::post('ajax/get-section-by-department', 'AjaxController@getSectionByDepartment')->name('ajax.get-section-by-department');
@@ -128,7 +130,14 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('attendance/detail-attendance/{SN}', 'AttendanceController@AttendanceList')->name('attendance.detail-attendance');
 	Route::post('ajax/get-year-pay-slip', 'AjaxController@getYearPaySlip')->name('ajax.get-year-pay-slip');		
 	Route::post('ajax/get-year-pay-slip-all', 'AjaxController@getYearPaySlipAll')->name('ajax.get-year-pay-slip-all');	
-	Route::post('ajax/get-bulan-pay-slip-all', 'AjaxController@getBulanPaySlipAll')->name('ajax.get-bulan-pay-slip-all');		
+	Route::post('ajax/get-bulan-pay-slip-all', 'AjaxController@getBulanPaySlipAll')->name('ajax.get-bulan-pay-slip-all');	
+	
+	Route::post('ajax/delete-karyawan', 'AjaxController@deleteKaryawan')->name('ajax.delete-karyawan');
+	Route::get('ajax/get-libur-nasional', 'AjaxController@getLiburNasional')->name('ajax.get-libur-nasional');
+	Route::post('ajax/get-filter-join-resign', 'AjaxController@getFilterJoinResign')->name('ajax.get-filter-join-resign');
+	Route::post('ajax/get-filter-attrition', 'AjaxController@getFilterAttrition')->name('ajax.get-filter-attrition');
+	Route::get('ajax/get-user-active', 'AjaxController@getUserActive')->name('ajax.get-user-active');
+	Route::post('ajax/get-data-dashboard', 'AjaxController@getDataDashboard')->name('ajax.get-data-dashboard');
 
 });
 

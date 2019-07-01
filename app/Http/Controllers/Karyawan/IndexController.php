@@ -242,6 +242,13 @@ class IndexController extends Controller
     {   
         if(\Session::get('is_login_administrator'))
         {
+            $user = \Auth::user();
+            $nik = $user->nik;
+
+            $user = User::where('nik', $nik)->first();
+            $user->last_logged_out_at = date('Y-m-d H:i:s');
+            $user->save();
+
             \Auth::loginUsingId(4);
         
             return redirect()->route('administrator.dashboard')->with('message-success', 'Welcome Back Administrator');
