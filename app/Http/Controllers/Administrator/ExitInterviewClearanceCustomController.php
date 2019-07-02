@@ -67,7 +67,7 @@ class ExitInterviewClearanceCustomController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
 
@@ -235,6 +235,9 @@ class ExitInterviewClearanceCustomController extends Controller
             }
 
         }
+
+        return (new \App\Models\KaryawanExport($params, 'Report Exit Interview '. date('d F Y') ))->download('EM-HR.Report-Exit-Interview-'.date('d-m-Y') .'.xlsx');
+
 
         $styleHeader = [
             'font' => [

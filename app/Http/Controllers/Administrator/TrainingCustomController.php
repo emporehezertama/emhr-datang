@@ -63,7 +63,7 @@ class TrainingCustomController extends Controller
             }
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
         $params['data'] = $data->paginate(50);
@@ -342,10 +342,10 @@ class TrainingCustomController extends Controller
 
                 $params[$no]['APPROVAL CLAIM DATE '. ($key+1)]           = $value->date_approved_claim != NULL ? date('d F Y', strtotime($value->date_approved_claim)) : ''; 
             }
-
-
-
         }
+
+        return (new \App\Models\KaryawanExport($params, 'Report Training '. date('d F Y') ))->download('EM-HR.Report-Training-'.date('d-m-Y') .'.xlsx');
+
 
         $styleHeader = [
             'font' => [
