@@ -727,13 +727,14 @@ class PayrollController extends Controller
             }
         }
 
-        return \Excel::create('Payroll-Template-'. date('Y-m-d'),  function($excel) use($params){
-              $excel->sheet('Payroll',  function($sheet) use($params){
-                $sheet->fromArray($params);
-              });
-        })->download('xls');
+        return (new \App\Models\PayrollExport($params))->download('EM-HR.Payroll-Template-'. date('Y-m-d') .'.xlsx');
 
-        exit;
+        // return \Excel::create('Payroll-Template-'. date('Y-m-d'),  function($excel) use($params){
+        //       $excel->sheet('Payroll',  function($sheet) use($params){
+        //         $sheet->fromArray($params);
+        //       });
+        // })->download('xls');
+        // exit;
     }
 
     /**
