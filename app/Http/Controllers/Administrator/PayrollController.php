@@ -555,6 +555,8 @@ class PayrollController extends Controller
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
+        $history->bpjs_ketenagakerjaan_employee= replace_idr($request->bpjs_ketenagakerjaan_employee);
+        $history->bpjs_pensiun_employee        = replace_idr($request->bpjs_pensiun_employee);
         $history->bonus                        = replace_idr($request->bonus);
         $history->total_deduction              = $request->total_deductions;
         $history->total_earnings               = $request->total_earnings;
