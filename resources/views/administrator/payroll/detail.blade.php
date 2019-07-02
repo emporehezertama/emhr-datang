@@ -10,7 +10,12 @@
                 <h4 class="page-title">Employee Payroll </h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                @php($is_lock = ($data->is_lock == 1 ? true : false));
+                @if(isset($create_by_payroll_id))
+                    @php($is_lock = false);
+                @else
+                    @php($is_lock = ($data->is_lock == 1 ? true : false));
+                @endif
+
                 @if(!$is_lock)
                     @if(isset($create_by_payroll_id))
                         <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Create Payroll </button>

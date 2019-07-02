@@ -93,6 +93,18 @@ class PayrollController extends Controller
             $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',$position_id)->where('structure_organization_custom.organisasi_division_id',$division_id);
         }
 
+        // if(!empty($year) || !empty($month))
+        // {
+        //     if(!empty($year) and empty($year))
+        //     {
+        //         $result = $result->whereYear('payroll.created_at', $year);
+        //     }
+        //     elseif(!empty($month) and !empty($year))
+        //     {
+        //         $result = $result->whereMonth('payroll.created_at', $month)->whereYear('payroll.created_at', $year);
+        //     }
+        // }
+
         if(!empty($name))
         {
             $result = $result->where(function($table) use($name){
@@ -136,7 +148,7 @@ class PayrollController extends Controller
             }
         }
 
-        if(!empty($year) and !empty($month))
+        if(!empty($year) || !empty($month))
         {
             $temp = clone $result;
             if($temp->count() == 0)
@@ -546,7 +558,7 @@ class PayrollController extends Controller
         $history->bonus                        = replace_idr($request->bonus);
         $history->total_deduction              = $request->total_deductions;
         $history->total_earnings               = $request->total_earnings;
-        #$history->is_lock                      = $request->is_lock;
+        $history->is_lock                      = $request->is_lock;
 
         // if create baru
         if(isset($request->create_by_payroll_id))

@@ -107,7 +107,7 @@ class KaryawanController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
 
@@ -608,68 +608,7 @@ class KaryawanController extends Controller
                     $user->bank_1           = $item[34];
                     $user->bank_account_name_1= $item[35];
                     $user->bank_account_number= $item[36];
-
-                    /*
-                    if(!empty($item[37]))
-                    {
-                        $direktur = EmporeOrganisasiDirektur::where('name', 'LIKE', '%'. $item[37] .'%')->first();
-                        if(!$direktur)
-                        {
-                            $direktur = new \EmporeOrganisasiDirektur();
-                            $direktur->name =  $item[37];
-                            $direktur->save();
-                        }
-
-                        $user->empore_organisasi_direktur = $direktur->id;
-
-                        if(!empty($item[38]))
-                        {
-                            $manager = EmporeOrganisasiManager::where('name', 'LIKE', '%'. $item[38] .'%')->where('empore_organisasi_direktur_id', $direktur->id)->first();
-                            if(!$manager)
-                            {
-                                $manager = new EmporeOrganisasiManager();
-                                $manager->empore_organisasi_direktur_id = $direktur->id;
-                                $manager->name =  $item[38];
-                                $manager->save();
-                            }
-
-                            $user->empore_organisasi_manager_id = $manager->id;
-                        }
-
-                        if(!empty($item[39]))
-                        {
-                            $staff = EmporeOrganisasiStaff::where('name', 'LIKE', $item[39])->first();
-                            if(!$staff)
-                            {
-                                $staff = new EmporeOrganisasiStaff();
-                                $staff->name =  $item[39];
-                                $staff->save();
-                            }
-
-                            $user->empore_organisasi_staff_id = $staff->id;
-                        }
-                    }
-
-                    $cabang = Cabang::where('name', 'LIKE', '%'. strtoupper($item[40]) .'%')->first();
-                    if($cabang)
-                    {
-                        $user->organisasi_branch    = $cabang->id;
-                    }
-                    else
-                    {
-                        $cabang = new \App\Cabang();
-                        $cabang->name = $item[40];
-                        $cabang->save();
-
-                        $user->organisasi_branch    = $cabang->id;
-                    }
-                    */
-                    //$user->organisasi_ho_or_branch= $item[41];
                     $user->organisasi_status    = $item[37];
-                    //$user->cuti_length_of_service = $item[38];
-                    //$user->cuti_cuti_2018       = $item[39];
-                    //$user->cuti_terpakai        = $item[40];
-                    //$user->cuti_sisa_cuti       = $item[41];
                     $user->save();
 
                      // SD
@@ -1564,16 +1503,6 @@ class KaryawanController extends Controller
 
             $pos ="";
 
-            /*if(!empty($item->empore_organisasi_staff_id)){
-                $pos= "Staff";
-            }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_supervisor_id)) {
-                $pos= "Supervisor";
-            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and !empty($item->empore_organisasi_manager_id)) {
-                 $pos= "Manager";
-            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and empty($item->empore_organisasi_manager_id) and !empty($item->empore_organisasi_direktur)) {
-                 $pos= "Direkitur";
-            }
-            */
             if(!empty($item->empore_organisasi_staff_id)){
                 $pos= "Staff";
             }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_manager_id)) {
@@ -1585,17 +1514,7 @@ class KaryawanController extends Controller
             $params[$k]['Position']             = $pos;
 
             $jobrule ="";
-            /*
-            if(!empty($item->empore_organisasi_staff_id)){
-                $jobrule = isset($item->empore_staff->name) ? $item->empore_staff->name : '';
-
-            }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_supervisor_id)) {
-                $jobrule = isset($item->empore_supervisor->name) ? $item->empore_supervisor->name : ''; 
-            }elseif (empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_supervisor_id) and !empty($tem->empore_organisasi_manager_id)) {
-                $jobrule = isset($item->empore_manager->name) ? $item->empore_manager->name : '';
-            }
-            */
-
+            
             if(!empty($item->empore_organisasi_staff_id)){
                 $jobrule = isset($item->empore_staff->name) ? $item->empore_staff->name : '';
             }elseif (empty($item->empore_organisasi_staff_id) and !empty($item->empore_organisasi_manager_id)) {
@@ -1930,82 +1849,59 @@ class KaryawanController extends Controller
             }
         }
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        return (new \App\Models\KaryawanExport($params, 'Report Employee '. date('d F Y') ))->download('EM-HR.Report-Employee-'.date('d-m-Y') .'.xlsx');
 
-        return \Excel::create('Report-Employee-'.date('d-m-Y'),  function($excel) use($params, $styleHeader){
-              $excel->sheet('Karyawan',  function($sheet) use($params){
-                
-                // $sheet->cell('B1', function($cell) {
-                //         $cell->setValue(get_setting('title'));
-                //         $cell->setFontSize(16);
-                //         $cell->setAlignment('center');
-                //     })->mergeCells('B1:Q1');
-
-                // $sheet->cell('B2', function($cell) {
-                //         $cell->setValue(get_setting('description'))
-                //         ->setAlignment('center');
-                //     })->mergeCells('B2:Q2');
-
-                // $sheet->setSize(array(
-                //     'A1' => array(
-                //         'height'    => 20
-                //     ),
-                //     'A2' => array(
-                //         'height'    => 30
-                //     ),
-                //     'A5' => [
-                //         'width' => 5,
-                //         'height' => 25
-                //     ]
-                // ));
-                
-                $sheet->cell('A1:EJ1', function($cell) {
-                        $cell->setFontSize(12);
-                        $cell->setBackground('#EEEEEE');
-                        $cell->setFontWeight('bold');
-                        $cell->setBorder('solid');
-                    });
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
+        // return \Excel::create('Report-Employee-'.date('d-m-Y'),  function($excel) use($params, $styleHeader){
+        //       $excel->sheet('Karyawan',  function($sheet) use($params){
+ 
+        //         $sheet->cell('A1:EJ1', function($cell) {
+        //                 $cell->setFontSize(12);
+        //                 $cell->setBackground('#EEEEEE');
+        //                 $cell->setFontWeight('bold');
+        //                 $cell->setBorder('solid');
+        //             });
 
 
-                $borderArray = array(
-                    'borders' => array(
-                        'outline' => array(
-                            'style' => \PHPExcel_Style_Border::BORDER_THICK,
-                            'color' => array('argb' => 'FFFF0000'),
-                        ),
-                    ),
-                );
+        //         $borderArray = array(
+        //             'borders' => array(
+        //                 'outline' => array(
+        //                     'style' => \PHPExcel_Style_Border::BORDER_THICK,
+        //                     'color' => array('argb' => 'FFFF0000'),
+        //                 ),
+        //             ),
+        //         );
 
-                $sheet->fromArray($params, null, 'A1', true);
+        //         $sheet->fromArray($params, null, 'A1', true);
 
-              });
+        //       });
 
-            $excel->getActiveSheet()->getStyle('A5:EI1')->applyFromArray($styleHeader);
+        //     $excel->getActiveSheet()->getStyle('A5:EI1')->applyFromArray($styleHeader);
 
-        })->download('xls');
+        // })->download('xls');
     }
 }
