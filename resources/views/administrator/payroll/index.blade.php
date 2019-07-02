@@ -124,9 +124,9 @@
                             @if(isset($data))	
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
-                                        @if(isset(request()->month) and isset(request()->year))
-                                            @if(request()->month != (Int)date('m') || request()->year != date('Y'))
-                                                @php($history = get_payroll_history($item->user_id, request()->month, request()->year))
+                                        @if(\Session::get('month') and \Session::get('year'))
+                                            @if( \Session::get('month') != (Int)date('m') || \Session::get('year') != date('Y'))
+                                                @php($history = get_payroll_history($item->user_id, \Session::get('month'), \Session::get('year') ))
                                                 @if($history)
                                                     @php($item = $history)
                                                     @php($item->is_calculate = 1)
@@ -149,8 +149,8 @@
 			                                    @endif
 			                                </td>
 			                                <td>
-                                                @if(isset(request()->month) and isset(request()->year))
-                                                    @if(request()->month == date('m') and request()->year == date('Y'))
+                                                @if(\Session::get('month') and \Session::get('year'))
+                                                    @if(\Session::get('month') == date('m') and \Session::get('year') == date('Y'))
     			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                     @elseif(isset($history))
                                                      <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
@@ -159,9 +159,9 @@
                                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                 @endif
                                                 
-                                                @if(isset(request()->month) and isset(request()->year))
-                                                    @if(cek_payroll_user_id($item->user_id, request()->month, request()->year ) == FALSE)
-                                                        <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ request()->year }}-{{ request()->month }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
+                                                @if(\Session::get('month') and \Session::get('year'))
+                                                    @if(cek_payroll_user_id($item->user_id, \Session::get('month'), \Session::get('year') ) == FALSE)
+                                                        <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ \Session::get('year') }}-{{ \Session::get('month') }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
                                                         @php($new = true)
                                                     @endif
                                                 @endif
