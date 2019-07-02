@@ -65,7 +65,7 @@ class MedicalCustomController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
 
@@ -250,6 +250,9 @@ class MedicalCustomController extends Controller
             } 
             
         }
+
+        return (new \App\Models\KaryawanExport($params, 'Report Medical Employee '. date('d F Y') ))->download('EM-HR.Report-Medical-'.date('d-m-Y') .'.xlsx');
+
 
         $styleHeader = [
             'font' => [
