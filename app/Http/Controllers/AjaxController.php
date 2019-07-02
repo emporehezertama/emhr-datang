@@ -618,7 +618,7 @@ class AjaxController extends Controller
             $params['less']                         = number_format($less);
 
             $non_bonus = $this->getCalculatePayrollNonBonus($request);
-            
+             
             $params['yearly_income_tax_non_bonus']  = $non_bonus['yearly_income_tax'];
             $params['monthly_income_tax']           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
             $params['monthly_income_tax']           = number_format($params['monthly_income_tax']);

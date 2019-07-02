@@ -190,6 +190,7 @@ class ExitInterviewCustomController extends Controller
     {
         if($request->asset != null)
         {
+            $user = \Auth::user();
             foreach($request->asset as $key => $item)
             {
                 $dataAset = ExitInterviewAssets::where('id', $request->asset[$key])->first();
