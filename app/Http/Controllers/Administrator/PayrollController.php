@@ -1481,6 +1481,9 @@ class PayrollController extends Controller
                     {
                         $is_calculate   = 0;
                     }
+                    
+                    if($payroll->salary != replace_idr($row[3])) $is_calculate = 0;
+                    
                     $payroll->salary        = replace_idr($row[3]);
                     $payroll->bonus        = replace_idr($row[4]);
                     $payroll->is_calculate  = $is_calculate;
