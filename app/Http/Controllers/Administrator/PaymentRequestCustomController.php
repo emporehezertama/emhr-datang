@@ -242,7 +242,7 @@ class PaymentRequestCustomController extends Controller
             
         }
 
-        return (new \App\Models\KaryawanExport($params, 'Report Payment Request Employee '. date('d F Y') ))->download('EM-HR.Report-Payment-Request-'.date('d-m-Y') .'.xlsx');
+        return (new \App\Models\KaryawanExport($params, 'Report Payment Request Employee ' ))->download('EM-HR.Report-Payment-Request-'.date('d-m-Y') .'.xlsx');
 
 
         // $styleHeader = [

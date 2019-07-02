@@ -270,7 +270,7 @@ class OvertimeCustomController extends Controller
 
         }
         
-        return (new \App\Models\KaryawanExport($params, 'Report Overtime Employee '. date('d F Y') ))->download('EM-HR.Report-Overtime-'.date('d-m-Y') .'.xlsx');
+        return (new \App\Models\KaryawanExport($params, 'Report Overtime Employee ' ))->download('EM-HR.Report-Overtime-'.date('d-m-Y') .'.xlsx');
 
 
         // $styleHeader = [
