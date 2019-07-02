@@ -1360,7 +1360,8 @@ class PayrollController extends Controller
                         
                         if($items)
                         {
-                            if($items->is_lock == 0) continue; // jika payroll belum di lock payslip jangan dikirim
+
+                            if(isset($items->is_lock) and $items->is_lock == 0) continue; // jika payroll belum di lock payslip jangan dikirim
                         }
                     }
                     else

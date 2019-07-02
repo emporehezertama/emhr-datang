@@ -191,7 +191,7 @@ class LeaveCustomController extends Controller
           
         }
 
-        return (new \App\Models\KaryawanExport($params, 'Report Leave / Permit Employee '. date('d F Y') ))->download('EM-HR.Report-Leave-Permit-'.date('d-m-Y') .'.xlsx');
+        return (new \App\Models\KaryawanExport($params, 'Report Leave Permit Employee ' ))->download('EM-HR.Report-Leave-Permit-'.date('d-m-Y') .'.xlsx');
 
         // $styleHeader = [
         //     'font' => [

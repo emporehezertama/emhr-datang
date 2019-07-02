@@ -344,41 +344,41 @@ class TrainingCustomController extends Controller
             }
         }
 
-        return (new \App\Models\KaryawanExport($params, 'Report Training '. date('d F Y') ))->download('EM-HR.Report-Training-'.date('d-m-Y') .'.xlsx');
+        return (new \App\Models\KaryawanExport($params, 'Report Training ' ))->download('EM-HR.Report-Training-'.date('d-m-Y') .'.xlsx');
 
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
 
-        return \Excel::create('Report-Training-dan-Perjalanan-Dinas-Karyawan',  function($excel) use($params, $styleHeader){
-              $excel->sheet('mysheet',  function($sheet) use($params){
-                $sheet->fromArray($params);
-              });
-            $excel->getActiveSheet()->getStyle('A1:IV1')->applyFromArray($styleHeader);
-        })->download('xls');
+        // return \Excel::create('Report-Training-dan-Perjalanan-Dinas-Karyawan',  function($excel) use($params, $styleHeader){
+        //       $excel->sheet('mysheet',  function($sheet) use($params){
+        //         $sheet->fromArray($params);
+        //       });
+        //     $excel->getActiveSheet()->getStyle('A1:IV1')->applyFromArray($styleHeader);
+        // })->download('xls');
     }
     
 }

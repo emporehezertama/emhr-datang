@@ -236,45 +236,44 @@ class ExitInterviewClearanceCustomController extends Controller
 
         }
 
-        return (new \App\Models\KaryawanExport($params, 'Report Exit Interview '. date('d F Y') ))->download('EM-HR.Report-Exit-Interview-'.date('d-m-Y') .'.xlsx');
+        return (new \App\Models\KaryawanExport($params, 'Report Exit Interview '))->download('EM-HR.Report-Exit-Interview-'.date('d-m-Y') .'.xlsx');
 
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        // return \Excel::create('Report-Exit-and-Clearance',  function($excel) use($params, $styleHeader){
 
-        return \Excel::create('Report-Exit-and-Clearance',  function($excel) use($params, $styleHeader){
+        //       $excel->sheet('mysheet',  function($sheet) use($params){
 
-              $excel->sheet('mysheet',  function($sheet) use($params){
-
-                $sheet->fromArray($params);
+        //         $sheet->fromArray($params);
                 
-              });
+        //       });
 
-            $excel->getActiveSheet()->getStyle('A1:IV1')->applyFromArray($styleHeader);
+        //     $excel->getActiveSheet()->getStyle('A1:IV1')->applyFromArray($styleHeader);
 
-        })->download('xls');
+        // })->download('xls');
     }
 }
