@@ -47,7 +47,7 @@
                                         <td>{{ $item->jenis_cuti }}</td>
                                         <td>{{ $item->kuota }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.setting-master-cuti.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> edit</button></a>
+                                            <a href="{{ route('administrator.setting-master-cuti.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
                                             <a href="{{ route('administrator.setting-master-cuti.delete', ['id' => $item->id]) }}" onclick="return confirm('Delete this data?')"> <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                             
                                         </td>

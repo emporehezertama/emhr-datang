@@ -190,6 +190,7 @@ class ExitInterviewCustomController extends Controller
     {
         if($request->asset != null)
         {
+            $user = \Auth::user();
             foreach($request->asset as $key => $item)
             {
                 $dataAset = ExitInterviewAssets::where('id', $request->asset[$key])->first();
@@ -199,9 +200,17 @@ class ExitInterviewCustomController extends Controller
             }
             $data = ExitInterview::where('id',$dataAset->exit_interview_id)->first();
 
-            $clearanceApproval = SettingApprovalClearance::all();
-            foreach ($clearanceApproval as $key => $value) {
-                # code...
+            
+            if($user->project_id != NULL)
+            {
+                $clearanceApproval = SettingApprovalClearance::join('users', 'users.id','=', 'setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_clearance.*')->get();
+            }else{
+                $clearanceApproval = SettingApprovalClearance::all();
+            }
+
+            foreach ($clearanceApproval as $key => $value) 
+            {
+
                 if($value->user->email == "") continue;
                 $params['data']     = $data;
                 $params['text']     = '<p><strong>Dear Sir/Madam '. $value->user->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Exit Clearance and currently waiting your approval.</p>';

@@ -39,12 +39,14 @@
                                         <td>{{ isset($item->kabupaten->nama) ? $item->kabupaten->nama : '' }}</td>
                                         <td>{{ $item->nama }}</td>
                                         <td>
-                                            <form action="{{ route('administrator.kecamatan.destroy', $item->id_kec) }}" method="post" style="float: left;">
+                                            <a href="javascript:void(0)" class="btn btn-info btn-xs" style="float: left; margin-right:5px" data-url="{{ route('administrator.kecamatan.update', $item->id_kec) }}" data-id_prov="{{ $item->id_prov }}" data-nama="{{ $item->nama }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> edit </a>
+
+                                            <form action="{{ route('administrator.kecamatan.destroy', $item->id_kec) }}" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}                                               
-                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="confirm_delete('Delete this data ?', this)" class="text-danger"><i class="ti-trash"></i> </a>
+                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="confirm_delete('Delete this data ?', this)" class="text-danger"><i class="ti-trash"></i> delete </a>
                                             </form> 
-                                            <a href="javascript:void(0)" class="btn btn-info btn-xs" style="margin-left: 5px;" data-url="{{ route('administrator.kecamatan.update', $item->id_kec) }}" data-id_prov="{{ $item->id_prov }}" data-nama="{{ $item->nama }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> </a>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -65,7 +67,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Provinsi</h4> </div>
+                <h4 class="modal-title" id="myModalLabel">Sub District</h4> </div>
                 <form method="POST" class="form-horizontal" action="{{ route('administrator.kabupaten.store') }}">
                     {{ csrf_field() }}
                     <div class="modal-body">
@@ -110,7 +112,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="myModalLabel">Provinsi</h4> </div>
+                <h4 class="modal-title" id="myModalLabel">Sub District</h4> </div>
                 <form method="POST" class="form-horizontal" id="form-modal-edit" action="">
                     {{ csrf_field() }}
                     <input type="hidden" name="_method" value="PUT">
@@ -123,6 +125,14 @@
                                     @foreach(get_provinsi() as $item)
                                     <option value="{{ $item->id_prov }}">{{ $item->nama }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3">@lang('setting.kabupaten')</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="provinsi_id">
+                                    <option value="">@lang('setting.select-kabupaten')</option>
                                 </select>
                             </div>
                         </div>
@@ -150,7 +160,7 @@
     
     function edit_modal(el)
     {
-        $("#modal_edit_kecamanta").modal("show");
+        $("#modal_edit_kecamatan").modal("show");
         $("#form-modal-edit").attr('action', $(el).data('url'));
         $("#form-modal-edit input[name='nama']").val($(el).data('nama'));
         $("#form-modal-edit select[name='provinsi_id']").val($(el).data('id_prov'));

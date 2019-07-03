@@ -100,7 +100,7 @@
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>
-                                            <a href="{{ route('administrator.paymentRequestCustom.proses', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>
+                                            <a href="{{ route('administrator.paymentRequestCustom.proses', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -25,11 +25,19 @@ class PayrollSettingController extends Controller
      */
     public function index()
     {
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {   
+            $params['earnings'] = PayrollEarnings::join('users','users.id','=','payroll_earnings.user_created')->where('users.project_id', $user->project_id)->select('payroll_earnings.*')->get();
+            $params['deductions']= PayrollDeductions::join('users','users.id','=','payroll_deductions.user_created')->where('users.project_id', $user->project_id)->select('payroll_deductions.*')->get();
+        }else{
+            $params['earnings'] = PayrollEarnings::all();
+            $params['deductions']= PayrollDeductions::all();
+        }
+
         $params['ptkp']     = PayrollPtkp::all();
         $params['pph']      = PayrollPPH::all();
         $params['others']   = PayrollOthers::all();
-        $params['earnings'] = PayrollEarnings::all();
-        $params['deductions']= PayrollDeductions::all();
 
         return view('administrator.payroll-setting.index')->with($params);
     }
@@ -219,6 +227,12 @@ class PayrollSettingController extends Controller
     {
         $data           = new PayrollEarnings();
         $data->title    = $request->title;
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));
@@ -232,6 +246,11 @@ class PayrollSettingController extends Controller
     {
         $data           = new PayrollDeductions();
         $data->title    = $request->title;
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));

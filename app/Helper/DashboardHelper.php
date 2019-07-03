@@ -64,7 +64,14 @@ function employee($status='all')
 {
 	$today = date('Y-m-d');
 
-	$employee = \App\User::where('access_id', 2);
+	$user = \Auth::user(); 
+    if($user->project_id != NULL)
+    {
+        $employee = \App\User::where('access_id', 2)->where('users.project_id', $user->project_id);
+    }else{
+        $employee = \App\User::where('access_id', 2);
+    }
+
 	if($status== 'all')
 	{
 		$employee = $employee->count();
@@ -78,7 +85,12 @@ function employee($status='all')
 
 	if($status== 'on-leave')
 	{
-		$employee = \App\Models\CutiKaryawan::where('status', 2)->whereDate('tanggal_cuti_start','<=', $today)->whereDate('tanggal_cuti_end','>=', $today)->count();
+		if($user->project_id != NULL)
+	    {
+	        $employee = \App\Models\CutiKaryawan::where('cuti_karyawan.status', 2)->whereDate('cuti_karyawan.tanggal_cuti_start','<=', $today)->whereDate('cuti_karyawan.tanggal_cuti_end','>=', $today)->join('users','users.id','=','cuti_karyawan.user_id')->where('users.project_id', $user->project_id)->select('cuti_karyawan.*')->count();
+	    }else{
+	        $employee = \App\Models\CutiKaryawan::where('status', 2)->whereDate('tanggal_cuti_start','<=', $today)->whereDate('tanggal_cuti_end','>=', $today)->count();
+	    }
 	}
 
 	if($status== 'on-tour')

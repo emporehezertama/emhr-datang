@@ -26,8 +26,14 @@ class NewsController extends Controller
     public function index()
     {
         //$params['data'] = \App\News::where('status', 1)->orderBy('id', 'DESC')->get();
-        $params['data'] = News::orderBy('id', 'DESC')->paginate(50);
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = News::orderBy('id', 'DESC')->join('users','users.id','=','news.user_created')->where('users.project_id', $user->project_id)->select('news.*')->paginate(50);
+        } else
+        {
+            $params['data'] = News::orderBy('id', 'DESC')->paginate(50);
+        }
         return view('administrator.news.index')->with($params);
     }
 
@@ -91,7 +97,7 @@ class NewsController extends Controller
 
         $data->save();
 
-        return redirect()->route('administrator.news.index')->with('message-success', 'Data berhasil disimpan');
+        return redirect()->route('administrator.news.index')->with('message-success', 'Data successfully saved');
     }   
 
     /**
@@ -104,7 +110,7 @@ class NewsController extends Controller
         $data = News::where('id', $id)->first();
         $data->delete();
 
-        return redirect()->route('administrator.news.index')->with('message-sucess', 'Data berhasi di hapus');
+        return redirect()->route('administrator.news.index')->with('message-sucess', 'Data successfully deleted');
     } 
 
     /**
@@ -142,9 +148,14 @@ class NewsController extends Controller
 
             $data->image = $fileName;
         }
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        }
+        
         $data->save();
 
-        return redirect()->route('administrator.news.index')->with('message-success', 'Data berhasil disimpan !');
+        return redirect()->route('administrator.news.index')->with('message-success', 'Data successfully saved !');
     }
 }

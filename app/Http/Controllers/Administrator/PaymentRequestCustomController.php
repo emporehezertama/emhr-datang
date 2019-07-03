@@ -26,13 +26,20 @@ class PaymentRequestCustomController extends Controller
      */
     public function index()
     {
-        
-        $data = PaymentRequest::select('payment_request.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'payment_request.user_id');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = PaymentRequest::select('payment_request.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'payment_request.user_id')->where('users.project_id', $user->project_id);
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        } else
+        {
+            $data = PaymentRequest::select('payment_request.*')->orderBy('id', 'DESC')->join('users', 'users.id', '=', 'payment_request.user_id');
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
+        }
         $params['structure'] = getStructureName();
-        $params['division'] = OrganisasiDivision::all();
-        $params['position'] = OrganisasiPosition::all();
-
-
+        
         if(request())
         {
             if(!empty(request()->employee_status))
@@ -55,7 +62,7 @@ class PaymentRequestCustomController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
 
@@ -235,38 +242,41 @@ class PaymentRequestCustomController extends Controller
             
         }
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        return (new \App\Models\KaryawanExport($params, 'Report Payment Request Employee ' ))->download('EM-HR.Report-Payment-Request-'.date('d-m-Y') .'.xlsx');
 
-        return \Excel::create('Report-Payment-Request-Karyawan',  function($excel) use($params, $styleHeader){
-              $excel->sheet('mysheet',  function($sheet) use($params){
-                $sheet->fromArray($params);
-              });
-            $excel->getActiveSheet()->getStyle('A1:CA1')->applyFromArray($styleHeader);
-        })->download('xls');
+
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
+
+        // return \Excel::create('Report-Payment-Request-Karyawan',  function($excel) use($params, $styleHeader){
+        //       $excel->sheet('mysheet',  function($sheet) use($params){
+        //         $sheet->fromArray($params);
+        //       });
+        //     $excel->getActiveSheet()->getStyle('A1:CA1')->applyFromArray($styleHeader);
+        // })->download('xls');
     }
 
 }

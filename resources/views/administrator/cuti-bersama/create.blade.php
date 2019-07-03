@@ -93,17 +93,14 @@
             if($("input[name='dari_tanggal']").val() == "" || $("input[name='sampai_tanggal']").val() == "" || $("input[name='total_cuti']").val() == "" )
             {
 
-                bootbox.alert('Lengkapi semua data form !');
+                bootbox.alert('Complete all form!');
                 return false;
             }
-
-            bootbox.confirm('<label style="color: red;">Cuti bersama ini akan memotong cuti tahunan semua karyawan </label><br ><br > Apakah anda ingin Proses Cuti Bersama ini?', function(result){
-
+            bootbox.confirm('<label style="color: red;">Collective leave will deduct the annual leave of all employees </label><br ><br > Do you want process this collective leave?', function(result){
                 if(result)
                 {
                     $("#form-cuti-bersama").submit();
                 }
-
             });
 
         });

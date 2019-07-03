@@ -25,8 +25,14 @@ class CabangController extends Controller
      */
     public function index()
     {
-        $params['data'] = Cabang::all();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = Cabang::join('users','users.id','=','cabang.user_created')->where('users.project_id', $user->project_id)->select('cabang.*')->get();
+        }else{
+            $params['data'] = Cabang::all();
+        }
+        
         return view('administrator.cabang.index')->with($params);
     }
 
@@ -114,6 +120,12 @@ class CabangController extends Controller
                     $data->alamat   = $item[3];
                     $data->telepon  = $item[4];
                     $data->fax      = $item[5];
+                    
+                    $user = \Auth::user();
+                    if($user->project_id != NULL)
+                    {
+                        $data->user_created = $user->id;
+                    }
                     $data->save();
                 }
             }
@@ -133,7 +145,13 @@ class CabangController extends Controller
         $data->name             = $request->name;
         $data->alamat           = $request->alamat; 
         $data->telepon          = $request->telepon; 
-        $data->fax              = $request->fax; 
+        $data->fax              = $request->fax;
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         return redirect()->route('administrator.cabang.index')->with('message-success', 'Data berhasil disimpan !');

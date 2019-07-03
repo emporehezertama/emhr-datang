@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Employee Leave')
+@section('title', 'Approval Employee Leave')
 
 @section('sidebar')
 
@@ -64,7 +64,7 @@
                                     <td>{{$item->cutiKaryawan->karyawan->name}}</td>
                                     <td>{{ date('d F Y', strtotime($item->tanggal_cuti_start)) }} - {{ date('d F Y', strtotime($item->tanggal_cuti_end)) }}</td>
                                     <td>{{ isset($item->cutiKaryawan->cuti) ? $item->cutiKaryawan->cuti->description : '' }}</td>
-                                    <td>{{ $item->total_cuti }} Days</td>
+                                    <td>{{ $item->total_cuti }} Day/s</td>
                                     <td>{{ $item->keperluan }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td><a onclick="detail_approval_leaveCustom({{ $item->id }})">
@@ -72,15 +72,13 @@
                                             </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> 
-                                        
                                         @if($item->is_approved === NULL and $item->status < 2)
-                                            Process
+                                            <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> process </button></a>
                                         @else
-                                            Detail
+                                            <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail </button></a>
                                         @endif
 
-                                        </button></a>                                        
+                                                                                
                                     </td>
                                 </tr>
                             @endforeach

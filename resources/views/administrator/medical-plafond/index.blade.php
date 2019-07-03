@@ -59,8 +59,8 @@
                                             <td>{{ $no+1 }}</td>
                                             <td>{{ $item->name}}</td>
                                             <td>
-                                                    <a href="{{ route('administrator.medical-plafond.edit', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
-                                                    <form action="{{ route('administrator.medical-plafond.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="float: left;">
+                                                    <a href="{{ route('administrator.medical-plafond.edit', ['id' => $item->id]) }}" style="float: left; margin-right:5px"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
+                                                    <form action="{{ route('administrator.medical-plafond.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="margin-left: 5px;">
                                                         {{ csrf_field() }}
                                                         {{ method_field('DELETE') }}                                               
                                                         <button type="submit" class="btn btn-danger btn-xs m-r-5"><i class="ti-trash"></i> delete</button>
@@ -84,7 +84,7 @@
                                             <th>NO</th>
                                             <th>POSITION</th>
                                             <th>TYPE</th>
-                                            <th>NOMINAL</th>
+                                            <th>AMOUNT</th>
                                             <th>DESCRIPTION</th>
                                             <th>#</th>
                                         </tr>

@@ -6,7 +6,14 @@
  */
 function countStructureOrganization()
 {
-	return \App\Models\StructureOrganizationCustom::count();
+	$user = \Auth::user();
+	if($user->project_id != NULL)
+    {
+    	return \App\Models\StructureOrganizationCustom::join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->count();
+    }else{
+		return \App\Models\StructureOrganizationCustom::count();
+    }
+	
 }
 
 /**

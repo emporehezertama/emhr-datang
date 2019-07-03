@@ -61,26 +61,8 @@
                                         <label class="col-md-6 select-cabang" style="display: none;">Branch Location</label>
                                         <div class="clearfix"></div>
                                         <div class="col-md-6">
-                                            <select name="jenis_training" readonly class="form-control">
-                                                <option value="">Choose type of business trip</option>
-                                                @foreach(jenis_perjalanan_dinas() as $item)
-                                                <option {{ $item == $data->jenis_training ? 'selected' : '' }}>{{ $item }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" readonly="true" class="form-control" value="{{ isset($data->training_type)? $data->training_type->name:'' }}">
                                         </div>
-                                        <div class="col-md-6 select-cabang" style="{{  $data->jenis_training != 'Branch Visit' ? 'display: none;' : '' }}">
-                                            <select class="form-control" name="cabang_id" readonly>
-                                                <option value="">Choose Branch Location</option>
-                                                @foreach(get_cabang() as $item)
-                                                <option {{ $item->id == $data->cabang_id ? 'selected' : '' }}>{{ $item->name  }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-6 select-others" style="{{ $data->jenis_training == 'Others' ? 'display: block;' : 'display:none;' }}">
-                                            <input type="text" class="form-control" value="{{ $data->others }}" name="others" placeholder="Others Business Trip">
-                                        </div>
-
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-12">Activity Location</label>
@@ -120,7 +102,7 @@
                                     <h4><b>Cash Advance Request</b></h4>
                                     <div class="col-md-12" style="border: 1px solid #eee; padding: 15px">
                                         <div class="form-group">
-                                            <label class="col-md-12">Nominal Cash Advance (Rp)</label>
+                                            <label class="col-md-12">Cash Advance Collection (IDR)</label>
                                             <div class="col-md-6">
                                                 <input type="text" readonly="true" class="form-control" name="pengambilan_uang_muka" value="{{ !empty($data->pengambilan_uang_muka) ? number_format($data->pengambilan_uang_muka) : '' }}" />
                                             </div>

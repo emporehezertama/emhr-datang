@@ -25,8 +25,13 @@ class TrainingTypeController extends Controller
     public function index()
     {
         //
-        $params['data'] = TrainingType::all();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = TrainingType::join('users','users.id','=','training_type.user_created')->where('users.project_id', $user->project_id)->select('training_type.*')->get();
+        }else{
+            $params['data'] = TrainingType::all();
+        }
         return view('administrator.training-type.index')->with($params);
     }
 
@@ -52,7 +57,12 @@ class TrainingTypeController extends Controller
         //
         $data                  = new TrainingType();
         $data->name            = $request->name;
-        $data->description     = $request->description;             
+        $data->description     = $request->description;   
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        }           
         $data->save();
 
         return redirect()->route('administrator.training-type.index')->with('message-success', 'Data successfully saved!');

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cuti;
+use App\User;
+use App\Models\UserCuti;
 
 class SettingMasterCutiController extends Controller
 {
@@ -25,8 +27,13 @@ class SettingMasterCutiController extends Controller
      */
     public function index()
     {
-        $params['data'] = Cuti::orderBy('id', 'DESC')->get();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {   
+            $params['data'] = Cuti::orderBy('cuti.id', 'DESC')->join('users','users.id','=','cuti.user_created')->where('users.project_id', $user->project_id)->select('cuti.*')->get();
+        }else{
+            $params['data'] = Cuti::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.setting-master-cuti.index')->with($params);
     }
 
@@ -104,11 +111,22 @@ class SettingMasterCutiController extends Controller
         $data->jenis_cuti   = $request->jenis_cuti;
         $data->kuota        = $request->kuota;
         $data->description  = $request->description;
+
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
         $data->save();
 
         if($data->jenis_cuti == 'Leave')
         {
-            $dataUser = User::where('access_id',2)->whereNull('resign_date')->get();
+            if($user->project_id != NULL)
+            {
+                $dataUser = User::where('access_id',2)->whereNull('resign_date')->where('project_id',$user->project_id)->get();
+            }else{
+                $dataUser = User::where('access_id',2)->whereNull('resign_date')->get();
+            }
             foreach ($dataUser as $key => $value) {
                 # code...
                 $userCuti = UserCuti::where('user_id',$value->id)->where('cuti_id',$data->id)->first();

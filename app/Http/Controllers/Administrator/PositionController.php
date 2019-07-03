@@ -29,8 +29,13 @@ class PositionController extends Controller
      */
     public function index()
     {
-        $params['data'] = OrganisasiPosition::orderBy('id', 'DESC')->get();
-
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {   
+            $params['data'] = OrganisasiPosition::orderBy('organisasi_position.id', 'DESC')->join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        }else{
+            $params['data'] = OrganisasiPosition::orderBy('id', 'DESC')->get();
+        }
         return view('administrator.position.index')->with($params);
     }
 
@@ -90,6 +95,13 @@ class PositionController extends Controller
     {
         $data       = new OrganisasiPosition();
         $data->name                         = $request->name;
+        
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data->user_created = $user->id;
+        } 
+
         $data->save();
 
         return redirect()->route('administrator.position.index')->with('message-success', 'Data successfully saved!');

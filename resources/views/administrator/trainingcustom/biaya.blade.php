@@ -271,7 +271,7 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>Cash Advance</th>
+                                    <th>Cash Advance Collection (IDR)</th>
                                     <th>IDR {{ number_format($data->pengambilan_uang_muka) }}</th>
                                 </tr>
                             </table>

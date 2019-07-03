@@ -122,7 +122,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->title }}</td>
-                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-earnings', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a></td>
+                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-earnings', $item->id) }}')" <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -144,7 +144,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->title }}</td>
-                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-deductions', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a></td>
+                                            <td><a href="javascript:void(0)" onclick="_confirm('@lang('general.confirm-message-delete')', '{{ route('administrator.payroll-setting.delete-deductions', $item->id) }}')" <button class="btn btn-danger btn-xs m-r-5"><i class="fa fa-trash"></i> delete</button></a>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -155,9 +155,8 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="pph">
                             <h3 class="box-title m-b-0">Setting PPH 21</h3>
-                            <a href="{{ route('administrator.payroll-setting.add-pph') }}" class="btn btn-info btn-sm" style="position: absolute;z-index: 99999;"><i class="fa fa-plus"></i> ADD PPH 21 SETTING</a>
                             <div class="table-responsive">
-                                <table id="data_table_no_copy" class="display nowrap" cellspacing="0" width="100%">
+                                <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>LOWER LIMIT</th>
@@ -177,8 +176,8 @@
                                             <td>{{ number_format($item->pajak_minimal) }}</td>
                                             <td>{{ number_format($item->akumulasi_pajak) }}</td>
                                             <td>
-                                                <a href="{{ route('administrator.payroll-setting.delete-pph', $item->id) }}" onclick="return confirm('Delete this data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                                <a href="{{ route('administrator.payroll-setting.edit-pph', $item->id) }}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                                                <!-- <a href="{{ route('administrator.payroll-setting.delete-pph', $item->id) }}" onclick="return confirm('Delete this data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a> -->
+                                                <a href="{{ route('administrator.payroll-setting.edit-pph', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -189,7 +188,7 @@
                         <div role="tabpanel" class="tab-pane fade" id="ptkp">
                             <h3 class="box-title m-b-0">Setting PTKP</h3>
                             <div class="table-responsive">
-                                <table id="data_table_no_copy2" class="display nowrap" cellspacing="0" width="100%">
+                                <table class="display nowrap data_table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>SINGLE</th>
@@ -219,9 +218,9 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="others">
                             <h3 class="box-title m-b-0">Others Setting</h3>
-                            <a href="{{ route('administrator.payroll-setting.add-others') }}" class="btn btn-info btn-sm" style="position: absolute;z-index: 99999;"><i class="fa fa-plus"></i> ADD OTHERS SETTING</a>
+                            <!-- <a href="{{ route('administrator.payroll-setting.add-others') }}" class="btn btn-info btn-sm" style="position: absolute;z-index: 99999;"><i class="fa fa-plus"></i> ADD OTHERS SETTING</a> -->
                             <div class="table-responsive">
-                                <table id="data_table_no_copy3" class="display nowrap" cellspacing="0" width="100%">
+                                <table class="display nowrap data_table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th width="70" class="text-center">#</th>
@@ -237,8 +236,8 @@
                                             <td>{{ $item->label }}</td>
                                             <td>{{ number_format($item->value) }}</td>
                                             <td>
-                                                <a href="{{ route('administrator.payroll-setting.delete-others', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs "><i class="fa fa-trash"></i> </a>
-                                                <a href="{{ route('administrator.payroll-setting.edit-others', $item->id) }}" class="btn btn-default btn-xs "><i class="fa fa-edit"></i> </a>
+                                                <!-- <a href="{{ route('administrator.payroll-setting.delete-others', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs "><i class="fa fa-trash"></i> </a> -->
+                                                <a href="{{ route('administrator.payroll-setting.edit-others', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
                                         </tr>
                                        @endforeach

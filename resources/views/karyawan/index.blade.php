@@ -19,7 +19,7 @@
                 <form method="GET" action="" style="float: right; width: 40%;">
                     <div class="form-group">
                         <i class="fa fa-search-plus" style="float: left;font-size: 20px;margin-top: 9px;margin-right: 12px;"></i>
-                        <input type="text" name="keyword-karyawan" class="form-control autocomplete-karyawan" style="float:left;width: 80%;margin-right: 5px;" placeholder="Search Karyawan Here...">
+                        <input type="text" name="keyword-karyawan" class="form-control autocomplete-karyawan" style="float:left;width: 80%;margin-right: 5px;" placeholder="Search Employee Here">
                     </div>
                 </form>
             </div>
@@ -55,7 +55,7 @@
                             <div class="clearfix"></div>
                             <hr style="margin-top:10px; margin-bottom:10px;" />
                         @endforeach
-                        <a href="{{ route('karyawan.news.more') }}" class="btn btn-rounded btn-danger btn-block p-10" style="color: white;"><i class="fa fa-list"></i> More News</a>
+                        <a href="{{ route('karyawan.news.more') }}" class="btn btn-rounded btn-danger btn-block p-10" style="color: white;"><i class="fa fa-list"></i> More</a>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                             <hr style="margin-top: 5px; margin-bottom:5px;" />
                         @endforeach
                         <br />
-                        <a href="{{ route('karyawan.internal-memo.more') }}" class="btn btn-rounded btn-info btn-block p-10" style="color: white;"><i class="fa fa-info-circle"></i> More Internal Memo</a>
+                        <a href="{{ route('karyawan.internal-memo.more') }}" class="btn btn-rounded btn-info btn-block p-10" style="color: white;"><i class="fa fa-info-circle"></i> More</a>
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                             <hr style="margin-top: 5px; margin-bottom:5px;" />
                         @endforeach
                         <br />
-                        <a href="" class="btn btn-rounded btn-success btn-block p-10" style="color: white;"><i class="fa fa-gavel"></i> More Product Information</a>
+                        <a href="" class="btn btn-rounded btn-success btn-block p-10" style="color: white;"><i class="fa fa-gavel"></i> More </a>
                     </div>
                 </div>
             </div>

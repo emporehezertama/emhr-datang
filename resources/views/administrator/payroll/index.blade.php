@@ -8,8 +8,9 @@
         <div class="row bg-title" style="overflow: inherit; ">
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <h4 class="page-title pull-left m-r-10">Payroll</h4>
-                <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form">
+                <form method="POST" action="{{ route('administrator.payroll.index') }}" id="filter-form" autocomplete="off">
                     {{ csrf_field() }}
+                    <input type="hidden" name="reset" value="0">
                     <div class="pull-right" style="padding-left:0;">
                         <button type="button" id="filter_view" class="btn btn-default btn-sm btn-outline"> <i class="fa fa-search-plus"></i></button>
                         <div class="btn-group m-r-10">
@@ -17,12 +18,14 @@
                                 <i class="fa fa-gear"></i>
                             </button>
                             <ul role="menu" class="dropdown-menu">
+                                <li><a href="javascript:void(0)" onclick="reset_filter()"> <i class="fa fa-refresh"></i> Reset Filter</a></li>
                                 <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
                                 <li><a href="#" onclick="submit_bukti_potong()" title="Download Bukti Potong"><i class="fa fa-download"></i> Bukti Potong</a></li>
                                 <li><a href="javascript:void(0)" onclick="send_payslip()" title="Send Payslip"><i class="fa fa-send-o"></i> Send Payslip</a></li>
+                                <li><a href="javascript:void(0)" onclick="submit_lock()" title="Lock Payslip"><i class="fa fa-lock"></i> Lock Payslip</a></li>
                             </ul>
                         </div>
                     </div>
@@ -30,18 +33,28 @@
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="is_calculate">
                                 <option value="">- Status -</option>
-                                <option value="0" {{ (request() and request()->is_calculate == '0') ? 'selected' : '' }}>No Calculated</option>
-                                <option value="1" {{ (request() and request()->is_calculate == '1') ? 'selected' : '' }}>Calculated</option>
+                                <option value="0" {{ (\Session::get('is_calculate') == '0') ? 'selected' : '' }}>No Calculated</option>
+                                <option value="1" {{ (\Session::get('is_calculate') == '1') ? 'selected' : '' }}>Calculated</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-1 pull-right" style="padding-left:0;">
                         <div class="form-group m-b-0">
-                            <select class="form-control form-control-line" name="jabatan">
-                                <option value="">- Position - </option>
-                                <option {{ (request() and request()->jabatan == 'Staff') ? 'selected' : '' }}>Staff</option>
-                                <option {{ (request() and request()->jabatan == 'Manager') ? 'selected' : '' }}>Manager</option>
-                                <option {{ (request() and request()->jabatan == 'Direktur') ? 'selected' : '' }}>Director</option>
+                            <select class="form-control form-control-line" name="division_id">
+                                <option value=""> - Division - </option>
+                                @foreach($division as $item)
+                                <option value="{{ $item->id }}" {{ $item->id== \Session::get('division_id') ? 'selected' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 pull-right" style="padding-left:0;">
+                        <div class="form-group m-b-0">
+                            <select class="form-control form-control-line" name="position_id">
+                                <option value=""> - Position - </option>
+                                @foreach($position as $item)
+                                <option value="{{ $item->id }}" {{ $item->id== \Session::get('position_id') ? 'selected' : '' }}>{{ $item->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -49,8 +62,8 @@
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="employee_status">
                                 <option value="">- Employee Status - </option>
-                                <option {{ (request() and request()->employee_status == 'Permanent') ? 'selected' : '' }}>Permanent</option>
-                                <option {{ (request() and request()->employee_status == 'Contract') ? 'selected' : '' }}>Contract</option>
+                                <option {{ (\Session::get('employee_status') == 'Permanent') ? 'selected' : '' }}>Permanent</option>
+                                <option {{ (\Session::get('employee_status') == 'Contract') ? 'selected' : '' }}>Contract</option>
                             </select>
                         </div>
                     </div>
@@ -59,7 +72,7 @@
                             <select class="form-control form-control-line" name="month">
                                 <option value="">- Month - </option>
                                 @foreach(month_name() as $key => $item)
-                                <option value="{{ $key }}" {{ (request() and request()->month == $key) ? 'selected' : '' }}>{{ $item }}</option>
+                                <option value="{{ $key }}" {{ (\Session::get('month') == $key) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -68,19 +81,20 @@
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="year">
                                 <option value="">- Year - </option>
-                                @foreach(get_year_payroll() as $key => $item)
-                                <option {{ (request() and request()->year == $item) ? 'selected' : '' }}>{{ $item }}</option>
-                                @endforeach
+                                @for($year=2019; $year <= ((Int)date('Y') + 5); $year++))
+                                <option {{ (\Session::get('year') == $year) ? 'selected' : '' }}>{{ $year }}</option>
+                                @endfor
                             </select>
                         </div>
                     </div>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <input type="text" class="form-control  form-control-line" name="name" value="{{ isset(request()->name) ? request()->name : '' }}" placeholder="Nik / Name">
+                            <input type="text" class="form-control form-control-line" name="name" value="{{ \Session::get('name') }}" placeholder="Nik / Name">
                         </div>
                     </div>
                     <input type="hidden" name="action" value="view">
                     <div class="clearfix"></div>
+                    <div id="filter-form-user"></div>
                 </form>
             </div>
         </div>
@@ -110,6 +124,15 @@
                             @if(isset($data))	
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
+                                        @if(\Session::get('month') and \Session::get('year'))
+                                            @if( \Session::get('month') != (Int)date('m') || \Session::get('year') != date('Y'))
+                                                @php($history = get_payroll_history($item->user_id, \Session::get('month'), \Session::get('year') ))
+                                                @if($history)
+                                                    @php($item = $history)
+                                                    @php($item->is_calculate = 1)
+                                                @endif
+                                            @endif
+                                        @endif
 			                            <tr>
                                             <td><input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
 			                                <td>{{ $i }}</td>
@@ -118,19 +141,36 @@
                                             <td>{{ number_format($item->total_earnings) }}</td>
 			                                <td>{{ number_format($item->total_deduction) }}</td>
 			                                <td>{{ number_format($item->thp) }}</td>
-			                                <td>
+			                                <td class="">
 			                                    @if($item->is_calculate == 0)
 			                                        <label class="btn btn-warning btn-xs btn-circle" title="Not Calculate"><i class="fa fa-close"></i></label>
 			                                    @else
-			                                        <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
+			                                         <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
 			                                    @endif
 			                                </td>
 			                                <td>
-                                                @if(!isset(request()->month))
-			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail</a>
-			                                    @endif
+                                                @if(\Session::get('month') and \Session::get('year'))
+                                                    @if(\Session::get('month') == date('m') and \Session::get('year') == date('Y'))
+    			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
+                                                    @elseif(isset($history))
+                                                     <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
+                                                    @endif
+                                                @else
+                                                    <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
+                                                @endif
+                                                
+                                                @if(\Session::get('month') and \Session::get('year'))
+                                                    @if(cek_payroll_user_id($item->user_id, \Session::get('month'), \Session::get('year') ) == FALSE)
+                                                        <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ \Session::get('year') }}-{{ \Session::get('month') }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
+                                                        @php($new = true)
+                                                    @endif
+                                                @endif
+                                                
+                                                @if($item->is_lock==1 and !isset($new))
+                                                    <a href="" class="pull-right text-danger" title="Lock Payroll" style="font-size: 25px;"><i class="fa fa-lock"></i></a> 
+                                                @endif
                                             </td>
-			                            </tr>
+			                            </tr> 
 			                            @php ($i ++)
 			                        @endIf
 	                            @endforeach
@@ -212,10 +252,71 @@
 </div>
 
 @section('footer-script')
+<style type="text/css" media="screen">
+    .ui-datepicker-year {
+        width: 97% !important;
+        height: 28px !important;
+        border: 1px solid #e9e9e9;
+    }
+</style>
 <script type="text/javascript">
+    
+    function submit_lock()
+    {
+        $("#filter-form input[name='action']").val('lock');
+
+        $("#filter-form").submit();
+    }
+
+    function reset_filter()
+    {
+        $("#filter-form input.form-control, #filter-form select").val("");
+        $("input[name='reset']").val(1);
+        $("#filter-form").submit();
+    }
+
+    $('#dpYears').datepicker( {
+        //yearRange: "c-100:c",
+        changeMonth: false,
+        changeYear: true,
+        showButtonPanel: true,
+        closeText:'Select',
+        currentText: 'This year',
+        onClose: function(dateText, inst) {
+          var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).val($.datepicker.formatDate("yy", new Date(year, 0, 1)));
+        },
+        beforeShow: function(input, inst){
+          if ($(this).val()!='')
+          {
+            var year = $(this).val();
+            //$(this).datepicker('option','defaultDate', new Date(tmpyear, 0, 1));
+            $(this).datepicker( {
+                changeMonth: false,
+                changeYear: true,
+                showButtonPanel: true,
+                closeText:'Select',
+                currentText: 'This year',
+                setDate: new Date(year, 0, 1)
+            });
+          }
+        }
+      }).focus(function () {
+        $(".ui-datepicker-month").hide();
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+        $(".ui-datepicker-prev").hide();
+        $(".ui-datepicker-next").hide();
+        $("#ui-datepicker-div").position({
+          my: "left top",
+          at: "left bottom",
+          of: $(this)
+        });
+      }).attr("readonly", false);
+
     var payroll_selected = 0;
     var send_payslip = function(){
-       $("#modal_send_pay_slip").modal("show");
+        $("#modal_send_pay_slip").modal("show");
 
        $.ajax({
             type: 'POST',
@@ -243,7 +344,6 @@
 
         $('.section-user-id').html(html);
     }
-
 
     function submit_payslip()
     {
@@ -291,11 +391,11 @@
         }
     });
 
-    
     function submit_bukti_potong()
     {
         if(payroll_selected > 0)
         {
+            $("#form_table_payroll").attr('target', '_blank')
             $("#form_table_payroll").submit();
         }
         else
@@ -325,8 +425,21 @@
 
     });
 
+    $("input[type='checkbox']").click(function(){
+        var count   = $("input[name='payroll_id[]']").filter(':checked');
+        var html    = '';
+
+        $(count).each(function(k,v){
+            html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
+            html += '<input type="hidden" name="payroll_id[]" value="'+ $(v).val() +'" />';
+        });
+
+        $("#filter-form-user").html(html); 
+    });
+
     var submit_filter_download = function(){
         $("#filter-form input[name='action']").val('download');
+
         $("#filter-form").submit();
     }
 

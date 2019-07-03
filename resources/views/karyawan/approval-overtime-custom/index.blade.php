@@ -1,6 +1,6 @@
 @extends('layouts.karyawan')
 
-@section('title', 'Overtime Sheet')
+@section('title', 'Approval Overtime Sheet')
 
 @section('sidebar')
 
@@ -32,7 +32,7 @@
                     <h3 class="box-title m-b-0">Overtime</h3>
                     <br />
                     <div class="table-responsive">
-                        <table id="data_table" class="display nowrap" cellspacing="0" width="100%">
+                        <table id="data_table_no_search" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th width="70" class="text-center">#</th>
@@ -72,9 +72,9 @@
                                         </td>
                                         <td>
                                             @if($item->is_approved === NULL and $item->status < 2)
-                                                <a href="{{ route('karyawan.approval.overtime-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Process</a>
+                                                <a href="{{ route('karyawan.approval.overtime-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-arrow-right"></i> process</a>
                                             @else
-                                                <a href="{{ route('karyawan.approval.overtime-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Detail</a>
+                                                <a href="{{ route('karyawan.approval.overtime-custom.detail', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-search-plus"></i> detail</a>
                                             @endif
                                             
                                         </td>
@@ -83,10 +83,10 @@
                                                 @if($item->is_approved_claim === NULL and $item->status_claim == 1)
                                                 @if(cek_level_overtime_up($item->overtimeSheet->id))
 
-                                                    <a href="{{ route('karyawan.approval.overtime-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Process Claim</a>
+                                                    <a href="{{ route('karyawan.approval.overtime-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-arrow-right"></i> process claim</a>
                                                 @endif
                                                 @elseif($item->is_approved_claim != NULL and $item->status_claim >= 1)
-                                                    <a href="{{ route('karyawan.approval.overtime-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-book"></i> Detail Claim</a>
+                                                    <a href="{{ route('karyawan.approval.overtime-custom.claim', ['id' => $item->id]) }}" class="btn btn-info btn-xs"> <i class="fa fa-search-plus"></i> claimed detail</a>
                                                 @endif
                                             @endif
                                         </td>

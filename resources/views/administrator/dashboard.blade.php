@@ -105,6 +105,28 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="col-sm-6">
+                <div class="white-box" style="margin-bottom:10px;">
+                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joinees and resignees</div>
+                    <!--button id="filter-monthly-join-resign" class="btn btn-xs btn-danger pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i> </button-->
+                    <div class="clearfix"></div>
+                    <div id="chart-1" style="height: 220px"></div>
+                    <p class="text-center">
+                        <label><i class="fa fa-circle" style="color:#d70206;"></i></label> Monthly resignees
+                        <label><i class="fa fa-circle" style="color:#f05b4f;"></i></label> Monthly joinees
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="white-box" style="margin-bottom:10px;">
+                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-line m-r-5"></i> Attrition Rate</div>
+                    <!--button id="filter-attrition" class="btn btn-xs btn-info pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i></button-->
+                    <div class="clearfix"></div>
+                    <div id="chart-2" style="height: 220px"></div>
+                    <p class="text-center"><label class="text-info m-l-10"><i class="fa fa-circle"></i></label> Attrition Rate</p>
+                </div>
+            </div>
             <!--div class="row">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-6">
@@ -169,27 +191,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="white-box" style="margin-bottom:10px;">
-                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-areaspline m-r-5"></i> Monthly joinees and resignees</div>
-                    <!--button id="filter-monthly-join-resign" class="btn btn-xs btn-danger pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i> </button-->
-                    <div class="clearfix"></div>
-                    <div id="chart-1" style="height: 220px"></div>
-                    <p class="text-center">
-                        <label><i class="fa fa-circle" style="color:#d70206;"></i></label> Monthly resignees
-                        <label><i class="fa fa-circle" style="color:#f05b4f;"></i></label> Monthly joinees
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="white-box" style="margin-bottom:10px;">
-                    <div class="box-title pull-left" style="text-transform: inherit;"><i class="mdi mdi-chart-line m-r-5"></i> Attrition Rate</div>
-                    <!--button id="filter-attrition" class="btn btn-xs btn-info pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i></button-->
-                    <div class="clearfix"></div>
-                    <div id="chart-2" style="height: 220px"></div>
-                    <p class="text-center"><label class="text-info m-l-10"><i class="fa fa-circle"></i></label> Attrition Rate</p>
                 </div>
             </div>
         </div>

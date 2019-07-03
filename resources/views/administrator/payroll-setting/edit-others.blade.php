@@ -48,7 +48,7 @@
                         <div class="form-group">
                             <label class="col-md-12">Label</label>
                             <div class="col-md-6">
-                               <input type="text" name="label" class="form-control" value="{{ $data->label }}">
+                               <input type="text" name="label" class="form-control" value="{{ $data->label }}" readonly="true">
                             </div>
                         </div>
                         <div class="form-group">

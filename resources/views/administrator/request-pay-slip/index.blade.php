@@ -53,9 +53,9 @@
                                         </td>
                                         <td>
                                             @if($item->status == 1)
-                                                <a href="{{ route('administrator.request-pay-slip.proses', $item->id) }}" class="btn btn-info btn-xs">proses <i class="fa fa-arrow-right"></i> </a>
+                                                <a href="{{ route('administrator.request-pay-slip.proses', $item->id) }}" class="btn btn-info btn-xs"> <i class="fa fa-arrow-right"></i> proses </a>
                                             @else
-                                                <a href="{{ route('administrator.request-pay-slip.proses', $item->id) }}" class="btn btn-info btn-xs">detail <i class="fa fa-search-plus"></i> </a>
+                                                <a href="{{ route('administrator.request-pay-slip.proses', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail </a>
                                             @endif
                                         </td>
                                     </tr>

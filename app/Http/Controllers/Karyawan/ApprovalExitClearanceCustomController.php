@@ -32,10 +32,18 @@ class ApprovalExitClearanceCustomController extends Controller
     {
         //
         $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+
         //if(!$approval) return [];
         if($approval)
         {
-            $params['data'] = ExitInterview::where('status','<',3)->orderBy('id', 'DESC')->get();
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                $params['data'] = ExitInterview::where('exit_interview.status','<',3)->orderBy('exit_interview.id', 'DESC')->join('users','users.id','=','exit_interview.user_id')->where('users.project_id', $user->project_id)->select('exit_interview.*')->get();
+            }else {
+                $params['data'] = ExitInterview::where('status','<',3)->orderBy('id', 'DESC')->get();
+            }
+            
            /* $count = ExitInterviewAssets::where('exit_interview_id',$params['data']['id'])->where(function($table)
                     {
                         $table->where('approval_check','<',1)->orWhereNull('approval_check');  
@@ -122,6 +130,8 @@ class ApprovalExitClearanceCustomController extends Controller
           ->orWhereNull('approval_check');  
         })->get();
 
+        $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
+        $params['type'] = $approval;
         $params['data']      = ExitInterviewAssets::where('exit_interview_id', $id)->get();
         $params['check']      = count($count);
 

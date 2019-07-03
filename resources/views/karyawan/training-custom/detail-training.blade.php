@@ -99,7 +99,7 @@
                                     </div>
                                     @if($data->pengambilan_uang_muka != "")
                                     <hr />
-                                    <h4><b>Cash Advance</b></h4>
+                                    <h4><b>Cash Advance Request</b></h4>
                                     <div class="col-md-12" style="border: 1px solid #eee; padding: 15px">
                                         <div class="form-group">
                                             <label class="col-md-12">Cash Advance Collection (IDR)</label>

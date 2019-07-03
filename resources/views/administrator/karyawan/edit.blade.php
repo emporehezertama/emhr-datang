@@ -13,7 +13,7 @@
             </div>
         </div>
     <div class="row">
-        <form class="form-horizontal" id="form-karyawan" enctype="multipart/form-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
+        <form class="form-horizontal" id="form-karyawan" enctype="multipart/fmodaorm-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
             <input type="hidden" name="_method" value="PUT">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
@@ -40,7 +40,7 @@
 
                         <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventory</span></a></li>
 
-                        <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Cuti</span></a></li>
+                        <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Leave</span></a></li>
                         @if(isset($payroll->salary))
                         <li role="presentation" class=""><a href="#payroll" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Payroll</span></a></li>
                         @endif
@@ -516,7 +516,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Date of Birth</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control datepicker"> </div>
+                                        <input type="text" name="tanggal_lahir" value="{{ $data->tanggal_lahir }}" class="form-control datepicker2"> </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Marital Status</label>
@@ -569,7 +569,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Join Date</label>
                                     <div class="col-md-10">
-                                        <input type="text" name="join_date" class="form-control  datepicker" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
+                                        <input type="text" name="join_date" class="form-control  datepicker2" value="{{ ($data->join_date == '0000-00-00' ? '' : $data->join_date) }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -669,12 +669,16 @@
                                     </div>
                                 </div> -->
                                 <div class="form-group">
-                                    <label class="col-md-12">Foto Ktp</label>
+                                    <label class="col-md-12">ID Picture</label>
                                     <div class="col-md-12">
-                                        <input type="file" name="foto_ktp" class="form-control " />
-                                        @if(!empty($data->foto_ktp))
-                                        <img src="{{ asset('storage/fotoktp/'. $data->foto_ktp) }}" style="width: 200px;" />
-                                        @endif
+                                        <div class="col-md-6">
+                                            <input type="file" name="foto_ktp" class="form-control " />
+                                        </div>
+                                        <div class="col-md-6">
+                                            @if(!empty($data->foto_ktp))
+                                                <a onclick="show_image('{{ $data->foto_ktp }}')" class="btn btn-default btn-xs" style="height: 35px;width: 100px"><i class="fa fa-search-plus"></i>View</a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -817,13 +821,13 @@
                         <div class="form-group">
                             <label class="col-md-12">Date of birth</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control datepicker modal-tanggal_lahir">
+                                <input type="text" class="form-control datepicker2 modal-tanggal_lahir">
                             </div>
                         </div>
                          <div class="form-group">
                             <label class="col-md-12">Date of death</label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control datepicker modal-tanggal_meninggal">
+                                <input type="text" class="form-control datepicker2 modal-tanggal_meninggal">
                             </div>
                         </div>
                         <div class="form-group">
@@ -898,6 +902,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3">School Name / University</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control modal-fakultas" name="modal-fakultas" id="modal-fakultas"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3">Year of Start</label>
                             <div class="col-md-9">
                                 <input type="number" class="form-control modal-tahun_awal" />
@@ -907,12 +917,6 @@
                             <label class="col-md-3">Year of Graduate</label>
                             <div class="col-md-9">
                                 <input type="number" class="form-control modal-tahun_akhir" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3">School Name</label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control modal-fakultas" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -938,7 +942,7 @@
                         <div class="form-group">
                             <label class="col-md-3">City</label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control modal-kota" placeholder="City / District" name="kota">
+                                <input type="text" class="form-control modal-kota" placeholder="City / District"  name="modal-kota" id="modal-kota">
                             </div>
                         </div>
                         <input type="hidden" name="action_education" value="insert" />
@@ -1095,7 +1099,11 @@
 <!-- ============================================================== -->
 <!-- End Page Content -->
 <!-- ============================================================== -->
-
+<style type="text/css">
+    .ui-autocomplete{
+            z-index: 9999999 !important;
+        }
+</style>
 @section('footer-script')
     <style type="text/css">
         .no-padding-td td {
@@ -1116,10 +1124,59 @@
 
     </style>
     <!-- Date picker plugins css -->
-    <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker-employee/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Date Picker Plugin JavaScript -->
-    <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('admin-css/plugins/bower_components/bootstrap-datepicker-employee/bootstrap-datepicker.min.js') }}"></script>
     <script type="text/javascript">
+        function show_image(img)
+        {
+            bootbox.alert('<img src="{{ asset('storage/fotoktp/') }}/'+ img +'" style = \'width: 100%;\' />');
+        }
+    </script>
+
+    <script type="text/javascript">
+        jQuery('.datepicker2').datepicker({
+            format: 'yyyy-mm-dd',
+        });
+
+        $("#modal-fakultas").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-university') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-fakultas']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
+
+        $("#modal-kota").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('ajax.get-city') }}",
+                    method:"POST",
+                    data: {'word' : request.term, '_token' : $("meta[name='csrf-token']").attr('content')},
+                    dataType:"json",
+                    success:function(data)
+                    {
+                        response(data);
+                    }
+                })
+            },
+            select: function( event, ui ) {
+                $("input[name='modal-kota']").val(ui.item.id)
+            },
+            showAutocompleteOnFocus: true
+        });
+
         var el_dependent;
         var el_education;
         var el_cuti;
@@ -1180,9 +1237,9 @@
         function edit_education(id, pendidikan, tahun_awal, tahun_akhir, fakultas, jurusan, nilai, kota)
         {
             $('.modal-pendidikan').val(pendidikan);
+            $('.modal-fakultas').val(fakultas);
             $('.modal-tahun_awal').val(tahun_awal);
             $('.modal-tahun_akhir').val(tahun_akhir);
-            $('.modal-fakultas').val(fakultas);
             $('.modal-jurusan').val(jurusan);
             $('.modal-nilai').val(nilai);
             $('.modal-kota').val(kota);
@@ -1198,9 +1255,9 @@
             el_education = el;
 
             $('.modal-pendidikan').val(pendidikan);
+            $('.modal-fakultas').val(fakultas);
             $('.modal-tahun_awal').val(tahun_awal);
             $('.modal-tahun_akhir').val(tahun_akhir);
-            $('.modal-fakultas').val(fakultas);
             $('.modal-jurusan').val(jurusan);
             $('.modal-nilai').val(nilai);
             $('.modal-kota').val(kota);
@@ -1575,9 +1632,9 @@
 
             var el = '<tr>';
             var modal_pendidikan            = $('.modal-pendidikan').val();
+            var modal_fakultas              = $('.modal-fakultas').val();
             var modal_tahun_awal            = $('.modal-tahun_awal').val();
             var modal_tahun_akhir           = $('.modal-tahun_akhir').val();
-            var modal_fakultas              = $('.modal-fakultas').val();
             var modal_jurusan               = $('.modal-jurusan').val();
             var modal_nilai                 = $('.modal-nilai').val();
             var modal_kota                  = $('.modal-kota').val();

@@ -27,10 +27,19 @@ class LeaveCustomController extends Controller
     public function index()
     {
         //
-        $data = CutiKaryawan::select('cuti_karyawan.*')->join('users', 'users.id','=','cuti_karyawan.user_id')->orderBy('id', 'DESC');
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $data = CutiKaryawan::select('cuti_karyawan.*')->join('users', 'users.id','=','cuti_karyawan.user_id')->where('users.project_id', $user->project_id)->orderBy('id', 'DESC');
+            $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
+            $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
+        } else
+        {
+            $data = CutiKaryawan::select('cuti_karyawan.*')->join('users', 'users.id','=','cuti_karyawan.user_id')->orderBy('id', 'DESC');
+            $params['division'] = OrganisasiDivision::all();
+            $params['position'] = OrganisasiPosition::all();
+        }
         $params['structure'] = getStructureName();
-        $params['division'] = OrganisasiDivision::all();
-        $params['position'] = OrganisasiPosition::all();
         
         
         if(request())
@@ -54,7 +63,7 @@ class LeaveCustomController extends Controller
             }
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
         $params['data'] = $data->get();
@@ -182,42 +191,45 @@ class LeaveCustomController extends Controller
           
         }
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        return (new \App\Models\KaryawanExport($params, 'Report Leave Permit Employee ' ))->download('EM-HR.Report-Leave-Permit-'.date('d-m-Y') .'.xlsx');
 
-        return \Excel::create('Report-Cuti-Karyawan',  function($excel) use($params, $styleHeader){
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
 
-              $excel->sheet('mysheet',  function($sheet) use($params){
+        // return \Excel::create('Report-Cuti-Karyawan',  function($excel) use($params, $styleHeader){
 
-                $sheet->fromArray($params);
+        //       $excel->sheet('mysheet',  function($sheet) use($params){
+
+        //         $sheet->fromArray($params);
                 
-              });
+        //       });
 
-            $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
+        //     $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
 
-        })->download('xls');
+        // })->download('xls');
+
     }
 }

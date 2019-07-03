@@ -75,13 +75,13 @@
                         </div>
                         -->
                         <div class="form-group">
-                            <label class="col-md-12">Meal Allowance / Day's (IDR)</label>
+                            <label class="col-md-12">Meal Allowance / Day (IDR)</label>
                             <div class="col-md-6">
                                 <input type="number" class="form-control" name="tunjangan_makanan"> 
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-12">Daily Allowance / Day's (IDR)</label>
+                            <label class="col-md-12">Daily Allowance / Day (IDR)</label>
                             <div class="col-md-6">
                                 <input type="number" class="form-control" name="tunjangan_harian"> 
                             </div>
