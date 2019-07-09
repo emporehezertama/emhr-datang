@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LandingPageForm;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class LandingPageController extends Controller
 {
     /**
@@ -135,4 +138,70 @@ class LandingPageController extends Controller
         );
     }
 
+
+    public function getPriceList(Request $request)
+    {
+        $params = 'Pricelist';
+        $view =  view('landing-page.email-price-list')->with($params);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+
+        $pdf->stream();
+
+        $output = $pdf->output();
+        $destinationPath = public_path('/storage/temp/');
+
+        file_put_contents( $destinationPath . 'Price-List'.date('Ymdhis') .'.pdf', $output);
+
+        $file = $destinationPath . 'Price-List'.date('Ymdhis') .'.pdf';
+
+        // send email
+        $objDemo = new \stdClass();
+        $objDemo->content = view('landing-page.email-price-list'); 
+    //    $emailto = $request->email2;
+        $emailto = 'farros.jackson@gmail.com';
+        $params = 'test';
+    /*    if($emailto != "")
+        { 
+            \Mail::send('landing-page.email-price-list', $params,
+                function($message) use($file, $emailto) {
+                    $message->from('emporeht@gmail.com');
+                    $message->to($emailto);
+                    $message->subject('Request Price List ('. date('m Y') .')');
+                /*    $message->attach($file, array(
+                            'as' => 'Price-List'. date('Ymdhis') .'.pdf', 
+                            'mime' => 'application/pdf')
+                    );  
+                    $message->setBody('');
+                }
+            );
+        }   */
+
+        \Mail::send('landing-page.email-price-list', $params,
+            function($message) use($emailto, $file) {
+                $message->from('test@mail.com');
+                $message->to('farros.jackson@gmail.com');
+                $message->subject('Request Price List');
+            /*    $message->attach($file, array(
+                    'as' => 'Price-List'. date('Ymdhis') .'.pdf', 
+                    'mime' => 'application/pdf')
+                ); 
+                $message->setBody('');  */
+            }
+        );
+
+
+    /*    $params['text']     = 'Test Free Trial';
+        
+        \Mail::send('email.trial-account', $params,
+            function($message) use($request) {
+                $message->from('test@mail.com');
+                $message->to('farros.jackson@gmail.com');
+                $message->subject('Request Trial');
+            }
+        );  */
+
+        return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products, your Price List request has been sent to your email');
+    }
 }
+ 

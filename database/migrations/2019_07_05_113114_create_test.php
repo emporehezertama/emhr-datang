@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToInternalMemo extends Migration
+class CreateTest extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class AddColumnToInternalMemo extends Migration
      */
     public function up()
     {
-        Schema::table('internal_memo', function (Blueprint $table) {
-            //
-            $table->integer('user_created')->nullable();
-        //    $table->integer('status')->nullable();
+        Schema::create('test', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nama');
+            $table->string('umur');
+            $table->timestamps();
         });
     }
 
@@ -27,8 +28,6 @@ class AddColumnToInternalMemo extends Migration
      */
     public function down()
     {
-        Schema::table('internal_memo', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('test');
     }
 }

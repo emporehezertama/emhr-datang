@@ -2853,39 +2853,6 @@ class AjaxController extends Controller
           return response()->json($this->respon);
     }
 
-/*    public function getFilterJoinResign(Request $request){
-        if($request->ajax())
-        {
-            $tahun = $request->tahun;
-            $monthlyjoin = [];
-            $monthlyresign = [];
-
-            $a = 0;
-            $b = 0;
-            for($i=1; $i<=12; $i++){
-                $monthlyjoin[$a] = employee_get_joinees($i, $tahun);
-                $monthlyresign[$b] = employee_get_resigness($i, $tahun);
-                $monthlyjoin[$a++];
-                $monthlyresign[$b++];
-            }
-            $monthly_join = $monthlyjoin;
-            $monthly_resign = $monthlyresign;
-
-            $hasil = json_encode(array("monthly_join"=>$monthly_join, "monthly_resign"=>$monthly_resign));
-            return response()->json($hasil);
-        }
-        return response()->json($this->respon);
-    }
-
-    public function getFilterAttrition(Request $request){
-        if($request->ajax())
-        {
-            $tahun = $request->tahun;
-            $value_attrition = employee_attrition($tahun);
-            return response()->json($value_attrition);
-        }
-        return response()->json($this->respon);
-    }   */
 
     public function getUserActive(Request $request){
         if($request->ajax())

@@ -33,6 +33,8 @@ Route::get('asset-accept/{id}', 'IndexController@acceptAsset')->name('accept-ass
 Route::get('em-hris-application-system', 'LandingPageController@page1')->name('landing-page1');
 Route::post('post-em-hris-application-system', 'LandingPageController@storePage1')->name('post-landing-page1');
 
+Route::post('get-price-list', 'LandingPageController@getPriceList')->name('get-price-list');
+
 
 Route::group(['middleware' => ['auth']], function(){
 //	Route::post('logout', 'LoginController@Logout')->name('logout');
@@ -141,6 +143,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('ajax/get-user-active', 'AjaxController@getUserActive')->name('ajax.get-user-active');
 	Route::post('ajax/get-data-dashboard', 'AjaxController@getDataDashboard')->name('ajax.get-data-dashboard');
 
+	//	Route::post('ajax/get-price-list', 'LandingPageController@getPriceList')->name('ajax.get-price-list');
 });
 
 /**
