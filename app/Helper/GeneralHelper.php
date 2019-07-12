@@ -88,7 +88,6 @@ function get_exit_header()
 function getStructureName()
 {
 	$user = \Auth::user();
-
     if($user->project_id != NULL)
     {
     	$all = \App\Models\StructureOrganizationCustom::orderBy('structure_organization_custom.organisasi_division_id','ASC')->join('users','users.id','=','structure_organization_custom.user_created')->where('users.project_id', $user->project_id)->select('structure_organization_custom.*')->get();
@@ -836,19 +835,8 @@ function update_setting($key, $value)
  */
 function get_setting($key)
 {
-	$auth = \Auth::user();
-	if($auth)
-	{
-		if($auth->project_id != NULL)
-        {
-        	$setting = \App\Models\Setting::where('key', $key)->where('project_id',$auth->project_id)->first();
-        } else{
-        	$setting = \App\Models\Setting::where('key', $key)->first();
-        }
-	}else{
-		$setting = \App\Models\Setting::where('key', $key)->first();
-	}
-	
+	$setting = \App\Models\Setting::where('key', $key)->first();
+
 	if($setting)
 	{
 		return $setting->value;

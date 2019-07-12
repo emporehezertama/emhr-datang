@@ -65,7 +65,7 @@ class MedicalCustomController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
 
@@ -251,38 +251,42 @@ class MedicalCustomController extends Controller
             
         }
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        return (new \App\Models\KaryawanExport($params, 'Report Medical Employee'))->download('EM-HR.Report-Medical-'.date('d-m-Y') .'.xlsx');
 
-        return \Excel::create('Report-Medical-Reimbursement-Karyawan',  function($excel) use($params, $styleHeader){
-              $excel->sheet('mysheet',  function($sheet) use($params){
-                $sheet->fromArray($params);
-              });
-            $excel->getActiveSheet()->getStyle('A1:IV1')->applyFromArray($styleHeader);
-        })->download('xls');
+
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
+
+        // return \Excel::create('Report-Medical-Reimbursement-Karyawan',  function($excel) use($params, $styleHeader){
+        //       $excel->sheet('mysheet',  function($sheet) use($params){
+        //         $sheet->fromArray($params);
+        //       });
+        //     $excel->getActiveSheet()->getStyle('A1:IV1')->applyFromArray($styleHeader);
+        // })->download('xls');
+        
     }
 
 }

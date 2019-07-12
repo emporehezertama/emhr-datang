@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Models\Organisasidivision;
+use DB;
 use App\Models\Directorate;
 
 class IndexController extends Controller
@@ -27,7 +29,34 @@ class IndexController extends Controller
      */
     public function index()
     {
-        return view('administrator.dashboard');
+        $jumlahdata = OrganisasiDivision::count();
+        $data = OrganisasiDivision::all();
+        $name = [];
+        $id = [];
+        $karyawan_per_divisi = [];
+        $y = 0;
+        $x = 0;
+        $z = 0;
+        for ($i=0; $i < $jumlahdata; $i++) { 	
+            $name[$y] = $data[$i]->name;
+            $id[$x] = $data[$i]->id;
+            
+            $karyawan_per_divisi[$z] = DB::table('structure_organization_custom')
+                                                ->select('structure_organization_custom.*', 'users.*')
+                                                ->join('users', 'structure_organization_custom.id','=', 'users.structure_organization_custom_id')
+                                                ->where('structure_organization_custom.organisasi_division_id', $id[$x])
+                                                ->where('users.status', '1')
+                                                ->count();
+
+            $name[$y++];
+            $id[$x++];
+            $karyawan_per_divisi[$z++];
+        }
+        $namedivision = $name;
+        $jumlahperdivisi = $karyawan_per_divisi;
+
+
+        return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
     }
 
     /**
@@ -37,7 +66,7 @@ class IndexController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        $user = User::where('id', \Auth::user()->id)->first();
+        $user = User::where('id', \Auth::user()->id)->count();
         
         if($user)
         {   

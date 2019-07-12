@@ -4,6 +4,11 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+		
+		
 		<title>EM-HR - HRIS Application System The Best and Complete</title>
 		<style type="text/css">
 			body {
@@ -137,10 +142,10 @@
                         @endif
 						<div class="px-5 pt-4">
 							<div class="form-group">
-								<input type="text" class="form-control" name="nama" placeholder="Full Name" value="{{ old('nama') }}" required>
+								<input type="text" class="form-control" id="nama" name="nama" placeholder="Full Name" value="{{ old('nama') }}" required>
 							</div>
 							<div class="form-group">
-								<select name="jabatan" class="form-control">
+								<select id="jabatan" name="jabatan" class="form-control">
 									<option value=""> - Position - </option>
 									<option>Owner</option>
 									<option>HRD / Finance</option>
@@ -149,19 +154,19 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<input type="email" class="form-control" name="email" placeholder="Email" value="{{ old('email') }}" required>
+								<input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
 							</div>
-							<div class="form-group">
+							<!--div class="form-group">
 								<input type="password" class="form-control" name="password" placeholder="Password"  value="{{ old('password') }}" required>
 							</div>
 							<div class="form-group">
 								<input type="password" class="form-control" name="confirm" placeholder="Confirm Password" value="{{ old('confirm') }}" required>
+							</div-->
+							<div class="form-group">
+								<input type="input" class="form-control" id="nama_perusahaan" name="nama_perusahaan" placeholder="Company" value="{{ old('company') }}" required>
 							</div>
 							<div class="form-group">
-								<input type="input" class="form-control" name="nama_perusahaan" placeholder="Company" value="{{ old('company') }}" required>
-							</div>
-							<div class="form-group">
-								<select class="form-control" name="bidang_usaha" required>
+								<select class="form-control" id="bidang_usaha" name="bidang_usaha" required>
 									<option value=""> - Choose Business Specialization - </option>
 									<option>Agriculture / Mining</option>
 									<option>Business Services</option>
@@ -187,7 +192,7 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<input type="text" name="handphone" class="form-control" placeholder="Handphone Number" value="{{ old('handphone') }}" required>
+								<input type="text" id="handphone" name="handphone" class="form-control" placeholder="Handphone Number" value="{{ old('handphone') }}" required>
 							</div>
 							<!-- <div class="form-group">
 								<div class="float-left px-0 mx-0" style="width: 15px">
@@ -203,6 +208,35 @@
 							<button class="btn_trial_2" type="submit">Create Free Member</button>
 						</div>
 					</form>
+
+					
+					<!--form method="POST" action="{{ route('get-price-list') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
+                        {{ csrf_field() }}
+						<div class="px-5 pt-4" style="display: none;">
+							<div class="form-group">
+								<input type="text" class="form-control" id="nama2" name="nama2" placeholder="Full Name" required>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="jabatan2" name="jabatan2" placeholder="Jabatan" required>
+							</div>
+							<div class="form-group">
+								<input type="email" class="form-control" id="email2" name="email2" placeholder="Email" required>
+							</div>
+							<div class="form-group">
+								<input type="input" class="form-control" id="nama_perusahaan2" name="nama_perusahaan2" placeholder="Company" value="{{ old('company') }}" required>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" id="bidang_usaha2" name="bidang_usaha2" placeholder="Bidang Usaha" required>
+							</div>
+							<div class="form-group">
+								<input type="text" id="handphone2" name="handphone2" class="form-control" placeholder="Handphone Number" value="{{ old('handphone') }}" required>
+							</div>
+						</div>
+							
+						<div class="form-group text-center">
+							<button class="btn_trial_2" id="get-price-list" type="submit">Get Price List</button>
+						</div>
+					</form-->
 				</div>
 			</div>
 			<div class="col-md-5 float-right">
@@ -243,5 +277,52 @@
 		</div>
 	  </div>
 	</div>
+
+<script type="text/javascript">
+	$('#nama').on('input', function(){
+		$('#nama2').val($('#nama').val());
+	});
+	$('#jabatan').change(function(){
+		$('#jabatan2').val($('#jabatan').val());
+	});
+	$('#email').on('input', function(){
+		$('#email2').val($('#email').val());
+	});
+	$('#nama_perusahaan').on('input', function(){
+		$('#nama_perusahaan2').val($('#nama_perusahaan').val());
+	});
+	$('#bidang_usaha').on('change', function(){
+		$('#bidang_usaha2').val($('#bidang_usaha').val());
+	});
+	$('#handphone').on('input', function(){
+		$('#handphone2').val($('#handphone').val());
+	});
+
+	$('#get-price-list').click(function(){
+	/*	var nama = $('#nama').val();
+		var email = $('#email').val();
+		var handphone = $('#handphone').val();
+		var usaha = $('#bidang_usaha').val();
+		var perusahaan = $('#nama_perusahaan').val();
+		alert(nama + email + handphone + usaha + perusahaan);	*/
+	/*	$.ajax({
+            type: 'POST',
+            url: '{{ route('get-price-list') }}',
+            data: {
+				/*	'nama' : nama, 
+					'email' : email, 
+					'handphone' : handphone, 
+					'usaha' : usaha, 
+					'perusahaan' : perusahaan, */
+				/*	'_token' : $("meta[name='csrf-token']").attr('content')
+					},
+            dataType: 'json',
+            success: function (msg) {
+				window.location = "<?php echo route('landing-page1') ?>";
+			}
+		});	*/
+	});
+</script>
+
 </body>
 </html>

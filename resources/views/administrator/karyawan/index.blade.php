@@ -48,6 +48,7 @@
                             @endif
                             <li><a href="javascript:void(0)" id="add-import-karyawan"> <i class="fa fa-upload"></i> Import</a></li>
                             <li><a onclick="submit_filter_download()"><i class="fa fa-download"></i> Download </a></li>
+                            <li><a id="delete-karyawan"><i class="ti-trash"></i> Delete </a></li>
                         </ul>
                     </div>
                     <button id="filter_view" class="btn btn-default btn-sm pull-right btn-outline"> <i class="fa fa-search-plus"></i></button>
@@ -93,6 +94,7 @@
                         <table id="data_table_no_pagging" class="display nowrap" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th><input type="checkbox" title="Check All" name="check_all" /></th>
                                     <th>#</th>
                                     <th>NIK</th>
                                     <th>@lang('general.name')</th>
@@ -113,6 +115,7 @@
                             <tbody>
                                 @foreach($data as $no => $item)
                                     <tr>
+                                        <td><input type="checkbox" class="checked_id" name="checked_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
                                         <td class="text-center">{{ $no+1 }}</td>
                                         <td>{{ $item->nik }}</td>
                                         <td><a href="{{ route('administrator.karyawan.edit', ['id' => $item->id]) }}">{{ strtoupper($item->name) }}</a></td>
@@ -138,6 +141,7 @@
                                             @if(empty($item->empore_organisasi_staff_id) and empty($item->empore_organisasi_manager_id) and !empty($item->empore_organisasi_direktur))
                                                 Direktur
                                             @endif
+                                            
                                         </td>
                                         <td>
                                             @if(!empty($item->empore_organisasi_staff_id))
@@ -460,6 +464,55 @@
         $('.div-proses-upload').hide();
         $("#form-upload").show();
     })
+
+    $("input[name='check_all']").click(function () {    
+        $('input:checkbox').prop('checked', this.checked);  
+    });
+
+    $('#delete-karyawan').click(function(){
+        var employees = [];
+        $.each($("input[name='checked_id[]']:checked"), function(){            
+            employees.push($(this).val());
+        });
+
+        var url = "<?php echo route('ajax.get-karyawan-by-id') ?>";
+        for(i=0; i<employees.length; i++){
+            var id = employees[i];
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.delete-karyawan') }}',
+                data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (msg) {
+                    window.location = "<?php echo route('administrator.karyawan.index') ?>";
+                }
+            });
+        }
+
+    /*    bootbox.confirm({
+            title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+            message: "Delete this data ?",
+            closeButton: false,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn btn-sm btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn btn-sm btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result)
+                { 
+                    
+                }
+            
+            }
+        });     */
+
+    });
 </script>
 @endsection
 @endsection

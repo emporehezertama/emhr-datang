@@ -50,39 +50,71 @@ class PayrollController extends Controller
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
         }
+
+        if(request()->is_calculate || request()->employee_status || request()->position_id || request()->division_id || request()->name || request()->month || request()->year)
+        {
+            \Session::put('is_calculate', request()->is_calculate);
+            \Session::put('employee_status', request()->employee_status);
+            \Session::put('position_id', request()->position_id);
+            \Session::put('division_id', request()->division_id);
+            \Session::put('name', request()->name);
+            \Session::put('month', request()->month);
+            \Session::put('year', request()->year);
+        }
+
+        $is_calculate       = \Session::get('is_calculate');
+        $employee_status    = \Session::get('employee_status');
+        $position_id        = \Session::get('position_id');
+        $division_id        = \Session::get('division_id');
+        $name               = \Session::get('name');
+        $month              = \Session::get('month');
+        $year               = \Session::get('year');
+
+        if(!empty($is_calculate))
+        {
+            $result = $result->where('is_calculate', request()->is_calculate );
+        }
+
+        if($employee_status)
+        {
+            $result = $result->where('users.organisasi_status', $employee_status);
+        }
+
+        if((!empty($division_id)) and (empty($position_id))) 
+        {   
+            $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_division_id',$division_id);
+        }
+        if((!empty($position_id)) and (empty($division_id)))
+        {   
+            $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',$position_id);
+        }
+        if((!empty($position_id)) and (!empty($division_id)))
+        {
+            $data = $data->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',$position_id)->where('structure_organization_custom.organisasi_division_id',$division_id);
+        }
+
+        // if(!empty($year) || !empty($month))
+        // {
+        //     if(!empty($year) and empty($year))
+        //     {
+        //         $result = $result->whereYear('payroll.created_at', $year);
+        //     }
+        //     elseif(!empty($month) and !empty($year))
+        //     {
+        //         $result = $result->whereMonth('payroll.created_at', $month)->whereYear('payroll.created_at', $year);
+        //     }
+        // }
+
+        if(!empty($name))
+        {
+            $result = $result->where(function($table) use($name){
+              $table->where('users.name', 'LIKE', '%'. $name .'%')
+                    ->orWhere('users.nik', 'LIKE', '%'. $name .'%');  
+            });
+        }
+
         if(request())
         {
-            if(!empty(request()->is_calculate))
-            {
-                $result = $result->where('is_calculate', request()->is_calculate );
-            }
-
-            if(!empty(request()->employee_status))
-            {
-                $result = $result->where('users.organisasi_status', request()->employee_status);
-            }
-
-            if((!empty(request()->division_id)) and (empty(request()->position_id))) 
-            {   
-                $result = $result->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_division_id',request()->division_id);
-            }
-            if((!empty(request()->position_id)) and (empty(request()->division_id)))
-            {   
-                $result = $result->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id);
-            }
-            if((!empty(request()->position_id)) and (!empty(request()->division_id)))
-            {
-                $result = $result->join('structure_organization_custom','users.structure_organization_custom_id','=','structure_organization_custom.id')->where('structure_organization_custom.organisasi_position_id',request()->position_id)->where('structure_organization_custom.organisasi_division_id',request()->division_id);
-            }
-
-            if(!empty(request()->name))
-            {
-                $result = $result->where(function($table){
-                  $table->where('users.name', 'LIKE', '%'. request()->name .'%')
-                        ->orWhere('users.nik', 'LIKE', '%'. request()->name .'%');  
-                });
-            }
-
             if(request()->action == 'lock')
             {
                 $this->lock_payroll();
@@ -91,11 +123,11 @@ class PayrollController extends Controller
             {
                 if(!isset(request()->user_id)) return redirect()->route('administrator.payroll.index')->with('message-error', 'Payroll item required.');
 
-                if(empty(request()->year) and empty(request()->month))
+                if(empty($year) and empty($month))
                 {
                     return redirect()->route('administrator.payroll.index')->with('message-error', 'Year / Month required.');
                 }
-                if(!empty(request()->year) and empty(request()->month))
+                if(!empty($year) and empty($month))
                 {
                    return $this->downloadExcelYear($result->get());
                 }
@@ -116,24 +148,13 @@ class PayrollController extends Controller
             }
         }
 
-        if(!empty(request()->year) and !empty(request()->month))
+        if(!empty($year) || !empty($month))
         {
             $temp = clone $result;
             if($temp->count() == 0)
             {
                 $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');   
             } 
-        }
-
-        if(request()->is_calculate || request()->employee_status || request()->position_id || request()->division_id || request()->name || request()->month || request()->year)
-        {
-            \Session::put('is_calculate', request()->is_calculate);
-            \Session::put('employee_status', request()->employee_status);
-            \Session::put('position_id', request()->position_id);
-            \Session::put('division_id', request()->division_id);
-            \Session::put('name', request()->name);
-            \Session::put('month', request()->month);
-            \Session::put('year', request()->year);
         }
 
         if(request()->reset == 1)
@@ -465,6 +486,8 @@ class PayrollController extends Controller
             $temp->is_lock                      = $request->is_lock;
             $temp->save();
         } 
+
+
         // if history
         if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
@@ -532,10 +555,12 @@ class PayrollController extends Controller
         $history->bpjs_pensiun_company         = get_setting('bpjs_pensiun_company');
         $history->bpjs_kesehatan_company       = replace_idr($request->bpjs_kesehatan_company); //get_setting('bpjs_kesehatan_company');
         $history->pph21                        = replace_idr($request->pph21);
+        $history->bpjs_ketenagakerjaan_employee= replace_idr($request->bpjs_ketenagakerjaan_employee);
+        $history->bpjs_pensiun_employee        = replace_idr($request->bpjs_pensiun_employee);
         $history->bonus                        = replace_idr($request->bonus);
         $history->total_deduction              = $request->total_deductions;
         $history->total_earnings               = $request->total_earnings;
-        #$history->is_lock                      = $request->is_lock;
+        $history->is_lock                      = $request->is_lock;
 
         // if create baru
         if(isset($request->create_by_payroll_id))
@@ -704,13 +729,14 @@ class PayrollController extends Controller
             }
         }
 
-        return \Excel::create('Payroll-Template-'. date('Y-m-d'),  function($excel) use($params){
-              $excel->sheet('Payroll',  function($sheet) use($params){
-                $sheet->fromArray($params);
-              });
-        })->download('xls');
+        return (new \App\Models\PayrollExport($params))->download('EM-HR.Payroll-Template-'. date('Y-m-d') .'.xlsx');
 
-        exit;
+        // return \Excel::create('Payroll-Template-'. date('Y-m-d'),  function($excel) use($params){
+        //       $excel->sheet('Payroll',  function($sheet) use($params){
+        //         $sheet->fromArray($params);
+        //       });
+        // })->download('xls');
+        // exit;
     }
 
     /**
@@ -1213,14 +1239,14 @@ class PayrollController extends Controller
             $thp                         = $thp + $monthly_income_tax;
 
             $non_bonus = $this->init_calculate_non_bonus($item);
-            $monthly_income_tax           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
+            $monthly_income_tax = $yearly_income_tax - $non_bonus['yearly_income_tax'] + ($non_bonus['yearly_income_tax'] / 12);
 
             $earnings                     = $earnings + $monthly_income_tax;    
-            // end custom
-
+            
             #$temp->total_deduction              = $total_deduction + $deductions; 
             $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax; 
             $temp->total_earnings               = $item->salary + $item->bonus + $earnings;
+
             $temp->thp                          = $thp;
             $temp->pph21                        = $monthly_income_tax;
             $temp->is_calculate                 = 1;
@@ -1334,7 +1360,8 @@ class PayrollController extends Controller
                         
                         if($items)
                         {
-                            if($items->is_lock == 0) continue; // jika payroll belum di lock payslip jangan dikirim
+
+                            if(isset($items->is_lock) and $items->is_lock == 0) continue; // jika payroll belum di lock payslip jangan dikirim
                         }
                     }
                     else
@@ -1457,6 +1484,9 @@ class PayrollController extends Controller
                     {
                         $is_calculate   = 0;
                     }
+                    
+                    if($payroll->salary != replace_idr($row[3])) $is_calculate = 0;
+                    
                     $payroll->salary        = replace_idr($row[3]);
                     $payroll->bonus        = replace_idr($row[4]);
                     $payroll->is_calculate  = $is_calculate;

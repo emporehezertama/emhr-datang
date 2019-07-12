@@ -64,7 +64,14 @@
                     <div class="panel-heading" style="background: #2cabe3; border:1px solid #2cabe3;"><i class="fa fa-info-circle"></i> Internal Memo</h2></div>
                     <div class="panel-body">
                         @foreach($internal_memo as $item)
-                            <div class="col-md-12" style="padding-bottom:0;padding-top:0;">
+                            <div class="col-md-4" style="padding:0;">
+                                @if(!empty($item->file))
+                                <a href="{{ route('karyawan.news.readmore', $item->id) }}">
+                                    <img src="{{ asset('storage/internal-memo/'. $item->file) }}" style="width: 100%;" />
+                                </a>
+                                @endif
+                            </div>
+                            <div class="col-md-8" style="padding-bottom:0;padding-top:0;">
                                 <a href="{{ asset('storage/internal-memo/'. $item->file) }}" target="_blank">
                                     <h4 style="margin-bottom:0;padding-bottom:0;color:#2cabe3; ">{{ $item->title }}</h4>
                                 </a>
@@ -74,6 +81,9 @@
                                         <i class="fa fa-cloud-download"></i>
                                     </p>
                                 </a>
+                                <p>
+                                    {{ substr($item->description,0, 50) }}
+                                </p>
                             </div>
                             <div class="clearfix"></div>
                             <hr style="margin-top: 5px; margin-bottom:5px;" />
@@ -88,7 +98,14 @@
                     <div class="panel-heading" style="background: #53e69d; border:1px solid #53e69d;"><i class="fa fa-gavel"></i> Product Information</h2></div>
                     <div class="panel-body">
                         @foreach($peraturan_perusahaan as $item)
-                            <div class="col-md-12" style="padding-bottom:0;padding-top:0;">
+                            <div class="col-md-4" style="padding:0;">
+                                @if(!empty($item->file))
+                                <a href="{{ route('karyawan.news.readmore', $item->id) }}">
+                                    <img src="{{ asset('storage/peraturan-perusahaan/'. $item->file) }}" style="width: 100%;" />
+                                </a>
+                                @endif
+                            </div>
+                            <div class="col-md-8" style="padding-bottom:0;padding-top:0;">
                                 <a href="{{ asset('storage/peraturan-perusahaan/'. $item->file) }}" target="_blank">
                                     <h4 style="margin-bottom:0;padding-bottom:0;color:#53e69d;">{{ $item->title }}</h4>
                                 </a>
@@ -98,6 +115,9 @@
                                         <i class="fa fa-cloud-download"></i>
                                     </p>
                                 </a>
+                                    <p>
+                                        {{ substr($item->description,0, 50) }}
+                                    </p>
                             </div>
                             <div class="clearfix"></div>
                             <hr style="margin-top: 5px; margin-bottom:5px;" />

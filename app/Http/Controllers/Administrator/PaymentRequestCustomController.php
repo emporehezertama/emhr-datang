@@ -62,7 +62,7 @@ class PaymentRequestCustomController extends Controller
 
             if(request()->action == 'download')
             {
-                $this->downloadExcel($data->get());
+                return $this->downloadExcel($data->get());
             }
         }
 
@@ -242,38 +242,41 @@ class PaymentRequestCustomController extends Controller
             
         }
 
-        $styleHeader = [
-            'font' => [
-                'bold' => true,
-            ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                'rotation' => 90,
-                'startColor' => [
-                    'argb' => 'FFA0A0A0',
-                ],
-                'endColor' => [
-                    'argb' => 'FFFFFFFF',
-                ],
-            ],
-            ''
-        ];
+        return (new \App\Models\KaryawanExport($params, 'Report Payment Request Employee ' ))->download('EM-HR.Report-Payment-Request-'.date('d-m-Y') .'.xlsx');
 
-        return \Excel::create('Report-Payment-Request-Karyawan',  function($excel) use($params, $styleHeader){
-              $excel->sheet('mysheet',  function($sheet) use($params){
-                $sheet->fromArray($params);
-              });
-            $excel->getActiveSheet()->getStyle('A1:CA1')->applyFromArray($styleHeader);
-        })->download('xls');
+
+        // $styleHeader = [
+        //     'font' => [
+        //         'bold' => true,
+        //     ],
+        //     'alignment' => [
+        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+        //     ],
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        //     'fill' => [
+        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+        //         'rotation' => 90,
+        //         'startColor' => [
+        //             'argb' => 'FFA0A0A0',
+        //         ],
+        //         'endColor' => [
+        //             'argb' => 'FFFFFFFF',
+        //         ],
+        //     ],
+        //     ''
+        // ];
+
+        // return \Excel::create('Report-Payment-Request-Karyawan',  function($excel) use($params, $styleHeader){
+        //       $excel->sheet('mysheet',  function($sheet) use($params){
+        //         $sheet->fromArray($params);
+        //       });
+        //     $excel->getActiveSheet()->getStyle('A1:CA1')->applyFromArray($styleHeader);
+        // })->download('xls');
     }
 
 }
