@@ -81,11 +81,7 @@
                                             <td>{{ $item->asset->asset_condition }}</td>
                                             <td>{{ $item->asset->handover_date != "" ?  format_tanggal($item->asset->handover_date) : '' }}</td>
                                             <td style="text-align: center;">
-                                                 @if($item->user_check == 1)
-                                                <label class="bt btn-success btn-xs"><i class="fa fa-check"></i> </label>
-                                                @else
-                                                <label class="bt btn-danger btn-xs"><i class="fa fa-close"></i> </label>
-                                                @endif 
+                                                <input type="checkbox" value="1" {{ $item->user_check == 1 ? 'checked' : '' }} name="user_check[{{$no}}]">
                                             </td>
                                             <td style="text-align: center;">
                                                 @if($item->approval_check == 1)
@@ -95,7 +91,7 @@
                                                 @endif  
                                             </td>
                                             <td>
-                                                <input type="text" readonly="true" name="catatan[{{$no}}]" class="form-control catatan" value="{{ $item->catatan }}" />
+                                                <input type="text" name="catatan[{{$no}}]" class="form-control catatan" value="{{ $item->catatan }}" />
                                             </td>
                                         </tr>
                                         @endforeach
@@ -108,7 +104,8 @@
 
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="{{ route('administrator.exitCustom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                <a href="{{ route('administrator.exit-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="submit_form"><i class="fa fa-save"></i> Submit Exit Clearance</a>
                             </div>
                         </div>
 
