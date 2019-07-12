@@ -54,7 +54,7 @@
 
 
 
-                        <!--div class="form-group">
+                        <div class="form-group">
                             <label class="col-md-12">Content</label>
                             <div class="col-md-12">
                                 <textarea class="content" name="content" id="ckeditor"></textarea>
@@ -81,7 +81,7 @@
                             <div class="col-md-12">
                                 <input type="file" name="image" class="form-control">
                             </div>
-                        </div-->
+                        </div>
                         
 
 

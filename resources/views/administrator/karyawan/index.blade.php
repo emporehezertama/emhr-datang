@@ -468,42 +468,53 @@
             employees.push($(this).val());
         });
 
+        if(employees.length < 1){
+            bootbox.confirm({
+                title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+                message: "Belum ada data yang dipilih",
+                closeButton: false,
+                callback: function (result) {
+                    if(result)
+                    { 
+                        
+                    }
+                }
+            });
+        }
         var url = "<?php echo route('ajax.get-karyawan-by-id') ?>";
         for(i=0; i<employees.length; i++){
             var id = employees[i];
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('ajax.delete-karyawan') }}',
-                data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
-                dataType: 'json',
-                success: function (msg) {
-                    window.location = "<?php echo route('administrator.karyawan.index') ?>";
+            bootbox.confirm({
+                title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+                message: "Delete this data ?",
+                closeButton: false,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn btn-sm btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn btn-sm btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if(result)
+                    { 
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('ajax.delete-karyawan') }}',
+                            data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
+                            dataType: 'json',
+                            success: function (msg) {
+                                window.location = "<?php echo route('administrator.karyawan.index') ?>"; 
+                            }
+                        });  
+                    }
                 }
             });
         }
 
-    /*    bootbox.confirm({
-            title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
-            message: "Delete this data ?",
-            closeButton: false,
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn btn-sm btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn btn-sm btn-danger'
-                }
-            },
-            callback: function (result) {
-                if(result)
-                { 
-                    
-                }
-            
-            }
-        });     */
 
     });
 </script>

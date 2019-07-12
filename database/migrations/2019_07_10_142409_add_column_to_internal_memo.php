@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToPeraturanPerusahaan extends Migration
+class AddColumnToInternalMemo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class AddColumnToPeraturanPerusahaan extends Migration
      */
     public function up()
     {
-        Schema::table('peraturan_perusahaan', function (Blueprint $table) {
+        Schema::table('internal_memo', function (Blueprint $table) {
             //
-            $table->integer('user_created')->nullable();
-            $table->integer('status')->nullable()->after('title');
         });
     }
 
@@ -27,7 +25,7 @@ class AddColumnToPeraturanPerusahaan extends Migration
      */
     public function down()
     {
-        Schema::table('peraturan_perusahaan', function (Blueprint $table) {
+        Schema::table('internal_memo', function (Blueprint $table) {
             //
         });
     }

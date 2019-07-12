@@ -41,6 +41,7 @@
                                     <th>TITLE</th>
                                     <th>FILE</th>
                                     <th>DATE</th>
+                                    <th>STATUS</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -56,6 +57,8 @@
                                             <label><i>empty</i></label>
                                         @endif
                                     <td>{{ $item->created_at }}</td>
+                                    <td>{!! $item->status == 1 ? '<label class="btn btn-success btn-xs">Publish</label>' : '<label class="btn btn-danger btn-xs">Draft</label>' !!}</td>
+                                    
                                     <td>
                                         <a href="{{ route('administrator.internal-memo.edit', ['id' => $item->id]) }}" style="float: left; margin-right:5px"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-edit"></i> edit</button></a>
                                             <form action="{{ route('administrator.internal-memo.destroy', $item->id) }}" onsubmit="return confirm('Delete this data?')" method="post" style="margin-left: 5px;">

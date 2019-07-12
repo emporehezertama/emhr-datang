@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use App\Models\OrganisasiDivision;
+use App\Models\Organisasidivision;
 use DB;
 use App\Models\Directorate;
 
@@ -44,8 +44,7 @@ class IndexController extends Controller
                                                 ->select('structure_organization_custom.*', 'users.*')
                                                 ->join('users', 'structure_organization_custom.id','=', 'users.structure_organization_custom_id')
                                                 ->where('structure_organization_custom.organisasi_division_id', $id[$x])
-                                                ->where('users.project_id', \Auth::user()->project_id)
-                                                ->whereNull('users.status')
+                                                ->where('users.status', '1')
                                                 ->count();
 
             $name[$y++];
@@ -54,6 +53,7 @@ class IndexController extends Controller
         }
         $namedivision = $name;
         $jumlahperdivisi = $karyawan_per_divisi;
+
 
         return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
     }

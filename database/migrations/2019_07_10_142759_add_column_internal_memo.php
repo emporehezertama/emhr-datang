@@ -4,19 +4,18 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToInternalMemo extends Migration
+class AddColumnInternalMemo extends Migration
 {
     /**
      * Run the migrations.
      *
-     * @return void 
+     * @return void
      */
     public function up()
     {
         Schema::table('internal_memo', function (Blueprint $table) {
-            //
-            $table->integer('user_created')->nullable();
-            $table->integer('status')->nullable()->after('description');
+            $table->text('thumbnail')->nullable();
+            $table->text('image')->nullable();
         });
     }
 
@@ -27,8 +26,6 @@ class AddColumnToInternalMemo extends Migration
      */
     public function down()
     {
-        Schema::table('internal_memo', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }

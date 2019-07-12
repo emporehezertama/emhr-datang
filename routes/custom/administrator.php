@@ -5,7 +5,8 @@
  */
 Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middleware' => ['auth', 'access:1']], function(){
 	
-	
+	Route::get('user-login', 'LoginController@user-login')->name('administrator.payroll.detail-history');
+
 	Route::get('/', 'IndexController@index')->name('administrator.dashboard');
 	Route::resource('karyawan', 'KaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('department', 'DepartmentController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -288,5 +289,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('setting/delete-backup-schedule/{id}', 'SettingController@deleteBackupSchedule')->name('administrator.setting.delete-backup-schedule');
 	Route::get('payroll/create-by-payroll-id/{id}', 'PayrollController@createByPayrollId')->name('administrator.payroll.create-by-payroll-id');
 	Route::get('payroll/detail-history/{id}', 'PayrollController@detailHistory')->name('administrator.payroll.detail-history');
+
 
 });

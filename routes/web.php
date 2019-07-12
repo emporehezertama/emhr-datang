@@ -143,7 +143,6 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('ajax/get-user-active', 'AjaxController@getUserActive')->name('ajax.get-user-active');
 	Route::post('ajax/get-data-dashboard', 'AjaxController@getDataDashboard')->name('ajax.get-data-dashboard');
 
-	//	Route::post('ajax/get-price-list', 'LandingPageController@getPriceList')->name('ajax.get-price-list');
 });
 
 /**
