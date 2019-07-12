@@ -2824,13 +2824,23 @@ class AjaxController extends Controller
     {
         if($request->ajax())
         {
-            $data               = \App\User::where('id', $request->id)->first();
-            $data->delete();
+            $user               = \App\User::where('id', $request->id)->count();
+            if($user > 0){
+                \App\User::where('id', $request->id)->delete();
+            }
 
-            \App\UserFamily::where('user_id',  $request->id)->delete();
-            \App\UserEducation::where('user_id',  $request->id)->delete();
+            $userfamily         =   UserFamily::where('user_id',  $request->id)->count();
+            if($userfamily > 0){
+                UserFamily::where('user_id',  $request->id)->delete();
+            }
 
-            return response()->json($data->id);
+            $useredu            =   UserEducation::where('user_id',  $request->id)->count(); 
+            if($useredu > 0){
+                UserEducation::where('user_id',  $request->id)->delete();
+            }
+            $hasil = 'ok';
+            return response()->json($hasil);
+        
         }
 
         return response()->json($this->respon);
@@ -2858,7 +2868,7 @@ class AjaxController extends Controller
         if($request->ajax())
         {
             $data = User::where('access_id', '2')
-                        ->where('status', '1')
+                        ->whereNull('status')
                     //    ->where('last_logged_in_at', '<=', date('Y-m-d H:i:s'))
                         ->whereRaw('last_logged_in_at >= last_logged_out_at')
                         ->count();

@@ -10,11 +10,11 @@
                 <div class="col-sm-12">
                     <div class="row white-box">
                         <div class="form-group">
-                            <label class="col-md-12">Date of Leave</label>
-                            <div class="col-md-5">
+                            <label class="col-md-12">Filter Date</label>
+                            <div class="col-md-3">
                                 <input type="text" id="filter_start" name="filter_start" class="form-control datepicker" id="from" placeholder="Start Date" />
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <input type="text" id="filter_end"  name="filter_end" class="form-control datepicker" id="to" placeholder="End Date">
                             </div>
                             <div class="col-md-2">
@@ -124,7 +124,7 @@
                     <!--button id="filter-attrition" class="btn btn-xs btn-info pull-right datepicker"><i class="mdi mdi-filter" style="font-size: 12px"></i></button-->
                     <div class="clearfix"></div>
                     <div id="chart-2" style="height: 220px"></div>
-                    <p class="text-center"><label class="text-info m-l-10"><i class="fa fa-circle"></i></label> Attrition Rate</p>
+                    <p class="text-center"><label class=" m-l-10"><i class="fa fa-circle" style="color:#d70206;"></i></label> Attrition Rate</p>
                 </div>
             </div>
             <!--div class="row">
@@ -389,9 +389,10 @@
             dataType: 'json',
             success: function (msg) {
                 $('#user-active').html(msg);
+                console.log(msg);
             }
         });
-        var cekUser = setTimeout("getUserActive()", 60000);
+        var cekUser = setTimeout("getUserActive()", 5000);
     }
 
     function  headcountDepartment(){

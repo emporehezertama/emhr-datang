@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use App\Models\Organisasidivision;
+use App\Models\OrganisasiDivision;
 use DB;
 use App\Models\Directorate;
 
@@ -28,6 +28,7 @@ class IndexController extends Controller
      */
     public function index()
     {
+        
         $jumlahdata = OrganisasiDivision::count();
         $data = OrganisasiDivision::all();
         $name = [];
@@ -44,7 +45,7 @@ class IndexController extends Controller
                                                 ->select('structure_organization_custom.*', 'users.*')
                                                 ->join('users', 'structure_organization_custom.id','=', 'users.structure_organization_custom_id')
                                                 ->where('structure_organization_custom.organisasi_division_id', $id[$x])
-                                                ->where('users.status', '1')
+                                                ->whereNull('users.status')
                                                 ->count();
 
             $name[$y++];
@@ -56,6 +57,8 @@ class IndexController extends Controller
 
 
         return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
+
+     //   return view('administrator.setting');
     }
 
     /**

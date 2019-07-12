@@ -55,11 +55,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-    //    return parent::render($request, $exception);
-    //    $user = Auth::user();
-    //    echo $user->name;
-
-        return redirect()->action('LoginController@Logout');
-     //   echo "session time out...";
+        return parent::render($request, $exception);
     }
 }
