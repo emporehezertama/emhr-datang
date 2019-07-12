@@ -200,7 +200,6 @@ class ExitInterviewCustomController extends Controller
             }
             $data = ExitInterview::where('id',$dataAset->exit_interview_id)->first();
 
-            
             if($user->project_id != NULL)
             {
                 $clearanceApproval = SettingApprovalClearance::join('users', 'users.id','=', 'setting_approval_clearance.user_created')->where('users.project_id', $user->project_id)->select('setting_approval_clearance.*')->get();
