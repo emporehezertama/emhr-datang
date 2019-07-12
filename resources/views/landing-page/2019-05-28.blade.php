@@ -103,27 +103,27 @@
 					Save Up To Tens Of Millions Of Rupiah <br />
 					Easy, Practical & Efficient 	
 				</p>
-				<button class="btn_trial_1" onclick="form_free_trial()">Free Trial Now</button>
+				<button class="btn_trial_1" onclick="form_free_trial()">Create Free Member</button>
 			</div>
 
 			<div class="col-md-8 float-left" style="height: 100vh;">
-				<img src="{{ asset('landing-page/2019-05-28/Model1.png') }}" style="width: 100%; position: absolute; bottom: -41px;">
+				<img src="{{ asset('landing-page/2019-05-28/Model1.png') }}" style="width: 100%; position: absolute; bottom: -10px;">
 			</div>
 			<div class="clearfix"></div>
 		  </div>
 		</div>
 		<div class="bg-2">
 		  <div class="container container_bottom">
-			<div class="col-md-4 float-left">
-				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px;" />
+			<div class="col-md-2 float-left">
+				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px; margin-top: 70px" />
 			</div>
-			<h1 class="text-right"><label style="color: #0e9a88;font-size: 29px;">There is ease in</label> <label style="color: #acce22">EM-HR</label> <label  style="color: #0e9a88">Application</label></h1>
-			<div class="col-md-6 float-right">
+			<h1 class="text-center"><label style="color: #0e9a88;font-size: 29px;">There is ease in</label> <label style="color: #acce22">EM-HR</label> <label  style="color: #0e9a88">Application</label></h1>
+			<div class="col-md-5 float-left">
 				<div class="form">
 					<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
 						<div class="bg-form-title">
-							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 13px !important;" class="py-2 px-0 mx-0 mt-0">Start Free Register</h3>
+							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 10px !important;" class="py-2 px-0 mx-0 mt-0">Free Register Member</h3>
 						</div>
 						@if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -200,12 +200,43 @@
 							</div> -->
 						</div>
 						<div class="form-group text-center">
-							<button class="btn_trial_2" type="submit">Create Free Trial Account</button>
+							<button class="btn_trial_2" type="submit">Create Free Member</button>
 						</div>
 					</form>
 				</div>
 			</div>
-			<div class="clearfix"></div>			
+			<div class="col-md-5 float-right">
+				<div class="form">
+					<form method="POST" action="{{ route('post-login-client') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
+                        {{ csrf_field() }}
+						<div class="bg-form-title">
+							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 10px !important;" class="py-2 px-0 mx-0 mt-0">Login Member</h3>
+						</div>
+						@if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                                </ul>
+                            </div>
+                        @endif
+						<div class="px-5 pt-4">
+							<div class="form-group">
+								<input type="email" class="form-control" name="email" placeholder="Email" value="{{ old('email') }}" required>
+							</div>
+							<div class="form-group">
+								<input type="password" class="form-control" name="password" placeholder="Password"  value="{{ old('password') }}" required>
+							</div>
+						</div>
+						<div class="form-group text-center">
+							<button class="btn_trial_2" type="submit">Login Now</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="clearfix"></div>	
 		</div>
 		<div>
 			<img src="{{ asset('landing-page/2019-05-28/line botton.png') }}" class="mb-4" style="width: 100%; margin-top: 1%">

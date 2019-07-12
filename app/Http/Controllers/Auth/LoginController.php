@@ -117,6 +117,9 @@ class LoginController extends Controller
         elseif (auth()->user()->access_id == 2) // karyawan
         {
             return $this->redirectTo = '/karyawan';
+        }elseif (auth()->user()->access_id == 3)  //super admin client
+        {
+            return $this->redirectTo = '/superadmin';
         }
         
         return $this->redirectTo = '/';
