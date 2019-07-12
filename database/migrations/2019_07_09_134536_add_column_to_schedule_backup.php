@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnTotalDeductionTablePayrollHistory extends Migration
+class AddColumnToScheduleBackup extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddColumnTotalDeductionTablePayrollHistory extends Migration
      */
     public function up()
     {
-        Schema::table('payroll_history', function (Blueprint $table) {
-            $table->integer('total_deductions')->nullable();
-            $table->integer('total_earnings')->nullable();
+        Schema::table('schedule_backup', function (Blueprint $table) {
+            //
+            $table->integer('user_created')->nullable();
+            $table->integer('project_id')->nullable();
         });
     }
 
@@ -26,7 +27,7 @@ class AddColumnTotalDeductionTablePayrollHistory extends Migration
      */
     public function down()
     {
-        Schema::table('payroll_history', function (Blueprint $table) {
+        Schema::table('schedule_backup', function (Blueprint $table) {
             //
         });
     }

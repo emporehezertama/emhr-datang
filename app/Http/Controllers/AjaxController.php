@@ -191,7 +191,7 @@ class AjaxController extends Controller
             if(!\Hash::check($request->currentpassword, $data->password))
             {
                 $params['message']  = 'error';
-                $params['data']     = 'Current password salah';
+                $params['data']     = 'Current password wrong';
             }
             else
             {
@@ -199,7 +199,7 @@ class AjaxController extends Controller
                 $data->last_change_password     = date('Y-m-d H:i:s');
                 $data->save();
 
-                \Session::flash('message-success', 'Password berhasil di rubah');
+                \Session::flash('message-success', 'The password was successfully changed');
             }
         }   
         
@@ -1130,6 +1130,35 @@ class AjaxController extends Controller
         
         return response()->json($params); 
     }
+
+   public function getAdministrator(Request $request)
+    {
+        $params = [];
+        if($request->ajax())
+        {
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                 $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
+                    $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                 })->get();
+            } else{
+                 $data =  User::where('access_id', 2)->where(function($query){
+                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                 })->get();
+            }
+            $params = [];
+            foreach($data as $k => $item)
+            {
+                if($k >= 10) continue;
+
+                $params[$k]['id'] = $item->id;
+                $params[$k]['value'] =  $item->name;
+            }
+        }
+        return response()->json($params); 
+    }
+
 
 
     /**

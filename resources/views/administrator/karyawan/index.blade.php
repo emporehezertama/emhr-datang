@@ -5,12 +5,21 @@
 @section('content')
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row bg-title" style="overflow: inherit;">
+        <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Employee</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <form method="POST" action="" id="filter-form">
+                <ol class="breadcrumb">
+                    <li><a href="javascript:void(0)">Dashboard</a></li>
+                    <li class="active">Employee</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="white-box">
+                    <form method="POST" action="" id="filter-form">
                     {{ csrf_field() }}
                     <input type="hidden" name="action" value="view">
                     <div class="btn-group pull-right">
@@ -78,11 +87,7 @@
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
-        <!-- .row -->
-        <div class="row">
-            @if(get_setting('layout_karyawan') == 'list')
+                @if(get_setting('layout_karyawan') == 'list')
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
                     <div class="table-responsive" style="overflow-y: unset;overflow-x: unset;">
@@ -272,6 +277,8 @@
                     </div>
                 @endforeach
             @endif
+                </div>
+            </div>
         </div>
     </div>
     @include('layouts.footer')
