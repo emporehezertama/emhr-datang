@@ -43,11 +43,8 @@ class LandingPageController extends Controller
         $data->nama         = $request->nama;
         $data->jabatan      = $request->jabatan;
         $data->email        = $request->email;
-<<<<<<< HEAD
         $data->password     = bcrypt($request->password);
-=======
         $data->password     = $request->password;
->>>>>>> 268bf0422753f050c8687bab9a70204c437e922f
         $data->perusahaan   = $request->nama_perusahaan;
         $data->bidang_usaha = $request->bidang_usaha;
         $data->handphone    = $request->handphone; 
@@ -64,6 +61,7 @@ class LandingPageController extends Controller
             'password' => 'required|string',
         ]);
         return view('landing-page/index');
+    }
 
     public function downloadExcel($request)
     {
