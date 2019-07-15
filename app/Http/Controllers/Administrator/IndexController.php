@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-use App\Models\Organisasidivision;
+use App\Models\OrganisasiDivision;
 use DB;
 use App\Models\Directorate;
 
