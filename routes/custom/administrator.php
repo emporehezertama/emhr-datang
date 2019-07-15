@@ -291,8 +291,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('payroll/detail-history/{id}', 'PayrollController@detailHistory')->name('administrator.payroll.detail-history');
 
 
-<<<<<<< HEAD
-=======
 	Route::resource('leave', 'LeaveController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::get('approval-leave-custom',  'ApprovalLeaveCustomController@index')->name('karyawan.approval.leave-custom.index');
 	Route::get('approval-leave-custom/detail/{id}',  'ApprovalLeaveCustomController@detail')->name('karyawan.approval.leave-custom.detail');
@@ -339,5 +337,4 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 
 	Route::resource('request-pay-slip-karyawan', 'RequestPaySlipKaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 
->>>>>>> 678653b822ea837129e59ee898c6350cc11f3e3f
 });
