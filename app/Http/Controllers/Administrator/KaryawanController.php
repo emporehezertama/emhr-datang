@@ -1090,7 +1090,7 @@ class KaryawanController extends Controller
         $data->current_address      = $request->current_address;
         $data->id_address           = $request->id_address;
        
-        $data->access_id            = 2;
+        //$data->access_id            = 2;
         $data->branch_type          = $request->branch_type;
         $data->hak_cuti             = 12;
         $data->cuti_yang_terpakai   = 0;
@@ -1452,6 +1452,11 @@ class KaryawanController extends Controller
     {   
         \Auth::loginUsingId($id);
         \Session::put('is_login_administrator', true);
+
+
+        $user = User::where('id', $id)->first();
+        $user->last_logged_in_at = date('Y-m-d H:i:s');
+        $user->save();
         
         return redirect()->route('karyawan.dashboard');
     }

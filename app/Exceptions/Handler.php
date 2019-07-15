@@ -5,6 +5,13 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use App\Http\Controllers\Controller;
+//use App\User;
+//use Illuminate\Support\Facades\Auth;
+use Auth;
+
+use \App\User;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -48,6 +55,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+    //    return parent::render($request, $exception);
+    //    $user = Auth::user();
+    //    echo $user->name;
+
+        return redirect()->action('LoginController@Logout');
+     //   echo "session time out...";
     }
 }

@@ -20,20 +20,28 @@ function employee_rate($month)
 /**
  * get Employee Resigness
  */
-function employee_get_resigness($month)
+function employee_get_resigness($StartDate, $StopDate, $currentMonth)
 {
-	$user  = \App\User::whereYear('resign_date', date('Y'))->whereMonth('resign_date', $month)->where('access_id', 2)->count();
-
+	$year = substr($currentMonth, 0, 4);
+	$month = substr($currentMonth, 5, 7);
+	$user  = \App\User::whereBetween('resign_date', array($StartDate, $StopDate))
+						->whereMonth('resign_date', $month)
+						->whereYear('resign_date', $year)
+						->where('access_id', 2)->count();
 	return $user;
 }
 
 /**
  * get Employee Resigness
  */
-function employee_get_joinees($month)
+function employee_get_joinees($StartDate, $StopDate, $currentMonth)
 {
-	$user  = \App\User::whereYear('join_date', date('Y'))->whereMonth('join_date', $month)->where('access_id', 2)->count();
-
+	$year = substr($currentMonth, 0, 4);
+	$month = substr($currentMonth, 5, 7);
+	$user  = \App\User::whereBetween('join_date', array($StartDate, $StopDate))
+						->whereMonth('join_date', $month)
+						->whereYear('join_date', $year)
+						->where('access_id', 2)->count();
 	return $user;
 }
 
@@ -43,7 +51,9 @@ function employee_get_joinees($month)
  */
 function employee_exit_this_month()
 {
-	return '0';
+	$user  = \App\User::whereYear('resign_date', date('Y'))->whereMonth('resign_date', date('m'))->where('access_id', 2)->count();
+	
+	return $user;
 }
 
 /**
@@ -69,7 +79,8 @@ function employee($status='all')
 
 	if($status== 'active')
 	{
-		$employee = $employee->where('status', 1)->count();
+	//	$employee = $employee->where('status', 1)->count();
+		$employee = $employee = \App\Models\AbsensiItem::whereDate('date','=', $today)->count();
 	}
 
 	if($status== 'on-leave')
@@ -89,18 +100,45 @@ function employee($status='all')
 
 	if($status == 'permanent')
 	{
-		$employee =0;
+		$employee = $employee->where('organisasi_status', 'Permanent')->count();
 	}
 
 	if($status == 'contract')
 	{
-		$employee =0;
+		$employee = $employee->where('organisasi_status', 'Contract')->count();
 	}
 
 	if($status == 'late-comers')
 	{
-		$employee = \App\Models\AbsensiItem::where('late', 1)->whereDate('date','=', $today)->count();;
+		$employee = \App\Models\AbsensiItem::where('late', 1)->whereDate('date','=', $today)->count();
 	}
 
 	return $employee;
+}
+
+
+function employee_attrition($StartDate, $StopDate, $currentMonth, $nextmonth){
+	$year = substr($currentMonth, 0, 4);
+	$month = substr($currentMonth, 5, 7);
+
+	$next_month = substr($nextmonth, 5, 7);
+	$next_month_year = substr($nextmonth, 0, 4);
+	$jumlah_karyawan_resign_perbulan = \App\User::whereBetween('resign_date', array($StartDate, $StopDate))
+													->whereMonth('resign_date', $month)
+													->whereYear('resign_date', $year)
+													->where('access_id', 2)->count();
+
+	$jumlah_karyawan_sebelum_resign_perbulan = \App\User::where('access_id', 2)
+															->whereBetween('join_date', array($StartDate, $StopDate))
+															->whereMonth('join_date', '<',$next_month)
+															->whereYear('join_date', $next_month_year)
+															->count();
+
+	if($jumlah_karyawan_resign_perbulan == 0){
+		$attrition = 0;
+	}else{
+		$attrition = round(($jumlah_karyawan_resign_perbulan / $jumlah_karyawan_sebelum_resign_perbulan) * 100);
+	}
+
+	return $attrition;
 }

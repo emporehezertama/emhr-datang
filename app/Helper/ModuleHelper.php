@@ -11,8 +11,24 @@ function checkModule($module)
 			if($module>0)
 			{
 				return true;
+			} 
+		}else{
+			return true;
+		}
+	}
+	return false;
+}
+function checkModuleAdmin($module){
+	$user = \Auth::user();
+	if($user)
+	{
+		if($user->project_id != NULL)
+		{
+			$admin = \App\Models\CrmModuleAdmin::where('user_id',$user->id)->where('product_id',$module)->count();
+			if($admin>0)
+			{
+				return true;
 			}
-
 		}else{
 			return true;
 		}

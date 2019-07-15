@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -112,13 +114,36 @@ class LoginController extends Controller
         // if user have role
         if (auth()->user()->access_id == 1) // Admin
         {
+            $user = User::where('nik', auth()->user()->nik)->first();
+            $user->last_logged_in_at = date('Y-m-d H:i:s');
+            $user->save();
+
             return $this->redirectTo = '/administrator';
         }
         elseif (auth()->user()->access_id == 2) // karyawan
         {
-            return $this->redirectTo = '/karyawan';
-        }
+            $user = User::where('nik', auth()->user()->nik)->first();
+            $user->last_logged_in_at = date('Y-m-d H:i:s');
+            $user->save();
         
+            return $this->redirectTo = '/karyawan';
+        }elseif (auth()->user()->access_id == 3)  //super admin client
+        {
+            return $this->redirectTo = '/superadmin';
+        }
+
         return $this->redirectTo = '/';
+    }
+
+    protected function Logout(){
+        $user = Auth::user();
+        $nik = $user->nik;
+
+        $user = User::where('nik', $nik)->first();
+        $user->last_logged_out_at = date('Y-m-d H:i:s');
+        $user->save();
+
+        Auth::logout();
+        return redirect('/login');
     }
 }

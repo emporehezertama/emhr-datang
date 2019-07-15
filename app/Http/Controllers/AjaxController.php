@@ -51,6 +51,9 @@ use App\Models\CutiBersama;
 use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
 use App\Models\SettingApprovalClearance;
+
+use App\Helpers\DashboardHelper;
+
 use App\Models\Universitas;
 
 class AjaxController extends Controller
@@ -188,7 +191,7 @@ class AjaxController extends Controller
             if(!\Hash::check($request->currentpassword, $data->password))
             {
                 $params['message']  = 'error';
-                $params['data']     = 'Current password salah';
+                $params['data']     = 'Current password wrong';
             }
             else
             {
@@ -196,7 +199,7 @@ class AjaxController extends Controller
                 $data->last_change_password     = date('Y-m-d H:i:s');
                 $data->save();
 
-                \Session::flash('message-success', 'Password berhasil di rubah');
+                \Session::flash('message-success', 'The password was successfully changed');
             }
         }   
         
@@ -1127,6 +1130,41 @@ class AjaxController extends Controller
         
         return response()->json($params); 
     }
+
+   public function getAdministrator(Request $request)
+    {
+        $params = [];
+        if($request->ajax())
+        {
+            $user = \Auth::user();
+            if($user->project_id != NULL)
+            {
+                $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+
+                 /*$data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
+                    $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                 })->get();
+                 */
+                 $data =[];
+            }else{
+                 /*$data =  User::where('access_id', 2)->where(function($query){
+                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                 })->get();
+                 */
+                 $data =[];
+            }
+            $params = [];
+            foreach($data as $k => $item)
+            {
+                if($k >= 10) continue;
+
+                $params[$k]['id'] = $item->id;
+                $params[$k]['value'] =  $item->name;
+            }
+        }
+        return response()->json($params); 
+    }
+
 
 
     /**
@@ -2813,6 +2851,95 @@ class AjaxController extends Controller
             return response()->json(['message' => 'success', 'data' => $data]);
         }
 
+        return response()->json($this->respon);
+    }
+
+
+    public function deleteKaryawan(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = \App\User::where('id', $request->id)->first();
+            $data->delete();
+
+            \App\UserFamily::where('user_id',  $request->id)->delete();
+            \App\UserEducation::where('user_id',  $request->id)->delete();
+
+            return response()->json($data->id);
+        }
+
+        return response()->json($this->respon);
+    }
+
+    public function getLiburNasional(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data               = LiburNasional::all();
+            $params = [];
+            foreach($data as $k =>  $item){
+                $tanggal[$k] = $item->tanggal;
+                $keterangan[$k] = $item->keterangan;
+            }
+            $hasil = json_encode(array("tanggal"=>$tanggal, "keterangan"=>$keterangan));
+            return response()->json($hasil);
+        }
+
+          return response()->json($this->respon);
+    }
+
+
+    public function getUserActive(Request $request){
+        if($request->ajax())
+        {
+            $data = User::where('access_id', '2')
+                        ->where('status', '1')
+                    //    ->where('last_logged_in_at', '<=', date('Y-m-d H:i:s'))
+                        ->whereRaw('last_logged_in_at >= last_logged_out_at')
+                        ->count();
+
+            return response()->json($data);
+        }
+        return response()->json($this->respon);
+    }
+
+    public function getDataDashboard(Request $request){
+        if($request->ajax())
+        {
+            $StartDate = strtotime(str_replace('/', '-', $request->filter_start));
+            $StopDate = strtotime(str_replace('/', '-', $request->filter_end));
+            $filterStart = str_replace('/', '-', $request->filter_start);
+            $filterEnd = str_replace('/', '-', $request->filter_end);
+            $current = $StartDate;
+            $ret = array();
+            $bulan_val = array();
+            $employee_join = array();
+            $employee_resign = array();
+            $attrition = array();
+
+            while($current<$StopDate){
+                $month = date('M y', $current);
+                $bulan_val[] = $month;
+
+                $next = date('Y-m', $current) . "+1 month";
+                $current = strtotime($next);
+                $replacetext = str_replace('+1 month', '', $next);
+                $ret[] = $replacetext;
+
+                $nextmonth = date('Y-m', $current)."+1 month";
+                $next_month = str_replace('+1 month', '', $nextmonth);
+                
+                $employee_join[] = employee_get_joinees($filterStart, $filterEnd, $replacetext);
+                $employee_resign[] = employee_get_resigness($filterStart, $filterEnd, $replacetext);
+                $attrition[] = employee_attrition($filterStart, $filterEnd, $replacetext, $next_month);
+                
+            }
+
+            $hasil = json_encode(array("bulan_val"=>$bulan_val, "employee_join"=>$employee_join, 
+                                        "employee_resign"=>$employee_resign, "attrition"=>$attrition));
+
+            return response()->json($hasil);
+        }
         return response()->json($this->respon);
     }
 }
