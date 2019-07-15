@@ -56,6 +56,8 @@ class PeraturanPerusahaanController extends Controller
     {
         $data                   = PeraturanPerusahaan::where('id', $id)->first();
         $data->title            = $request->title;
+        $data->content            = $request->content;
+        $data->status            = $request->status;
         
         if (request()->hasFile('file'))
         {
@@ -67,6 +69,32 @@ class PeraturanPerusahaanController extends Controller
 
             $data->file = $fileName;
         }
+
+        if (request()->hasFile('thumbnail'))
+        {
+
+            $file = $request->file('thumbnail');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/peraturan-perusahaan/');
+            $file->move($destinationPath, $fileName);
+
+            \Image::make(public_path('storage/peraturan-perusahaan/'. $fileName))->fit(100, 70)->save(public_path('storage/peraturan-perusahaan/'. $fileName));
+
+            $data->thumbnail = $fileName;
+        }
+        
+        if (request()->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/peraturan-perusahaan/');
+            $file->move($destinationPath, $fileName);
+
+            $data->image = $fileName;
+        }
+
 
         $data->save();
 
@@ -95,6 +123,8 @@ class PeraturanPerusahaanController extends Controller
     {
         $data                   = new PeraturanPerusahaan();
         $data->title            = $request->title;
+        $data->content          = $request->content;
+        $data->status            = $request->status;
 
         if (request()->hasFile('file'))
         {
@@ -106,6 +136,33 @@ class PeraturanPerusahaanController extends Controller
 
             $data->file = $fileName;
         }
+
+        if (request()->hasFile('thumbnail'))
+        {
+            $file = $request->file('thumbnail');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/peraturan-perusahaan/');
+            $file->move($destinationPath, $fileName);
+
+            \Image::make(public_path('storage/peraturan-perusahaan/'. $fileName))->fit(100, 70)->save(public_path('storage/peraturan-perusahaan/'. $fileName));
+
+            $data->thumbnail = $fileName;
+        }
+        
+        if (request()->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/peraturan-perusahaan/');
+            $file->move($destinationPath, $fileName);
+
+            $data->image = $fileName;
+        }
+
+
+
         $user = \Auth::user();
         if($user->project_id != NULL)
         {

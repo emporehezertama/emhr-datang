@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\LandingPageForm;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class LandingPageController extends Controller
 {
     /**
@@ -28,17 +31,19 @@ class LandingPageController extends Controller
         $this->validate($request,[
             'nama' => 'required',
             'jabatan' => 'required',
+
             'email' => 'email:required',
             'nama_perusahaan' => 'required',
             'bidang_usaha' => 'required',
             'handphone' => 'required',
-            'confirmation'      => 'same:password',
+            'confirm'      => 'same:password',
         ]);
 
     /*  $data               = new LandingPageForm();
         $data->nama         = $request->nama;
         $data->jabatan      = $request->jabatan;
         $data->email        = $request->email;
+        $data->password     = bcrypt($request->password);
         $data->password     = $request->password;
         $data->perusahaan   = $request->nama_perusahaan;
         $data->bidang_usaha = $request->bidang_usaha;
@@ -49,7 +54,14 @@ class LandingPageController extends Controller
 
         return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products and registering for trial licenses, we have received your data and we will contact you immediately for trial account information');
     }
-
+    public function loginClient(Request $request) 
+    {
+        $this->validate($request,[
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+        return view('landing-page/index');
+    }
 
     public function downloadExcel($request)
     {
@@ -135,4 +147,53 @@ class LandingPageController extends Controller
         );
     }
 
+
+    public function getPriceList(Request $request)
+    {
+        $params['subj'] = 'Pricelist';
+        $view =  view('landing-page.email-price-list')->with($params);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+
+        $pdf->stream();
+
+        $output = $pdf->output();
+
+        $destinationPath = public_path('/storage/temp/');
+        file_put_contents( $destinationPath . 'Price-List'.date('Ymdhis') .'.pdf', $output);
+        $file = $destinationPath . 'Price-List'.date('Ymdhis') .'.pdf';
+
+        $destination = public_path('storage\temp');
+        $file_name = 'Price-List'.date('YmdHis');
+        $file2 = $destination ."\\". $file_name.'.pdf';
+        file_put_contents( $destination . $file_name .'.pdf', $output);
+
+        // send email
+        $objDemo = new \stdClass();
+        $objDemo->content = view('landing-page.email-price-list'); 
+    //    $emailto = $request->email2;
+        $emailto = 'farros.jackson@gmail.com';
+        echo $file2;
+        if($emailto != "")
+        { 
+            \Mail::send('landing-page.email-price-list', $params,
+                function($message) use($file2, $emailto, $file_name, $destination) {
+                    $message->from('emporeht@gmail.com');
+                    $message->to($emailto);
+                    $message->subject('Request Price List');
+                    $message->attach($file2, array(
+                            'as' => $file_name .'.pdf', 
+                            'mime' => 'application/pdf')
+                    );  
+                    $message->setBody(''); 
+                }
+            ); 
+
+        }
+
+        
+        return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products, your Pricelist request has been sent to your email');
+    
+    }
 }
+ 

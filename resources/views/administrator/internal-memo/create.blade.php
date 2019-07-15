@@ -50,6 +50,43 @@
                                 <input type="text" required class="form-control" name="title">
                             </div>
                         </div>
+
+
+
+
+                        <div class="form-group">
+                            <label class="col-md-12">Content</label>
+                            <div class="col-md-12">
+                                <textarea class="content" name="content" id="ckeditor"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Status</label>
+                            <div class="col-md-12">
+                                <select class="form-control" name="status" required>
+                                    <option value=""> - none - </option>
+                                    <option value="1">Publish</option>
+                                    <option value="0">Draft</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Thumbnail</label>
+                            <div class="col-md-12">
+                                <input type="file" name="thumbnail" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Image Detail</label>
+                            <div class="col-md-12">
+                                <input type="file" name="image" class="form-control">
+                            </div>
+                        </div>
+                        
+
+
+
+
                         <div class="form-group">
                             <label class="col-md-12">File (PDF)</label>
                             <div class="col-md-12">

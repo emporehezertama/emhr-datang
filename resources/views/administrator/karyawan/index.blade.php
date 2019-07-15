@@ -5,12 +5,20 @@
 @section('content')
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row bg-title" style="overflow: inherit;">
+        <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Employee</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <form method="POST" action="" id="filter-form">
+                <ol class="breadcrumb">
+                    <li><a href="javascript:void(0)">Dashboard</a></li>
+                    <li class="active">Employee</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                    <form method="POST" action="" id="filter-form">
                     {{ csrf_field() }}
                     <input type="hidden" name="action" value="view">
                     <div class="btn-group pull-right">
@@ -78,11 +86,7 @@
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
-        <!-- .row -->
-        <div class="row">
-            @if(get_setting('layout_karyawan') == 'list')
+                @if(get_setting('layout_karyawan') == 'list')
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
                     <div class="table-responsive" style="overflow-y: unset;overflow-x: unset;">
@@ -272,6 +276,7 @@
                     </div>
                 @endforeach
             @endif
+            </div>
         </div>
     </div>
     @include('layouts.footer')
@@ -468,42 +473,53 @@
             employees.push($(this).val());
         });
 
+        if(employees.length < 1){
+            bootbox.confirm({
+                title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+                message: "Belum ada data yang dipilih",
+                closeButton: false,
+                callback: function (result) {
+                    if(result)
+                    { 
+                        
+                    }
+                }
+            });
+        }
         var url = "<?php echo route('ajax.get-karyawan-by-id') ?>";
         for(i=0; i<employees.length; i++){
             var id = employees[i];
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('ajax.delete-karyawan') }}',
-                data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
-                dataType: 'json',
-                success: function (msg) {
-                    window.location = "<?php echo route('administrator.karyawan.index') ?>";
+            bootbox.confirm({
+                title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+                message: "Delete this data ?",
+                closeButton: false,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn btn-sm btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn btn-sm btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if(result)
+                    { 
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('ajax.delete-karyawan') }}',
+                            data: {'id' : id, '_token' : $("meta[name='csrf-token']").attr('content')},
+                            dataType: 'json',
+                            success: function (msg) {
+                                window.location = "<?php echo route('administrator.karyawan.index') ?>"; 
+                            }
+                        });  
+                    }
                 }
             });
         }
 
-    /*    bootbox.confirm({
-            title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
-            message: "Delete this data ?",
-            closeButton: false,
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn btn-sm btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn btn-sm btn-danger'
-                }
-            },
-            callback: function (result) {
-                if(result)
-                { 
-                    
-                }
-            
-            }
-        });     */
 
     });
 </script>

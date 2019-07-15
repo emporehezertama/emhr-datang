@@ -1,4 +1,4 @@
-@extends('layouts.karyawan')
+@extends('layouts.administrator')
 
 @section('title', 'Exit Clearance Form')
 
@@ -27,7 +27,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('karyawan.exit-custom.prosesclearance') }}" method="POST" id="exit_interview_form">
+            <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.exit-custom.prosesclearance') }}" method="POST" id="exit_interview_form">
                 <div class="col-md-12">
                     <div class="white-box">
                         @if (count($errors) > 0)

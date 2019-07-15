@@ -80,10 +80,10 @@
                                     <p style="position: absolute;top: 0;right: 0; font-size: 20px;color: #2cabe3;">
                                         <i class="fa fa-cloud-download"></i>
                                     </p>
+                                    <p>
+                                        {{ substr(strip_tags($item->content),0, 50) }}
+                                    </p>
                                 </a>
-                                <p>
-                                    {{ substr($item->description,0, 50) }}
-                                </p>
                             </div>
                             <div class="clearfix"></div>
                             <hr style="margin-top: 5px; margin-bottom:5px;" />

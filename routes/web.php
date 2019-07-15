@@ -32,6 +32,9 @@ Auth::routes();
 Route::get('asset-accept/{id}', 'IndexController@acceptAsset')->name('accept-asset');
 Route::get('em-hris-application-system', 'LandingPageController@page1')->name('landing-page1');
 Route::post('post-em-hris-application-system', 'LandingPageController@storePage1')->name('post-landing-page1');
+Route::post('post-login-client', 'LandingPageController@loginClient')->name('post-login-client');
+
+Route::post('get-price-list', 'LandingPageController@getPriceList')->name('get-price-list');
 
 Route::group(['middleware' => ['auth']], function(){
 //	Route::post('logout', 'LoginController@Logout')->name('logout');
@@ -104,7 +107,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-history-training-bill', 'AjaxController@getHistoryApprovalTrainingBill')->name('ajax.get-history-training-bill');	
 	Route::post('ajax/get-history-approval-payment-request', 'AjaxController@getHistoryApprovalPaymentRequest')->name('ajax.get-history-approval-payment-request');		
 	Route::post('ajax/get-history-approval-overtime', 'AjaxController@getHistoryApprovalOvertime')->name('ajax.get-history-approval-overtime');		
-	Route::post('ajax/get-history-approval-medical', 'AjaxController@getHistoryApprovalMedical')->name('ajax.get-history-approval-medical');		
+	Route::post('ajax/get-history-approval-medical', 'AjaxController@getHistoryApprovalMedical')->name('ajax.get-history-approval-medical');
+	Route::post('ajax/get-administrator', 'AjaxController@getAdministrator')->name('ajax.get-administrator');		
 	Route::post('ajax/get-karyawan', 'AjaxController@getKaryawan')->name('ajax.get-karyawan');
 	Route::post('ajax/get-karyawan-payroll', 'AjaxController@getKaryawanPayroll')->name('ajax.get-karyawan-payroll');	
 	Route::post('ajax/get-calculate-payroll', 'AjaxController@getCalculatePayroll')->name('ajax.get-calculate-payroll');

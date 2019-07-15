@@ -127,6 +127,9 @@ class LoginController extends Controller
             $user->save();
         
             return $this->redirectTo = '/karyawan';
+        }elseif (auth()->user()->access_id == 3)  //super admin client
+        {
+            return $this->redirectTo = '/superadmin';
         }
 
         return $this->redirectTo = '/';
@@ -142,5 +145,13 @@ class LoginController extends Controller
 
         Auth::logout();
         return redirect('/login');
+    }
+
+    function authenticated(Request $request, $user)
+    {
+        $user->update([
+            'last_logged_in_at' => date('Y-m-d H:i:s')
+        //    'npwp_number' => $request->getClientIp()
+        ]);
     }
 }

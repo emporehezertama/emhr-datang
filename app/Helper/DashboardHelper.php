@@ -27,7 +27,9 @@ function employee_get_resigness($StartDate, $StopDate, $currentMonth)
 	$user  = \App\User::whereBetween('resign_date', array($StartDate, $StopDate))
 						->whereMonth('resign_date', $month)
 						->whereYear('resign_date', $year)
-						->where('access_id', 2)->count();
+						->where('access_id', 2)
+						->where('project_id', \Auth::user()->project_id)
+						->count();
 	return $user;
 }
 
@@ -41,7 +43,9 @@ function employee_get_joinees($StartDate, $StopDate, $currentMonth)
 	$user  = \App\User::whereBetween('join_date', array($StartDate, $StopDate))
 						->whereMonth('join_date', $month)
 						->whereYear('join_date', $year)
-						->where('access_id', 2)->count();
+						->where('access_id', 2)
+						->where('project_id', \Auth::user()->project_id)
+						->count();
 	return $user;
 }
 
@@ -51,7 +55,11 @@ function employee_get_joinees($StartDate, $StopDate, $currentMonth)
  */
 function employee_exit_this_month()
 {
-	$user  = \App\User::whereYear('resign_date', date('Y'))->whereMonth('resign_date', date('m'))->where('access_id', 2)->count();
+	$user  = \App\User::whereYear('resign_date', date('Y'))
+						->whereMonth('resign_date', date('m'))
+						->where('access_id', 2)
+						->where('project_id', \Auth::user()->project_id)
+						->count();
 	
 	return $user;
 }
@@ -79,23 +87,45 @@ function employee($status='all')
 
 	if($status== 'active')
 	{
-	//	$employee = $employee->where('status', 1)->count();
-		$employee = $employee = \App\Models\AbsensiItem::whereDate('date','=', $today)->count();
+	//	$employee = \App\Models\AbsensiItem::whereDate('date','=', $today)->count();
+		$employee = DB::table('absensi_item')
+						->join('users', 'absensi_item.user_id','=', 'users.id')
+						->where('users.project_id', \Auth::user()->project_id)
+						->whereDate('absensi_item.date','=', $today)
+						->count();
+
 	}
 
 	if($status== 'on-leave')
 	{
 		if($user->project_id != NULL)
 	    {
-	        $employee = \App\Models\CutiKaryawan::where('cuti_karyawan.status', 2)->whereDate('cuti_karyawan.tanggal_cuti_start','<=', $today)->whereDate('cuti_karyawan.tanggal_cuti_end','>=', $today)->join('users','users.id','=','cuti_karyawan.user_id')->where('users.project_id', $user->project_id)->select('cuti_karyawan.*')->count();
+			$employee = \App\Models\CutiKaryawan::where('cuti_karyawan.status', 2)
+												->whereDate('cuti_karyawan.tanggal_cuti_start','<=', $today)
+												->whereDate('cuti_karyawan.tanggal_cuti_end','>=', $today)
+												->join('users','users.id','=','cuti_karyawan.user_id')
+												->where('users.project_id', $user->project_id)
+												->select('cuti_karyawan.*')->count();
 	    }else{
-	        $employee = \App\Models\CutiKaryawan::where('status', 2)->whereDate('tanggal_cuti_start','<=', $today)->whereDate('tanggal_cuti_end','>=', $today)->count();
+			$employee = \App\Models\CutiKaryawan::where('status', 2)
+												->whereDate('tanggal_cuti_start','<=', $today)
+												->whereDate('tanggal_cuti_end','>=', $today)->count();
 	    }
 	}
 
 	if($status== 'on-tour')
 	{
-		$employee = \App\Models\Training::where('status', 2)->whereDate('tanggal_kegiatan_start','<=', $today)->whereDate('tanggal_kegiatan_end','>=', $today)->count();
+	/*	$employee = \App\Models\Training::where('status', 2)
+										->whereDate('tanggal_kegiatan_start','<=', $today)
+										->whereDate('tanggal_kegiatan_end','>=', $today)->count();	*/
+
+		$employee = DB::table('training')
+						->join('users', 'users.id', '=', 'training.user_id')
+						->where('users.project_id', \Auth::user()->project_id)
+						->where('training.status', 2)
+						->whereDate('training.tanggal_kegiatan_start','<=', $today)
+						->whereDate('training.tanggal_kegiatan_end','>=', $today)
+						->count();
 	}
 
 	if($status == 'permanent')
@@ -111,6 +141,12 @@ function employee($status='all')
 	if($status == 'late-comers')
 	{
 		$employee = \App\Models\AbsensiItem::where('late', 1)->whereDate('date','=', $today)->count();
+		$employee = DB::table('absensi_item')
+						->join('users', 'absensi_item.user_id','=', 'users.id')
+						->where('users.project_id', \Auth::user()->project_id)
+						->where('absensi_item.late', 1)
+						->whereDate('absensi_item.date','=', $today)
+						->count();
 	}
 
 	return $employee;
@@ -126,12 +162,15 @@ function employee_attrition($StartDate, $StopDate, $currentMonth, $nextmonth){
 	$jumlah_karyawan_resign_perbulan = \App\User::whereBetween('resign_date', array($StartDate, $StopDate))
 													->whereMonth('resign_date', $month)
 													->whereYear('resign_date', $year)
-													->where('access_id', 2)->count();
+													->where('access_id', 2)
+													->where('project_id', \Auth::user()->project_id)
+													->count();
 
 	$jumlah_karyawan_sebelum_resign_perbulan = \App\User::where('access_id', 2)
-															->whereBetween('join_date', array($StartDate, $StopDate))
+														//	->whereBetween('join_date', array($StartDate, $StopDate))
 															->whereMonth('join_date', '<',$next_month)
 															->whereYear('join_date', $next_month_year)
+															->where('project_id', \Auth::user()->project_id)
 															->count();
 
 	if($jumlah_karyawan_resign_perbulan == 0){

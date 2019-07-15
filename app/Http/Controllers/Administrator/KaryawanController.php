@@ -1090,7 +1090,7 @@ class KaryawanController extends Controller
         $data->current_address      = $request->current_address;
         $data->id_address           = $request->id_address;
        
-        $data->access_id            = 2;
+        //$data->access_id            = 2;
         $data->branch_type          = $request->branch_type;
         $data->hak_cuti             = 12;
         $data->cuti_yang_terpakai   = 0;
