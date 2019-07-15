@@ -1115,6 +1115,7 @@ class KaryawanController extends Controller
             $file->move($destinationPath, $fileName);
 
             $data->foto = $fileName;
+
         }
 
         if ($request->hasFile('foto_ktp'))

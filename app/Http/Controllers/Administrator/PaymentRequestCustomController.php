@@ -235,48 +235,11 @@ class PaymentRequestCustomController extends Controller
                 $params[$no]['APPROVAL NAME '. ($key+1)]           = isset($value->userApproved) ? $value->userApproved->name:'';
 
                 $params[$no]['APPROVAL DATE '. ($key+1)]           = $value->date_approved != NULL ? date('d F Y', strtotime($value->date_approved)) : ''; 
-                //Status Approval
-               //Nama Approval
-               //Tanggal Approval
             }
             
         }
 
         return (new \App\Models\KaryawanExport($params, 'Report Payment Request Employee ' ))->download('EM-HR.Report-Payment-Request-'.date('d-m-Y') .'.xlsx');
-
-
-        // $styleHeader = [
-        //     'font' => [
-        //         'bold' => true,
-        //     ],
-        //     'alignment' => [
-        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-        //     ],
-        //     'borders' => [
-        //         'allBorders' => [
-        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        //             'color' => ['argb' => '000000'],
-        //         ],
-        //     ],
-        //     'fill' => [
-        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-        //         'rotation' => 90,
-        //         'startColor' => [
-        //             'argb' => 'FFA0A0A0',
-        //         ],
-        //         'endColor' => [
-        //             'argb' => 'FFFFFFFF',
-        //         ],
-        //     ],
-        //     ''
-        // ];
-
-        // return \Excel::create('Report-Payment-Request-Karyawan',  function($excel) use($params, $styleHeader){
-        //       $excel->sheet('mysheet',  function($sheet) use($params){
-        //         $sheet->fromArray($params);
-        //       });
-        //     $excel->getActiveSheet()->getStyle('A1:CA1')->applyFromArray($styleHeader);
-        // })->download('xls');
     }
 
 }

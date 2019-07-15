@@ -33,7 +33,6 @@ Route::get('asset-accept/{id}', 'IndexController@acceptAsset')->name('accept-ass
 Route::get('em-hris-application-system', 'LandingPageController@page1')->name('landing-page1');
 Route::post('post-em-hris-application-system', 'LandingPageController@storePage1')->name('post-landing-page1');
 
-
 Route::group(['middleware' => ['auth']], function(){
 //	Route::post('logout', 'LoginController@Logout')->name('logout');
 	Route::post('ajax/get-division-by-directorate', 'AjaxController@getDivisionByDirectorate')->name('ajax.get-division-by-directorate');
