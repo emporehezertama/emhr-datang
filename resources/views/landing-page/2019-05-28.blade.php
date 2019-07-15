@@ -5,9 +5,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 		
-		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-		
+		<script src="{{ asset('js/bootbox.min.js') }}"></script>
 		
 		<title>EM-HR - HRIS Application System The Best and Complete</title>
 		<style type="text/css">
@@ -117,13 +115,28 @@
 			<div class="clearfix"></div>
 		  </div>
 		</div>
+
+
+		<div class="bg-1">
+		  <div class="container" style="padding: 15px 0;">
+			<div class="col-md-6 float-left section-1">
+				<iframe width="540" height="320" src="https://www.youtube.com/embed/y8h1fB7lSIQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			</div>
+			<div class="col-md-4 float-right">
+				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px; margin-top: 70px" />
+			</div>
+			<div class="clearfix"></div>
+		  </div>
+		</div>
+
+
 		<div class="bg-2">
 		  <div class="container container_bottom">
-			<div class="col-md-2 float-left">
+			<div class="col-md-4 float-left">
 				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px; margin-top: 70px" />
 			</div>
 			<h1 class="text-center"><label style="color: #0e9a88;font-size: 29px;">There is ease in</label> <label style="color: #acce22">EM-HR</label> <label  style="color: #0e9a88">Application</label></h1>
-			<div class="col-md-5 float-left">
+			<div class="col-md-5 float-right">
 				<div class="form">
 					<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
@@ -210,7 +223,7 @@
 					</form>
 
 					
-					<!--form method="POST" action="{{ route('get-price-list') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
+					<form id="form-price-list" method="POST" action="{{ route('get-price-list') }}" class="col-md-12" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
 						<div class="px-5 pt-4" style="display: none;">
 							<div class="form-group">
@@ -234,12 +247,12 @@
 						</div>
 							
 						<div class="form-group text-center">
-							<button class="btn_trial_2" id="get-price-list" type="submit">Get Price List</button>
+							<input class="btn_trial_2" id="get-price-list" type="button" onclick="submitFormPricelist();" value="Get Price List">
 						</div>
-					</form-->
+					</form>
 				</div>
 			</div>
-			<div class="col-md-5 float-right">
+			<!--div class="col-md-5 float-right">
 				<div class="form">
 					<form method="POST" action="{{ route('post-login-client') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
@@ -269,7 +282,7 @@
 						</div>
 					</form>
 				</div>
-			</div>
+			</div-->
 			<div class="clearfix"></div>	
 		</div>
 		<div>
@@ -298,30 +311,28 @@
 		$('#handphone2').val($('#handphone').val());
 	});
 
-	$('#get-price-list').click(function(){
-	/*	var nama = $('#nama').val();
-		var email = $('#email').val();
-		var handphone = $('#handphone').val();
-		var usaha = $('#bidang_usaha').val();
-		var perusahaan = $('#nama_perusahaan').val();
-		alert(nama + email + handphone + usaha + perusahaan);	*/
-	/*	$.ajax({
-            type: 'POST',
-            url: '{{ route('get-price-list') }}',
-            data: {
-				/*	'nama' : nama, 
-					'email' : email, 
-					'handphone' : handphone, 
-					'usaha' : usaha, 
-					'perusahaan' : perusahaan, */
-				/*	'_token' : $("meta[name='csrf-token']").attr('content')
-					},
-            dataType: 'json',
-            success: function (msg) {
-				window.location = "<?php echo route('landing-page1') ?>";
-			}
-		});	*/
-	});
+
+	function submitFormPricelist(){
+		if($('#nama2').val() != '' || $('#jabatan2').val() != '' || $('#email2').val() != '' || $('#nama_perusahaan2').val() != '' || $('#bidang_usaha2').val() != '' || $('#handphone2').val() != ''){
+			$('#form-price-list').submit();
+		}else{
+			bootbox.confirm({
+                title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
+                message: "Field tidak boleh kosong",
+                closeButton: false,
+                buttons: {
+
+                },
+                callback: function (result) {
+                    if(result)
+                    { 
+                        
+                    }
+                }
+            });
+		}
+	}
+	
 </script>
 
 </body>

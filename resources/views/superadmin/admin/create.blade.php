@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label class="col-md-12">Name</label>
                                 <div class="col-md-10">
-                                <input type="text" name="name" style="text-transform: uppercase"  class="form-control autocomplete" value="{{ old('name')}}"> </div>
+                                <input type="text" name="name" style="text-transform: uppercase"  class="form-control autocomplete"> </div>
                                 <input type="hidden" name="admin_id" />
                             </div>
                             <div class="form-group">
@@ -106,7 +106,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style type="text/css">
     .ui-menu.ui-widget.ui-widget-content.ui-autocomplete.ui-front {
-        z-index: 9999;
+        z-index: 9999 !important;
     } 
 </style>
 <script type="text/javascript">
@@ -119,15 +119,15 @@
               url: "{{ route('ajax.get-administrator') }}",
               method : 'POST',
               data: {
-                'name': request.term, '_token' : $("meta[name='csrf-token']").attr('content')
+                'name': request.term,'_token' : $("meta[name='csrf-token']").attr('content')
               },
               success: function( data ) {
-                response( data );
+                response(data);
               }
             });
         },
         select: function( event, ui ) {
-            $( "input[name='admin_id']" ).val(ui.item.id);
+            $("input[name='admin_id']").val(ui.item.id);
             $.ajax({
                 type: 'POST',
                 url: '{{ route('ajax.get-karyawan-by-id') }}',
@@ -137,10 +137,17 @@
                     $('.nik').val(data.data.nik);
                     $('.email').val(data.data.email);
                     $('.mobile_1').val(data.data.mobile_1);
+                    /*
+                    setTimeout(function(){
+                        $(".autocomplete").val(" ");
+
+                        $(".autocomplete").triggerHandler("focus");
+
+                    }, 500);
+                    /*
                 }
             });
-
-            $(".autocomplete" ).val("");
+            $(".autocomplete").val("");
         }
     }).on('focus', function () {
             $(this).autocomplete("search", "");

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToPeraturanPerusahaan extends Migration
+class AddStatusThumbnailImageContentToPeraturanPerusahaan extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddColumnToPeraturanPerusahaan extends Migration
     {
         Schema::table('peraturan_perusahaan', function (Blueprint $table) {
             //
-            $table->integer('user_created')->nullable();
             $table->integer('status')->nullable()->after('title');
         });
     }

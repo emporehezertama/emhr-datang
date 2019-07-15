@@ -191,7 +191,7 @@ class AjaxController extends Controller
             if(!\Hash::check($request->currentpassword, $data->password))
             {
                 $params['message']  = 'error';
-                $params['data']     = 'Current password wrong';
+                $params['data']     = 'Current password salah';
             }
             else
             {
@@ -199,7 +199,7 @@ class AjaxController extends Controller
                 $data->last_change_password     = date('Y-m-d H:i:s');
                 $data->save();
 
-                \Session::flash('message-success', 'The password was successfully changed');
+                \Session::flash('message-success', 'Password berhasil di rubah');
             }
         }   
         
@@ -1130,36 +1130,6 @@ class AjaxController extends Controller
         
         return response()->json($params); 
     }
-
-   public function getAdministrator(Request $request)
-    {
-        $params = [];
-        if($request->ajax())
-        {
-            $user = \Auth::user();
-            if($user->project_id != NULL)
-            {
-
-                 $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
-                    $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
-                 })->get();
-            } else{
-                 $data =  User::where('access_id', 2)->where(function($query){
-                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
-                 })->get();
-               }
-            $params = [];
-            foreach($data as $k => $item)
-            {
-                if($k >= 10) continue;
-
-                $params[$k]['id'] = $item->id;
-                $params[$k]['value'] =  $item->name;
-            }
-        }
-        return response()->json($params); 
-    }
-
 
 
     /**
@@ -2854,22 +2824,13 @@ class AjaxController extends Controller
     {
         if($request->ajax())
         {
-            $user               = \App\User::where('id', $request->id)->count();
-            if($user > 0){
-                \App\User::where('id', $request->id)->delete();
-            }
+            $data               = \App\User::where('id', $request->id)->first();
+            $data->delete();
 
-            $userfamily         =   UserFamily::where('user_id',  $request->id)->count();
-            if($userfamily > 0){
-                UserFamily::where('user_id',  $request->id)->delete();
-            }
+            \App\UserFamily::where('user_id',  $request->id)->delete();
+            \App\UserEducation::where('user_id',  $request->id)->delete();
 
-            $useredu            =   UserEducation::where('user_id',  $request->id)->count(); 
-            if($useredu > 0){
-                UserEducation::where('user_id',  $request->id)->delete();
-            }
-            $hasil = 'ok';
-            return response()->json($hasil);
+            return response()->json($data->id);
         }
 
         return response()->json($this->respon);
@@ -2897,7 +2858,7 @@ class AjaxController extends Controller
         if($request->ajax())
         {
             $data = User::where('access_id', '2')
-                        ->whereNull('status')
+                        ->where('status', '1')
                     //    ->where('last_logged_in_at', '<=', date('Y-m-d H:i:s'))
                         ->whereRaw('last_logged_in_at >= last_logged_out_at')
                         ->count();
