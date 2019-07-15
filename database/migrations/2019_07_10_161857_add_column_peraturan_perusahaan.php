@@ -13,10 +13,10 @@ class AddColumnPeraturanPerusahaan extends Migration
      */
     public function up()
     {
-        //
+        // 
         Schema::table('peraturan_perusahaan', function(Blueprint $table){
             $table->text('content')->nullable()->after('title');
-            $table->integer('status')->nullable();
+            // $table->integer('status')->nullable();
             $table->text('thumbnail')->nullable();
             $table->text('image')->nullable();
         });
