@@ -16,3 +16,4 @@ yarn-error.log
 /routes/ori.php
 /public/.htaccess
 /public/new/*
+/public/api/*

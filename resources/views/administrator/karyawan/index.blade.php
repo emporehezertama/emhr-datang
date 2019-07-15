@@ -18,7 +18,6 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="white-box">
                     <form method="POST" action="" id="filter-form">
                     {{ csrf_field() }}
                     <input type="hidden" name="action" value="view">
@@ -277,7 +276,6 @@
                     </div>
                 @endforeach
             @endif
-                </div>
             </div>
         </div>
     </div>

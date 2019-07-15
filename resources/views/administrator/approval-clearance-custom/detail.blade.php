@@ -27,7 +27,7 @@
         </div>
         <!-- .row -->
         <div class="row">
-            <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.exit-custom.prosesclearance') }}" method="POST" id="exit_interview_form">
+            <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('administrator.approval.clearance-custom.proses') }}" method="POST" id="exit_clearance_form">
                 <div class="col-md-12">
                     <div class="white-box">
                         @if (count($errors) > 0)
@@ -41,6 +41,9 @@
                             </div>
                         @endif
                         {{ csrf_field() }}
+                        <?php
+
+                        ?>
                         <div class="form-group">
                             <label class="col-md-12">INVENTORY RETURN</label>
                             <div class="col-md-12">
@@ -81,21 +84,24 @@
                                             <td>{{ $item->asset->asset_condition }}</td>
                                             <td>{{ $item->asset->handover_date != "" ?  format_tanggal($item->asset->handover_date) : '' }}</td>
                                             <td style="text-align: center;">
-                                                 @if($item->user_check == 1)
+                                                @if($item->user_check == 1)
                                                 <label class="bt btn-success btn-xs"><i class="fa fa-check"></i> </label>
                                                 @else
                                                 <label class="bt btn-danger btn-xs"><i class="fa fa-close"></i> </label>
-                                                @endif 
+                                                @endif
                                             </td>
-                                            <td style="text-align: center;">
-                                                @if($item->approval_check == 1)
-                                                <label class="bt btn-success btn-xs"><i class="fa fa-check"></i> </label>
-                                                @else
-                                                <label class="bt btn-danger btn-xs"><i class="fa fa-close"></i> </label>
-                                                @endif  
-                                            </td>
+                                            @if($item->asset->asset_type->pic_department == $type->nama_approval)
+                                                <td style="text-align: center;">
+                                                <input type="checkbox" value="1" {{ $item->approval_check == 1 ? 'checked' : '' }} name="approval_check[{{$no}}]">
+                                                </td>
+                                            @else
+                                                <td style="text-align: center;">
+                                                    <input type="checkbox" value="1" disabled="true" {{ $item->approval_check == 1 ? 'checked' : '' }} name="approval_check[{{$no}}]">
+                                                </td>
+                                            @endif
+                                        
                                             <td>
-                                                <input type="text" readonly="true" name="catatan[{{$no}}]" class="form-control catatan" value="{{ $item->catatan }}" />
+                                                <input type="text" name="catatan[{{$no}}]" class="form-control catatan" value="{{ $item->catatan }}" />
                                             </td>
                                         </tr>
                                         @endforeach
@@ -108,7 +114,11 @@
 
                         <div class="form-group">
                             <div class="col-md-12">
-                                <a href="{{ route('administrator.exitCustom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                <a href="{{ route('administrator.approval.clearance-custom.index') }}" class="btn btn-sm btn-default waves-effect waves-light m-r-10"><i class="fa fa-arrow-left"></i> Cancel</a>
+                                @if($check > 0)
+                                <a class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="submit_form"><i class="fa fa-save"></i> Approve</a>
+                                @endif
+                                
                             </div>
                         </div>
 
@@ -129,41 +139,15 @@
 <link href="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css') }}" rel="stylesheet">
 <!-- Clock Plugin JavaScript -->
 <script src="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
-<script type="text/javascript">
 
-    $("input[name='exit_interview_reason']").click(function(){
-
-        if($(this).val() == 1)
-        {
-            $('.perusahaan_lain').show("slow");
-        }
-        else if($(this).val() == 'other')
-        {
-            $("textarea[name='other_reason']").show();
-        }
-        else
-        {
-            $('.perusahaan_lain').hide("slow");
-            $("textarea[name='other_reason']").hide();
-        }
-    });
-</script>
-<script type="text/javascript">
-
-    var list_atasan = [];
-
-    @foreach(empore_get_atasan_langsung() as $item)
-        list_atasan.push({id : {{ $item->id }}, value : '{{ $item->nik .' - '. $item->name.' - '. empore_jabatan($item->id) }}',  });
-    @endforeach
-</script>
 <script type="text/javascript">
 
     $('#submit_form').click(function(){
 
-        bootbox.confirm("Do you want to submit this form ?", function(result){
+        bootbox.confirm("Do you want to update this form ?", function(result){
             if(result)
             {
-                $("#exit_interview_form").submit()
+                $("#exit_clearance_form").submit()
             }
         });
 
@@ -172,14 +156,6 @@
     jQuery('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd',
     });
-
-    $('.next_exit_clearance').click(function(){
-
-        $("a[href='#clearance']").parent().addClass('active');        
-
-        $("a[href='#interview']").parent().removeClass('active');
-    });
-
 </script>
 @endsection
 <!-- ============================================================== -->

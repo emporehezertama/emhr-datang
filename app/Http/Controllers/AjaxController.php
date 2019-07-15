@@ -1139,6 +1139,7 @@ class AjaxController extends Controller
             $user = \Auth::user();
             if($user->project_id != NULL)
             {
+<<<<<<< HEAD
             //    $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->get();
 
                 $data =  User::where('access_id', 2)
@@ -1156,6 +1157,21 @@ class AjaxController extends Controller
             /*     $data =  User::where('access_id', 2)->where(function($query){
                      $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
                  })->get(); */
+=======
+                $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+
+                 /*$data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
+                    $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                 })->get();
+                 */
+                 $data =[];
+            }else{
+                 /*$data =  User::where('access_id', 2)->where(function($query){
+                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                 })->get();
+                 */
+                 $data =[];
+>>>>>>> 678653b822ea837129e59ee898c6350cc11f3e3f
             }
             $params = [];
             foreach($data as $k => $item)
