@@ -115,13 +115,28 @@
 			<div class="clearfix"></div>
 		  </div>
 		</div>
+
+
+		<div class="bg-1">
+		  <div class="container" style="padding: 15px 0;">
+			<div class="col-md-6 float-left section-1">
+				<iframe width="540" height="320" src="https://www.youtube.com/embed/y8h1fB7lSIQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			</div>
+			<div class="col-md-4 float-right">
+				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px; margin-top: 70px" />
+			</div>
+			<div class="clearfix"></div>
+		  </div>
+		</div>
+
+
 		<div class="bg-2">
 		  <div class="container container_bottom">
-			<div class="col-md-2 float-left">
+			<div class="col-md-4 float-left">
 				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px; margin-top: 70px" />
 			</div>
 			<h1 class="text-center"><label style="color: #0e9a88;font-size: 29px;">There is ease in</label> <label style="color: #acce22">EM-HR</label> <label  style="color: #0e9a88">Application</label></h1>
-			<div class="col-md-5 float-left">
+			<div class="col-md-5 float-right">
 				<div class="form">
 					<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
@@ -208,7 +223,7 @@
 					</form>
 
 					
-					<form id="form-price-list" method="POST" action="{{ route('get-price-list') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
+					<form id="form-price-list" method="POST" action="{{ route('get-price-list') }}" class="col-md-12" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
 						<div class="px-5 pt-4" style="display: none;">
 							<div class="form-group">
@@ -237,7 +252,7 @@
 					</form>
 				</div>
 			</div>
-			<div class="col-md-5 float-right">
+			<!--div class="col-md-5 float-right">
 				<div class="form">
 					<form method="POST" action="{{ route('post-login-client') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
                         {{ csrf_field() }}
@@ -267,7 +282,7 @@
 						</div>
 					</form>
 				</div>
-			</div>
+			</div-->
 			<div class="clearfix"></div>	
 		</div>
 		<div>
