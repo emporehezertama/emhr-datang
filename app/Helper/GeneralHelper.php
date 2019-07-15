@@ -837,6 +837,19 @@ function get_setting($key)
 {
 	$setting = \App\Models\Setting::where('key', $key)->first();
 
+	$auth = \Auth::user();
+	if($auth)
+	{
+		if($auth->project_id != NULL)
+        {
+        	$setting = \App\Models\Setting::where('key', $key)->where('project_id',$auth->project_id)->first();
+        } else{
+        	$setting = \App\Models\Setting::where('key', $key)->first();
+        }
+	}else{
+		$setting = \App\Models\Setting::where('key', $key)->first();
+	}
+
 	if($setting)
 	{
 		return $setting->value;

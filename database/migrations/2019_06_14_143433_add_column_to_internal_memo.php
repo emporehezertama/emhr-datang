@@ -9,14 +9,14 @@ class AddColumnToInternalMemo extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
+     * @return void 
      */
     public function up()
     {
         Schema::table('internal_memo', function (Blueprint $table) {
             //
             $table->integer('user_created')->nullable();
-        //    $table->integer('status')->nullable();
+            $table->integer('status')->nullable()->after('description');
         });
     }
 

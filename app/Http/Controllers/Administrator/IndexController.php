@@ -46,7 +46,8 @@ class IndexController extends Controller
                                                 ->select('structure_organization_custom.*', 'users.*')
                                                 ->join('users', 'structure_organization_custom.id','=', 'users.structure_organization_custom_id')
                                                 ->where('structure_organization_custom.organisasi_division_id', $id[$x])
-                                                ->whereNull('users.status')
+                                                ->where('users.project_id', \Auth::user()->project_id)
+                                                ->where('users.status', '')
                                                 ->count();
 
             $name[$y++];
@@ -56,10 +57,7 @@ class IndexController extends Controller
         $namedivision = $name;
         $jumlahperdivisi = $karyawan_per_divisi;
 
-
         return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
-
-     //   return view('administrator.setting');
     }
 
     /**

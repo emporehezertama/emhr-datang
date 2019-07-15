@@ -41,9 +41,9 @@
                     <li><a href="{{ route('administrator.exitCustom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a></li>
                     @endif
                 
-                @if(checkModuleAdmin(10))
-                <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-library-books fa-fw"></i><span class="hide-menu">Request Pay Slip</span></a></li>
-                @endif
+                    @if(checkModuleAdmin(10))
+                    <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-library-books fa-fw"></i><span class="hide-menu">Request Pay Slip</span></a></li>
+                    @endif
             </ul>
         </li>
         @endif
@@ -106,8 +106,10 @@
         </li>
         @endif
         <!--As Karyawan-->
-        <li class="devider"></li>
-          @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9))
+        @if(Auth::user()->project_id != NULL)
+            <li class="devider"></li>
+
+          @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9) || checkModule(10))
         <li class="mega-nav">
             <a href="javascript:void(0)" class="waves-effect">
                 <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Management Form<span class="fa arrow"></span></span>
@@ -115,44 +117,45 @@
             <ul class="nav nav-second-level">
                      @if(checkModule(4)) 
                     <li>
-                        <a href="{{ route('karyawan.leave.index') }}"><i class="mdi mdi-calendar-multiple-check fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
+                        <a href="{{ route('administrator.leave.index') }}"><i class="mdi mdi-calendar-multiple-check fa-fw"></i><span class="hide-menu">Leave / Permit</span></a>
                     </li>
                     @endif
                     @if(checkModule(6))
                     <li>
-                        <a href="{{ route('karyawan.payment-request-custom.index') }}"><i class="mdi mdi-cash-multiple fa-fw"></i><span class="hide-menu">Payment Request</span></a>
+                        <a href="{{ route('administrator.payment-request-custom.index') }}"><i class="mdi mdi-cash-multiple fa-fw"></i><span class="hide-menu">Payment Request</span></a>
                     </li>
                     @endif
                     @if(checkModule(7))
                     <li>
-                    <a href="{{ route('karyawan.overtime-custom.index') }}"><i class="mdi mdi-clock-fast fa-fw"></i><span class="hide-menu">Overtime Sheet </span></a>
+                    <a href="{{ route('administrator.overtime-custom.index') }}"><i class="mdi mdi-clock-fast fa-fw"></i><span class="hide-menu">Overtime Sheet </span></a>
                     </li>
                     @endif
                     @if(checkModule(8))
                     <li>
-                    <a href="{{ route('karyawan.training-custom.index') }}"><i class="mdi mdi-taxi fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a>
+                    <a href="{{ route('administrator.training-custom.index') }}"><i class="mdi mdi-taxi fa-fw"></i><span class="hide-menu">Training & Business Trip</span></a>
                     </li>
                     @endif
                     @if(checkModule(5))
                     <li>
-                    <a href="{{ route('karyawan.medical-custom.index') }}"><i class="mdi mdi-stethoscope fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a>
+                    <a href="{{ route('administrator.medical-custom.index') }}"><i class="mdi mdi-stethoscope fa-fw"></i><span class="hide-menu">Medical Reimbursement</span></a>
                     </li>
                     @endif
                     @if(checkModule(9))
                     <li>
-                    <a href="{{ route('karyawan.exit-custom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
+                    <a href="{{ route('administrator.exit-custom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
+                    </li>
+                    @endif
+                    @if(checkModule(10))
+                    <li class="mega-nav">
+                        <a href="{{ route('administrator.request-pay-slip-karyawan.index') }}" class="waves-effect">
+                            <i class="mdi mdi-library-books fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>
+                        </a>
                     </li>
                     @endif
             </ul>
         </li>
         @endif
-        @if(checkModule(10))
-        <li class="mega-nav">
-            <a href="{{ route('karyawan.request-pay-slip.index') }}" class="waves-effect">
-                <i class="mdi mdi-library-books fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>
-            </a>
-        </li>
-        @endif
+        
 
         @php($leave_menu = count_leave_approval())
         @php($payment_menu = count_payment_request_approval())
@@ -175,47 +178,47 @@
                 <ul class="nav nav-second-level">
                     @if(checkModule(4))
                     <li>
-                        <a href="{{ route('karyawan.approval.leave-custom.index') }}"><i class="mdi mdi-calendar-check fa-fw"></i><span class="hide-menu">Leave/Permit</span>
+                        <a href="{{ route('administrator.approval.leave-custom.index') }}"><i class="mdi mdi-calendar-check fa-fw"></i><span class="hide-menu">Leave/Permit</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $leave_menu['waiting'] }}</label>
                         </a>
                     </li>
                     @endif
                     @if(checkModule(6))
                     <li>
-                        <a href="{{ route('karyawan.approval.payment-request-custom.index') }}"><i class="mdi mdi-cast fa-fw"></i><span class="hide-menu">Payment Request</span>
+                        <a href="{{ route('administrator.approval.payment-request-custom.index') }}"><i class="mdi mdi-cast fa-fw"></i><span class="hide-menu">Payment Request</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $payment_menu['waiting'] }}</label>
                         </a>
                     </li>
                     @endif
                     @if(checkModule(7))
                     <li>
-                        <a href="{{ route('karyawan.approval.overtime-custom.index') }}"><i class="mdi mdi-checkbox-multiple-marked-circle-outline fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
+                        <a href="{{ route('administrator.approval.overtime-custom.index') }}"><i class="mdi mdi-checkbox-multiple-marked-circle-outline fa-fw"></i><span class="hide-menu">Overtime Sheet</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $overtime_menu['waiting'] }}</label>
                         </a>
                     </li>
                     @endif
                     @if(checkModule(8))
                     <li>
-                        <a href="{{ route('karyawan.approval.training-custom.index') }}"><i class="mdi mdi-car-connected fa-fw"></i><span class="hide-menu">Business Trip / Training</span>
+                        <a href="{{ route('administrator.approval.training-custom.index') }}"><i class="mdi mdi-car-connected fa-fw"></i><span class="hide-menu">Business Trip / Training</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $training_menu['waiting'] }}</label>
                         </a>
                     </li>
                     @endif
                     @if(checkModule(5))
                     <li>
-                        <a href="{{ route('karyawan.approval.medical-custom.index') }}"><i class="mdi mdi-hospital-building fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
+                        <a href="{{ route('administrator.approval.medical-custom.index') }}"><i class="mdi mdi-hospital-building fa-fw"></i><span class="hide-menu">Medical Reimbursement</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $medical_menu['waiting'] }}</label>
                         </a>
                     </li>
                     @endif
                     @if(checkModule(9))
                     <li>
-                        <a href="{{ route('karyawan.approval.exit-custom.index') }}"><i class="mdi mdi-arrow-right-bold-circle-outline fa-fw"></i><span class="hide-menu">Exit Interview</span>
+                        <a href="{{ route('administrator.approval.exit-custom.index') }}"><i class="mdi mdi-arrow-right-bold-circle-outline fa-fw"></i><span class="hide-menu">Exit Interview</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $exit_menu['waiting'] }}</label>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('karyawan.approval.clearance-custom.index') }}"><i class="mdi mdi-checkbox-multiple-marked-outline fa-fw"></i><span class="hide-menu">Exit Clearance</span>
+                        <a href="{{ route('administrator.approval.clearance-custom.index') }}"><i class="mdi mdi-checkbox-multiple-marked-outline fa-fw"></i><span class="hide-menu">Exit Clearance</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $clearance_menu['waiting'] }}</label>
                         </a>
                     </li>
@@ -223,6 +226,7 @@
                 </ul>
             </li>
             @endif
+        @endif
         @endif
     </ul>
 @elseif(Auth::user()->access_id == 3)
@@ -295,17 +299,17 @@
                     <a href="{{ route('karyawan.exit-custom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
                     </li>
                     @endif
+                    @if(checkModule(10))
+                    <li class="mega-nav">
+                        <a href="{{ route('karyawan.request-pay-slip.index') }}" class="waves-effect">
+                            <i class="mdi mdi-library-books fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>
+                        </a>
+                    </li>
+                    @endif
             </ul>
         </li>
         @endif
-        @if(checkModule(10))
-        <li class="mega-nav">
-            <a href="{{ route('karyawan.request-pay-slip.index') }}" class="waves-effect">
-                <i class="mdi mdi-library-books fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>
-            </a>
-        </li>
-        @endif
-
+        
         @php($leave_menu = count_leave_approval())
         @php($payment_menu = count_payment_request_approval())
         @php($overtime_menu = count_overtime_approval())

@@ -56,7 +56,34 @@ class InternalMemoController extends Controller
     {
         $data                   = InternalMemo::where('id', $id)->first();
         $data->title            = $request->title;
+        $data->content            = $request->content;
+        $data->status            = $request->status;
         
+        if (request()->hasFile('thumbnail'))
+        {
+
+            $file = $request->file('thumbnail');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/internal-memo/');
+            $file->move($destinationPath, $fileName);
+
+            \Image::make(public_path('storage/internal-memo/'. $fileName))->fit(100, 70)->save(public_path('storage/internal-memo/'. $fileName));
+
+            $data->thumbnail = $fileName;
+        }
+
+        if (request()->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/internal-memo/');
+            $file->move($destinationPath, $fileName);
+
+            $data->image = $fileName;
+        }
+
         if (request()->hasFile('file'))
         {
             $file = $request->file('file');
@@ -95,6 +122,8 @@ class InternalMemoController extends Controller
     {
         $data                   = new InternalMemo();
         $data->title            = $request->title;
+        $data->content          = $request->content;
+        $data->status           = $request->status;
         
         $user = \Auth::user();
         if($user->project_id != NULL)
@@ -112,7 +141,35 @@ class InternalMemoController extends Controller
 
             $data->file = $fileName;
         }
+
+
+        if (request()->hasFile('thumbnail'))
+        {
+            $file = $request->file('thumbnail');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/internal-memo/');
+            $file->move($destinationPath, $fileName);
+
+            \Image::make(public_path('storage/internal-memo/'. $fileName))->fit(100, 70)->save(public_path('storage/internal-memo/'. $fileName));
+
+            $data->thumbnail = $fileName;
+        }
+        
+        if (request()->hasFile('image'))
+        {
+            $file = $request->file('image');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/storage/internal-memo/');
+            $file->move($destinationPath, $fileName);
+
+            $data->image = $fileName;
+        }
+
+
         $data->save();
+    //    echo $data->image;
 
         return redirect()->route('administrator.internal-memo.index')->with('message-success', 'Data successfully saved !');
     }

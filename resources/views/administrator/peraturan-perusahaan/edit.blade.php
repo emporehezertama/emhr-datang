@@ -51,6 +51,40 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-12">Content</label>
+                            <div class="col-md-12">
+                                <textarea class="content" name="content" id="ckeditor">{{ $data->content }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Status</label>
+                            <div class="col-md-12">
+                                <select class="form-control" name="status" required>
+                                    <option value=""> - none - </option>
+                                    <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>Publish</option>
+                                    <option value="0" {{ $data->status == 0 ? 'selected' : '' }}>Draft</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Thumbnail</label>
+                            <div class="col-md-12">
+                                <input type="file" name="thumbnail" class="form-control">
+                                @if(!empty($data->thumbnail))
+                                <img src="{{ asset('storage/peraturan-perusahaan/'. $data->thumbnail) }}" />
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Image</label>
+                            <div class="col-md-12">
+                                <input type="file" name="image" class="form-control">
+                                @if(!empty($data->image))
+                                <img src="{{ asset('storage/peraturan-perusahaan/'. $data->image) }}" />
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-12">File (PDF)</label>
                             <div class="col-md-12">
                                 <input type="file" name="file" class="form-control" />

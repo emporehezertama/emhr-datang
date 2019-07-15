@@ -36,7 +36,6 @@ Route::post('post-login-client', 'LandingPageController@loginClient')->name('pos
 
 Route::post('get-price-list', 'LandingPageController@getPriceList')->name('get-price-list');
 
-
 Route::group(['middleware' => ['auth']], function(){
 //	Route::post('logout', 'LoginController@Logout')->name('logout');
 	Route::post('ajax/get-division-by-directorate', 'AjaxController@getDivisionByDirectorate')->name('ajax.get-division-by-directorate');
@@ -145,7 +144,6 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('ajax/get-user-active', 'AjaxController@getUserActive')->name('ajax.get-user-active');
 	Route::post('ajax/get-data-dashboard', 'AjaxController@getDataDashboard')->name('ajax.get-data-dashboard');
 
-	//	Route::post('ajax/get-price-list', 'LandingPageController@getPriceList')->name('ajax.get-price-list');
 });
 
 /**

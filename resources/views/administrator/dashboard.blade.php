@@ -126,14 +126,7 @@
                     <div id="chart-2" style="height: 220px"></div>
                     <p class="text-center"><label class=" m-l-10"><i class="fa fa-circle" style="color:#d70206;"></i></label> Attrition Rate</p>
                 </div>
-            </div>
-            <!--div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                    <div id="calendar2"></div>
-                </div>
-                <div class="col-sm-3"></div>
-            </div-->            
+            </div>         
             <div class="col-sm-6">
                 <div id="calendar2"></div>
             </div>
