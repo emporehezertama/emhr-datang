@@ -64,6 +64,7 @@ class LandingPageController extends Controller
             'password' => 'required|string',
         ]);
         return view('landing-page/index');
+    }
 
     public function downloadExcel($request)
     {

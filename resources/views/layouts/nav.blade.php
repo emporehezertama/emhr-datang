@@ -106,7 +106,9 @@
         </li>
         @endif
         <!--As Karyawan-->
-        <li class="devider"></li>
+        @if(Auth::user()->project_id != NULL)
+            <li class="devider"></li>
+
           @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9) || checkModule(10))
         <li class="mega-nav">
             <a href="javascript:void(0)" class="waves-effect">
@@ -224,6 +226,7 @@
                 </ul>
             </li>
             @endif
+        @endif
         @endif
     </ul>
 @elseif(Auth::user()->access_id == 3)
