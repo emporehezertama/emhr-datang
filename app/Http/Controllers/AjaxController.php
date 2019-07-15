@@ -1140,12 +1140,13 @@ class AjaxController extends Controller
             if($user->project_id != NULL)
             {
                  $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
-                    $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                    $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
                  })->get();
             } else{
                  $data =  User::where('access_id', 2)->where(function($query){
-                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')
+                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
                  })->get();
+                 
             }
             $params = [];
             foreach($data as $k => $item)
