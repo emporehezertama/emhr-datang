@@ -71,7 +71,7 @@ class MedicalController extends Controller
      */
     public function create()
     {   
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('administrator.medical.create')->with($params);
     }
@@ -85,7 +85,7 @@ class MedicalController extends Controller
     {
         $params['data'] = MedicalReimbursement::where('id', $id)->first();;
         $params['form'] = MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('administrator.medical.edit')->with($params);
     }

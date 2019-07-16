@@ -499,7 +499,7 @@ class KaryawanController extends Controller
             foreach($rows as $key => $item)
             {
                 if(empty($item[2])) continue;
-                
+
                 if($key >= 3)
                 {
                     $user = new UserTemp();
@@ -532,13 +532,12 @@ class KaryawanController extends Controller
                         $user->gender           = 'Female';
                     }
 
+                    $user->marital_status   = $item[6];
                     $agama = $item[7];
 
                     if(strtoupper($agama)=='ISLAM'){
                       $agama = 'Muslim';
                     }
-
-                    $user->marital_status   = $item[6];
                     $user->agama            = $agama;
                     $user->ktp_number       = $item[8];
                     $user->passport_number  = $item[9];

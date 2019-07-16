@@ -43,8 +43,8 @@ class LeaveController extends Controller
      */
     public function create()
     {
-        $params['karyawan'] = User::where('access_id', 2)->get();
-        $params['karyawan_backup'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
+        $params['karyawan_backup'] = User::whereIn('access_id', [1,2])->get();
 
         return view('administrator.leave.create')->with($params);
     }

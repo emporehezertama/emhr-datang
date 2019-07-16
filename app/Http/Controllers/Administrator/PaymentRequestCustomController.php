@@ -141,7 +141,7 @@ class PaymentRequestCustomController extends Controller
     {   
 
         $params['data'] = PaymentRequest::where('id', $id)->first();
-        $params['karyawan']     = User::where('access_id', 2)->get();
+        $params['karyawan']     = User::whereIn('access_id', [1,2])->get();
         $params['form']         = PaymentRequestForm::where('payment_request_id', $id)->get();
 
         return view('administrator.paymentrequestcustom.proses')->with($params);

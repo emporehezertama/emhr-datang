@@ -975,7 +975,7 @@ function list_approval_user()
  */
 function get_karyawan()
 {
-	return \App\User::where('access_id', 2)->get();
+	return \App\User::whereIn('access_id', [1,2])->get();
 }
 
 /**

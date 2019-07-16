@@ -185,7 +185,7 @@ class CutiController extends Controller
      */
     public function create()
     {   
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('administrator.cuti.create')->with($params);
     }
@@ -197,7 +197,7 @@ class CutiController extends Controller
      */
     public function edit($id)
     {
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = whereIn('access_id', [1,2])->get();
         $params['data']     = CutiKaryawan::where('id', $id)->first();
 
         return view('administrator.cuti.edit')->with($params);

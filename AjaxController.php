@@ -1158,7 +1158,7 @@ class AjaxController extends Controller
                 // existing user payroll skip
                 if($payroll) continue;
 
-                if($i->access_id != 2) continue; // jika bukan karyawan maka skip
+                if($i->access_id == 3) continue; // jika bukan karyawan maka skip
 
                 $karyawan[$k]['id']     = $i->id;
                 $karyawan[$k]['value']  = $i->nik .' - '. $i->name;
@@ -1182,7 +1182,7 @@ class AjaxController extends Controller
                 // existing user payroll skip
                 if($payroll) continue;
 
-                if($i->access_id != 2) continue; // jika bukan karyawan maka skip
+                if($i->access_id == 3) continue; // jika bukan karyawan maka skip
 
                 $karyawan[$k]['id']     = $i->id;
                 $karyawan[$k]['value']  = $i->nik .' - '. $i->name;
@@ -1206,7 +1206,7 @@ class AjaxController extends Controller
                 // existing user payroll skip
                 if($payroll) continue;
 
-                if($i->access_id != 2) continue; // jika bukan karyawan maka skip
+                if($i->access_id == 3) continue; // jika bukan karyawan maka skip
 
                 $karyawan[$k]['id']     = $i->id;
                 $karyawan[$k]['value']  = $i->nik .' - '. $i->name;
