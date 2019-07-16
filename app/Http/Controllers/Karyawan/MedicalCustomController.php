@@ -51,7 +51,7 @@ class MedicalCustomController extends Controller
         }else{
             $params['type'] = MedicalType::all();
         }
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('karyawan.medical-custom.create')->with($params);
     }
@@ -162,7 +162,7 @@ class MedicalCustomController extends Controller
     {
         $params['data'] = MedicalReimbursement::where('id', $id)->first();;
         $params['form'] = MedicalReimbursementForm::where('medical_reimbursement_id', $id)->get();
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('karyawan.medical-custom.edit')->with($params);
     }

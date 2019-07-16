@@ -836,7 +836,12 @@ function update_setting($key, $value)
 function get_setting($key)
 {
 	$setting = \App\Models\Setting::where('key', $key)->first();
-
+	if($key == 'layout_karyawan'){
+		if($setting)
+		{
+			return $setting->value;
+		}
+	}
 	$auth = \Auth::user();
 	if($auth)
 	{

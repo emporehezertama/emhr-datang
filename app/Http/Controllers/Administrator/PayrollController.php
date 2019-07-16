@@ -666,7 +666,7 @@ class PayrollController extends Controller
      */
     public function download()
     {
-        $users = \App\User::where('access_id', 2)->get();
+        $users = \App\User::whereIn('access_id', [1,2])->get();
 
         $params = [];
 

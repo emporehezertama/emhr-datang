@@ -21,6 +21,8 @@ class AccessMiddleware
                 return redirect()->to('administrator')->with('message-error', 'Access Denied');
             elseif($request->user()->access_id == 2)
                 return redirect()->to('karyawan')->with('message-error', 'Access Denied');
+            elseif($request->user()->access_id == 3)
+                return redirect()->to('superadmin')->with('message-error', 'Access Denied');
             else
                 return redirect()->to('login');
         }

@@ -71,7 +71,7 @@ class OvertimeController extends Controller
      */
     public function create()
     {   
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('administrator.overtime.create')->with($params);
     }
