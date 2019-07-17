@@ -222,7 +222,7 @@ class AjaxController extends Controller
             $data->last_change_password = date('Y-m-d H:i:s');
             $data->save();
 
-            \Session::flash('message-success', 'Password berhasil di rubah');
+            \Session::flash('message-success', 'Password has Successfully Change');
         }   
         
         return response()->json($params);
@@ -1134,20 +1134,20 @@ class AjaxController extends Controller
    public function getAdministrator(Request $request)
     {
         $params = [];
-        if($request->ajax())
+         if($request->ajax())
         {
             $user = \Auth::user();
             if($user->project_id != NULL)
             {
-
-                 $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
+                $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
                  })->get();
+                
             } else{
-                 $data =  User::where('access_id', 2)->where(function($query){
+                $data =  User::where('access_id', 2)->where(function($query){
                      $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
                  })->get();
-               }
+            }
             $params = [];
             foreach($data as $k => $item)
             {
@@ -2896,11 +2896,20 @@ class AjaxController extends Controller
     public function getUserActive(Request $request){
         if($request->ajax())
         {
-            $data = User::whereIn('access_id', [1,2])
+            if(\Auth::user()->project_id != Null){
+                $data = User::whereIn('access_id', ['1', '2'])
                         ->whereNull('status')
+                        ->where('project_id', \Auth::user()->project_id)
                     //    ->where('last_logged_in_at', '<=', date('Y-m-d H:i:s'))
                         ->whereRaw('last_logged_in_at >= last_logged_out_at')
                         ->count();
+            }else{
+                $data = User::whereIn('access_id', ['1', '2'])
+                        ->whereNull('status')
+                        ->whereRaw('last_logged_in_at >= last_logged_out_at')
+                        ->count();
+            }
+            
 
             return response()->json($data);
         }

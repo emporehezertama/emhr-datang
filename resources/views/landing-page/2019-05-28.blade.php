@@ -110,7 +110,7 @@
 			</div>
 
 			<div class="col-md-8 float-left" style="height: 100vh;">
-				<img src="{{ asset('landing-page/2019-05-28/Model1.png') }}" style="width: 100%; position: absolute; bottom: -10px;">
+				<img src="{{ asset('landing-page/2019-05-28/modelEMHRsmall.png') }}" style="width: 175%; position: absolute; bottom: -10px; right: -340px;">
 			</div>
 			<div class="clearfix"></div>
 		  </div>
@@ -120,7 +120,7 @@
 		<div class="bg-1">
 		  <div class="container" style="padding: 15px 0;">
 			<div class="col-md-6 float-left section-1">
-				<iframe width="540" height="320" src="https://www.youtube.com/embed/y8h1fB7lSIQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<iframe width="580" height="360" src="https://www.youtube.com/embed/y8h1fB7lSIQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 			</div>
 			<div class="col-md-4 float-right">
 				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 100%; margin-left: -23px; margin-top: 70px" />
@@ -222,67 +222,8 @@
 						</div>
 					</form>
 
-					
-					<form id="form-price-list" method="POST" action="{{ route('get-price-list') }}" class="col-md-12" style="padding-top: 0px !important; padding-bottom: 10px">
-                        {{ csrf_field() }}
-						<div class="px-5 pt-4" style="display: none;">
-							<div class="form-group">
-								<input type="text" class="form-control" id="nama2" name="nama2" placeholder="Full Name" required>
-							</div>
-							<div class="form-group">
-								<input type="text" class="form-control" id="jabatan2" name="jabatan2" placeholder="Jabatan" required>
-							</div>
-							<div class="form-group">
-								<input type="email" class="form-control" id="email2" name="email2" placeholder="Email" required>
-							</div>
-							<div class="form-group">
-								<input type="input" class="form-control" id="nama_perusahaan2" name="nama_perusahaan2" placeholder="Company" value="{{ old('company') }}" required>
-							</div>
-							<div class="form-group">
-								<input type="text" class="form-control" id="bidang_usaha2" name="bidang_usaha2" placeholder="Bidang Usaha" required>
-							</div>
-							<div class="form-group">
-								<input type="text" id="handphone2" name="handphone2" class="form-control" placeholder="Handphone Number" value="{{ old('handphone') }}" required>
-							</div>
-						</div>
-							
-						<div class="form-group text-center">
-							<input class="btn_trial_2" id="get-price-list" type="button" onclick="submitFormPricelist();" value="Get Price List">
-						</div>
-					</form>
 				</div>
 			</div>
-			<!--div class="col-md-5 float-right">
-				<div class="form">
-					<form method="POST" action="{{ route('post-login-client') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
-                        {{ csrf_field() }}
-						<div class="bg-form-title">
-							<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 10px !important;" class="py-2 px-0 mx-0 mt-0">Login Member</h3>
-						</div>
-						@if (count($errors) > 0)
-                            <div class="alert alert-danger">
-                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                                <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                                </ul>
-                            </div>
-                        @endif
-						<div class="px-5 pt-4">
-							<div class="form-group">
-								<input type="email" class="form-control" name="email" placeholder="Email" value="{{ old('email') }}" required>
-							</div>
-							<div class="form-group">
-								<input type="password" class="form-control" name="password" placeholder="Password"  value="{{ old('password') }}" required>
-							</div>
-						</div>
-						<div class="form-group text-center">
-							<button class="btn_trial_2" type="submit">Login Now</button>
-						</div>
-					</form>
-				</div>
-			</div-->
 			<div class="clearfix"></div>	
 		</div>
 		<div>

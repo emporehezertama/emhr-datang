@@ -172,7 +172,6 @@ class AdminController extends Controller
 
         if($request->product_id != null) {
             CrmModuleAdmin::whereNotIn('product_id',$request->product_id)->where('user_id',$id)->delete();
-
             foreach ($request->product_id as $key => $value) {
 
                 $product = CrmModuleAdmin::where('product_id',$value)->where('user_id',$id)->first();

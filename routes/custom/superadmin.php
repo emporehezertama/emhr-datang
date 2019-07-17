@@ -7,6 +7,8 @@ Route::group(['prefix' => 'superadmin', 'namespace'=>'SuperAdmin', 'middleware' 
 	Route::get('/', 'IndexController@index')->name('superadmin.dashboard');
 	Route::get('profile', 'IndexController@profile')->name('superadmin.profile');
 	Route::post('update-profile', 'IndexController@updateProfile')->name('superadmin.update-profile');
+	Route::post('update-modul', 'IndexController@updateModul')->name('superadmin.update-modul');
+
 	Route::resource('admin', 'AdminController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'superadmin']);
 	Route::get('admin/changeStatus/{id}', 'AdminController@changeStatus')->name('superadmin.admin.changeStatus');
 
