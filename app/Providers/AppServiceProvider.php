@@ -40,11 +40,28 @@ class AppServiceProvider extends ServiceProvider
         // find setting URL
         if(isset($_GET['layout_karyawan']))
         {
-            $setting = \App\Models\Setting::where('key', 'layout_karyawan')->first();
+            //$setting = \App\Models\Setting::where('key', 'layout_karyawan')->first();
+            $auth = \Auth::user();
+            if($auth)
+            {
+                if($auth->project_id != NULL)
+                {
+                    $setting = \App\Models\Setting::where('key', 'layout_karyawan')->where('project_id',$auth->project_id)->first();
+                } else{
+                    $setting = \App\Models\Setting::where('key', 'layout_karyawan')->first();
+                }
+            }else{
+                $setting = \App\Models\Setting::where('key', 'layout_karyawan')->first();
+            }
+
             if(!$setting)
             {
                 $setting = new \App\Models\Setting();
                 $setting->key = 'layout_karyawan';
+                if($auth->project_id != NULL)
+                {
+                    $setting->project_id = $auth->project_id;
+                }
             }
 
             $setting->value = $_GET['layout_karyawan'];

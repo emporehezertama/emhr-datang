@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToOrganisasiDivision extends Migration
+class AddColumnUsersApikey extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddColumnToOrganisasiDivision extends Migration
      */
     public function up()
     {
-        Schema::table('organisasi_division', function (Blueprint $table) {
-            //
-            $table->integer('user_created')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('apikey')->nullable();
         });
     }
 
@@ -26,7 +25,7 @@ class AddColumnToOrganisasiDivision extends Migration
      */
     public function down()
     {
-        Schema::table('organisasi_division', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

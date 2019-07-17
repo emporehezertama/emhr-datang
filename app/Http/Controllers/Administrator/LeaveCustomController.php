@@ -187,49 +187,8 @@ class LeaveCustomController extends Controller
 
                 $params[$no]['APPROVAL DATE '. ($key+1)]           = $value->date_approved != NULL ? date('d F Y', strtotime($value->date_approved)) : ''; 
             }
-           
-          
         }
 
         return (new \App\Models\KaryawanExport($params, 'Report Leave Permit Employee ' ))->download('EM-HR.Report-Leave-Permit-'.date('d-m-Y') .'.xlsx');
-
-        // $styleHeader = [
-        //     'font' => [
-        //         'bold' => true,
-        //     ],
-        //     'alignment' => [
-        //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-        //     ],
-        //     'borders' => [
-        //         'allBorders' => [
-        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        //             'color' => ['argb' => '000000'],
-        //         ],
-        //     ],
-        //     'fill' => [
-        //         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-        //         'rotation' => 90,
-        //         'startColor' => [
-        //             'argb' => 'FFA0A0A0',
-        //         ],
-        //         'endColor' => [
-        //             'argb' => 'FFFFFFFF',
-        //         ],
-        //     ],
-        //     ''
-        // ];
-
-        // return \Excel::create('Report-Cuti-Karyawan',  function($excel) use($params, $styleHeader){
-
-        //       $excel->sheet('mysheet',  function($sheet) use($params){
-
-        //         $sheet->fromArray($params);
-                
-        //       });
-
-        //     $excel->getActiveSheet()->getStyle('A1:AM1')->applyFromArray($styleHeader);
-
-        // })->download('xls');
-
     }
 }

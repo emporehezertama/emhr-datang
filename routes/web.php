@@ -36,7 +36,6 @@ Route::post('post-login-client', 'LandingPageController@loginClient')->name('pos
 
 Route::post('get-price-list', 'LandingPageController@getPriceList')->name('get-price-list');
 
-
 Route::group(['middleware' => ['auth']], function(){
 //	Route::post('logout', 'LoginController@Logout')->name('logout');
 	Route::post('ajax/get-division-by-directorate', 'AjaxController@getDivisionByDirectorate')->name('ajax.get-division-by-directorate');

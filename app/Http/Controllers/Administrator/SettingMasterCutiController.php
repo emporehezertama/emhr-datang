@@ -123,9 +123,9 @@ class SettingMasterCutiController extends Controller
         {
             if($user->project_id != NULL)
             {
-                $dataUser = User::where('access_id',2)->whereNull('resign_date')->where('project_id',$user->project_id)->get();
+                $dataUser = User::whereIn('access_id',[1,2])->whereNull('resign_date')->where('project_id',$user->project_id)->get();
             }else{
-                $dataUser = User::where('access_id',2)->whereNull('resign_date')->get();
+                $dataUser = User::whereIn('access_id',[1,2])->whereNull('resign_date')->get();
             }
             foreach ($dataUser as $key => $value) {
                 # code...

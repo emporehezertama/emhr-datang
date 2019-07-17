@@ -60,6 +60,7 @@ class KaryawanController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
+
             $data = User::whereIn('access_id', ['1', '2'])->where('project_id', $user->project_id);
             $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
             $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
@@ -70,6 +71,7 @@ class KaryawanController extends Controller
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
             $notDefinePos = User::whereIn('access_id', ['1', '2'])->whereNull('structure_organization_custom_id')->get();
+
         }
 
         $params['countPos'] = count($notDefinePos);
@@ -251,7 +253,7 @@ class KaryawanController extends Controller
             }
 
             $module = \App\Models\CrmModule::where('project_id', $userLogin->project_id)->where('crm_product_id', 3)->first();
-            $User = \App\User::where('project_id', $userLogin->project_id)->where('access_id',2)->count();
+            $User = \App\User::where('project_id', $userLogin->project_id)->whereIn('access_id',[1,2])->count();
 
             if($countNew > (($module->limit_user)-$User)){
                 UserTemp::truncate();
@@ -498,6 +500,8 @@ class KaryawanController extends Controller
 
             foreach($rows as $key => $item)
             {
+                if(empty($item[2])) continue;
+
                 if($key >= 3)
                 {
                     $user = new UserTemp();
@@ -530,13 +534,12 @@ class KaryawanController extends Controller
                         $user->gender           = 'Female';
                     }
 
+                    $user->marital_status   = $item[6];
                     $agama = $item[7];
 
                     if(strtoupper($agama)=='ISLAM'){
                       $agama = 'Muslim';
                     }
-
-                    $user->marital_status   = $item[6];
                     $user->agama            = $agama;
                     $user->ktp_number       = $item[8];
                     $user->passport_number  = $item[9];
@@ -1115,6 +1118,7 @@ class KaryawanController extends Controller
             $file->move($destinationPath, $fileName);
 
             $data->foto = $fileName;
+
         }
 
         if ($request->hasFile('foto_ktp'))

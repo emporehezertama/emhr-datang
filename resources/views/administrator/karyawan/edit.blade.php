@@ -13,7 +13,7 @@
             </div>
         </div>
     <div class="row">
-        <form class="form-horizontal" id="form-karyawan" enctype="multipart/fmodaorm-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
+        <form class="form-horizontal" id="form-karyawan" enctype="multipart/form-data" action="{{ route('administrator.karyawan.update', $data->id ) }}" method="POST">
             <input type="hidden" name="_method" value="PUT">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
@@ -87,8 +87,22 @@
                                                     <td>{{ $item->timetable }}</td>
                                                     <td>{{ $item->on_dutty }}</td>
                                                     <td>{{ $item->off_dutty }}</td>
-                                                    <td>{{ $item->clock_in }}</td>
-                                                    <td>{{ $item->clock_out }}</td>
+                                                    <td>
+                                                        @if(!empty($item->long) || !empty($item->lat))
+                                                            <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
+                                                            <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                                        @else
+                                                            {{ $item->clock_in }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if(!empty($item->long) || !empty($item->lat))
+                                                            <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a> 
+                                                            <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                                        @else
+                                                            {{ $item->clock_out }}
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $item->work_time }}</td>
                                                     <td></td>
                                                     <td></td>
@@ -98,7 +112,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-
                                 <div role="tabpanel" class="tab-pane fade" id="attendance_calculation">
 
                                     <div class="col-md-4 b-all" style="width: 38%;margin-right: 0.5%;">
@@ -137,7 +150,6 @@
                                     <div class="clearfix"></div> 
                                 </div>
                             </div>
-
                         </div>
                         @if(isset($payroll->salary))
                         <div role="tabpanel" class="tab-pane fade" id="payroll">
@@ -357,7 +369,6 @@
                             </table>
                             <br />
                         </div>
-
                         <div role="tabpanel" class="tab-pane fade" id="rekening_bank">
                             <div class="form-group">
                                 <label class="col-md-12">Name of Account</label>
@@ -383,7 +394,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div role="tabpanel" class="tab-pane fade" id="department">
                         @if(get_setting('struktur_organisasi') == 3)
                             <div class="form-group">
@@ -780,6 +790,39 @@
     <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
+
+<!-- modal content education  -->
+<div id="modal_detail_attendance" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Attendance</h4> </div>
+                <div class="modal-body">
+                   <form class="form-horizontal frm-modal-inventaris-lainnya">
+                        <div class="form-group">
+                            <div class="col-md-12 input_pic">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-6">Latitude </label>
+                            <label class="col-md-6">Longitude </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control input-latitude" readonly="true">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control input-longitude" readonly="true">
+                            </div>
+                        </div>
+                   </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- modal content dependent  -->
 <div id="modal_dependent" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -1096,6 +1139,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 <!-- ============================================================== -->
 <!-- End Page Content -->
 <!-- ============================================================== -->
@@ -1133,8 +1177,18 @@
             bootbox.alert('<img src="{{ asset('storage/fotoktp/') }}/'+ img +'" style = \'width: 100%;\' />');
         }
     </script>
-
     <script type="text/javascript">
+
+        function detail_attendance(el)
+        {
+            var img = '<img src="'+ $(el).data('pic') +'" style="width:100%;" />';
+            $('#modal_detail_attendance .modal-title').html($(el).data('title'));
+            $('.input_pic').html(img);
+            $(".input-latitude").val($(el).data('lat'));
+            $(".input-longitude").val($(el).data('long'));
+            $("#modal_detail_attendance").modal("show");
+        }
+
         jQuery('.datepicker2').datepicker({
             format: 'yyyy-mm-dd',
         });

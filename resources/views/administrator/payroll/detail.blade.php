@@ -18,7 +18,7 @@
 
                 @if(!$is_lock)
                     @if(isset($create_by_payroll_id))
-                        <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Create Payroll </button>
+                        <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit('Create Payroll ?')"><i class="fa fa-save"></i> Create Payroll </button>
                     @else
                         <button type="submit" class="btn btn-sm btn-danger waves-effect waves-light m-r-10 pull-right" onclick="form_finalized()"><i class="fa fa-lock"></i> Finalized </button>
                         <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="form_submit()"><i class="fa fa-save"></i> Save Data </button>
@@ -98,7 +98,12 @@
                                 </tr>
 
                                 @foreach(get_earnings() as $item)
-                                    @php($earning = getEarningEmployee($item->id, $data->id))
+                                    @if(isset($update_history))
+                                        @php($earning = getEarningEmployee($item->id, $data->id, 'history'))
+                                    @else
+                                        @php($earning = getEarningEmployee($item->id, $data->id))
+                                    @endif
+
                                     @if($earning)
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $earning->payrollEarnings->title }}</td>
@@ -167,7 +172,11 @@
                                     </td>
                                 </tr>
                                 @foreach(get_deductions() as $item)
-                                    @php($deduction = getDeductionEmployee($item->id, $data->id))
+                                    @if(isset($update_history))
+                                        @php($deduction = getDeductionEmployee($item->id, $data->id, 'history'))
+                                    @else
+                                        @php($deduction = getDeductionEmployee($item->id, $data->id))
+                                    @endif
                                     @if($deduction)
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $deduction->payrollDeductions->title }}</td>
@@ -235,7 +244,7 @@
         $("#form-payroll").submit();
     }
 
-    function form_submit()
+    function form_submit(msg = "")
     {
         if($("input[name='user_id']").val() == "" || $("input[name='salary']").val() == "")
         {
@@ -243,7 +252,14 @@
             return false;
         }
 
-        $("#form-payroll").submit();
+        if(msg != "")
+        {
+            _confirm_submit(msg, $("#form-payroll"));   
+        }
+        else
+        {
+            $("#form-payroll").submit();            
+        }
     }
 
     // start custom

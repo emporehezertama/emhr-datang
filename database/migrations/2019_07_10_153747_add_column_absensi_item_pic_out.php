@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToOrganisasiPosition extends Migration
+class AddColumnAbsensiItemPicOut extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddColumnToOrganisasiPosition extends Migration
      */
     public function up()
     {
-        Schema::table('organisasi_position', function (Blueprint $table) {
-            //
-            $table->integer('user_created')->nullable();
+        Schema::table('absensi_item', function (Blueprint $table) {
+            $table->text('pic_out')->nullable();
+            $table->string('long_out', 255)->nullable();
+            $table->string('lat_out', 255)->nullable();
         });
     }
 
@@ -26,7 +27,7 @@ class AddColumnToOrganisasiPosition extends Migration
      */
     public function down()
     {
-        Schema::table('organisasi_position', function (Blueprint $table) {
+        Schema::table('absensi_item', function (Blueprint $table) {
             //
         });
     }

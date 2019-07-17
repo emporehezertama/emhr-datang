@@ -71,7 +71,7 @@ class PaymentRequestController extends Controller
      */
     public function create()
     {   
-        $params['karyawan'] = User::where('access_id', 2)->get();
+        $params['karyawan'] = User::whereIn('access_id', [1,2])->get();
 
         return view('administrator.payment-request.create')->with($params);
     }
@@ -84,7 +84,7 @@ class PaymentRequestController extends Controller
     public function edit($id)
     {
         $params['data']         = PaymentRequest::where('id', $id)->first();
-        $params['karyawan']     = User::where('access_id', 2)->get();
+        $params['karyawan']     = User::whereIn('access_id', [1,2])->get();
         $params['form']         = PaymentRequestForm::where('payment_request_id', $id)->get();
 
         return view('administrator.payment-request.edit')->with($params);
