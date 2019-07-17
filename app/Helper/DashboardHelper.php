@@ -27,7 +27,7 @@ function employee_get_resigness($StartDate, $StopDate, $currentMonth)
 	$user  = \App\User::whereBetween('resign_date', array($StartDate, $StopDate))
 						->whereMonth('resign_date', $month)
 						->whereYear('resign_date', $year)
-						->where('access_id', 2)
+						->whereIn('access_id', [1,2])
 						->where('project_id', \Auth::user()->project_id)
 						->count();
 	return $user;
@@ -40,12 +40,23 @@ function employee_get_joinees($StartDate, $StopDate, $currentMonth)
 {
 	$year = substr($currentMonth, 0, 4);
 	$month = substr($currentMonth, 5, 7);
-	$user  = \App\User::whereBetween('join_date', array($StartDate, $StopDate))
+
+	if(\Auth::user()->project_id != Null){
+		$user  = \App\User::whereBetween('join_date', array($StartDate, $StopDate))
 						->whereMonth('join_date', $month)
 						->whereYear('join_date', $year)
-						->where('access_id', 2)
+						->whereIn('access_id', ['1', '2'])
+
 						->where('project_id', \Auth::user()->project_id)
 						->count();
+	}else{
+		$user  = \App\User::whereBetween('join_date', array($StartDate, $StopDate))
+						->whereMonth('join_date', $month)
+						->whereYear('join_date', $year)
+						->whereIn('access_id', ['1', '2'])
+						->count();
+	}
+	
 	return $user;
 }
 
@@ -55,11 +66,19 @@ function employee_get_joinees($StartDate, $StopDate, $currentMonth)
  */
 function employee_exit_this_month()
 {
-	$user  = \App\User::whereYear('resign_date', date('Y'))
+	if(\Auth::user()->project_id != Null){
+		$user  = \App\User::whereYear('resign_date', date('Y'))
 						->whereMonth('resign_date', date('m'))
-						->where('access_id', 2)
+						->whereIn('access_id', ['1', '2'])
 						->where('project_id', \Auth::user()->project_id)
 						->count();
+	}else{
+		$user  = \App\User::whereYear('resign_date', date('Y'))
+						->whereMonth('resign_date', date('m'))
+						->whereIn('access_id', ['1', '2'])
+						->count();
+	}
+	
 	
 	return $user;
 }
@@ -75,9 +94,9 @@ function employee($status='all')
 	$user = \Auth::user(); 
     if($user->project_id != NULL)
     {
-        $employee = \App\User::where('access_id', 2)->where('users.project_id', $user->project_id);
+        $employee = \App\User::whereIn('access_id', [1,2])->where('users.project_id', $user->project_id);
     }else{
-        $employee = \App\User::where('access_id', 2);
+        $employee = \App\User::whereIn('access_id', [1,2]);
     }
 
 	if($status== 'all')
@@ -162,11 +181,11 @@ function employee_attrition($StartDate, $StopDate, $currentMonth, $nextmonth){
 	$jumlah_karyawan_resign_perbulan = \App\User::whereBetween('resign_date', array($StartDate, $StopDate))
 													->whereMonth('resign_date', $month)
 													->whereYear('resign_date', $year)
-													->where('access_id', 2)
+													->whereIn('access_id', [1,2])
 													->where('project_id', \Auth::user()->project_id)
 													->count();
 
-	$jumlah_karyawan_sebelum_resign_perbulan = \App\User::where('access_id', 2)
+	$jumlah_karyawan_sebelum_resign_perbulan = \App\User::whereIn('access_id', [1,2])
 														//	->whereBetween('join_date', array($StartDate, $StopDate))
 															->whereMonth('join_date', '<',$next_month)
 															->whereYear('join_date', $next_month_year)

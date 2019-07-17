@@ -222,7 +222,7 @@ class AjaxController extends Controller
             $data->last_change_password = date('Y-m-d H:i:s');
             $data->save();
 
-            \Session::flash('message-success', 'Password berhasil di rubah');
+            \Session::flash('message-success', 'Password has Successfully Change');
         }   
         
         return response()->json($params);
@@ -1134,21 +1134,20 @@ class AjaxController extends Controller
    public function getAdministrator(Request $request)
     {
         $params = [];
-        if($request->ajax())
+         if($request->ajax())
         {
             $user = \Auth::user();
             if($user->project_id != NULL)
             {
-
-                 $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
+                $data =  User::where('access_id', 2)->where('project_id', $user->project_id)->where(function($query){
                     $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
                  })->get();
+                
             } else{
-                 $data =  User::where('access_id', 2)->where(function($query){
+                $data =  User::where('access_id', 2)->where(function($query){
                      $query->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%');
                  })->get();
             }
-            
             $params = [];
             foreach($data as $k => $item)
             {
@@ -1189,7 +1188,7 @@ class AjaxController extends Controller
                 // existing user payroll skip
                 if($payroll) continue;
 
-                if($i->access_id != 2) continue; // jika bukan karyawan maka skip
+                if($i->access_id == 3) continue; // jika bukan karyawan maka skip
 
                 $karyawan[$k]['id']     = $i->id;
                 $karyawan[$k]['value']  = $i->nik .' - '. $i->name;
@@ -1213,7 +1212,7 @@ class AjaxController extends Controller
                 // existing user payroll skip
                 if($payroll) continue;
 
-                if($i->access_id != 2) continue; // jika bukan karyawan maka skip
+                if($i->access_id == 3) continue; // jika bukan karyawan maka skip
 
                 $karyawan[$k]['id']     = $i->id;
                 $karyawan[$k]['value']  = $i->nik .' - '. $i->name;
@@ -1237,7 +1236,7 @@ class AjaxController extends Controller
                 // existing user payroll skip
                 if($payroll) continue;
 
-                if($i->access_id != 2) continue; // jika bukan karyawan maka skip
+                if($i->access_id == 3) continue; // jika bukan karyawan maka skip
 
                 $karyawan[$k]['id']     = $i->id;
                 $karyawan[$k]['value']  = $i->nik .' - '. $i->name;
@@ -2733,7 +2732,7 @@ class AjaxController extends Controller
                 $data =  \App\User::whereNotIn('id', $approvalExistUser)->whereNull('resign_date')->where('project_id',$user->project_id)->where(function($table) use ($request) {
                     $table->where('name', 'LIKE', "%". $request->name . "%")
                     ->orWhere('nik', 'LIKE', '%'. $request->name .'%');  
-                })->where('access_id', 2)->get();
+                })->whereIn('access_id', [1,2])->get();
 
             }else {
                 // Skip Exist User
@@ -2744,7 +2743,7 @@ class AjaxController extends Controller
 
                     $table->where('name', 'LIKE', "%". $request->name . "%")
                     ->orWhere('nik', 'LIKE', '%'. $request->name .'%');  
-                })->where('access_id', 2)->get();
+                })->whereIn('access_id', [1,2])->get();
             }
 
             $params = [];
@@ -2897,11 +2896,20 @@ class AjaxController extends Controller
     public function getUserActive(Request $request){
         if($request->ajax())
         {
-            $data = User::where('access_id', '2')
+            if(\Auth::user()->project_id != Null){
+                $data = User::whereIn('access_id', ['1', '2'])
                         ->whereNull('status')
+                        ->where('project_id', \Auth::user()->project_id)
                     //    ->where('last_logged_in_at', '<=', date('Y-m-d H:i:s'))
                         ->whereRaw('last_logged_in_at >= last_logged_out_at')
                         ->count();
+            }else{
+                $data = User::whereIn('access_id', ['1', '2'])
+                        ->whereNull('status')
+                        ->whereRaw('last_logged_in_at >= last_logged_out_at')
+                        ->count();
+            }
+            
 
             return response()->json($data);
         }
