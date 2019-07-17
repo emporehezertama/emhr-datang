@@ -107,7 +107,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 
 	Route::resource('setting-approvalClearance', 'SettingApprovalClearanceController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 
-
 	Route::resource('news', 'NewsController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('internal-memo', 'InternalMemoController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 	Route::resource('branch-organisasi', 'BranchOrganisasiController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
@@ -124,7 +123,6 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('plafond-dinas/edit-luar-negeri/{id}', 'PlafondDinasController@editLuarNegeri')->name('administrator.plafond-dinas.edit-luar-negeri');
 	Route::post('plafond-dinas/update-luar-negeri/{id}', 'PlafondDinasController@updateLuarNegeri')->name('administrator.plafond-dinas.update-luar-negeri');
 	Route::get('plafond-dinas/destroy-luar-negeri/{id}', 'PlafondDinasController@deleteLuarNegeri')->name('administrator.plafond-dinas.destroy-luar-negeri');
-	
 	
 	Route::get('branch-organisasi/tree', 'BranchOrganisasiController@tree')->name('administrator.branch-organisasi.tree');
 	Route::get('karyawan/delete-cuti/{id}', 'KaryawanController@DeleteCuti')->name('administrator.karyawan.delete-cuti');
