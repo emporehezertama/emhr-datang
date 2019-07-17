@@ -199,9 +199,13 @@ function get_year_payroll()
  * @param  $id
  * @return object
  */
-function getDeductionEmployee($id, $payroll_id)
+function getDeductionEmployee($id, $payroll_id, $type = 'current')
 {
-	$item = \App\Models\PayrollDeductionsEmployee::where('payroll_deduction_id', $id)->where('payroll_id', $payroll_id)->first();
+	if($type == 'history')
+	{
+		$item = \App\Models\PayrollDeductionsEmployeeHistory::where('payroll_deduction_id', $id)->where('payroll_id', $payroll_id)->first();
+	}
+	else $item = \App\Models\PayrollDeductionsEmployee::where('payroll_deduction_id', $id)->where('payroll_id', $payroll_id)->first();
 
 	return $item;
 }
@@ -211,9 +215,13 @@ function getDeductionEmployee($id, $payroll_id)
  * @param  $id
  * @return object
  */
-function getEarningEmployee($id, $payroll_id)
+function getEarningEmployee($id, $payroll_id, $type='current')
 {
-	$item = \App\Models\PayrollEarningsEmployee::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id)->first();
+	if($type == 'history')
+	{
+		$item = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id)->first();
+	}
+	else $item = \App\Models\PayrollEarningsEmployee::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id)->first();
 
 	return $item;
 }

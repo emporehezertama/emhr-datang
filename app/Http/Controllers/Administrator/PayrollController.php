@@ -455,10 +455,10 @@ class PayrollController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $temp = Payroll::where('id', $id)->first();
+
         if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
         {
-            $temp = Payroll::where('id', $id)->first();
-
             if(!isset($request->salary) || empty($request->salary)) $request->salary = 0;
             if(!isset($request->thp) || empty($request->thp)) $request->thp = 0;
 
@@ -490,7 +490,6 @@ class PayrollController extends Controller
             $temp->is_lock                      = $request->is_lock;
             $temp->save();
         } 
-
 
         // if history
         if(!isset($request->create_by_payroll_id) and !isset($request->update_history))
@@ -576,23 +575,28 @@ class PayrollController extends Controller
             $history->save();
 
         // update history earning and deduction
-        if(isset($request->update_history))
+        if(isset($request->update_history) || isset($request->create_by_payroll_id))
         {
             // save earnings
             if(isset($request->earning))
             {
                 foreach($request->earning as $key => $value)
                 {
-                    $earning = PayrollEarningsEmployeeHistory::where('payroll_id', $id)->where('payroll_earning_id', $value)->first();
+                    $earning = PayrollEarningsEmployeeHistory::where('payroll_id', $history->id)->where('payroll_earning_id', $value)->first();
                     if(!$earning)
                     {
                         $earning                        = new PayrollEarningsEmployeeHistory();
-                        $earning->payroll_id            = $id;
+                        $earning->payroll_id            = $history->id;
                         $earning->payroll_earning_id    = $value;
                     }
 
                     $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
-                    $earning->save();
+                    if(isset($request->create_by_payroll_id))
+                    {
+                        $earning->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
+                        $earning->save(['timestamps' => false]);
+                    }
+                    else  $earning->save();
                 }
             }
             // save deductions
@@ -600,26 +604,32 @@ class PayrollController extends Controller
             {
                 foreach($request->deduction as $key => $value)
                 {
-                    $deduction                        = PayrollDeductionsEmployeeHistory::where('payroll_id', $id)->where('payroll_deduction_id', $value)->first();
+                    $deduction                        = PayrollDeductionsEmployeeHistory::where('payroll_id', $history->id)->where('payroll_deduction_id', $value)->first();
                     if(!$deduction)
                     {
                         $deduction                        = new PayrollDeductionsEmployeeHistory();
-                        $deduction->payroll_id            = $id;
+                        $deduction->payroll_id            = $history->id;
                         $deduction->payroll_deduction_id  = $value;
                     }
                     
-                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]); 
-                    $deduction->save();
+                    $deduction->nominal               = replace_idr($request->deduction_nominal[$key]);
+                    if(isset($request->create_by_payroll_id))
+                    {
+                        $deduction->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
+                        $deduction->save(['timestamps' => false]);
+                    }
+                    else  $deduction->save();
                 }
             }
         }
-        
+
+        /*
         if(isset($temp->payrollDeductionsEmployee))
         {
             foreach($temp->payrollDeductionsEmployee as $i)
             {
                 $deduction                        = new PayrollDeductionsEmployeeHistory();
-                $deduction->payroll_id            = $id;
+                $deduction->payroll_id            = $history->id;
                 $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
                 $deduction->nominal               = replace_idr($i->nominal); 
 
@@ -628,8 +638,7 @@ class PayrollController extends Controller
                     $deduction->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
                     $deduction->save(['timestamps' => false]);
                 }
-                else
-                    $deduction->save();
+                else $deduction->save();
             }
         }
 
@@ -637,22 +646,22 @@ class PayrollController extends Controller
         {
             foreach($temp->payrollEarningsEmployee as $i)
             {
-                $deduction                        = new PayrollEarningsEmployeeHistory();
-                $deduction->payroll_id            = $id;
-                $deduction->payroll_earning_id    = $i->payroll_earning_id;   
-                $deduction->nominal               = replace_idr($i->nominal); 
+                $earning                        = new PayrollEarningsEmployeeHistory();
+                $earning->payroll_id            = $history->id;
+                $earning->payroll_earning_id    = $i->payroll_earning_id;   
+                $earning->nominal               = replace_idr($i->nominal); 
                 
                 if(isset($request->create_by_payroll_id))
                 {
-                    $deduction->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
-                    $deduction->save(['timestamps' => false]);
+                    $earning->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
+                    $earning->save(['timestamps' => false]);
                 }
-                else
-                    $deduction->save();
+                else $earning->save();
             }
         }
+        */
 
-        $this->init_calculate();
+        //$this->init_calculate();
 
         if(isset($request->create_by_payroll_id) || isset($request->update_history))
         {
@@ -734,13 +743,6 @@ class PayrollController extends Controller
         }
 
         return (new \App\Models\PayrollExport($params))->download('EM-HR.Payroll-Template-'. date('Y-m-d') .'.xlsx');
-
-        // return \Excel::create('Payroll-Template-'. date('Y-m-d'),  function($excel) use($params){
-        //       $excel->sheet('Payroll',  function($sheet) use($params){
-        //         $sheet->fromArray($params);
-        //       });
-        // })->download('xls');
-        // exit;
     }
 
     /**
@@ -1273,6 +1275,7 @@ class PayrollController extends Controller
             $user_id        = $temp->user_id;
             $payroll_id     = $temp->id;
 
+            /*
             $temp                               = new PayrollHistory();
             $temp->payroll_id                   = $payroll_id;
             $temp->user_id                      = $user_id;
@@ -1315,6 +1318,7 @@ class PayrollController extends Controller
                     $deduction->save();
                 }
             }
+            */
         }
     }
 
