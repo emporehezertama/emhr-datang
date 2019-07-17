@@ -106,7 +106,7 @@
         </li>
         @endif
         <!--As Karyawan-->
-        @if(Auth::user()->project_id != NULL)
+        @if(Auth::user()->project_id != 1)
             <li class="devider"></li>
 
           @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9) || checkModule(10))
