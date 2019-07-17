@@ -34,8 +34,8 @@ class IndexController extends Controller
             $params['data'] = CrmModule::orderBy('id', 'ASC')->where('project_id',$user->project_id)->get();
             $ch = curl_init();
             $data   = ['project_id'=>$user->project_id];
-            $url = 'http://192.168.112.122:8001/get-modul-crm';
-            //$url = 'http://api.em-hr.co.id/get-modul-crm';
+            //$url = 'http://192.168.112.122:8001/get-modul-crm';
+            $url = 'http://api.em-hr.co.id/get-modul-crm';
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_POST, true);
@@ -218,8 +218,8 @@ class IndexController extends Controller
                 # code...
                 $ch = curl_init();
                 $data = "project_id=$value->project_id&crm_product_id=$value->crm_product_id&limit_user=$value->limit_user";
-                $url = 'http://192.168.112.122:8001/update-modul-crm';
-                //$url = 'http://api.em-hr.co.id/update-modul-crm';
+                //$url = 'http://192.168.112.122:8001/update-modul-crm';
+                $url = 'http://api.em-hr.co.id/update-modul-crm';
                 curl_setopt($ch, CURLOPT_URL, $url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
                 curl_setopt($ch, CURLOPT_POST, true);
