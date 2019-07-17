@@ -34,8 +34,8 @@ class IndexController extends Controller
             $params['data'] = CrmModule::orderBy('id', 'ASC')->where('project_id',$user->project_id)->get();
             $ch = curl_init();
             $data   = ['project_id'=>$user->project_id];
-            //$url = 'http://192.168.112.122:8001/get-modul-crm';
-            $url = 'http://api.em-hr.co.id/get-modul-crm';
+            $url = 'http://192.168.112.122:8001/get-modul-crm';
+            //$url = 'http://api.em-hr.co.id/get-modul-crm';
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
             curl_setopt($ch, CURLOPT_POST, true);
@@ -184,6 +184,56 @@ class IndexController extends Controller
         $params['data'] = \Auth::user();
         
         return view('superadmin.profile')->with($params);
+    }
+
+    public function updateModul(Request $request)
+    {
+        //dd($request->project_product_id);
+
+        $projectId = \Auth::user()->project_id;
+
+        if($request->project_product_id != null) {
+            CrmModule::whereNotIn('crm_product_id',$request->project_product_id)->where('project_id',$projectId)->delete();
+            foreach ($request->project_product_id as $key => $value) {
+                $product = CrmModule::where('crm_product_id',$value)->where('project_id',$projectId)->first();
+                if(!$product)
+                {
+                    $product = new CrmModule();
+                    $product->project_id  = $projectId;
+                    $product->crm_product_id  = $request->project_product_id[$key];
+                    if(isset($request->limit_user[$key])){
+                        $product->limit_user      = $request->limit_user[$key];
+                    }
+                    $product->save();
+                }
+            }
+        } else{
+            CrmModule::where('crm_project_id',$projectId)->delete();
+        }
+
+        //kirim ke API dan update ke database CRM --> crm_project_id dan crm_product_id
+        $dataAPI   = CrmModule::where('project_id', $projectId);
+        $dataSend = clone $dataAPI;
+            foreach ($dataSend->get() as $key => $value) {
+                # code...
+                $ch = curl_init();
+                $data = "project_id=$value->project_id&crm_product_id=$value->crm_product_id&limit_user=$value->limit_user";
+                $url = 'http://192.168.112.122:8001/update-modul-crm';
+                //$url = 'http://api.em-hr.co.id/update-modul-crm';
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                
+                $html = curl_exec($ch);
+                if (curl_errno($ch)) 
+                {
+                    print curl_error($ch);
+                }
+                curl_close($ch);
+            }
+
+        return redirect()->route('superadmin.dashboard')->with('message-sucess', 'Data successfully saved');
     }
     
 }
