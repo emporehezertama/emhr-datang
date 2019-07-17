@@ -2871,10 +2871,6 @@ class AjaxController extends Controller
             }
             $hasil = 'ok';
             return response()->json($hasil);
-<<<<<<< HEAD
-        
-=======
->>>>>>> e8c53d6bddb8f4698eb3babd11ca0371fd56e2d3
         }
 
         return response()->json($this->respon);
