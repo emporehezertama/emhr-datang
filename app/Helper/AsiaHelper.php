@@ -839,7 +839,18 @@ function total_payment_request()
  */
 function total_karyawan()
 {
-	return \App\User::where('access_id', 2)->whereNull('status')->count();
+	$user = \Auth::user();
+	if($user->project_id != Null){
+		return \App\User::whereIn('access_id', ['1', '2'])
+						->whereNull('status')
+						->where('project_id', \Auth::user()->project_id)
+						->count();
+	}else{
+		return \App\User::whereIn('access_id', ['1', '2'])
+						->whereNull('status')
+						->count();
+	}
+	
 }
 
 /**
