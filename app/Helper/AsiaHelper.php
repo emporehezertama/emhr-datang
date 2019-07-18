@@ -841,20 +841,13 @@ function total_karyawan()
 {
 	$user = \Auth::user();
 	if($user->project_id != Null){
-<<<<<<< HEAD
-		return \App\User::whereIn('access_id', [1, 2])
-=======
 		return \App\User::whereIn('access_id', ['1', '2'])
->>>>>>> 451843f82cc9b0a436f175073a893c6a4c8d09db
 						->whereNull('status')
 						->where('project_id', \Auth::user()->project_id)
 						->count();
 	}else{
-<<<<<<< HEAD
-		return \App\User::whereIn('access_id', [1, 2])
-=======
+
 		return \App\User::whereIn('access_id', ['1', '2'])
->>>>>>> 451843f82cc9b0a436f175073a893c6a4c8d09db
 						->whereNull('status')
 						->count();
 	}
