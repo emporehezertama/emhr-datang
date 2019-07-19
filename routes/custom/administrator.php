@@ -290,48 +290,48 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 
 
 	Route::resource('leave', 'LeaveController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	Route::get('approval-leave-custom',  'ApprovalLeaveCustomController@index')->name('karyawan.approval.leave-custom.index');
-	Route::get('approval-leave-custom/detail/{id}',  'ApprovalLeaveCustomController@detail')->name('karyawan.approval.leave-custom.detail');
-	Route::post('approval-leave-custom/proses',  'ApprovalLeaveCustomController@proses')->name('karyawan.approval.leave-custom.proses');
+	Route::get('approval-leave-custom',  'ApprovalLeaveCustomController@index')->name('administrator.approval.leave-custom.index');
+	Route::get('approval-leave-custom/detail/{id}',  'ApprovalLeaveCustomController@detail')->name('administrator.approval.leave-custom.detail');
+	Route::post('approval-leave-custom/proses',  'ApprovalLeaveCustomController@proses')->name('administrator.approval.leave-custom.proses');
 
 	Route::resource('payment-request-custom', 'PaymentRequestKaryawanCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	Route::get('approval-payment-request-custom',  'ApprovalPaymentRequestCustomController@index')->name('karyawan.approval.payment-request-custom.index');
-	Route::get('approval-payment-request-custom/detail/{id}',  'ApprovalPaymentRequestCustomController@detail')->name('karyawan.approval.payment-request-custom.detail');
-	Route::post('approval-payment-request-custom/proses',  'ApprovalPaymentRequestCustomController@proses')->name('karyawan.approval.payment-request-custom.proses');
+	Route::get('approval-payment-request-custom',  'ApprovalPaymentRequestCustomController@index')->name('administrator.approval.payment-request-custom.index');
+	Route::get('approval-payment-request-custom/detail/{id}',  'ApprovalPaymentRequestCustomController@detail')->name('administrator.approval.payment-request-custom.detail');
+	Route::post('approval-payment-request-custom/proses',  'ApprovalPaymentRequestCustomController@proses')->name('administrator.approval.payment-request-custom.proses');
 
 	Route::resource('overtime-custom', 'OvertimeKaryawanCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	Route::get('overtime-custom/claim/{id}',  'OvertimeCustomController@claim')->name('karyawan.overtime-custom.claim');
-	Route::post('overtime-custom/prosesclaim',  'OvertimeCustomController@prosesclaim')->name('karyawan.overtime-custom.prosesclaim');
-	Route::get('approval-overtime-custom',  'ApprovalOvertimeCustomController@index')->name('karyawan.approval.overtime-custom.index');
-	Route::get('approval-overtime-custom/detail/{id}',  'ApprovalOvertimeCustomController@detail')->name('karyawan.approval.overtime-custom.detail');
-	Route::post('approval-overtime-custom/proses',  'ApprovalOvertimeCustomController@proses')->name('karyawan.approval.overtime-custom.proses');
-	Route::get('approval-overtime-custom/claim/{id}',  'ApprovalOvertimeCustomController@claim')->name('karyawan.approval.overtime-custom.claim');
-	Route::post('approval-overtime-custom/prosesClaim',  'ApprovalOvertimeCustomController@prosesClaim')->name('karyawan.approval.overtime-custom.prosesClaim');
+	Route::get('overtime-custom/claim/{id}',  'OvertimeCustomController@claim')->name('administrator.overtime-custom.claim');
+	Route::post('overtime-custom/prosesclaim',  'OvertimeCustomController@prosesclaim')->name('administrator.overtime-custom.prosesclaim');
+	Route::get('approval-overtime-custom',  'ApprovalOvertimeCustomController@index')->name('administrator.approval.overtime-custom.index');
+	Route::get('approval-overtime-custom/detail/{id}',  'ApprovalOvertimeCustomController@detail')->name('administrator.approval.overtime-custom.detail');
+	Route::post('approval-overtime-custom/proses',  'ApprovalOvertimeCustomController@proses')->name('administrator.approval.overtime-custom.proses');
+	Route::get('approval-overtime-custom/claim/{id}',  'ApprovalOvertimeCustomController@claim')->name('administrator.approval.overtime-custom.claim');
+	Route::post('approval-overtime-custom/prosesClaim',  'ApprovalOvertimeCustomController@prosesClaim')->name('administrator.approval.overtime-custom.prosesClaim');
 
 	Route::resource('training-custom', 'TrainingKaryawanCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	Route::get('training-custom/claim/{id}',  'TrainingCustomController@claim')->name('karyawan.training-custom.claim');
-	Route::post('training-custom/prosesclaim',  'TrainingCustomController@prosesclaim')->name('karyawan.training-custom.prosesclaim');
-	Route::get('approval-training-custom',  'ApprovalTrainingCustomController@index')->name('karyawan.approval.training-custom.index');
-	Route::get('approval-training-custom/detail/{id}',  'ApprovalTrainingCustomController@detail')->name('karyawan.approval.training-custom.detail');
-	Route::post('approval-training-custom/proses',  'ApprovalTrainingCustomController@proses')->name('karyawan.approval.training-custom.proses');
-	Route::get('approval-training-custom/claim/{id}',  'ApprovalTrainingCustomController@claim')->name('karyawan.approval.training-custom.claim');
-	Route::post('approval-training-custom/prosesClaim',  'ApprovalTrainingCustomController@prosesClaim')->name('karyawan.approval.training-custom.prosesClaim');
+	Route::get('training-custom/claim/{id}',  'TrainingCustomController@claim')->name('administrator.training-custom.claim');
+	Route::post('training-custom/prosesclaim',  'TrainingCustomController@prosesclaim')->name('administrator.training-custom.prosesclaim');
+	Route::get('approval-training-custom',  'ApprovalTrainingCustomController@index')->name('administrator.approval.training-custom.index');
+	Route::get('approval-training-custom/detail/{id}',  'ApprovalTrainingCustomController@detail')->name('administrator.approval.training-custom.detail');
+	Route::post('approval-training-custom/proses',  'ApprovalTrainingCustomController@proses')->name('administrator.approval.training-custom.proses');
+	Route::get('approval-training-custom/claim/{id}',  'ApprovalTrainingCustomController@claim')->name('administrator.approval.training-custom.claim');
+	Route::post('approval-training-custom/prosesClaim',  'ApprovalTrainingCustomController@prosesClaim')->name('administrator.approval.training-custom.prosesClaim');
 
 	Route::resource('medical-custom', 'MedicalKaryawanCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	Route::get('approval-medical-custom',  'ApprovalMedicalCustomController@index')->name('karyawan.approval.medical-custom.index');
-	Route::get('approval-medical-custom/detail/{id}',  'ApprovalMedicalCustomController@detail')->name('karyawan.approval.medical-custom.detail');
-	Route::post('approval-medical-custom/proses',  'ApprovalMedicalCustomController@proses')->name('karyawan.approval.medical-custom.proses');
+	Route::get('approval-medical-custom',  'ApprovalMedicalCustomController@index')->name('administrator.approval.medical-custom.index');
+	Route::get('approval-medical-custom/detail/{id}',  'ApprovalMedicalCustomController@detail')->name('administrator.approval.medical-custom.detail');
+	Route::post('approval-medical-custom/proses',  'ApprovalMedicalCustomController@proses')->name('administrator.approval.medical-custom.proses');
 
 	Route::resource('exit-custom', 'ExitInterviewKaryawanCustomController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-	Route::get('exit-custom/clearance/{id}',  'ExitInterviewCustomController@clearance')->name('karyawan.exit-custom.clearance');
-	Route::post('exit-custom/prosesclearance',  'ExitInterviewCustomController@prosesclearance')->name('karyawan.exit-custom.prosesclearance');
-	Route::get('approval-exit-custom',  'ApprovalExitInterviewCustomController@index')->name('karyawan.approval.exit-custom.index');
-	Route::get('approval-exit-custom/detail/{id}',  'ApprovalExitInterviewCustomController@detail')->name('karyawan.approval.exit-custom.detail');
-	Route::post('approval-exit-custom/proses',  'ApprovalExitInterviewCustomController@proses')->name('karyawan.approval.exit-custom.proses');
+	Route::get('exit-custom/clearance/{id}',  'ExitInterviewCustomController@clearance')->name('administrator.exit-custom.clearance');
+	Route::post('exit-custom/prosesclearance',  'ExitInterviewCustomController@prosesclearance')->name('administrator.exit-custom.prosesclearance');
+	Route::get('approval-exit-custom',  'ApprovalExitInterviewCustomController@index')->name('administrator.approval.exit-custom.index');
+	Route::get('approval-exit-custom/detail/{id}',  'ApprovalExitInterviewCustomController@detail')->name('administrator.approval.exit-custom.detail');
+	Route::post('approval-exit-custom/proses',  'ApprovalExitInterviewCustomController@proses')->name('administrator.approval.exit-custom.proses');
 
-	Route::get('approval-clearance-custom', 'ApprovalExitKaryawanClearanceCustomController@index')->name('karyawan.approval.clearance-custom.index');
-	Route::get('approval-clearance-custom/detail/{id}', 'ApprovalExitClearanceCustomController@detail')->name('karyawan.approval.clearance-custom.detail');
-	Route::post('approval-clearance-custom/proses', 'ApprovalExitClearanceCustomController@proses')->name('karyawan.approval.clearance-custom.proses');
+	Route::get('approval-clearance-custom', 'ApprovalExitKaryawanClearanceCustomController@index')->name('administrator.approval.clearance-custom.index');
+	Route::get('approval-clearance-custom/detail/{id}', 'ApprovalExitClearanceCustomController@detail')->name('administrator.approval.clearance-custom.detail');
+	Route::post('approval-clearance-custom/proses', 'ApprovalExitClearanceCustomController@proses')->name('administrator.approval.clearance-custom.proses');
 
 	Route::resource('request-pay-slip-karyawan', 'RequestPaySlipKaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
 
