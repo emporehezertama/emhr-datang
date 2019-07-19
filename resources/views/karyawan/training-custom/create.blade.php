@@ -147,11 +147,11 @@
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> - </div>
 
-                                    <div class="col-md-2"><input type="text" readonly="true" placeholder="Return Date" id="to_tanggal_pulang" name="tanggal_pulang" class="form-control">
+                                    <div class="col-md-2"><input type="text" disabled="" placeholder="Return Date" id="to_tanggal_pulang" name="tanggal_pulang" class="form-control">
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> / </div>
                                      <div class="col-md-1">
-                                        <input type="text" class="form-control time_picker" readonly="true"  placeholder="Time" name="waktu_pulang" />
+                                        <input type="text" class="form-control time_picker" disabled="" placeholder="Time" name="waktu_pulang" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -440,13 +440,13 @@
             
             if($(this).val() == 'Sekali Jalan')
             {   
-                $("input[name='tanggal_pulang']").attr('readonly', true);
-                $("input[name='waktu_pulang']").attr('readonly', true);
+                $("input[name='tanggal_pulang']").attr('disabled', true);
+                $("input[name='waktu_pulang']").attr('disabled', true);
             }
             else
             {
-                $("input[name='tanggal_pulang']").removeAttr('readonly');
-                $("input[name='waktu_pulang']").removeAttr('readonly');
+                $("input[name='tanggal_pulang']").removeAttr('disabled');
+                $("input[name='waktu_pulang']").removeAttr('disabled');
             }
 
         });
