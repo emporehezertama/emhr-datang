@@ -96,8 +96,8 @@
 <body>
 	<div>
 		<a href="{{ route('login') }}" class="btn btn-info float-right btn_login">Login</a>
-		<div class="bg-1">
-		  <div class="container" style="height: 100vh;">
+		<div class="bg-1" style="">
+		  <div class="container" style="height: 100vh; ">
 			<div class="col-md-4 float-left section-1">
 				<h1 style="color: #acce22; font-size: 53px;">EM-HR</h1>
 				<h3 style="color: #0e9a88; font-size: 29px;">HRIS Application System The Best and Complete</h1>
@@ -109,7 +109,7 @@
 				<button class="btn_trial_1" onclick="form_free_trial()">Create Free Member</button>
 			</div>
 
-			<div class="col-md-8 float-left" style="height: 100vh;">
+			<div class="col-md-8 float-left" style="height: 100vh; ">
 				<img src="{{ asset('landing-page/2019-05-28/modelEMHRsmall.png') }}" style="width: 175%; position: absolute; bottom: -10px; right: -340px;">
 			</div>
 			<div class="clearfix"></div>
