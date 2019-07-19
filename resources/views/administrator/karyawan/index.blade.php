@@ -155,6 +155,7 @@
                                             @endif
                                         </td>
                                         @endif
+                                        <td></td>
                                         <td>
                                             @if(isset($item->resign_date))
                                                 <label class="btn btn-danger btn-xs" style="text-align: center;" title="{{$item->resign_date}}">R</label>
