@@ -398,7 +398,10 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<img style="width: 100%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/>
+								<div class="col-md-2"></div>
+								<div class="col-md-8">	<img style="width: 60%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/>
+							</div>
+								<div class="col-md-2"></div>
 							</div>
 						</div>
 					</div>

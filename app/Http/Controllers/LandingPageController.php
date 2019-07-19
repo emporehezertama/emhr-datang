@@ -66,13 +66,13 @@ class LandingPageController extends Controller
 
         $destination = storage_path('app');
         $name_excel = 'Request_Trial'.date('YmdHis');
-        $file = $destination ."\\". $name_excel.'.xlsx';
+        $file = $destination ."//". $name_excel.'.xlsx';
 
         Excel::store(new ClientExport($nama, $email, $jabatan, $bidang_usaha, $nama_perusahaan, $handphone), $name_excel.'.xlsx');
     //  return (new ClientExport($nama, $email, $jabatan, $bidang_usaha, $nama_perusahaan, $handphone))->download('Request-trial'.date('d-m-Y') .'.xlsx');
     
         $params['text']     = 'Test Free Trial';
-        $emailto = ['farrosashiddiq@gmail.com', 'farros@empore.co.id'];
+        $emailto = ['marketing@empore.co.id', 'farros@empore.co.id'];
         \Mail::send('email.trial-account', $params,
             function($message) use($request, $file, $email, $emailto,$name_excel, $destination) {
                 $message->from($email);
