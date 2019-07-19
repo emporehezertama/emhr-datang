@@ -144,8 +144,8 @@
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> / </div>
                                     <div class="col-md-1">
-                                        <input type="text" class="form-control time_picker" value="
-                                        {{ date("H:i",strtotime($data->waktu_berangkat))}}" placeholder="Time" readonly name="waktu_berangkat" />
+                                        <input type="text" class="form-control time_picker" value="{{ date("H:i",strtotime($data->waktu_berangkat))}}" placeholder="Time" readonly name="waktu_berangkat" />
+
                                     </div>
                                     <div style="float: left; width: 5px;padding-top:10px;"> - </div>
 

@@ -131,11 +131,12 @@
                                         <label class="col-md-12">Choose Route</label>
                                         <div class="col-md-6">
                                             <label style="font-weight: normal;">
-                                                <input type="radio" {{ $data->pesawat_perjalanan == 'Sekali Jalan' ? 'checked' : '' }} name="pesawat_perjalanan" value="Sekali Jalan"> One Way
+                                            <input type="radio" readonly="true" {{ $data->pesawat_perjalanan == 'Sekali Jalan' ? 'checked' : '' }} name="pesawat_perjalanan" value="Sekali Jalan"> One Way
                                             </label> &nbsp;&nbsp;
                                             <label style="font-weight: normal;">
-                                                <input type="radio" {{ $data->pesawat_perjalanan == 'Sekali Jalan' ? 'checked' : '' }} name="pesawat_perjalanan" value="Pulang Pergi"> Round Trip
+                                                <input type="radio" readonly="true" {{ $data->pesawat_perjalanan == 'Pulang Pergi' ? 'checked' : '' }} name="pesawat_perjalanan" value="Pulang Pergi"> Round Trip
                                             </label>
+
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -149,7 +150,9 @@
                                         </div>
                                         <div style="float: left; width: 5px;padding-top:10px;"> - </div>
 
-                                        <div class="col-md-2"><input type="text" placeholder="Return Date" name="tanggal_pulang" class="form-control datepicker" readonly value="{{ $data->tanggal_pulangn }}">
+                                        <div class="col-md-2">
+                                             <input type="text" placeholder="Departure Date" value="{{ $data->tanggal_pulang }}" name="tanggal_pulang" readonly class="form-control datepicker">
+
                                         </div>
                                         <div style="float: left; width: 5px;padding-top:10px;"> / </div>
                                          <div class="col-md-1">

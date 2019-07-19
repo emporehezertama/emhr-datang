@@ -126,7 +126,6 @@
                                         <td>{{ $item->email }}</td>
                                         @if(get_setting('struktur_organisasi') == 3)
                                         <td>{{ isset($item->structure->position) ? $item->structure->position->name:''}}</td>
-                                        <td></td>
                                         <td>
                                             {{ isset($item->structure->division) ? $item->structure->division->name:'' }}
                                         </td>
