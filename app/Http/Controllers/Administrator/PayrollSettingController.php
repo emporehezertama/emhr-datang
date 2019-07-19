@@ -293,21 +293,38 @@ class PayrollSettingController extends Controller
      */
     public function storeGeneral(Request $request)
     {
+        $user = \Auth::user();
         if($request->setting)
         {
-            foreach($request->setting as $key => $value)
+            if($user->project_id != NULL)
             {
-                $setting = Setting::where('key', $key)->first();
-                if(!$setting)
+                foreach($request->setting as $key => $value)
                 {
-                    $setting = new Setting();
-                    $setting->key = $key;
+                    $setting = Setting::where('key', $key)->where('project_id',$user->project_id)->first();
+                    if(!$setting)
+                    {
+                        $setting = new Setting();
+                        $setting->key = $key;
+                    }
+                    $setting->user_created = $user->id;
+                    $setting->project_id = $user->project_id;
+                    $setting->value = $value;
+                    $setting->save();
                 }
-                $setting->value = $value;
-                $setting->save();
+            }else{
+                foreach($request->setting as $key => $value)
+                {
+                    $setting = Setting::where('key', $key)->first();
+                    if(!$setting)
+                    {
+                        $setting = new Setting();
+                        $setting->key = $key;
+                    }
+                    $setting->value = $value;
+                    $setting->save();
+                }
             }
         }
-
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', __('general.message-data-saved-success'));
     }
 }

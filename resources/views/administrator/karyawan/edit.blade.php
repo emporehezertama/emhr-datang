@@ -805,6 +805,9 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <div id="map"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-6">Latitude </label>
                             <label class="col-md-6">Longitude </label>
                             <div class="col-md-6">
@@ -822,6 +825,9 @@
         </div>
     </div>
 </div>
+
+  <!--The div element for the map -->
+    <div id="map"></div>
 
 <!-- modal content dependent  -->
 <div id="modal_dependent" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1145,8 +1151,12 @@
 <!-- ============================================================== -->
 <style type="text/css">
     .ui-autocomplete{
-            z-index: 9999999 !important;
-        }
+        z-index: 9999999 !important;
+    }
+    #map {
+        height: 300px; 
+        width: 100%;
+    }
 </style>
 @section('footer-script')
     <style type="text/css">
@@ -1177,6 +1187,7 @@
             bootbox.alert('<img src="{{ asset('storage/fotoktp/') }}/'+ img +'" style = \'width: 100%;\' />');
         }
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"></script>
     <script type="text/javascript">
 
         function detail_attendance(el)
@@ -1187,6 +1198,16 @@
             $(".input-latitude").val($(el).data('lat'));
             $(".input-longitude").val($(el).data('long'));
             $("#modal_detail_attendance").modal("show");
+
+            // The location of Uluru
+            var uluru = {lat: $(el).data('lat'), lng: $(el).data('long')};
+            // The map, centered at Uluru
+            setTimeout(function(){
+                var map = new google.maps.Map(
+                    document.getElementById('map'), {zoom: 16, center: uluru});
+                // The marker, positioned at Uluru
+                var marker = new google.maps.Marker({position: uluru, map: map});
+            }, 1000);
         }
 
         jQuery('.datepicker2').datepicker({

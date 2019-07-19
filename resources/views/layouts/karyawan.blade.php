@@ -113,12 +113,14 @@
                                 <a style="font-size: 12px;"><i class="fa fa-star"></i> {{ isset(Auth::user()->structure->position) ? Auth::user()->structure->position->name:''}}{{ isset(Auth::user()->structure->division) ? '-'. Auth::user()->structure->division->name:''}}</a>
                             </li>
                             <li role="separator" class="divider"></li>
+                            <!--
                             @if(\Session::get('is_login_administrator'))
                                 <li>
                                     <a href="{{ route('karyawan.back-to-administrator') }}"> <i class="fa fa-key"></i> Back to Administrator</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
                             @endif
+                            -->
                             <li>
                                 <a href="{{ route('karyawan.profile') }}">Profile</a>
                             </li>

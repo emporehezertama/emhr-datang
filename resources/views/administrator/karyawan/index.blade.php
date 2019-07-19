@@ -155,6 +155,7 @@
                                             @endif
                                         </td>
                                         @endif
+                                        <td></td>
                                         <td>
                                             @if(isset($item->resign_date))
                                                 <label class="btn btn-danger btn-xs" style="text-align: center;" title="{{$item->resign_date}}">R</label>
@@ -378,7 +379,7 @@
                                 <input type="file" name="file" class="form-control" />
                             </div>
                         </div>
-                        <a href="{{ asset('storage/sample/Sample-Karyawan.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
+                        <a href="{{ asset('storage/sample/Sample-Karyawan-2019-7-16.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
@@ -525,6 +526,7 @@
         }
 
 
+        
     });
 </script>
 @endsection

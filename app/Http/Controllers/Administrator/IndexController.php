@@ -29,6 +29,7 @@ class IndexController extends Controller
      */
     public function index()
     {
+        
         $jumlahdata = OrganisasiDivision::count();
         $data = OrganisasiDivision::all();
         $name = [];
@@ -70,8 +71,6 @@ class IndexController extends Controller
         $jumlahperdivisi = $karyawan_per_divisi;
 
         return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
-
-        
     }
 
     /**

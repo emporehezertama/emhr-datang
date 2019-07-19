@@ -254,13 +254,15 @@ class KaryawanController extends Controller
 
             $module = \App\Models\CrmModule::where('project_id', $userLogin->project_id)->where('crm_product_id', 3)->first();
             $User = \App\User::where('project_id', $userLogin->project_id)->whereIn('access_id',[1,2])->count();
-
-            if($countNew > (($module->limit_user)-$User)){
+            if($module->limit_user !=NULL || $module->limit_user > 0)
+            {
+                if($countNew > (($module->limit_user)-$User)){
                 UserTemp::truncate();
                 UserEducationTemp::truncate();
                 UserFamilyTemp::truncate();
 
                 return redirect()->route('administrator.karyawan.index')->with('message-error', 'You can not import user anymore. You have reached the limit!');
+                }
             }
         }
 
