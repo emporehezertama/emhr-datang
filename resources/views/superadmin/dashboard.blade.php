@@ -23,13 +23,21 @@
                         <label class="col-md-12">List Module</label>
                         @foreach($product as $no => $item)
                             @php($check='')
+                            @php($limit='')
                             @foreach($data as $key => $items)
                                 @if($items->crm_product_id == $item->id)
                                     @php($check='checked')
+                                    @if($items->limit_user > 0 )
+                                        @php($limit=$items->limit_user)
+                                    @endif
                                 @endif
                             @endforeach
                             <div class="col-md-6">
-                                <label><input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id" name="project_product_id[{{$item->id}}]" value="{{$item->id}}"> {{$item->name}}</label>
+                                <label><input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id" name="project_product_id[{{$item->id}}]" value="{{$item->id}}" > {{$item->name}}</label>
+                                @if($item->user_limit == 1)
+                                    <input type="text" style="margin-left: 20px;" disabled value="{{$limit}}" class="form-control limit_user" name="limit_user[{{$item->id}}]" placeholder="User Limit">
+                                @endif
+
                             </div>
                         <div class="clearfix"></div>
                         @endforeach
@@ -125,11 +133,17 @@ $(document).ready(function () {
 
 function editModule() {
     $(".project_product_id").removeAttr("disabled", "disabled");
+    $(".limit_user").removeAttr("disabled", "disabled");
+    
     //document.getElementById('project_type_id').removeAttribute('readonly');
     //$(".project_type_id").removeAttr("disabled", "disabled");
     document.getElementById('btnUpdate').style.display = "block";
 }
+function handleClick(cb) {
+    //di cek semua yang tercentang nilainya
 
+    alert("Clicked, new value = " + cb.checked);
+}
 </script>
 @endsection
 @endsection
