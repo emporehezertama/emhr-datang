@@ -80,21 +80,30 @@ class SettingController extends Controller
      */
     public function save(Request $request)
     {
+        $user = \Auth::user();
+
         if($request->setting)
         {
             foreach($request->setting as $key => $value)
             {
-                $setting = Setting::where('key', $key)->first();
+                if($user->project_id != NULL)
+                {
+                    $setting = Setting::where('key', $key)->where('project_id',$user->project_id)->first();
+                }else{
+                    $setting = Setting::where('key', $key)->first();
+                }
                 if(!$setting)
                 {
                     $setting = new Setting();
                     $setting->key = $key;
                 }
+                $setting->user_created = $user->id;
+                $setting->project_id = $user->project_id;
                 $setting->value = $value;
                 $setting->save();
             }
         }
-
+        
         if ($request->hasFile('logo'))
         {
             $file = $request->file('logo');
@@ -103,12 +112,19 @@ class SettingController extends Controller
             $destinationPath = public_path('/upload/setting');
             $file->move($destinationPath, $fileName);
 
-            $setting = Setting::where('key', 'logo')->first();
+            if($user->project_id != NULL)
+            {
+                $setting = Setting::where('key', 'logo')->where('project_id',$user->project_id)->first();
+            } else{
+                $setting = Setting::where('key', 'logo')->first();
+            }
             if(!$setting)
             {
                 $setting = new Setting();
                 $setting->key = 'logo';
             }
+            $setting->user_created = $user->id;
+            $setting->project_id = $user->project_id;
             $setting->value = '/upload/setting/' . $fileName;
             $setting->save();
         }
@@ -121,12 +137,20 @@ class SettingController extends Controller
             $destinationPath = public_path('/upload/setting');
             $file->move($destinationPath, $fileName);
 
-            $setting = Setting::where('key', 'favicon')->first();
+            if($user->project_id != NULL)
+            {
+                $setting = Setting::where('key', 'favicon')->where('project_id',$user->project_id)->first();
+            } else{
+                $setting = Setting::where('key', 'favicon')->first();
+            }
+            
             if(!$setting)
             {
                 $setting = new Setting();
                 $setting->key = 'favicon';
             }
+            $setting->user_created = $user->id;
+            $setting->project_id = $user->project_id;
             $setting->value = '/upload/setting/' . $fileName;
             $setting->save();
         }
@@ -139,16 +163,24 @@ class SettingController extends Controller
             $destinationPath = public_path('/upload/setting');
             $file->move($destinationPath, $fileName);
 
-            $setting = Setting::where('key', 'logo_footer')->first();
+            if($user->project_id != NULL)
+            {
+                $setting = Setting::where('key', 'logo_footer')->where('project_id',$user->project_id)->first();
+            }else{
+                $setting = Setting::where('key', 'logo_footer')->first();
+            }
+            
             if(!$setting)
             {
                 $setting = new Setting();
                 $setting->key = 'logo_footer';
             }
+            $setting->user_created = $user->id;
+            $setting->project_id = $user->project_id;
             $setting->value = '/upload/setting/' . $fileName;
             $setting->save();
         }
-
+        
         return redirect()->route('administrator.setting.general')->with('message-success', 'Setting saved');
     }
 

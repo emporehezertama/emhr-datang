@@ -29,6 +29,7 @@ class IndexController extends Controller
      */
     public function index()
     {
+        
         $jumlahdata = OrganisasiDivision::count();
         $data = OrganisasiDivision::all();
         $name = [];
@@ -41,14 +42,27 @@ class IndexController extends Controller
             $name[$y] = $data[$i]->name;
             $id[$x] = $data[$i]->id;
             
-            $karyawan_per_divisi[$z] = DB::table('structure_organization_custom')
+            if(\Auth::user()->project_id != Null){
+                $karyawan_per_divisi[$z] = DB::table('structure_organization_custom')
                                                 ->select('structure_organization_custom.*', 'users.*')
                                                 ->join('users', 'structure_organization_custom.id','=', 'users.structure_organization_custom_id')
                                                 ->where('structure_organization_custom.organisasi_division_id', $id[$x])
                                                 ->where('users.project_id', \Auth::user()->project_id)
-                                                ->where('users.status', '')
+                                                ->whereNull('users.status')
+                                                ->whereIn('users.access_id', ['1', '2'])
                                                 ->count();
 
+            }else{
+                $karyawan_per_divisi[$z] = DB::table('structure_organization_custom')
+                                                ->select('structure_organization_custom.*', 'users.*')
+                                                ->join('users', 'structure_organization_custom.id','=', 'users.structure_organization_custom_id')
+                                                ->where('structure_organization_custom.organisasi_division_id', $id[$x])
+                                                ->whereNull('users.status')
+                                                ->whereIn('users.access_id', ['1', '2'])
+                                                ->count();
+
+            }
+            
             $name[$y++];
             $id[$x++];
             $karyawan_per_divisi[$z++];
@@ -57,8 +71,6 @@ class IndexController extends Controller
         $jumlahperdivisi = $karyawan_per_divisi;
 
         return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
-
-        
     }
 
     /**

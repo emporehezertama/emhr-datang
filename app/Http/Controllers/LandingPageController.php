@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LandingPageForm;
+use App\Models\ClientExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -39,21 +41,9 @@ class LandingPageController extends Controller
             'confirm'      => 'same:password',
         ]);
 
-    /*  $data               = new LandingPageForm();
-        $data->nama         = $request->nama;
-        $data->jabatan      = $request->jabatan;
-        $data->email        = $request->email;
-        $data->password     = bcrypt($request->password);
-        $data->password     = $request->password;
-        $data->perusahaan   = $request->nama_perusahaan;
-        $data->bidang_usaha = $request->bidang_usaha;
-        $data->handphone    = $request->handphone; 
-        $data->save();  */
+        return $this->downloadExcel($request);
 
-        $this->downloadExcel($request);
-
-        return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products and registering for trial licenses, we have received your data and we will contact you immediately for trial account information');
-    }
+        }
     public function loginClient(Request $request) 
     {
         $this->validate($request,[
@@ -67,15 +57,38 @@ class LandingPageController extends Controller
     {
         ini_set('max_execution_time', 3000); //300 seconds = 5 minutes
    
-        $params = [];
-        $params[0]['Full Name']         = $request['nama'];
-        $params[0]['Email']             = $request['email'];
-        $params[0]['Jabatan']           = $request['jabatan'];
-        $params[0]['Bidang Usaha']      = $request['bidang_usaha'];
-        $params[0]['Nama Perusahaan']   = $request['nama_perusahaan'];
-        $params[0]['Handphone']         = $request['handphone'];
+        $nama              = $request['nama'];
+        $email             = $request['email'];
+        $jabatan           = $request['jabatan'];
+        $bidang_usaha      = $request['bidang_usaha'];
+        $nama_perusahaan   = $request['nama_perusahaan'];
+        $handphone         = $request['handphone'];
 
-        $styleHeader = [
+        $destination = storage_path('app');
+        $name_excel = 'Request_Trial'.date('YmdHis');
+        $file = $destination ."//". $name_excel.'.xlsx';
+
+        Excel::store(new ClientExport($nama, $email, $jabatan, $bidang_usaha, $nama_perusahaan, $handphone), $name_excel.'.xlsx');
+    //  return (new ClientExport($nama, $email, $jabatan, $bidang_usaha, $nama_perusahaan, $handphone))->download('Request-trial'.date('d-m-Y') .'.xlsx');
+    
+        $params['text']     = 'Test Free Trial';
+        $emailto = ['marketing@empore.co.id', 'farros@empore.co.id'];
+        \Mail::send('email.trial-account', $params,
+            function($message) use($request, $file, $email, $emailto,$name_excel, $destination) {
+                $message->from($email);
+                $message->to($emailto);
+                $message->subject('Request Trial');
+                $message->attach($file, array(
+                    'as' => $name_excel .'.xlsx',
+                    'mime' => 'application/xlsx'
+                    )
+            );
+            }
+        );
+
+        return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products and registering for trial licenses, we have received your data and we will contact you immediately for trial account information');
+    
+    /*    $styleHeader = [
             'font' => [
                 'bold' => true,
             ],
@@ -131,7 +144,7 @@ class LandingPageController extends Controller
 
         })->save('xls', $destination, true);
 
-        $params['text']     = 'Test Free Trial';
+       $params['text']     = 'Test Free Trial';
         
         \Mail::send('email.trial-account', $params,
             function($message) use($request, $file, $name_excel, $destination) {
@@ -144,56 +157,10 @@ class LandingPageController extends Controller
                     )
             );
             }
-        );
+        );  */
+
     }
 
 
-    public function getPriceList(Request $request)
-    {
-        $params['subj'] = 'Pricelist';
-        $view =  view('landing-page.email-price-list')->with($params);
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-
-        $pdf->stream();
-
-        $output = $pdf->output();
-
-        $destinationPath = public_path('/storage/temp/');
-        file_put_contents( $destinationPath . 'Price-List'.date('Ymdhis') .'.pdf', $output);
-        $file = $destinationPath . 'Price-List'.date('Ymdhis') .'.pdf';
-
-        $destination = public_path('storage\temp');
-        $file_name = 'Price-List'.date('YmdHis');
-        $file2 = $destination ."\\". $file_name.'.pdf';
-        file_put_contents( $destination . $file_name .'.pdf', $output);
-
-        // send email
-        $objDemo = new \stdClass();
-        $objDemo->content = view('landing-page.email-price-list'); 
-    //    $emailto = $request->email2;
-        $emailto = 'farros.jackson@gmail.com';
-        echo $file2;
-        if($emailto != "")
-        { 
-            \Mail::send('landing-page.email-price-list', $params,
-                function($message) use($file2, $emailto, $file_name, $destination) {
-                    $message->from('emporeht@gmail.com');
-                    $message->to($emailto);
-                    $message->subject('Request Price List');
-                    $message->attach($file2, array(
-                            'as' => $file_name .'.pdf', 
-                            'mime' => 'application/pdf')
-                    );  
-                    $message->setBody(''); 
-                }
-            ); 
-
-        }
-
-        
-        return redirect()->route('landing-page1')->with('message-success', 'Thank you for being interested in our products, your Pricelist request has been sent to your email');
-    
-    }
 }
  

@@ -385,7 +385,7 @@
                 console.log(msg);
             }
         });
-        var cekUser = setTimeout("getUserActive()", 6000);
+        var cekUser = setTimeout("getUserActive()", 5000);
     }
 
     function  headcountDepartment(){

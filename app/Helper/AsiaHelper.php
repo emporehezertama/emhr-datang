@@ -186,7 +186,7 @@ function get_backup_cuti()
 			$karyawan = \App\User::where('division_id', $user->division_id)->where('id', '<>', $user->id)->whereNull('resign_date');
 		}
     }
-		$karyawan = $karyawan->where('id', '<>', $user->id)->whereIn('access_id', [1,2])->whereNull('resign_date')->get();
+		$karyawan = $karyawan->where('id', '<>', $user->id)->where('access_id', '2')->whereNull('resign_date')->get();
 
 	return $karyawan;
 }
@@ -839,7 +839,19 @@ function total_payment_request()
  */
 function total_karyawan()
 {
-	return \App\User::whereIn('access_id', [1,2])->whereNull('status')->count();
+	$user = \Auth::user();
+	if($user->project_id != Null){
+		return \App\User::whereIn('access_id', ['1', '2'])
+						->whereNull('status')
+						->where('project_id', \Auth::user()->project_id)
+						->count();
+	}else{
+
+		return \App\User::whereIn('access_id', ['1', '2'])
+						->whereNull('status')
+						->count();
+	}
+	
 }
 
 /**
@@ -975,7 +987,7 @@ function list_approval_user()
  */
 function get_karyawan()
 {
-	return \App\User::whereIn('access_id', [1,2])->get();
+	return \App\User::where('access_id', 2)->get();
 }
 
 /**

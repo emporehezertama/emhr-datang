@@ -60,16 +60,18 @@ class KaryawanController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-            $data = User::whereIn('access_id',[1,2])->where('project_id', $user->project_id);
+
+            $data = User::whereIn('access_id', ['1', '2'])->where('project_id', $user->project_id);
             $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
             $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
-            $notDefinePos = User::whereIn('access_id',[1,2])->whereNull('structure_organization_custom_id')->where('users.project_id', $user->project_id)->get();
+            $notDefinePos = User::whereIn('access_id', ['1', '2'])->whereNull('structure_organization_custom_id')->where('users.project_id', $user->project_id)->get();
         } else
         {
-            $data = User::whereIn('access_id',[1,2]);
+            $data = User::whereIn('access_id', ['1', '2']);
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
-            $notDefinePos = User::whereIn('access_id',[1,2])->whereNull('structure_organization_custom_id')->get();
+            $notDefinePos = User::whereIn('access_id', ['1', '2'])->whereNull('structure_organization_custom_id')->get();
+
         }
 
         $params['countPos'] = count($notDefinePos);
@@ -252,13 +254,15 @@ class KaryawanController extends Controller
 
             $module = \App\Models\CrmModule::where('project_id', $userLogin->project_id)->where('crm_product_id', 3)->first();
             $User = \App\User::where('project_id', $userLogin->project_id)->whereIn('access_id',[1,2])->count();
-
-            if($countNew > (($module->limit_user)-$User)){
+            if($module->limit_user !=NULL || $module->limit_user > 0)
+            {
+                if($countNew > (($module->limit_user)-$User)){
                 UserTemp::truncate();
                 UserEducationTemp::truncate();
                 UserFamilyTemp::truncate();
 
                 return redirect()->route('administrator.karyawan.index')->with('message-error', 'You can not import user anymore. You have reached the limit!');
+                }
             }
         }
 

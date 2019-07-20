@@ -169,6 +169,10 @@ class PayrollController extends Controller
 
             return redirect()->route('administrator.payroll.index');
         }
+        if($user->project_id != NULL)
+        {
+            $result = $result->where('users.project_id', $user->project_id);
+        }
 
         $params['data'] = $result->get();
         

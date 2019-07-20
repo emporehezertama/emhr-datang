@@ -113,12 +113,14 @@
                                 <a style="font-size: 12px;"><i class="fa fa-star"></i> {{ isset(Auth::user()->structure->position) ? Auth::user()->structure->position->name:''}}{{ isset(Auth::user()->structure->division) ? '-'. Auth::user()->structure->division->name:''}}</a>
                             </li>
                             <li role="separator" class="divider"></li>
+                            <!--
                             @if(\Session::get('is_login_administrator'))
                                 <li>
                                     <a href="{{ route('karyawan.back-to-administrator') }}"> <i class="fa fa-key"></i> Back to Administrator</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
                             @endif
+                            -->
                             <li>
                                 <a href="{{ route('karyawan.profile') }}">Profile</a>
                             </li>
@@ -1201,7 +1203,7 @@
                   <form>
                     
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLabel1">Reset Password Anda terlebih dahulu !</h4> 
+                        <h4 class="modal-title" id="exampleModalLabel1">Reset Your Password First !</h4> 
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -1210,8 +1212,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="recipient-name" class="control-label">Konfirmasi Password:</label>
-                            <input type="password" name="confirm"class="form-control" placeholder="Konfirmasi Password"> 
+                            <label for="recipient-name" class="control-label">Confirm Password:</label>
+                            <input type="password" name="confirm"class="form-control" placeholder="Confirm Password"> 
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1230,13 +1232,13 @@
 
                 if(password == "" || confirm == "")
                 {
-                    bootbox.alert('Password atau Konfirmasi Password harus diisi !');
+                    bootbox.alert('Password or Confirm Password can not be Empty !');
                     return false;
                 }
 
                 if(password != confirm)
                 {
-                    bootbox.alert('Password tidak sama');
+                    bootbox.alert('Password does not Match');
                 }
                 else
                 {

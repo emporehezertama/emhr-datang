@@ -15,19 +15,29 @@
             </div>
         </div>
         <div class="row">
+             <form class="form-horizontal" id="form-module" name="form_module" enctype="multipart/form-data" action="{{ route('superadmin.update-modul') }}" method="POST">
+                {{ csrf_field() }}
             <div class="col-md-12">
                 <div class="white-box">
                     <div class="form-group">
                         <label class="col-md-12">List Module</label>
                         @foreach($product as $no => $item)
                             @php($check='')
+                            @php($limit='')
                             @foreach($data as $key => $items)
                                 @if($items->crm_product_id == $item->id)
                                     @php($check='checked')
+                                    @if($items->limit_user > 0 )
+                                        @php($limit=$items->limit_user)
+                                    @endif
                                 @endif
                             @endforeach
                             <div class="col-md-6">
-                                <label><input type="checkbox" {{$check}} disabled="true" style="margin-right: 10px; margin-bottom: 10px" name="project_product_id['+$item->id+']" value="{{$item->id}}"> {{$item->name}}</label>
+                                <label><input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id" name="project_product_id[{{$item->id}}]" value="{{$item->id}}" > {{$item->name}}</label>
+                                @if($item->user_limit == 1)
+                                    <input type="text" style="margin-left: 20px;" disabled value="{{$limit}}" class="form-control limit_user" name="limit_user[{{$item->id}}]" placeholder="User Limit">
+                                @endif
+
                             </div>
                         <div class="clearfix"></div>
                         @endforeach
@@ -43,15 +53,13 @@
 
                     <div class="form-group">
                         <label class="col-md-12">Project Type</label>
-                            @php($type='')
-                            @if($itemProject->project_type == 1)
-                                @php($type = 'License')
-                            @elseif($itemProject->project_type == 2)
-                                @php($type = 'Trial')
-                            @endif
                         <div class="col-md-6">
-                            <input type="hidden" name="project_type_id" class="form-control" value="{{$itemProject->project_type}}">
-                            <input type="text" name="project_type" readonly="true" class="form-control" value="{{$type}}">
+                           
+                            <select name="project_type_id" class="form-control project_type_id" disabled>
+                                <option value="1" {{old('project_type_id',$itemProject->project_type)=="1"? 'selected':''}} >License</option>
+                                <option value="2" {{old('project_type_id',$itemProject->project_type)=="2"? 'selected':''}} >Trial</option>
+                            </select>
+
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -78,8 +86,15 @@
                     </div>
                     @endforeach
                     <div class="clearfix"></div>
+                    <div class="col-md-12">
+                        <button type="button" onclick="editModule()" class="btn btn-info btn-sm m-r-5" style="float: left; margin-right:5px" ><i class="fa fa-edit"></i> edit</button>
+                        <button type="submit" class="btn btn-sm btn-success waves-effect waves-light m-r-10" id="btnUpdate" style="display: none; margin-left: 5px;"><i class="fa fa-save"></i> Update</button>
+                        <br style="clear: both;" />
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
+        </form>
         </div>
         
     </div>
@@ -97,7 +112,11 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-    var el = $("input[name='project_type_id']").val();
+    
+    //var el = $("input[name='project_type_id']").val();
+    var projectType = $("select[name='project_type_id'] :selected");
+    var el = projectType.val();
+
     if(el == 1)
     {
       document.getElementById('divLabelDuration').style.display = "none";
@@ -110,8 +129,21 @@ $(document).ready(function () {
         document.getElementById('divLabelExpired').style.display = "block";
         document.getElementById('divLabelLicense').style.display = "none";
     }
-
 });
+
+function editModule() {
+    $(".project_product_id").removeAttr("disabled", "disabled");
+    $(".limit_user").removeAttr("disabled", "disabled");
+    
+    //document.getElementById('project_type_id').removeAttribute('readonly');
+    //$(".project_type_id").removeAttr("disabled", "disabled");
+    document.getElementById('btnUpdate').style.display = "block";
+}
+function handleClick(cb) {
+    //di cek semua yang tercentang nilainya
+
+    alert("Clicked, new value = " + cb.checked);
+}
 </script>
 @endsection
 @endsection
