@@ -405,7 +405,8 @@
                 '_token' : $("meta[name='csrf-token']").attr('content')
             },
             success: function( data ) {
-                $('.td-thp').html(numberWithDot(data.thp));
+                var thp  = data.thp.split(',').join('');
+                $('.td-thp').html(numberWithDot(thp));
                 $('.td-pph21').html(data.monthly_income_tax);
                 $("input[name='bpjs_ketenagakerjaan']").val(data.bpjs_ketenagakerjaan);
                 $("input[name='bpjs_ketenagakerjaan2']").val(data.bpjs_ketenagakerjaan2);
@@ -413,7 +414,7 @@
                 $("input[name='bpjs_kesehatan2']").val(data.bpjs_kesehatan2);
                 $("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
-                $("input[name='thp']").val(data.thp + parseInt(data.monthly_income_tax));
+                $("input[name='thp']").val(parseInt(thp));
                 $("input[name='pph21']").val(data.monthly_income_tax);
                 $('.bpjs_ketenagakerjaan_employee').val(data.bpjs_ketenagakerjaan2);
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);

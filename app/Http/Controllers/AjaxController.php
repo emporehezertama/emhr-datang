@@ -626,7 +626,7 @@ class AjaxController extends Controller
             $params['monthly_income_tax']           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
             $params['monthly_income_tax']           = number_format($params['monthly_income_tax']);
             // start custom
-            $params['thp']                          = number_format($thp + $monthly_income_tax);
+            $params['thp']                          = number_format($thp + $monthly_income_tax); 
             // end custom
             $params['bpjs_pengurang']               = number_format($bpjspengurangan);
             $params['bpjs_penambahan']              = number_format($bpjspenambahan);

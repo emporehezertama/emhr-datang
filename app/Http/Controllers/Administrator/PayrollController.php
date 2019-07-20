@@ -619,46 +619,6 @@ class PayrollController extends Controller
             }
         }
 
-        /*
-        if(isset($temp->payrollDeductionsEmployee))
-        {
-            foreach($temp->payrollDeductionsEmployee as $i)
-            {
-                $deduction                        = new PayrollDeductionsEmployeeHistory();
-                $deduction->payroll_id            = $history->id;
-                $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
-                $deduction->nominal               = replace_idr($i->nominal); 
-
-                if(isset($request->create_by_payroll_id))
-                {
-                    $deduction->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
-                    $deduction->save(['timestamps' => false]);
-                }
-                else $deduction->save();
-            }
-        }
-
-        if(isset($temp->payrollEarningsEmployee))
-        {
-            foreach($temp->payrollEarningsEmployee as $i)
-            {
-                $earning                        = new PayrollEarningsEmployeeHistory();
-                $earning->payroll_id            = $history->id;
-                $earning->payroll_earning_id    = $i->payroll_earning_id;   
-                $earning->nominal               = replace_idr($i->nominal); 
-                
-                if(isset($request->create_by_payroll_id))
-                {
-                    $earning->created_at = date('Y-m-d H:i:s', strtotime( $request->date ));
-                    $earning->save(['timestamps' => false]);
-                }
-                else $earning->save();
-            }
-        }
-        */
-
-        //$this->init_calculate();
-
         if(isset($request->create_by_payroll_id) || isset($request->update_history))
         {
             return redirect()->route('administrator.payroll.detail-history', $history->id)->with('message-success', __('general.message-data-saved-success'));
@@ -1239,7 +1199,7 @@ class PayrollController extends Controller
             
             // start custom
             $thp                         = $thp + $monthly_income_tax;
-
+ 
             $non_bonus = $this->init_calculate_non_bonus($item);
             $monthly_income_tax = $yearly_income_tax - $non_bonus['yearly_income_tax'] + ($non_bonus['yearly_income_tax'] / 12);
 
