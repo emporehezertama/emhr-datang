@@ -4,29 +4,42 @@ function getPlafondTraining($lokasi_kegiatan,$tempat_tujuan)
 	//lokasi_kegiatan //Dalam Negeri atau Luar Negeri
 	//tempat_tujuan kemudia dia di cek kabupaten dan dapatkan ke provinsi
 	$position = \Auth::user()->structure->position->id;
+
 	$plafond = \App\Models\Kabupaten::select('provinsi.type')->where('kabupaten.nama',$tempat_tujuan)->join('provinsi','provinsi.id_prov','=','kabupaten.id_prov')->first();
 
-	//dd($plafond);
-
 	if($lokasi_kegiatan == 'Dalam Negeri'){
-		if($plafond == null)
+		if($plafond == NULL)
 		{
 			$data = new \App\Models\PlafondDinas();
 			$data->tunjangan_makanan = 0;
 			$data->tunjangan_harian = 0;
 		}else{
-			if($plafond->type == null)
+			if($plafond->type == NULL)
 			{
 				$data = new \App\Models\PlafondDinas();
 				$data->tunjangan_makanan = 0;
 				$data->tunjangan_harian = 0;
-			} else{
+			}else{
 				$data = \App\Models\PlafondDinas::where('organisasi_position_id',$position)->where('plafond_type',$plafond->type)->first();
+				if($data){
+					$data= $data;
+				}else{
+					$data = new \App\Models\PlafondDinas();
+					$data->tunjangan_makanan = 0;
+					$data->tunjangan_harian = 0;
+				}
 			}
 		}
 	}elseif ($lokasi_kegiatan == 'Luar Negeri') {
 		# code...
 		$data = \App\Models\PlafondDinasLuarNegeri::where('organisasi_position_id',$position)->first();
+		if($data){
+			$data= $data;
+		} else{
+			$data = new \App\Models\PlafondDinasLuarNegeri();
+			$data->tunjangan_makanan = 0;
+			$data->tunjangan_harian = 0;
+		}
 	}
 	//dd($lokasi_kegiatan,$tempat_tujuan,$plafond,$data);
 	//return 'aaa';

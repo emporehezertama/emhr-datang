@@ -56,7 +56,7 @@
                                         <td>{{ $item->total_cuti }} Day/s</td>
                                         <td>{{ $item->keperluan }}</td>
                                         <td>
-                                            <a onclick="detail_approval_leaveCustom({{ $item->id }})">
+                                            <a onclick="detail_approval_leave_custom({{ $item->id }})">
                                             {!! status_cuti($item->status) !!}
                                             </a>
                                         </td>

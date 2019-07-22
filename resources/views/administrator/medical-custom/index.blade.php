@@ -53,7 +53,7 @@
                                         <td class="text-center">{{ $no+1 }}</td> 
                                         <td>{{ date('d F Y', strtotime($item->tanggal_pengajuan)) }}</td>
                                         <td>
-                                            <a onclick="detail_approval_medicalCustom({{ $item->id }})"> 
+                                            <a onclick="detail_approval_medical_custom({{ $item->id }})"> 
                                             {!! status_medical($item->status) !!}
                                             </a>
                                         </td>
