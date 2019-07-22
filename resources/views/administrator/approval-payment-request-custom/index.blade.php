@@ -64,7 +64,7 @@
                                         <td>Accounting Department</td>
                                         <td>{{ $item->tujuan }}</td>
                                         <td>{{ $item->payment_method }}</td>
-                                        <td><a onclick="detail_approval_paymentRequestCustom({{ $item->id }})">
+                                        <td><a onclick="detail_approval_payment_custom({{ $item->id }})">
                                             {!! status_cuti($item->status) !!}
                                             </a>
                                         </td>

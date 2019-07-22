@@ -56,7 +56,7 @@
                                        <!-- <td>{{ $item->transaction_type }}</td>-->
                                         <td>{{ $item->payment_method }}</td>
                                         <td>
-                                            <a onclick="detail_approval_paymentRequestCustom({{ $item->id }})">
+                                            <a onclick="detail_approval_payment_custom({{ $item->id }})">
                                                 {!! status_payment_request($item->status) !!}
                                             </a>
                                            

@@ -58,13 +58,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a onclick="detail_approval_exitCustom({{ $item->id }})"> 
+                                            <a onclick="detail_approval_exit_custom({{ $item->id }})"> 
                                                 {!! status_exit_interview($item->status) !!}
                                             </a>
                                         </td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>
-                                            <a onclick="detail_approval_clearanceCustom({{ $item->id }})">
+                                            <a onclick="detail_approval_clearance_custom({{ $item->id }})">
                                                 @if(count($item->countAssets) >= 1)
                                                 <label class="btn btn-warning btn-xs">Waiting Approval</label>
                                                 @else
