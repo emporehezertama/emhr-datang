@@ -844,6 +844,7 @@ class PayrollController extends Controller
         // burdern allowance
         $burden_allow = 5 * ($item->salary + $earnings + $bpjspenambahan) / 100;
         $biaya_jabatan_bulan = $biaya_jabatan / 12;
+
         if($burden_allow > $biaya_jabatan_bulan)
         {
             $burden_allow = $biaya_jabatan_bulan;
@@ -928,39 +929,10 @@ class PayrollController extends Controller
         }
 
         $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-        $monthly_income_tax = $yearly_income_tax / 12;
-        $gross_income_per_month       = $gross_income / 12;
-
-        $less               = $bpjspengurangan + $monthly_income_tax; 
-
-        $gross_thp = ($item->salary + $earnings);
-
-        $deductions = 0;
-        if(isset($item->payrollDeductionsEmployee))
-        {
-            foreach($item->payrollDeductionsEmployee as $i)
-            {
-                if(isset($i->payrollDeductions->title))
-                {
-                    $deductions += $i->nominal;
-                }
-            }
-        }
         
-        #$thp                = $gross_thp - $less - $deductions;
-        $thp = ($item->salary + $item->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
-
-        if(!isset($item->salary) || empty($item->salary)) $item->salary = 0;
-        if(!isset($thp) || empty($thp)) $thp = 0;
-        
-        // start custom
-        $thp                            = $thp + $monthly_income_tax;
-        $earnings                       = $earnings + $monthly_income_tax;   
         $params['yearly_income_tax']    = $yearly_income_tax;
-        $params['monthly_income_tax']   = $monthly_income_tax;
 
-        return $params;
-        // end custom  
+        return $params; 
     }
 
     /**
@@ -1175,9 +1147,9 @@ class PayrollController extends Controller
                 $income_tax_calculation_30 = ($pph_setting_4->tarif / 100) * ($taxable_yearly_income - $pph_setting_4->batas_bawah);
             }
 
-            $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax = $yearly_income_tax / 12;
-            $gross_income_per_month       = $gross_income / 12;
+            $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
+            $monthly_income_tax             = $yearly_income_tax / 12;
+            $gross_income_per_month         = $gross_income / 12;
 
             $less               = $bpjspengurangan + $monthly_income_tax; 
 
@@ -1212,15 +1184,12 @@ class PayrollController extends Controller
             #$temp->total_deduction              = $total_deduction + $deductions; 
             $temp->total_deduction              = $deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax; 
             $temp->total_earnings               = $item->salary + $item->bonus + $earnings;
-
             $temp->thp                          = $thp;
             $temp->pph21                        = $monthly_income_tax;
             $temp->is_calculate                 = 1;
-
             $temp->bpjs_ketenagakerjaan_employee    = $bpjs_ketenagakerjaan2;
             $temp->bpjs_kesehatan_employee          = $bpjs_kesehatan2;
             $temp->bpjs_pensiun_employee            = $bpjs_pensiun2;
-            
             $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * $item->salary / 100;
             $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company') * $item->salary / 100;
             $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * $item->salary / 100;
@@ -1234,51 +1203,6 @@ class PayrollController extends Controller
             $bonus = $temp->bonus;
             $user_id        = $temp->user_id;
             $payroll_id     = $temp->id;
-
-            /*
-            $temp                               = new PayrollHistory();
-            $temp->payroll_id                   = $payroll_id;
-            $temp->user_id                      = $user_id;
-            $temp->salary                       = replace_idr($item->salary);
-            $temp->thp                          = $thp;
-            $temp->bpjs_jkk_company             = get_setting('bpjs_jkk_company') * $item->salary / 100;
-            $temp->bpjs_jkm_company             = get_setting('bpjs_jkm_company');
-            $temp->bpjs_jht_company             = get_setting('bpjs_jht_company') * $item->salary / 100;
-            $temp->bpjs_jaminan_jht_employee    = get_setting('bpjs_jaminan_jht_employee');
-            $temp->bpjs_jaminan_jp_employee     = get_setting('bpjs_jaminan_jp_employee');
-            $temp->bpjs_kesehatan_employee      = $bpjs_kesehatan2;
-            $temp->bpjs_ketenagakerjaan_employee= $bpjs_ketenagakerjaan2;
-            $temp->bpjs_pensiun_employee        = $bpjs_pensiun2;
-            $temp->bpjs_pensiun_company         = $bpjs_pensiun;
-            $temp->bpjs_kesehatan_company       = $bpjs_kesehatan;
-            $temp->pph21                        = $monthly_income_tax;
-            $temp->bonus                        = replace_idr($bonus);
-            $temp->save();
-
-            if(isset($item->payrollDeductionsEmployee))
-            {
-                foreach($item->payrollDeductionsEmployee as $i)
-                {
-                    $deduction                        = new PayrollDeductionsEmployeeHistory();
-                    $deduction->payroll_id            = $temp->id;
-                    $deduction->payroll_deduction_id  = $i->payroll_deduction_id;   
-                    $deduction->nominal               = replace_idr($i->nominal); 
-                    $deduction->save();
-                }
-            }
-
-            if(isset($item->payrollEarningsEmployee))
-            {
-                foreach($item->payrollEarningsEmployee as $i)
-                {
-                    $deduction                        = new PayrollEarningsEmployeeHistory();
-                    $deduction->payroll_id            = $temp->id;
-                    $deduction->payroll_earning_id    = $i->payroll_earning_id;   
-                    $deduction->nominal               = replace_idr($i->nominal); 
-                    $deduction->save();
-                }
-            }
-            */
         }
     }
 

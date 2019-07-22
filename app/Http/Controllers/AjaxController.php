@@ -494,10 +494,10 @@ class AjaxController extends Controller
                 }
             }
 
-            $gross_income           = ($request->salary + $earnings + $bpjspenambahan) * 12 + $request->bonus;
+            $gross_income           = (($request->salary + $earnings + $bpjspenambahan) * 12) + $request->bonus;
 
             // burdern allowance
-            $burden_allow           = 5 *  $gross_income / 100;
+            $burden_allow           = 5 *  ($request->salary + $earnings + $bpjspenambahan + $request->bonus) / 100;
             $biaya_jabatan_bulan    = $biaya_jabatan / 12;
 
             if($burden_allow > $biaya_jabatan_bulan)
@@ -505,7 +505,7 @@ class AjaxController extends Controller
                 $burden_allow = $biaya_jabatan_bulan;
             }
  
-            $total_deduction = ($bpjspengurangan * 12) + $burden_allow * 12;
+            $total_deduction = ($bpjspengurangan * 12) + ($burden_allow * 12);
             
             $net_yearly_income          = $gross_income - $total_deduction;
 
@@ -587,9 +587,9 @@ class AjaxController extends Controller
             $monthly_income_tax             = $yearly_income_tax / 12;
             $gross_income_per_month         = ($request->salary + $earnings + $bpjspenambahan)  + $request->bonus;//$gross_income / 12;
 
-            $less               = $bpjspengurangan + $monthly_income_tax; 
-            $gross_thp          = ($request->salary + $earnings + $request->bonus);
-            $deductions         = 0;
+            $less                           = $bpjspengurangan + $monthly_income_tax; 
+            $gross_thp                      = ($request->salary + $earnings + $request->bonus);
+            $deductions                     = 0;
             if(isset($request->deductions))
             {
                 foreach($request->deductions as $item)
@@ -623,7 +623,7 @@ class AjaxController extends Controller
             $non_bonus = $this->getCalculatePayrollNonBonus($request);
              
             $params['yearly_income_tax_non_bonus']  = $non_bonus['yearly_income_tax'];
-            $params['monthly_income_tax']           = $yearly_income_tax - (Int)replace_idr($non_bonus['yearly_income_tax']) + ((Int)replace_idr($non_bonus['yearly_income_tax']) / 12);
+            $params['monthly_income_tax']           = $yearly_income_tax - $non_bonus['yearly_income_tax'] + ($non_bonus['yearly_income_tax'] / 12);
             $params['monthly_income_tax']           = number_format($params['monthly_income_tax']);
             // start custom
             $params['thp']                          = number_format($thp + $monthly_income_tax); 
@@ -749,8 +749,7 @@ class AjaxController extends Controller
             $gross_income           = ($request->salary + $earnings + $bpjspenambahan) * 12;
 
             // burdern allowance
-            #$burden_allow           = 5 *  ($request->salary + $earnings + $bpjspenambahan + $request->bonus) / 100;
-            $burden_allow           = 5 *  $gross_income / 100;
+            $burden_allow = 5 * ($request->salary + $earnings + $bpjspenambahan) / 100;
             $biaya_jabatan_bulan    = $biaya_jabatan / 12;
 
             if($burden_allow > $biaya_jabatan_bulan)
@@ -758,7 +757,7 @@ class AjaxController extends Controller
                 $burden_allow = $biaya_jabatan_bulan;
             }
  
-            $total_deduction = ($bpjspengurangan * 12) + $burden_allow * 12;
+            $total_deduction = ($bpjspengurangan * 12) + ($burden_allow * 12);
             
             $net_yearly_income          = $gross_income - $total_deduction;
 
@@ -837,47 +836,8 @@ class AjaxController extends Controller
             }
 
             $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax             = $yearly_income_tax / 12;
-            $gross_income_per_month         = ($request->salary + $earnings + $bpjspenambahan);//$gross_income / 12;
-
-            $less               = $bpjspengurangan + $monthly_income_tax; 
-
-            $gross_thp = ($request->salary + $earnings);
-
-            $deductions = 0;
-            if(isset($request->deductions))
-            {
-                foreach($request->deductions as $item)
-                {   
-                    $deductions += replace_idr($item);
-                }
-            }
-            
-            $thp = ($request->salary + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
-
-            $params['gross_income']         = number_format($gross_income); 
-            $params['burden_allow']         = number_format($burden_allow);
-            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
-            $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan2);
-            $params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
-            $params['bpjs_kesehatan2']        = number_format($bpjs_kesehatan2);
-            $params['bpjs_pensiun']         = number_format($bpjs_pensiun);
-            $params['bpjs_pensiun2']        = number_format($bpjs_pensiun2);
-            $params['total_deduction']      = number_format($total_deduction);
-            $params['net_yearly_income']    = number_format($net_yearly_income);
-            $params['untaxable_income']     = number_format($untaxable_income);
-            $params['taxable_yearly_income']        = number_format($taxable_yearly_income);
-            $params['income_tax_calculation_5']     = number_format($income_tax_calculation_5); 
-            $params['income_tax_calculation_15']    = number_format($income_tax_calculation_15); 
-            $params['income_tax_calculation_25']    = number_format($income_tax_calculation_25); 
-            $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
-            $params['yearly_income_tax']            = number_format($yearly_income_tax);
-            $params['monthly_income_tax']           = number_format($monthly_income_tax);
-            $params['gross_income_per_month']                 = number_format($gross_income_per_month);
-            $params['less']                         = number_format($less);
-            $params['thp']                          = number_format($thp + $monthly_income_tax);
-            $params['bpjs_pengurang']                          = number_format($bpjspengurangan);
-            $params['bpjs_penambahan']                          = number_format($bpjspenambahan);
+           
+            $params['yearly_income_tax']            = $yearly_income_tax;
         }
 
         return $params;

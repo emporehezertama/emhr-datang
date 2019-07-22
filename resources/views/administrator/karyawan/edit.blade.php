@@ -88,7 +88,7 @@
                                                     <td>{{ $item->on_dutty }}</td>
                                                     <td>{{ $item->off_dutty }}</td>
                                                     <td>
-                                                        @if(!empty($item->long) || !empty($item->lat))
+                                                        @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic))
                                                             <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
                                                             <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
                                                         @else
