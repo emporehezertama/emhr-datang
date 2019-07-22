@@ -196,7 +196,7 @@
 				<td style="border: 1px solid #000000;"> BPJS JHT (employee)</td>
 				@php($bpjs1 = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($bpjs1 += get_payroll_history_param($user_id, $year, $month, 'bpjs_jaminan_jht_employee') )
+				@php($bpjs1 += get_payroll_history_param($user_id, $year, $month, 'salary') * get_payroll_history_param($user_id, $year, $month, 'bpjs_jaminan_jht_employee') / 100 )
 				<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bpjs1) }}</th>
         		@php($total_deduction[$month] += $bpjs1)
 				@endfor
@@ -206,7 +206,7 @@
 				<td style="border: 1px solid #000000;"> BPJS JP (employee)</td>
 				@php($bpjs2 = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($bpjs2 += get_payroll_history_param($user_id, $year, $month, 'bpjs_jaminan_jp_employee') )
+				@php($bpjs2 += get_payroll_history_param($user_id, $year, $month, 'salary') * get_payroll_history_param($user_id, $year, $month, 'bpjs_jaminan_jp_employee') / 100 )
 				<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bpjs2) }}</th>
         		@php($total_deduction[$month] += $bpjs2)
 				@endfor
