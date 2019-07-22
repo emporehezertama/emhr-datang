@@ -53,12 +53,12 @@
                                         <td>{{ $item->topik_kegiatan }}</td>
                                         <td>{{ date('d F Y', strtotime($item->tanggal_kegiatan_start)) }} - {{ date('d F Y', strtotime($item->tanggal_kegiatan_end)) }}</td>
                                         <td>
-                                            <a onclick="detail_approval_trainingCustom({{ $item->id }})"> 
+                                            <a onclick="detail_approval_training_custom({{ $item->id }})"> 
                                             {!! status_cuti($item->status) !!}
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="javascript:;" onclick="detail_approval_trainingClaimCustom({{ $item->id }})"> 
+                                            <a href="javascript:;" onclick="detail_approval_trainingClaim_custom({{ $item->id }})"> 
                                                 {!! status_cuti($item->status_actual_bill) !!}
                                             </a>
                                         </td>

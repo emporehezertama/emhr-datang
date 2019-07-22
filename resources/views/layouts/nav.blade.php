@@ -217,11 +217,11 @@
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $exit_menu['waiting'] }}</label>
                         </a>
                     </li>
-                    <li>
+                     <li>
                         <a href="{{ route('administrator.approval.clearance-custom.index') }}"><i class="mdi mdi-checkbox-multiple-marked-outline fa-fw"></i><span class="hide-menu">Exit Clearance</span>
                             <label class="btn btn-danger btn-xs" style="position: absolute;right:10px; top: 10px;">{{ $clearance_menu['waiting'] }}</label>
                         </a>
-                    </li>
+                    </li>                   
                     @endif
                 </ul>
             </li>

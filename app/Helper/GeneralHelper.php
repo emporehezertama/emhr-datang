@@ -641,7 +641,7 @@ function cek_exit_approval()
 	if($cek1->setting_approval_level_id >=2)
 	{
 		$cek2 = clone $exit;
-		$cek2 = $cek2->where('history_approval_exit.setting_approval_level_id',  ( $cek1->setting_approval_level_id - 1) )->whereNull('is_approved')->first();
+		$cek2 = $cek2->where('history_approval_exit.setting_approval_level_id',  ($cek1->setting_approval_level_id - 1))->whereNull('is_approved')->first();
 		if($cek2)
 		{
 			//return [];
@@ -709,12 +709,12 @@ function count_clearance_approval()
 {
 	// cek jenis user
 	$user = \Auth::user();
+
+    $approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
     if($user->project_id != NULL)
     {
-    	$approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
    		$data = \App\Models\ExitInterviewAssets::join('exit_interview','exit_interview.id','=','exit_interview_assets.exit_interview_id')->where('exit_interview.status','<',3)->join('users','users.id','=','exit_interview.user_id')->where('users.project_id', $user->project_id)->select('exit_interview_assets.*')->get();
     }else{
-    	$approval = \App\Models\SettingApprovalClearance::where('user_id', \Auth::user()->id)->first();
    		$data = \App\Models\ExitInterviewAssets::join('exit_interview','exit_interview.id','=','exit_interview_assets.exit_interview_id')->where('exit_interview.status','<',3)->get();
     }
     
@@ -730,7 +730,7 @@ function count_clearance_approval()
 		{
 			if($item->approval_check == NULL)
 			{
-				 $params['waiting'] = $params['waiting'] + 1; 
+				 $params['waiting'] = $params['waiting'] + 1;
 			}
 			if($item->approval_check == 0)
 	        {
@@ -741,9 +741,13 @@ function count_clearance_approval()
 				$params['approved'] = $params['approved'] + 1;
 	        }
 		}
-    	$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
+		$params['all'] = $params['approved'] + $params['waiting'] + $params['reject'];
 		return $params;
-    }
+	}else{
+		return $params;
+	}
+
+    	
 }
 
 
@@ -849,7 +853,7 @@ function get_setting($key)
 		if($auth->project_id != NULL)
         {
         	$setting = \App\Models\Setting::where('key', $key)->where('project_id',$auth->project_id)->first();
-        } else{
+        }else{
         	$setting = \App\Models\Setting::where('key', $key)->first();
         }
 	}else{

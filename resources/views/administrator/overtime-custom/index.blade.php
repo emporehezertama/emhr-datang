@@ -35,12 +35,12 @@
                                         <td class="text-center">{{ $no+1 }}</td>    
                                         <td>{{ date('d F Y', strtotime($item->created_at))}}</td>
                                         <td>
-                                            <a href="javascript:;" onclick="detail_approval_overtimeCustom({{ $item->id }})"> 
+                                            <a href="javascript:;" onclick="detail_approval_overtime_custom({{ $item->id }})"> 
                                                 {!! status_overtime($item->status) !!}
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="javascript:;" onclick="detail_approval_overtimeClaimCustom({{ $item->id }})"> 
+                                            <a href="javascript:;" onclick="detail_approval_overtimeClaim_custom({{ $item->id }})"> 
                                                 {!! status_overtime($item->status_claim) !!}
                                             </a>
                                         </td>
