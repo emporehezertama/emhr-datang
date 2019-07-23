@@ -74,11 +74,11 @@ function get_ptkp($user_id)
 /**
  * Get History Earning
  */
-function get_payroll_earning_history_param($payroll_id, $year, $month)
+function get_payroll_earning_history_param($payroll_id, $year, $month, $id)
 {
 	if(!isset($payroll_id)) return 0;
 
-	$data = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_id', $payroll_id->payroll_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
+	$data = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id->payroll_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
 
 	if($data)
 	{

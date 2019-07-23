@@ -103,7 +103,7 @@
 				<td style="border: 1px solid #000000;">EARNING {{ $key+1 }}</td>
 				@php($earning = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($earning += get_payroll_earning_history_param($data[$month], $year, $month))
+				@php($earning += get_payroll_earning_history_param($data[$month], $year, $month, $item->id))
         		<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($earning) }}</th>
         		@php($gross[$month] += $earning)
 				@endfor
