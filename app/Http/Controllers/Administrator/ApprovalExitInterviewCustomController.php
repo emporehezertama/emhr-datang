@@ -134,7 +134,7 @@ class ApprovalExitInterviewCustomController extends Controller
                 function($message) use($data,$historyApprov) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Empore - Exit Interview');
+                    $message->subject(get_setting('mail_name').' - Exit Interview');
                 }
             ); 
             $history->approval_id    = \Auth::user()->id;
@@ -153,7 +153,7 @@ class ApprovalExitInterviewCustomController extends Controller
                         function($message) use($data,$historyApprov) {
                             $message->from('emporeht@gmail.com');
                             $message->to($data->user->email);
-                            $message->subject('Empore - Exit Interview');
+                            $message->subject(get_setting('mail_name').' - Exit Interview');
                         });  
                         $history->approval_id    = \Auth::user()->id;
                         $history->is_approved    = 1;
@@ -182,7 +182,7 @@ class ApprovalExitInterviewCustomController extends Controller
                                 function($message) use($data, $historyApprov,$items) {
                                 $message->from('emporeht@gmail.com');
                                 $message->to($items->email);
-                                $message->subject('Empore - Exit Interview');
+                                $message->subject(get_setting('mail_name').' - Exit Interview');
                             }); 
                     }
                     $history->approval_id    = \Auth::user()->id;

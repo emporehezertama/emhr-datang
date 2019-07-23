@@ -110,7 +110,7 @@ class LeaveController extends Controller
                     function($message) use($data, $value) {
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
-                    $message->subject('Empore - Submission of Leave / Permit');
+                    $message->subject(get_setting('mail_name').' - Submission of Leave / Permit');
                 }); 
             }
             return redirect()->route('administrator.leave.index')->with('message-success', 'Data saved successfully !');

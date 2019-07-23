@@ -139,7 +139,7 @@ class ApprovalTrainingCustomController extends Controller
                 function($message) use($data,$historyApprov) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Empore - Business Trip / Training');
+                    $message->subject(get_setting('mail_name').' - Business Trip / Training');
                 }
             ); 
             $history->approval_id    = \Auth::user()->id;
@@ -159,7 +159,7 @@ class ApprovalTrainingCustomController extends Controller
                         function($message) use($data,$historyApprov) {
                             $message->from('emporeht@gmail.com');
                             $message->to($data->user->email);
-                            $message->subject('Empore - Business Trip / Training');
+                            $message->subject(get_setting('mail_name').' - Business Trip / Training');
                         });  
                         $history->approval_id    = \Auth::user()->id;
                         $history->is_approved    = 1;
@@ -183,7 +183,7 @@ class ApprovalTrainingCustomController extends Controller
                                 function($message) use($data, $historyApprov,$items) {
                                 $message->from('emporeht@gmail.com');
                                 $message->to($items->email);
-                                $message->subject('Empore - Business Trip / Training');
+                                $message->subject(get_setting('mail_name').' - Business Trip / Training');
                             }); 
                     }
                     $history->approval_id    = \Auth::user()->id;
@@ -269,7 +269,7 @@ class ApprovalTrainingCustomController extends Controller
                 function($message) use($data,$historyApprov) {
                     $message->from('emporeht@gmail.com');
                     $message->to($data->user->email);
-                    $message->subject('Empore - Business Trip /Training');
+                    $message->subject(get_setting('mail_name').' - Business Trip /Training');
                 }
             ); 
             $history->approval_id_claim    = \Auth::user()->id;
@@ -289,7 +289,7 @@ class ApprovalTrainingCustomController extends Controller
                         function($message) use($data,$historyApprov) {
                             $message->from('emporeht@gmail.com');
                             $message->to($data->user->email);
-                            $message->subject('Empore - Business Trip /Training');
+                            $message->subject(get_setting('mail_name').' - Business Trip /Training');
                         });  
                         $history->approval_id_claim    = \Auth::user()->id;
                         $history->is_approved_claim    = 1;
@@ -313,7 +313,7 @@ class ApprovalTrainingCustomController extends Controller
                                 function($message) use($data, $historyApprov,$items) {
                                 $message->from('emporeht@gmail.com');
                                 $message->to($items->email);
-                                $message->subject('Empore - Business Trip /Training');
+                                $message->subject(get_setting('mail_name').' - Business Trip /Training');
                             }); 
                     }
                     $history->approval_id_claim    = \Auth::user()->id;

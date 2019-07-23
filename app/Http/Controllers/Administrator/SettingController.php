@@ -38,16 +38,23 @@ class SettingController extends Controller
      */
     public function emailSave(Request $request)
     {
+        $user = \Auth::user();
         if($request->setting)
         {
             foreach($request->setting as $key => $value)
             {
-                $setting = Setting::where('key', $key)->first();
+                if($user->project_id != NULL)
+                {
+                    $setting = Setting::where('key', $key)->where('project_id',$user->project_id)->first();
+                }else{
+                    $setting = Setting::where('key', $key)->first();
+                }
                 if(!$setting)
                 {
                     $setting = new Setting();
                     $setting->key = $key;
                 }
+                $setting->project_id = $user->project_id;
                 $setting->value = $value;
                 $setting->save();
             }
