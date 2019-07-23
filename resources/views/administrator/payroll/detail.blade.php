@@ -358,7 +358,7 @@
         calculate();
     }
 
-    var marital_status = ""; 
+    var marital_status = "<?=isset($data->user->marital_status) ? $data->user->marital_status : '' ?>"; 
 
     function calculate()
     {
