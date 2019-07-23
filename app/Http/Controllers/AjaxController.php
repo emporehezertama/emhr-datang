@@ -600,6 +600,7 @@ class AjaxController extends Controller
             
             $thp = ($request->salary + $request->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
 
+            $params['untaxable_income']     = number_format($untaxable_income);
             $params['gross_income']         = number_format($gross_income); 
             $params['burden_allow']         = number_format($burden_allow);
             $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
