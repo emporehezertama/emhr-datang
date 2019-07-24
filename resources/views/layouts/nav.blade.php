@@ -4,10 +4,8 @@
             <a href="javascript:void(0)" class="waves-effect"><img src="{{ asset('admin-css/images/user.png') }}" alt="user-img" class="img-circle"> <span class="hide-menu"> {{ Auth::user()->name }}</span>
             </a>
         </li>
-        @if(checkModuleAdmin(2))
         <li><a href="{{ route('administrator.dashboard') }}"><i class="mdi mdi-chart-bar fa-fw" data-icon="v"></i> Dashboard </a></li>
         <li class="devider"></li>
-        @endif
         @if(checkModuleAdmin(3))
         <li>
             <a href="{{ route('administrator.karyawan.index') }}">
@@ -15,8 +13,7 @@
             </a>
         </li>
         @endif
-
-        @if(checkModuleAdmin(4) || checkModuleAdmin(5) || checkModuleAdmin(6) || checkModuleAdmin(7) || checkModuleAdmin(8) || checkModuleAdmin(9) || checkModuleAdmin(10))
+        @if(checkModuleAdmin(4) || checkModuleAdmin(5) || checkModuleAdmin(6) || checkModuleAdmin(7) || checkModuleAdmin(8) || checkModuleAdmin(9) || checkModuleAdmin(13))
         <li class="mega-nav">
             <a href="#" style="position: relative;">
                 <i class="mdi mdi-playlist-check fa-fw"></i> <span class="hide-menu">Workflow Monitoring<span class="fa arrow"></span></span>
@@ -40,22 +37,18 @@
                     @if(checkModuleAdmin(9))
                     <li><a href="{{ route('administrator.exitCustom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a></li>
                     @endif
-                
-                    @if(checkModuleAdmin(10))
+                    @if(checkModuleAdmin(13))
                     <li><a href="{{ route('administrator.request-pay-slip.index') }}"><i class="mdi mdi-library-books fa-fw"></i><span class="hide-menu">Request Pay Slip</span></a></li>
                     @endif
             </ul>
         </li>
         @endif
-
-        @if(checkModuleAdmin(11))
+        @if(checkModuleAdmin(3))
         <li>
             <a href="{{ route('administrator.organization-structure-custom.index') }}" class="waves-effect">
             <i class="mdi mdi-sitemap fa-fw"></i> <span class="hide-menu">@lang('menu.organization_structure')<span class="fa arrow"></span></span>
             </a>
         </li>
-        @endif
-        @if(checkModuleAdmin(12))
         <li>
             <a href="javascript:void(0)">
                 <i class="mdi mdi-newspaper fa-fw"></i> <span class="hide-menu">News List / Memo<span class="fa arrow"></span></span>
@@ -98,18 +91,16 @@
              <a href="{{ route('attendance.index') }}"><i class="mdi mdi-fingerprint fa-fw"></i><span class="hide-menu">Attendance</span></a>
         </li>
         @endif
-        @if(checkModuleAdmin(16))
         <li class="mega-nav">
             <a href="{{ route('administrator.setting.index') }}" class="waves-effect">
                 <i class="mdi mdi-settings fa-fw"></i> <span class="hide-menu">@lang('menu.setting')</span>
             </a>
         </li>
-        @endif
         <!--As Karyawan-->
         @if(Auth::user()->project_id != 1)
             <li class="devider"></li>
 
-          @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9) || checkModule(10))
+          @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9) || checkModule(13))
         <li class="mega-nav">
             <a href="javascript:void(0)" class="waves-effect">
                 <i class="mdi mdi-account-multiple fa-fw"></i> <span class="hide-menu">Management Form<span class="fa arrow"></span></span>
@@ -142,10 +133,10 @@
                     @endif
                     @if(checkModule(9))
                     <li>
-                    <a href="{{ route('administrator.exit-custom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
+                        <a href="{{ route('administrator.exit-custom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
                     </li>
                     @endif
-                    @if(checkModule(10))
+                    @if(checkModule(13))
                     <li class="mega-nav">
                         <a href="{{ route('administrator.request-pay-slip-karyawan.index') }}" class="waves-effect">
                             <i class="mdi mdi-library-books fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>
@@ -259,9 +250,7 @@
             <a href="javascript:void(0)" class="waves-effect"><img src="{{ asset('admin-css/images/user.png') }}" alt="user-img" class="img-circle"> <span class="hide-menu"> {{ Auth::user()->name }}</span>
             </a>
         </li>
-        @if(checkModule(2))
         <li> <a href="{{ route('karyawan.dashboard') }}" class="waves-effect"><i class="mdi mdi-chart-bar fa-fw" data-icon="v"></i> Dashboard </a></li>
-        @endif
         <li class="devider"></li>
           @if(checkModule(4) || checkModule(5) || checkModule(6) || checkModule(7) || checkModule(8) || checkModule(9))
         <li class="mega-nav">
@@ -299,7 +288,7 @@
                     <a href="{{ route('karyawan.exit-custom.index') }}"><i class="mdi mdi-account-remove fa-fw"></i><span class="hide-menu">Exit Interview & Clearance</span></a>
                     </li>
                     @endif
-                    @if(checkModule(10))
+                    @if(checkModule(13))
                     <li class="mega-nav">
                         <a href="{{ route('karyawan.request-pay-slip.index') }}" class="waves-effect">
                             <i class="mdi mdi-library-books fa-fw"></i> <span class="hide-menu">Request Pay Slip</span>

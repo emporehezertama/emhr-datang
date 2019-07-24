@@ -123,7 +123,7 @@ class ExitInterviewKaryawanCustomController extends Controller
                     function($message) use($data, $value) {
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
-                    $message->subject('Empore - Exit Interview');
+                    $message->subject(get_setting('mail_name').' - Exit Interview');
                 }); 
             }
             return redirect()->route('administrator.exit-custom.index')->with('message-success', 'Exit Interview succesfully process');
@@ -217,7 +217,7 @@ class ExitInterviewKaryawanCustomController extends Controller
                         function($message) use($data,$value) {
                         $message->from('emporeht@gmail.com');
                         $message->to($value->user->email);
-                        $message->subject('Empore - Exit Clearance');
+                        $message->subject(get_setting('mail_name').' - Exit Clearance');
                     }); 
             }
         }

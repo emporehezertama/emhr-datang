@@ -133,7 +133,7 @@ class MedicalKaryawanCustomController extends Controller
                     function($message) use($data, $value) {
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
-                    $message->subject('Empore - Medical Reimbursement');
+                    $message->subject(get_setting('mail_name').' - Medical Reimbursement');
                 }); 
             }
             return redirect()->route('administrator.medical-custom.index')->with('message-success', 'Medical Reimbursement succesfully process');

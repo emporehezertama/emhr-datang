@@ -18,7 +18,7 @@
                 <div class="col-md-6 p-l-0 p-r-0">
                     <div class="white-box">
                         <div class="form-group">
-                            <label class="col-md-12">Website Title</label>
+                            <label class="col-md-12">Company Name</label>
                             <div class="col-md-12">
                                 <input type="text" name="setting[title]" class="form-control" value="{{ get_setting('title') }}">
                             </div>
