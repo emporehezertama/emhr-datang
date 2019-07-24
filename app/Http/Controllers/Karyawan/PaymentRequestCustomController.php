@@ -131,8 +131,8 @@ class PaymentRequestCustomController extends Controller
                         
                             $image = $file;
                             
-                            $name = time().'.'.$image->getClientOriginalExtension();
-                            
+                            //$name = time().'.'.$image->getClientOriginalExtension();
+                            $name = (PaymentRequestForm::count()+1).'.'.$image->getClientOriginalExtension();
                             $destinationPath = public_path('storage/file-struk/');
                             
                             $image->move($destinationPath, $name);
@@ -141,6 +141,8 @@ class PaymentRequestCustomController extends Controller
                         }
                     }
                 }
+
+                //dd($request->hasFile('file_struk'));
 
                 $form->save();
             }

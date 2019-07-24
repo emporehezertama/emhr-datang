@@ -131,7 +131,8 @@ class PaymentRequestKaryawanCustomController extends Controller
                         
                             $image = $file;
                             
-                            $name = time().'.'.$image->getClientOriginalExtension();
+                            //$name = time().'.'.$image->getClientOriginalExtension();
+                            $name = (PaymentRequestForm::count()+1).'.'.$image->getClientOriginalExtension();
                             
                             $destinationPath = public_path('storage/file-struk/');
                             

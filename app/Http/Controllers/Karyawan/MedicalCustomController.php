@@ -95,7 +95,8 @@ class MedicalCustomController extends Controller
                     {
                         if($k == $key)
                         {
-                            $fname = md5($f->getClientOriginalName() . time()) . "." . $f->getClientOriginalExtension();
+                            //$fname = md5($f->getClientOriginalName() . time()) . "." . $f->getClientOriginalExtension();
+                            $fname = (MedicalReimbursementForm::count()+1).'.'.$f->getClientOriginalExtension();
 
                             $destinationPath = public_path('/storage/file-medical/');
                             $f->move($destinationPath, $fname);

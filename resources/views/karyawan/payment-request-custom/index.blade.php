@@ -63,7 +63,7 @@
                                         </td>
                                         <td>{{ date('d F Y', strtotime($item->created_at)) }}</td>
                                         <td>
-                                            <a href="{{ route('karyawan.payment-request-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><<i class="fa fa-search-plus"></i> detail</a>
+                                            <a href="{{ route('karyawan.payment-request-custom.edit', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a>
                                         </td>
                                     </tr>
                                 @endforeach

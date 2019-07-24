@@ -168,9 +168,9 @@ $("#add").click(function(){
         html += '<td><div class="col-md-10" style="padding-left:0;">\
                         <select name="type[]" class="form-control input" onchange="select_type_(this)">\
                         <option value=""> - none - </option>\
-                        <option>Parkir</option>\
-                        <option>Bensin</option>\
-                        <option>Tol</option>\
+                        <option>Parking</option>\
+                        <option>Gasoline</option>\
+                        <option>Toll</option>\
                         <option>Transportation</option>\
                         <option>Transport(Overtime)</option>\
                         <option>Others</option></select></div>';
