@@ -4,7 +4,6 @@
  * @param  snumber
  * @return string
  */
-
 function format_idr($number, $delimeter=',')
 {
 	return number_format($number,0,0,$delimeter);
