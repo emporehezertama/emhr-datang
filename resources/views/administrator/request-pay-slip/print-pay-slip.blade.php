@@ -16,7 +16,7 @@
 <body>
 	@foreach($dataArray as $k => $item)
 	<img src="{{  asset(get_setting('logo')) }}" style="width: 140px; float: right;" /> 
-	<h3>PT. Empore Hezer Tama </h3>
+	<h3>{{ get_setting('title') }} </h3>
 	<p><strong>PAYSLIP {{ $bulan[$k] }} {{ $tahun }}</strong></p>
 	<br />
 	<table style="width: 100%;">

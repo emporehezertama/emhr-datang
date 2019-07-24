@@ -131,7 +131,7 @@ class TrainingKaryawanCustomController extends Controller
                     function($message) use($data, $value) {
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
-                    $message->subject('Empore - Business Trip / Training');
+                    $message->subject(get_setting('mail_name').' - Business Trip / Training');
                 }); 
             }
             return redirect()->route('administrator.training-custom.index')->with('message-success', 'Training succesfully process');
@@ -337,7 +337,7 @@ class TrainingKaryawanCustomController extends Controller
                 function($message) use($data, $value) {
                 $message->from('emporeht@gmail.com');
                 $message->to($value->email);
-                $message->subject('Empore - Business Trip / Training');
+                $message->subject(get_setting('mail_name').' - Business Trip / Training');
             }); 
         }
 

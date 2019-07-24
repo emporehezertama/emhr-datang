@@ -136,7 +136,7 @@ class ApprovalLeaveCustomController extends Controller
                 function($message) use($cuti,$historyApprov) {
                     $message->from('emporeht@gmail.com');
                     $message->to($cuti->karyawan->email);
-                    $message->subject('Empore - Submission of Leave / Permit');
+                    $message->subject(get_setting('mail_name').' - Submission of Leave / Permit');
                 }
             ); 
             $history->approval_id    = \Auth::user()->id;
@@ -156,7 +156,7 @@ class ApprovalLeaveCustomController extends Controller
                         function($message) use($cuti,$historyApprov) {
                             $message->from('emporeht@gmail.com');
                             $message->to($cuti->karyawan->email);
-                            $message->subject('Empore - Submission of Leave / Permit');
+                            $message->subject(get_setting('mail_name').' - Submission of Leave / Permit');
                         });  
 
                         $user_cuti = UserCuti::where('user_id', $cuti->user_id)->where('cuti_id', $cuti->jenis_cuti)->first();
@@ -215,7 +215,7 @@ class ApprovalLeaveCustomController extends Controller
                                 function($message) use($cuti, $historyApprov,$items) {
                                 $message->from('emporeht@gmail.com');
                                 $message->to($items->email);
-                                $message->subject('Empore - Submission of Leave / Permit');
+                                $message->subject(get_setting('mail_name').' - Submission of Leave / Permit');
                             }); 
                     }
                     $history->approval_id    = \Auth::user()->id;

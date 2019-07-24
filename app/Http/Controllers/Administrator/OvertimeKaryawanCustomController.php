@@ -107,7 +107,7 @@ class OvertimeKaryawanCustomController extends Controller
                     function($message) use($data, $value) {
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
-                    $message->subject('Empore - Overtime Sheet');
+                    $message->subject(get_setting('mail_name').' - Overtime Sheet');
                 }); 
             }
 
@@ -215,7 +215,7 @@ class OvertimeKaryawanCustomController extends Controller
                 function($message) use($data, $value) {
                 $message->from('emporeht@gmail.com');
                 $message->to($value->email);
-                $message->subject('Empore - Overtime Sheet');
+                $message->subject(get_setting('mail_name').' - Overtime Sheet');
             }); 
         }
         $data->save();

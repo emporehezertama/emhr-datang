@@ -174,7 +174,7 @@ class PaymentRequestKaryawanCustomController extends Controller
                     function($message) use($data, $value) {
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
-                    $message->subject('Empore - Payment Request');
+                    $message->subject(get_setting('mail_name').' - Payment Request');
                 }); 
             }
 
