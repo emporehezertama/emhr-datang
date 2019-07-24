@@ -106,7 +106,12 @@
                                         <td>{{ $item->quantity }}</td>
                                         <td>{{ number_format($item->amount) }}</td>
                                         <td>
-                                            <input type="text" name="nominal_approve[{{ $item->id }}]" {{$history->is_approved ? 'readonly="true"' : '' }} class="form-control nominal_approve" value="{{ $item->nominal_approved }}" placeholder="Nominal Approve"/>
+                                            @if($item->nominal_approved != NULL)
+                                                <input type="text" name="nominal_approve[{{ $item->id }}]" {{$history->is_approved ? 'readonly="true"' : '' }} class="form-control nominal_approve" value="{{ $item->nominal_approved }}" placeholder="Nominal Approve"/>
+                                            @endif
+                                            @if($item->nominal_approved == NULL)
+                                                <input type="text" name="nominal_approve[{{ $item->id }}]" {{$history->is_approved ? 'readonly="true"' : '' }} class="form-control nominal_approve" value="{{ $item->amount }}" placeholder="Nominal Approve"/>
+                                            @endif
                                         </td>
                                         <td>
                                             @if(!empty($item->file_struk)) 
@@ -199,6 +204,9 @@
 
 @section('footer-script')
 <script type="text/javascript">
+    $(document).ready(function () {
+        calculate_amountApprove();
+    });
         
     var global_el;
     $(".nominal_approve").on('input', function(){

@@ -9,10 +9,12 @@
 			<th style="text-align: left;">Claim Date </th>
 			<th style="text-align: left;"> : {{ date('d F Y', strtotime($data->tanggal_pengajuan)) }}</th>
 		</tr>
+		<!--
 		<tr>
 			<th style="text-align: left;">Claim Type </th>
 			<th style="text-align: left;"> : {{ medical_type_string($data->id) }}</th>
 		</tr>
+		-->
 		<tr>
 			<th style="text-align: left;">Amount</th>
 			<th style="text-align: left;"> : {{ number_format(total_medical_nominal($data->id)) }}</th>
