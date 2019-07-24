@@ -133,7 +133,16 @@
                                     <td><input type="text" class="form-control" required value="{{ number_format($f->jumlah) }}" readonly /></td>
                                     <td><a onclick="show_image('{{ $f->file_bukti_transaksi }}')" class="btn btn-default btn-xs"><i class="fa fa-search-plus"></i>View</a></td>
 
-                                    <td><input type="text" name="nominal_approve[{{ $f->id }}]" class="form-control input_nominal_approve price_format" value="{{ number_format($f->nominal_approve) }}" ></td>
+                                    <td>
+                                        @if($f->nominal_approve != NULL)
+                                            <input type="text" name="nominal_approve[{{ $f->id }}]" class="form-control input_nominal_approve price_format" value="{{ number_format($f->nominal_approve) }}" >
+
+                                        @endif
+                                        @if($f->nominal_approve == NULL)
+                                            <input type="text" name="nominal_approve[{{ $f->id }}]" class="form-control input_nominal_approve price_format" value="{{ number_format($f->jumlah) }}">
+                                        @endif
+
+                                    </td>
                                 </tr>
                                 @php($total += $f->jumlah)
                                 @php($total_disetujui += $f->nominal_approve)
@@ -190,6 +199,22 @@
 
 @section('footer-script')
 <script type="text/javascript">
+    $(document).ready(function () {
+        calculate_amountApprove();
+    });
+
+    var calculate_amountApprove  = function(){
+    var total_nominal = 0;
+        $(".input_nominal_approve").each(function(){
+            if($(this).val() != "")
+            {
+                var value = $(this).val();
+                total_nominal += parseInt(value.split('.').join(''));            
+            }
+        });
+       $('.th-total-disetujui').html('Rp '+numberWithComma(total_nominal));
+    }
+    
     function show_image(img)
     {
         bootbox.alert('<img src="{{ asset('storage/file-medical/') }}/'+ img +'" style = \'width: 100%;\' />');
