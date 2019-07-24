@@ -159,8 +159,16 @@ class PaymentRequestController extends Controller
             $form->estimation_cost      = $request->estimation_cost[$key];
             $form->amount               = $request->amount[$key];
 
-            if($request->hasFile('file_struk'))
+            if($request->hasFile('file_struk['.$key.']'))
             {
+                $image = $request->hasFile('file_struk['.$key.']');
+
+                $name = time().'_'.$item.'_'.$data->id.'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('storage/file-struk/');
+                $image->move($destinationPath, $name);
+                $form->file_struk = $name;
+               
+                 /*       
                 foreach($request->file_struk as $k => $file)
                 {
                     if ($file and $key == $k ) {
@@ -175,8 +183,9 @@ class PaymentRequestController extends Controller
 
                         $form->file_struk = $name;
                     }
-                }
+                }*/
             }
+            dd($request->hasFile('file_struk['.$key.']'));
 
             $form->save();
         }

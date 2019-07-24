@@ -217,7 +217,8 @@ class TrainingCustomController extends Controller
                     {
                         if ($file and $key == $k ) {
                             $image = $file;
-                            $name = time().'.'.$image->getClientOriginalExtension();
+                            //$name = time().'.'.$image->getClientOriginalExtension();
+                            $name = (TrainingTransportation::count()+1).'.'.$image->getClientOriginalExtension();
                             $destinationPath = public_path('storage/file-acomodation/');
                             $image->move($destinationPath, $name);
                             $acomodation->file_struk = $name;
@@ -247,7 +248,8 @@ class TrainingCustomController extends Controller
                     {
                         if ($file and $key == $k ) {
                             $image = $file;
-                            $name = time().'.'.$image->getClientOriginalExtension();
+                            //$name = time().'.'.$image->getClientOriginalExtension();
+                            $name = (TrainingAllowance::count()+1).'.'.$image->getClientOriginalExtension();
                             $destinationPath = public_path('storage/file-allowance/');
                             $image->move($destinationPath, $name);
                             $form->file_struk = $name;
@@ -275,7 +277,8 @@ class TrainingCustomController extends Controller
                     {
                         if ($file and $key == $k ) {
                             $image = $file;
-                            $name = time().'.'.$image->getClientOriginalExtension();
+                            //$name = time().'.'.$image->getClientOriginalExtension();
+                            $name = (TrainingDaily::count()+1).'.'.$image->getClientOriginalExtension();
                             $destinationPath = public_path('storage/file-daily/');
                             $image->move($destinationPath, $name);
                             $daily->file_struk = $name;
@@ -304,7 +307,8 @@ class TrainingCustomController extends Controller
                     {
                         if ($file and $key == $k ) {
                             $image = $file;
-                            $name = time().'.'.$image->getClientOriginalExtension();
+                            //$name = time().'.'.$image->getClientOriginalExtension();
+                            $name = (TrainingOther::count()+1).'.'.$image->getClientOriginalExtension();
                             $destinationPath = public_path('storage/file-other/');
                             $image->move($destinationPath, $name);
                             $other->file_struk = $name;
