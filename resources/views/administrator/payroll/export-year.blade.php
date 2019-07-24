@@ -44,7 +44,7 @@
         		<th style="border: 1px solid #000000;background: #ffff00;"><strong> 0 </strong></th>
 				@endfor
 			</tr> -->
-			<tr>
+			{{-- <tr>
 				<td style="border: 1px solid #000000;">Cummulative PP21 (PAID)</td>
 				<td style="border: 1px solid #000000;"></td>
 				@php($commulative_pph21 = 0)
@@ -54,7 +54,7 @@
         			{{ format_idr( $commulative_pph21 ) }}
         		</th>
 				@endfor
-			</tr>
+			</tr> --}}
 			<tr>
 				<td style="border: 1px solid #000000;"> Annual PPH 21 - prorate/month</td>
 				<td style="border: 1px solid #000000;"></td>
