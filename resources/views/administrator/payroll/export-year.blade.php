@@ -48,7 +48,7 @@
 				<td style="border: 1px solid #000000;">Cummulative PP21 (PAID)</td>
 				<td style="border: 1px solid #000000;"></td>
 				@php($commulative_pph21 = 0)
-				@for ($month = 1; $month <= 11; $month++) 
+				@for ($month = 1; $month <= 12; $month++) 
 				@php($commulative_pph21 += isset($data[$month]->pph21) ? $data[$month]->pph21 : 0)
         		<th style="text-align: center;border: 1px solid #000000; width: 15px">
         			{{ format_idr( $commulative_pph21 ) }}
