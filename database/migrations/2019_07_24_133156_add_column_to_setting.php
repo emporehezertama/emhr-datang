@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnPeraturanPerusahaan extends Migration
+class AddColumnToSetting extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class AddColumnPeraturanPerusahaan extends Migration
      */
     public function up()
     {
-        // 
-        Schema::table('peraturan_perusahaan', function(Blueprint $table){
-            $table->text('content')->nullable()->after('title');
-            // $table->integer('status')->nullable();
-            $table->text('thumbnail')->nullable();
-            $table->text('image')->nullable();
+        Schema::table('setting', function (Blueprint $table) {
+            $table->integer('user_created')->nullable()->after('description');
+            $table->integer('project_id')->nullable();
         });
     }
 
@@ -29,6 +26,8 @@ class AddColumnPeraturanPerusahaan extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('setting', function (Blueprint $table) {
+            //
+        });
     }
 }

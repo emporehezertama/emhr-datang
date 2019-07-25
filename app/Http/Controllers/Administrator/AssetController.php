@@ -64,7 +64,13 @@ class AssetController extends Controller
      */
     public function create()
     {   
-        $params['asset_type']       = AssetType::all();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['asset_type']       = AssetType::where('project_id', $user->project_id)->get();
+        }else{
+            $params['asset_type']       = AssetType::all();
+        }
         $params['asset_number']     = $this->asset_number();
         
         return view('administrator.asset.create')->with($params);
@@ -75,10 +81,16 @@ class AssetController extends Controller
      * @return [type] [description]
      */
     public function asset_number()
+    
     {
         $no = 0;
-
-        $count = Asset::count()+1;
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $count = Asset::join('users', 'asset.user_id', '=', 'users.id')->where('users.project_id', $user->project_id)->count()+1;
+        }else{
+            $count = Asset::count()+1;
+        }
 
         if(strlen($count) == 1)
         {
@@ -110,8 +122,14 @@ class AssetController extends Controller
      */
     public function edit($id)
     {
+        $user = \Auth::user();
         $params['data']         = Asset::where('id', $id)->first();
-        $params['asset_type']       = AssetType::all();
+        if($user->project_id != NULL)
+        {
+            $params['asset_type']       = AssetType::where('project_id', $user->project_id)->get();
+        }else{
+            $params['asset_type']       = AssetType::all();
+        }
         $params['asset_number']     = $this->asset_number();
 
         return view('administrator.asset.edit')->with($params);
