@@ -36,6 +36,7 @@ class IndexController extends Controller
                         ->where('users.project_id', \Auth::user()->project_id)
                         ->count();
             $data = DB::table('organisasi_division')
+                        ->select('organisasi_division.name', 'organisasi_division.id')
                         ->join('structure_organization_custom', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
                         ->join('users', 'structure_organization_custom.id', '=', 'users.structure_organization_custom_id')
                         ->where('users.project_id', \Auth::user()->project_id)
@@ -44,6 +45,8 @@ class IndexController extends Controller
             $jumlahdata = OrganisasiDivision::count();
             $data = OrganisasiDivision::all();
         }
+
+        
         
         
         $name = [];
@@ -53,7 +56,7 @@ class IndexController extends Controller
         $x = 0;
         $z = 0;
         for ($i=0; $i < $jumlahdata; $i++) { 	
-            $name[$y] = $data[$i]->names;
+            $name[$y] = $data[$i]->name;
             $id[$x] = $data[$i]->id;
             
             if(\Auth::user()->project_id != Null){
