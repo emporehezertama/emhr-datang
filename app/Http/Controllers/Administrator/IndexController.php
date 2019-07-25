@@ -28,10 +28,24 @@ class IndexController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {  
+        if(\Auth::user()->project_id != Null){
+            $jumlahdata = DB::table('organisasi_division')
+                        ->join('structure_organization_custom', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
+                        ->join('users', 'structure_organization_custom.id', '=', 'users.structure_organization_custom_id')
+                        ->where('users.project_id', \Auth::user()->project_id)
+                        ->count();
+            $data = DB::table('organisasi_division')
+                        ->join('structure_organization_custom', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
+                        ->join('users', 'structure_organization_custom.id', '=', 'users.structure_organization_custom_id')
+                        ->where('users.project_id', \Auth::user()->project_id)
+                        ->get();
+        }else{
+            $jumlahdata = OrganisasiDivision::count();
+            $data = OrganisasiDivision::all();
+        }
         
-        $jumlahdata = OrganisasiDivision::count();
-        $data = OrganisasiDivision::all();
+        
         $name = [];
         $id = [];
         $karyawan_per_divisi = [];
@@ -39,7 +53,7 @@ class IndexController extends Controller
         $x = 0;
         $z = 0;
         for ($i=0; $i < $jumlahdata; $i++) { 	
-            $name[$y] = $data[$i]->name;
+            $name[$y] = $data[$i]->names;
             $id[$x] = $data[$i]->id;
             
             if(\Auth::user()->project_id != Null){

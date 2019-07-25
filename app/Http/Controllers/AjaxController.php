@@ -1075,9 +1075,11 @@ class AjaxController extends Controller
             $user = \Auth::user();
             if($user->project_id != NULL)
             {
-                 $data =  User::where('project_id', $user->project_id)->where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+                $data =  User::where('name', 'LIKE', "%". $request->name . "%")->where('project_id', $user->project_id)
+                                ->orWhere('nik', 'LIKE', '%'. $request->name .'%')->where('project_id', $user->project_id)
+                                ->get();
             } else{
-                 $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
+                $data =  User::where('name', 'LIKE', "%". $request->name . "%")->orWhere('nik', 'LIKE', '%'. $request->name .'%')->get();
             }
             $params = [];
             foreach($data as $k => $item)

@@ -25,7 +25,13 @@ class AssetTypeController extends Controller
      */
     public function index()
     {
-        $params['data'] = AssetType::orderBy('id', 'ASC')->get();
+        $user = \Auth::user();
+        if($user->project_id != NULL)
+        {
+            $params['data'] = AssetType::where('project_id', $user->project_id)->orderBy('id', 'ASC')->get();
+        }else{
+            $params['data'] = AssetType::orderBy('id', 'ASC')->get();
+        }
 
         return view('administrator.asset-type.index')->with($params);
     }
@@ -89,6 +95,7 @@ class AssetTypeController extends Controller
         $data                       = new AssetType();
         $data->name                 = $request->name; 
         $data->pic_department       = $request->pic_department;
+        $data->project_id           = \Auth::user()->project_id;
         $data->save();
 
         return redirect()->route('administrator.asset-type.index')->with('message-success', 'Data saved successfully !');
