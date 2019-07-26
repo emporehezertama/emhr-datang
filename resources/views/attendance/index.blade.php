@@ -10,94 +10,75 @@
                 <h4 class="page-title">Manage Attendance</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <ol class="breadcrumb">
-                    <li><a href="javascript:void(0)">Dashboard</a></li>
-                    <li class="active">Employee Attendance</li>
-                </ol>
+                <form method="POST" action="">
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-search-plus"></i></button>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input type="text" class="form-control form-control-line" name="date" placeholder="Tanggal" />
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input type="text" class="form-control form-control-line" name="nik" placeholder="Nik / Name" />
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- .row -->
         <div class="row">
             <div class="col-md-12 p-l-0 p-r-0">
                 <div class="white-box">
-                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#device" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Device</span></a></li>
+                    <table class="data_table_no_pagging table table-background">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 80px;">No</th>
+                                <th rowspan="2">NIK</th>
+                                <th rowspan="2">Name</th>
+                                <th rowspan="2">Date</th>
+                                <th rowspan="2">Day</th>
+                                <th colspan="2" style="text-align: center;">Clock</th>
+                                <th rowspan="2">Late CLOCK In</th>
+                                <th rowspan="2">Early CLOCK In</th>
+                                <th rowspan="2">Duration</th>
+                            </tr>
+                            <tr>
+                                <th>In</th>   
+                                <th>Out</th>   
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($data as $key => $item)
+                            @if(!isset($item->user->id)) <?php continue;?> @endif
+                            <tr>
+                                <td>{{ $key+1 }}</td>    
+                                <td>{{ $item->user->nik }}</td>    
+                                <td>{{ $item->user->name }}</td>    
+                                <td>{{ $item->date }}</td>    
+                                <td>{{ $item->timetable }}</td>    
+                                <td>
+                                    @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic))
+                                        <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
+                                        <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                    @else
+                                        {{ $item->clock_in }}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if(!empty($item->long_out) || !empty($item->lat_out) || !empty($item->pic_out))
+                                        <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a> 
+                                        <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                    @else
+                                        {{ $item->clock_out }}
+                                    @endif
+                                </td>
 
-                        <li role="presentation" class=""><a href="#upload" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Import Attendance</span></a></li>
-                    </ul>
-    
-                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane fade active in" id="device">
-                            <table class="display nowrap data_table_no_pagging" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Device Name</th>
-                                        <th>Serial Number</th>
-                                        <th>Device Alias Name</th>
-                                        <th>Status</th>
-                                        <th>Transfer Time</th>
-                                        <th>Last Activity</th>
-                                        <th>Employee</th>
-                                        <th>Finger Print</th>
-                                        <th>Transaction</th>
-                                        <th>#</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($device as $key => $item)
-                                    <tr>
-                                        <td>{{ $key+1 }}</td>
-                                        <td>{{ $item->device_name }}</td>
-                                        <td>{{ $item->sn }}</td>
-                                        <td>{{ $item->alias }}</td>
-                                        <td>
-                                            @if($item->state == 1)
-                                                <label class="text-success"><i class="fa fa-check-circle" style="font-size: 15px;"></i> Online</label>
-                                            @else
-                                                <label class="text-danger"><i class="fa fa-times-circle" style="font-size: 15px;"></i> Offline</label>
-                                            @endif
-                                        </td>
-                                        <td>{{ $item->trans_time }}</td>
-                                        <td>{{ $item->last_activity }}</td>
-                                        <td>{{ $item->user_count }}</td>
-                                        <td>{{ $item->fp_count }}</td>
-                                        <td>{{ $item->transaction_count }}</td>
-                                        <td>
-                                            <a href="{{ route('attendance.detail-attendance', $item->sn) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody> 
-                            </table>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade" id="upload">
-                             <a href="{{ route('administrator.absensi.import') }}" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> IMPORT ATTENDANCE</a>
-                            <div class="clearfix"></div>
-                            <div class="table-responsive">
-                                <table class="display nowrap data_table_no_pagging" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th width="30" class="text-center">#</th>
-                                            <th>DATE UPLOAD ATTENDANCE</th>
-                                            <th>MANAGE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                         @foreach($data as $key => $item)
-                                        <tr>
-                                            <td width="30" >{{ $key + 1 }}</td>
-                                            <td>{{ $item->tanggal_upload }}</td>
-                                            <td><a href="{{ route('administrator.absensi.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-search-plus"></i> detail</a></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-
+                                <td>{{ $item->late }}</td>    
+                                <td>{{ $item->early }}</td>    
+                                <td>{{ $item->work_time }}</td>    
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="col-m-6 pull-left text-left">Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries</div>
+                    <div class="col-md-6 pull-right text-right">{{ $data->appends($_GET)->render() }}</div><div class="clearfix"></div>
                 </div>
             </div> 
         </div>
@@ -105,4 +86,62 @@
     <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
+
+<div id="modal_detail_attendance" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Attendance</h4> </div>
+                <div class="modal-body">
+                   <form class="form-horizontal frm-modal-inventaris-lainnya">
+                        <div class="form-group">
+                            <div class="col-md-12 input_pic">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div id="map"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-6">Latitude </label>
+                            <label class="col-md-6">Longitude </label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control input-latitude" readonly="true">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control input-longitude" readonly="true">
+                            </div>
+                        </div>
+                   </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section('js')
+<script>
+function detail_attendance(el)
+{
+    var img = '<img src="'+ $(el).data('pic') +'" style="width:100%;" />';
+    $('#modal_detail_attendance .modal-title').html($(el).data('title'));
+    $('.input_pic').html(img);
+    $(".input-latitude").val($(el).data('lat'));
+    $(".input-longitude").val($(el).data('long'));
+    $("#modal_detail_attendance").modal("show");
+
+    // The location of Uluru
+    var uluru = {lat: $(el).data('lat'), lng: $(el).data('long')};
+    // The map, centered at Uluru
+    setTimeout(function(){
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 16, center: uluru});
+        // The marker, positioned at Uluru
+        var marker = new google.maps.Marker({position: uluru, map: map});
+    }, 1000);
+}
+</script>
+@endsection
+
 @endsection

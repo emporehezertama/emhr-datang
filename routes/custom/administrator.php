@@ -333,6 +333,5 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('approval-clearance-custom/detail/{id}', 'ApprovalExitClearanceCustomController@detail')->name('administrator.approval.clearance-custom.detail');
 	Route::post('approval-clearance-custom/proses', 'ApprovalExitClearanceCustomController@proses')->name('administrator.approval.clearance-custom.proses');
 
-	Route::resource('request-pay-slip-karyawan', 'RequestPaySlipKaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);
-
+	Route::resource('request-pay-slip-karyawan', 'RequestPaySlipKaryawanController', ['only'=> ['index','create','store', 'edit','destroy','update'], 'as' => 'administrator']);	
 });

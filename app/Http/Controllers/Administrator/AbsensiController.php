@@ -8,6 +8,7 @@ use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiItem;
 use App\User;
 use App\Models\Absensi;
+use App\Models\AbsensiSetting;
 
 class AbsensiController extends Controller
 {   
@@ -231,5 +232,5 @@ class AbsensiController extends Controller
     	$params['data'] = AbsensiItemTemp::all();
 
     	return view('administrator.absensi.preview-temp')->with($params);
-    }
+    }   
 }
