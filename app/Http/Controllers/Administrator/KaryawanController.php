@@ -1105,11 +1105,11 @@ class KaryawanController extends Controller
         $data->bank_id              = $request->bank_id;
         $data->ext                  = $request->ext;
         $data->is_pic_cabang        = isset($request->is_pic_cabang) ? $request->is_pic_cabang : 0;
-        
-        $data->empore_organisasi_direktur   = $request->empore_organisasi_direktur;
-        $data->empore_organisasi_manager_id = $request->empore_organisasi_manager_id;
-        $data->empore_organisasi_staff_id   = $request->empore_organisasi_staff_id;
+        $data->empore_organisasi_direktur       = $request->empore_organisasi_direktur;
+        $data->empore_organisasi_manager_id     = $request->empore_organisasi_manager_id;
+        $data->empore_organisasi_staff_id       = $request->empore_organisasi_staff_id;
         $data->structure_organization_custom_id = $request->structure_organization_custom_id;
+        $data->absensi_setting_id               = $request->absensi_setting_id;
 
         if ($request->hasFile('foto'))
         {
@@ -1120,7 +1120,6 @@ class KaryawanController extends Controller
             $file->move($destinationPath, $fileName);
 
             $data->foto = $fileName;
-
         }
 
         if ($request->hasFile('foto_ktp'))

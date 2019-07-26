@@ -51,105 +51,62 @@
                         <div role="tabpanel" class="tab-pane fade" id="attendance">
                             <form class="form-control">
                                 <div class="form-group">
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control" name="date" placeholder="Period" />
-                                    </div>
-                                    <div class="col-md-2 p-l-0">
-                                        <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-search-plus"></i> </button>
+                                    <div class="col-md-3">
+                                        <select name="absensi_setting_id" class="form-control">
+                                            <option value=""> - Select Shift - </option>
+                                            @foreach(get_shift_attendance() as $item)
+                                            <option value="{{ $item->id }}" {{ $data->absensi_setting_id == $item->id ? 'selected' : '' }} >{{ $item->shift }} ( {{ $item->clock_in }} - {{ $item->clock_out }} )</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </form>
-                            <ul class="nav customtab nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#attendance_sheet" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> Attendance Sheet</span></a></li>
-                                <li role="presentation" class=""><a href="#attendance_calculation" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">Calculation Attendance Data</span></a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane fade active in" id="attendance_sheet">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Day</th>
-                                                <th>Planned Sign In</th>
-                                                <th>Planned Sign Out</th>
-                                                <th>Sign In</th>
-                                                <th>Sign Out</th>
-                                                <th>Different Time</th>
-                                                <th>Late Sign In</th>
-                                                <th>Early Sign Out</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="no-padding-td">
-                                            @if(isset($data->absensiItem))
-                                                @foreach($data->absensiItem as $item)
-                                                <tr>
-                                                    <td>{{ $item->date }}</td>
-                                                    <td>{{ $item->timetable }}</td>
-                                                    <td>{{ $item->on_dutty }}</td>
-                                                    <td>{{ $item->off_dutty }}</td>
-                                                    <td>
-                                                        @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic))
-                                                            <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
-                                                            <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
-                                                        @else
-                                                            {{ $item->clock_in }}
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if(!empty($item->long) || !empty($item->lat))
-                                                            <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a> 
-                                                            <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
-                                                        @else
-                                                            {{ $item->clock_out }}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $item->work_time }}</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div role="tabpanel" class="tab-pane fade" id="attendance_calculation">
+                            <table class="table table-bordered">
+                                <thead class="header" style="background: #f5f5f5;">
+                                    <tr>
+                                        <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Date</th>
+                                        <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Day</th>
+                                        <th colspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Clock</th>
+                                        <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Late CLOCK In</th>
+                                        <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Early CLOCK Out</th>
+                                        <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Duration</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="padding: 3px 5px;vertical-align: middle;text-align:center;">In</th>
+                                        <th style="padding: 3px 5px;vertical-align: middle;text-align:center;">Out</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="no-padding-td">
+                                    @if(isset($data->absensiItem))
+                                        @foreach($data->absensiItem as $item)
+                                        <tr>
+                                            <td>{{ $item->date }}</td>
+                                            <td>{{ $item->timetable }}</td>
+                                            <td>
+                                                @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic))
+                                                    <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
+                                                    <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                                @else
+                                                    {{ $item->clock_in }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(!empty($item->long_out) || !empty($item->lat_out) || !empty($item->pic_out))
+                                                    <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a> 
+                                                    <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                                @else
+                                                    {{ $item->clock_out }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $item->work_time }}</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
 
-                                    <div class="col-md-4 b-all" style="width: 38%;margin-right: 0.5%;">
-                                        <h3>Overtime</h3>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>No Of Overtime</th>
-                                                    <th>Total Overtime</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-4 b-all m-l-0" style="width: 38%; margin-left:0;">
-                                        <h3>Absensi</h3>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>No Of Overtime</th>
-                                                    <th>Total Overtime</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class="col-md-4 b-all m-l-0" style="width: 38%; margin-left:0;">
-                                        <h3>Daily Attendance</h3>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>No Of Overtime</th>
-                                                    <th>Total Overtime</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                    <div class="clearfix"></div> 
-                                </div>
-                            </div>
                         </div>
                         @if(isset($payroll->salary))
                         <div role="tabpanel" class="tab-pane fade" id="payroll">
@@ -825,9 +782,6 @@
         </div>
     </div>
 </div>
-
-  <!--The div element for the map -->
-    <div id="map"></div>
 
 <!-- modal content dependent  -->
 <div id="modal_dependent" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

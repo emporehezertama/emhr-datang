@@ -122,7 +122,13 @@
                             @else
                                 <a href="javascript:void(0)" class="disabled" onclick="alert('You do not have permission to access this menu')"><i class="mdi mdi-hospital fa-fw"></i><span class="hide-menu">Medical Plafond</span></a>
                             @endif
-                            
+                        </div>
+                        <div class="col-md-2">
+                            @if(checkModuleAdmin(5))
+                                <a href="{{ route('attendance-setting.index') }}"><i class="mdi mdi-fingerprint fa-fw"></i><span class="hide-menu">Attendance</span></a>
+                            @else
+                                <a href="javascript:void(0)" class="disabled" onclick="alert('You do not have permission to access this menu')"><i class="mdi mdi-fingerprint fa-fw"></i><span class="hide-menu">Medical Plafond</span></a>
+                            @endif
                         </div>
                         <div class="clearfix"></div><br />
                     </div>

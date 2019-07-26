@@ -191,7 +191,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Position</label>
                                     <div class="col-md-6">
-                                       <input type="text" name="position" class="form-control"  readonly="true" value="{{ $data->structure->position->name }}" />
+                                       <input type="text" name="position" class="form-control"  readonly="true" value="{{ isset($data->structure->position->name) ? $data->structure->position->name : '' }}" />
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>

@@ -80,6 +80,25 @@ class AjaxController extends Controller
     public function index()
     {
         return ;
+    }  
+
+    /**
+     * Edit Inline
+     * @param  Request $r
+     */
+    public function postEditInline(Request $r)
+    {
+        $params['code']         = 200;
+        $params['message']      = 'success';
+
+        if(isset($r->table))
+        {
+            \DB::table($r->table)
+                ->where('id', $r->pk)
+                ->update([$r->name => $r->value]);
+        }
+
+        return response()->json($params);
     }
 
     /**

@@ -104,12 +104,12 @@
                                     <th>TELEPHONE</th>
                                     <th>EMAIL</th>
                                     <th>POSITION </th>
+                                    <th>DIVISION</th>
                                     <th>
                                         @if($countPos > 0)
                                             <a href="{{ route('administrator.karyawan.index', ['position'=> 1])}}"><label class="btn btn-danger btn-xs" style="text-align: center;" title="">{{$countPos}}</label></a>
                                         @endif
                                     </th>
-                                    <th>DIVISION</th>
                                     <th>RESIGN</th>
                                     <th>ACTION</th>
                                 </tr>

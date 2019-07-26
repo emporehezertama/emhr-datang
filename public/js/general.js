@@ -134,6 +134,7 @@ function _confirm(msg, url)
     title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
     message: msg,
     closeButton: false,
+    backdrop: true,
     buttons: {
         confirm: {
             label: '<i class="fa fa-trash"></i> Yes',
@@ -163,6 +164,7 @@ function _confirm_submit(msg, form)
     title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
     message: msg,
     closeButton: false,
+    backdrop: true,
     buttons: {
         confirm: {
             label: '<i class="fa fa-check"></i> Yes',
@@ -200,6 +202,7 @@ function _alert(msg)
     title : "<i class=\"fa fa-check-square text-success\"></i> EMPORE SYSTEM",
     closeButton: false,
     message: msg,
+    backdrop: true,
      buttons: {
         ok: {
             label: 'OK',
@@ -217,6 +220,7 @@ function _alert_error(msg)
     title : "<i class=\"fa fa-exclamation-triangle text-danger\"></i> EMPORE SYSTEM",
     closeButton: false,
     message: msg,
+    backdrop: true,
      buttons: {
         ok: {
             label: 'OK',
@@ -239,6 +243,7 @@ function confirm_delete(msg, el)
     title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
     message: msg,
     closeButton: false,
+    backdrop: true,
     buttons: {
         confirm: {
             label: 'Yes',

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToSetting extends Migration
+class AddColumnAbsensiSettingId extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddColumnToSetting extends Migration
      */
     public function up()
     {
-        Schema::table('setting', function (Blueprint $table) {
-            $table->integer('user_created')->nullable()->after('description');
-            $table->integer('project_id')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('absensi_setting_id')->nullable();
+        });
+
+        Schema::table('absensi_item', function (Blueprint $table) {
+            $table->integer('absensi_setting_id')->nullable();
         });
     }
 
@@ -26,7 +29,7 @@ class AddColumnToSetting extends Migration
      */
     public function down()
     {
-        Schema::table('setting', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * Get Setting
+ * @return objects
+ */
+function get_shift_attendance()
+{
+	return \App\Models\AbsensiSetting::all();
+}
+
 /**
  * Format IDR
  * @param  snumber
@@ -171,8 +181,14 @@ function cek_leave_approval()
 {
 	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')->orderBy('cuti_karyawan_id', 'DESC');
 
+
+	if(\Auth::user()->project_id != "")
+	{
+		$cuti = $cuti->join('users', 'users.id', '=', 'cuti_karyawan.user_id')->where('users.project_id', \Auth::user()->project_id);
+	}
+	
 	$cek1 = clone $cuti;
-	$cek1 = $cek1->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+	$cek1 = $cek1->where('history_approval_leave.structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
 	
 	if(!$cek1) return [];
 
@@ -185,7 +201,7 @@ function cek_leave_approval()
 			//return [];
 		} 
 	}
-	return $cuti->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
+	return $cuti->where('history_approval_leave.structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->get();
 }
 
 function count_leave_approval()

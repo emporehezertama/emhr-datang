@@ -143,7 +143,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/get-filter-attrition', 'AjaxController@getFilterAttrition')->name('ajax.get-filter-attrition');
 	Route::get('ajax/get-user-active', 'AjaxController@getUserActive')->name('ajax.get-user-active');
 	Route::post('ajax/get-data-dashboard', 'AjaxController@getDataDashboard')->name('ajax.get-data-dashboard');
-
+	Route::post('ajax/post-edit-inline', 'AjaxController@postEditInline')->name('ajax.post-edit-inline');
+	Route::get('attendance-setting', 'AttendanceController@setting')->name('attendance-setting.index');
+	Route::post('attendance-setting-store', 'AttendanceController@settingStore')->name('attendance-setting.store');
+	Route::get('attendance-setting-delete/{id}', 'AttendanceController@settingDelete')->name('attendance-setting.delete');
 });
 
 /**

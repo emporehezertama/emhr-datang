@@ -23,6 +23,7 @@
     <link href="{{ asset('admin-css/css/colors/green.css?v=2') }}" id="theme" rel="stylesheet">
     <link href="{{ asset('admin-css/plugins/bower_components/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('js/bootstrap3-editable/css/bootstrap-editable.css') }}" rel="stylesheet"/>
     <?php 
          $chek_url = @$_SERVER['HTTP_HOST'];
          if (strpos($chek_url, '.local') == false) {
@@ -66,6 +67,11 @@
                 background: {{ get_setting('menu_color')  }};
             }
         @endif
+
+        .editable-container .form-group {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
     </style>
 </head>
 <body class="fix-header">
@@ -1311,7 +1317,7 @@
     <script src="{{ asset('admin-css/plugins/bower_components/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/morrisjs/morris.js') }}"></script>
     <!-- chartist chart -->
-    <script src="{{ asset('admin-css/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script>
+    {{-- <script src="{{ asset('admin-css/plugins/bower_components/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script> --}}
     <!-- Calendar JavaScript -->
     <script src="{{ asset('admin-css/plugins/bower_components/moment/moment.js') }}"></script>
     <script src="{{ asset('admin-css/plugins/bower_components/calendar/dist/fullcalendar.min.js') }}"></script>
@@ -1337,13 +1343,13 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <link rel="stylesheet" href="{{ asset('admin-css/plugins/bower_components/jquery-ui/jquery-ui.css') }}">
     <script src="{{ asset('admin-css/plugins/bower_components/jquery-ui/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js//bootstrap3-editable/js/bootstrap-editable.min.js') }}"></script>
     <script src="{{ asset('js/general.js?v='. date('His')) }}"></script>
-    
     <script type="text/javascript">
         
         function status_exit_interview(id)
         {
-             $.ajax({
+            $.ajax({
                 type: 'POST',
                 url: '{{ route('ajax.get-history-approval-exit') }}',
                 data: {'foreign_id' : id ,'_token' : $("meta[name='csrf-token']").attr('content')},
