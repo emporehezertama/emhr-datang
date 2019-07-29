@@ -27,14 +27,25 @@ class ProvinsiController extends Controller
     {
         $user   =   \Auth::user();
 
-    /*    if($user->project_id != Null){
-            $params['data'] = Provinsi::where('project_id', $user->project_id)->orderBy('nama', 'ASC')->get();
+        if($user->project_id != Null){
+            $params['data'] = Provinsi::orderBy('nama', 'ASC')->get();
+
+        /*    foreach($provinsi as $prov){
+                $params['data'] = Provinsi::join('provinsi_detail_allowance', 'provinsi.id_prov', '=', 'provinsi_detail_allowance.id_prov')
+                                     //   ->where('provinsi.project_id', $user->project_id)
+                                        ->where('provinsi.id_prov', $prov->id_prov)
+                                        ->orderBy('provinsi.nama', 'ASC')
+                                        ->get();
+                
+            echo dd(json_encode($prov)); 
+                                        
+        }   */
+            
         }else{
             $params['data'] = Provinsi::orderBy('nama', 'ASC')->get();
-        }   */
+        }
 
-        $params['data'] = Provinsi::orderBy('nama', 'ASC')->get();
-
+        
         return view('administrator.provinsi.index')->with($params);
 
     }
