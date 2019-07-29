@@ -92,17 +92,16 @@ function empore_jabatan($id)
 
 	if($user)
 	{
-		if(!empty($user->empore_organisasi_staff_id)):
-            return 'Staff - '.$user->empore_staff->name;
-        endif;
+		
+        $position = \App\Models\StructureOrganizationCustom::
+								select('organisasi_position.name as position')
+								->join('organisasi_division', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
+								->join('organisasi_position', 'organisasi_position.id', '=', 'structure_organization_custom.organisasi_position_id')
+								->where('structure_organization_custom.id', $user->structure_organization_custom_id)
+								->get();
 
-        if(empty($user->empore_organisasi_staff_id) and !empty($user->empore_organisasi_manager_id)):
-            return 'Manager - '.$user->empore_manager->name;
-        endif;
-
-        if(empty($user->empore_organisasi_staff_id) and empty($user->empore_organisasi_manager_id) and !empty($user->empore_organisasi_direktur)):
-            return 'Direktur ';
-        endif;
+		$pos =  $position['0']['position'];
+		return $pos;
 	}
 
 	return;

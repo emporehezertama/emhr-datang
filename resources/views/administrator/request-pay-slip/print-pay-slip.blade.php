@@ -15,13 +15,13 @@
 </head>
 <body>
 	@foreach($dataArray as $k => $item)
-	<img src="{{  asset(get_setting('logo')) }}" style="height: 80px; float: right;" /> 
+	<img src="{{  asset(get_setting('logo')) }}" style="height: 80; float: right;" /> 
 	<h3>{{ get_setting('title') }} </h3>
 	<p><strong>PAYSLIP {{ $bulan[$k] }} {{ $tahun }}</strong></p>
 	<br />
 	<table style="width: 100%;">
 		<tr>
-			<th style="width: 20%;">Employee ID</th>
+			<th style="width: 20%;">EMPLOYEE ID</th>
 			<th style="width: 30%;"> : {{ $data->user->nik }}</th>
 			<th style="width: 25%;">Status</th>
 			<th style="width: 25%;"> : {{ $data->user->organisasi_status }}</th>
@@ -78,6 +78,12 @@
                     	</td>
                     </tr>
 				</table>
+				<table style="width: 100%;">
+					<tr>
+						<th style="width:78%;">Total Earning </th>
+						<th>{{ format_idr($total_earning) }}</th>
+					</tr>
+				</table>
 			</td>
 			<td>&nbsp;</td>
 			<td style="width: 49%;vertical-align: top;">
@@ -111,10 +117,16 @@
                           	</td>
                           	<td style="text-align: right;">
                           		{{ format_idr($i->nominal) }}
-                          	</td>
+                          	</ td>
                           </tr>
                         @endif
                     @endforeach
+				</table>
+				<table style="width: 100%;">
+					<tr>
+						<th style="width: 78%;">Total Deduction </th>
+						<th> {{ format_idr($total_deduction) }}</th>
+					</tr>
 				</table>
 			</td>
 		</tr>
@@ -129,6 +141,7 @@
 			<th>Take Home Pay </th>
 			<th> : {{ format_idr($item->thp) }}</th>
 		</tr>
+		
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
