@@ -17,7 +17,7 @@
         <div class="row">
              <form class="form-horizontal" id="form-module" name="form_module" enctype="multipart/form-data" action="{{ route('superadmin.update-modul') }}" method="POST">
                 {{ csrf_field() }}
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="white-box">
                     <div class="form-group">
                         <label class="col-md-12">List Module</label>
@@ -32,8 +32,11 @@
                                     @endif
                                 @endif
                             @endforeach
-                            <div class="col-md-6">
-                                <label><input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id" name="project_product_id[{{$item->id}}]" value="{{$item->id}}" > {{$item->name}}</label>
+                            <div class="col-md-12">
+                                <label>
+                                    <input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id  item_product[]" name="project_product_id[{{$item->id}}]" value="{{$item->id}}" onclick="calculateprice({{$item->id}});" > {{$item->name}}
+                                    <!--input type="text" style="margin-left: 20px;" class="form-control price[{{$item->id}}]" name="price" value="{{$item->price}}"-->
+                                </label>
                                 @if($item->user_limit == 1)
                                     <input type="text" style="margin-left: 20px;" disabled value="{{$limit}}" class="form-control limit_user" name="limit_user[{{$item->id}}]" placeholder="User Limit">
                                 @endif
@@ -94,6 +97,13 @@
                     </div>
                 </div>
             </div>
+
+            <!--div class="col-md-6">
+                <div class="white-box">
+                    <input type="text" style="margin-left: 20px;"  class="form-control total" name="total" placeholder="Total">
+                                
+                </div>
+            </div-->
         </form>
         </div>
         
@@ -143,6 +153,35 @@ function handleClick(cb) {
     //di cek semua yang tercentang nilainya
 
     alert("Clicked, new value = " + cb.checked);
+}
+
+
+$(".project_product_id").click(function(){
+    var getcheck = $(this).val();
+    alert(getcheck);
+   
+});
+
+function calculateprice(id){
+/*    if($("input[name='project_product_id["+id+"]']:checked")){
+        
+        var totalharga = [];
+        $.each($("input[name^='price']"), function(){           
+            totalharga.push($(this).val());
+        });
+        var val = $("input[name='project_product_id["+id+"]']").val();
+        console.log(val);
+
+        var array = totalharga,
+        s = 0,
+        p = 1,
+        i;
+  
+        for(i = 0; i < array.length; i += 1){
+            s += parseInt(array[i]);
+        } 
+        $("input[name='total']").val(s);
+    }  */ 
 }
 </script>
 @endsection
