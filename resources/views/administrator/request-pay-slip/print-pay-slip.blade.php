@@ -15,13 +15,13 @@
 </head>
 <body>
 	@foreach($dataArray as $k => $item)
-	<img src="{{  asset(get_setting('logo')) }}" style="width: 140px; float: right;" /> 
+	<img src="{{  asset(get_setting('logo')) }}" style="height: 80px; float: right;" /> 
 	<h3>{{ get_setting('title') }} </h3>
 	<p><strong>PAYSLIP {{ $bulan[$k] }} {{ $tahun }}</strong></p>
 	<br />
 	<table style="width: 100%;">
 		<tr>
-			<th style="width: 20%;">EMPORE ID</th>
+			<th style="width: 20%;">Employee ID</th>
 			<th style="width: 30%;"> : {{ $data->user->nik }}</th>
 			<th style="width: 25%;">Status</th>
 			<th style="width: 25%;"> : {{ $data->user->organisasi_status }}</th>
