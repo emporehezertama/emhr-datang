@@ -164,7 +164,9 @@
                                             <th>RATE</th>
                                             <th>MINIMAL TAX</th>
                                             <th>TAX ACCUMULATION</th>
+                                            @if(\Auth::user()->project_id == 1)
                                             <th>#</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -175,10 +177,12 @@
                                             <td>{{ $item->tarif }}</td>
                                             <td>{{ number_format($item->pajak_minimal) }}</td>
                                             <td>{{ number_format($item->akumulasi_pajak) }}</td>
+                                            @if(\Auth::user()->project_id == 1)
                                             <td>
                                                 <!-- <a href="{{ route('administrator.payroll-setting.delete-pph', $item->id) }}" onclick="return confirm('Delete this data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a> -->
                                                 <a href="{{ route('administrator.payroll-setting.edit-pph', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>

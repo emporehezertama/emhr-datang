@@ -38,9 +38,9 @@
                                     <tr>
                                         <td class="text-center">{{ $no+1 }}</td>   
                                         <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->type }}</td>
+                                        <td>{{getTypeProvinsi($item->id_prov)}}</td>
                                         <td>
-                                             <a href="javascript:void(0)" class="btn btn-info btn-xs" style="float: left; margin-right:5px" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" data-type="{{ $item->type }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> edit </a>
+                                             <a href="javascript:void(0)" class="btn btn-info btn-xs" style="float: left; margin-right:5px" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" data-type="{{getTypeProvinsi($item->id_prov)}}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> edit </a>
                                              @if(\Auth::user()->project_id == 1)
                                             <form action="{{ route('administrator.provinsi.destroy', $item->id_prov) }}" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}
@@ -111,7 +111,11 @@
                         <div class="form-group">
                             <label class="col-md-3">Name</label>
                             <div class="col-md-9">
+                            @if(\Auth::user()->project_id != 1)
                                 <input type="text" name="nama" class="form-control" readonly />
+                            @else
+                                <input type="text" name="nama" class="form-control" />
+                            @endif
                             </div>
                         </div>
                         <div class="form-group">
