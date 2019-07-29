@@ -98,9 +98,9 @@
                                                     {{ $item->clock_out }}
                                                 @endif
                                             </td>
+                                            <td>{{ $item->late }}</td>    
+                                            <td>{{ $item->early }}</td>    
                                             <td>{{ $item->work_time }}</td>
-                                            <td></td>
-                                            <td></td>
                                         </tr>
                                         @endforeach
                                     @endif

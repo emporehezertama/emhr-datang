@@ -36,7 +36,7 @@
                                 <th rowspan="2">Day</th>
                                 <th colspan="2" style="text-align: center;">Clock</th>
                                 <th rowspan="2">Late CLOCK In</th>
-                                <th rowspan="2">Early CLOCK In</th>
+                                <th rowspan="2">Early CLOCK Out</th>
                                 <th rowspan="2">Duration</th>
                             </tr>
                             <tr>
@@ -69,7 +69,6 @@
                                         {{ $item->clock_out }}
                                     @endif
                                 </td>
-
                                 <td>{{ $item->late }}</td>    
                                 <td>{{ $item->early }}</td>    
                                 <td>{{ $item->work_time }}</td>    

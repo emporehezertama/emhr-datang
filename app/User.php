@@ -46,7 +46,7 @@ class User extends Authenticatable
      */
     public function absensiItem()
     {
-        return $this->hasMany('App\Models\AbsensiItem', 'user_id', 'id');
+        return $this->hasMany('App\Models\AbsensiItem', 'user_id', 'id')->orderBy('absensi_item.id', 'DESC');
 
     }
 
