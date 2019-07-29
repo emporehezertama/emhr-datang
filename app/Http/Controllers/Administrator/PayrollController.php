@@ -1274,11 +1274,15 @@ class PayrollController extends Controller
                     }
                 }
 
-                $params['total']        = $total;
-                $params['dataArray']    = $dataArray;
-                $params['data']         = $data;
-                $params['bulan']        = $bulan;
-                $params['tahun']        = $request->tahun;
+                $payroll = Payroll::where('user_id', $request->user_id)->first();
+
+                $params['total']                = $total;
+                $params['dataArray']            = $dataArray;
+                $params['data']                 = $data;
+                $params['bulan']                = $bulan;
+                $params['tahun']                = $request->tahun;
+                $params['total_earning']        = $payroll->total_earnings;
+                $params['total_deduction']      = $payroll->total_deduction;
 
                 $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);
 

@@ -21,13 +21,22 @@ class ProvinsiController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @r  eturn \Illuminate\Http\Response
      */
     public function index()
     {
+        $user   =   \Auth::user();
+
+    /*    if($user->project_id != Null){
+            $params['data'] = Provinsi::where('project_id', $user->project_id)->orderBy('nama', 'ASC')->get();
+        }else{
+            $params['data'] = Provinsi::orderBy('nama', 'ASC')->get();
+        }   */
+
         $params['data'] = Provinsi::orderBy('nama', 'ASC')->get();
 
         return view('administrator.provinsi.index')->with($params);
+
     }
 
     /**
@@ -40,6 +49,7 @@ class ProvinsiController extends Controller
         $data = new Provinsi();
         $data->nama = $request->nama;
         $data->type = $request->type;
+        $data->project_id = \Auth::user()->project_id;
         $data->save();
         
         return redirect()->route('administrator.provinsi.index')->with('message-success', \Lang::get('setting.provinsi-message-success'));
@@ -52,7 +62,6 @@ class ProvinsiController extends Controller
     public function update(Request $request, $id)
     {
         $data = Provinsi::where('id_prov', $id)->first();
-        $data->nama = $request->nama;
         $data->type = $request->type;
         $data->save();
         

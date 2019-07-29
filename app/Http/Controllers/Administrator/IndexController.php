@@ -45,8 +45,6 @@ class IndexController extends Controller
             $jumlahdata = OrganisasiDivision::count();
             $data = OrganisasiDivision::all();
         }
-
-        
         
         
         $name = [];

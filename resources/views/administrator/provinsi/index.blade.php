@@ -10,7 +10,10 @@
                 <h4 class="page-title">Province</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            
+                @if(\Auth::user()->project_id == 1)
                 <a href="javascript:void(0)" id="form_add_modal" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> ADD</a>
+                @endif  
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">Province</li>
@@ -26,6 +29,7 @@
                                 <tr>
                                     <th width="70" class="text-center">#</th>
                                     <th>PROVINCE</th>
+                                    <th>ALLOWANCE LEVEL</th>
                                     <th>#</th>
                                 </tr>
                             </thead>
@@ -34,14 +38,16 @@
                                     <tr>
                                         <td class="text-center">{{ $no+1 }}</td>   
                                         <td>{{ $item->nama }}</td>
+                                        <td>{{ $item->type }}</td>
                                         <td>
                                              <a href="javascript:void(0)" class="btn btn-info btn-xs" style="float: left; margin-right:5px" data-url="{{ route('administrator.provinsi.update', $item->id_prov) }}" data-nama="{{ $item->nama }}" data-type="{{ $item->type }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> edit </a>
-
+                                             @if(\Auth::user()->project_id == 1)
                                             <form action="{{ route('administrator.provinsi.destroy', $item->id_prov) }}" method="post" style="margin-left: 5px;">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}                                               
                                                 <a href="javascript:void(0)" class="btn btn-danger btn-xs" onclick="confirm_delete('Delete this data ?', this)" class="text-danger"><i class="ti-trash"></i> delete </a>
                                             </form> 
+                                            @endif
                                            
                                         </td>
                                     </tr>
@@ -105,7 +111,7 @@
                         <div class="form-group">
                             <label class="col-md-3">Name</label>
                             <div class="col-md-9">
-                                <input type="text" name="nama" class="form-control" />
+                                <input type="text" name="nama" class="form-control" readonly />
                             </div>
                         </div>
                         <div class="form-group">
