@@ -2889,11 +2889,12 @@ class AjaxController extends Controller
         {
             if(\Auth::user()->project_id != Null){
                 $data               = Note::where('project_id', \Auth::user()->project_id)->get();
+                $check              = Note::where('project_id', \Auth::user()->project_id)->count();
             }else{
-                $data               = Note::all();
+                $data               = Note::whereNull('project_id')->get();
+                $check              = Note::whereNull('project_id')->count();
             }
             
-            $check      = Note::where('project_id', \Auth::user()->project_id)->count();
             if($check < 1){
                 $tanggal = "";
                 $judul = "";
@@ -2920,7 +2921,7 @@ class AjaxController extends Controller
             if(\Auth::user()->project_id != Null){
                 $data               = Note::where('tanggal', $tanggalnote)->where('project_id', \Auth::user()->project_id)->get();
             }else{
-                $data               = Note::where('tanggal', $tanggalnote)->get();
+                $data               = Note::where('tanggal', $tanggalnote)->whereNull('project_id')->get();
             }
             
             if(count($data) < 1){
@@ -2970,7 +2971,7 @@ class AjaxController extends Controller
                     
                 }
             }else{
-                $check              = Note::where('tanggal', $request->tanggal)->count();
+                $check              = Note::where('tanggal', $request->tanggal)->whereNull('project_id')->count();
                 if($check < 1){
                     $data               = new Note();
                     $data->tanggal      = $request->tanggal;
