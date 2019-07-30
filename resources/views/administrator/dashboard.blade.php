@@ -155,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-lg-12">
+                <div class="col-md-6 col-sm-6 col-lg-12" id="test-click">
                     <div class="white-box">
                         <div class="row">
                             <div class="col-sm-6">
@@ -197,11 +197,33 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><strong>Add Event</strong></h4>
+                <h4 class="modal-title"><strong>Add Note</strong></h4>
             </div>
-            <div class="modal-body" id="add-event-body"></div>
+            <div class="modal-body" id="add-event-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal" />
+                            <input type="text" id="judul" name="judul" class="form-control" placeholder="Judul" />
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <textarea id="catatan"  name="catatan" class="form-control" placeholder="Catatan"></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    
+                </div>
+                
+            </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success save-event waves-effect waves-light">Submit</button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="submit-note" class="btn btn-success save-event waves-effect waves-light">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,6 +255,23 @@
         getUserActive();
         calendarDashboard();
         headcountDepartment();
+    });
+
+    $('#submit-note').click(function(){
+        var tanggal = $('#tanggal').val();
+        var judul = $('#judul').val();
+        var catatan = $('#catatan').val();
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('ajax.store-note') }}',
+            data: {'tanggal' : tanggal, 'judul' : judul, 'catatan' : catatan, '_token' : $("meta[name='csrf-token']").attr('content')},
+            dataType: 'json',
+            success: function (ret) {
+                calendarDashboard();
+                $("#add-event").modal("hide");
+                window.location = "<?php echo route('administrator.dashboard'); ?>";
+            }
+        });
     });
 
 
@@ -286,9 +325,9 @@
             showPoint: true,
             height: 210,
             fullWidth: true,
-            plugins: [
+        /*    plugins: [
                 Chartist.plugins.tooltip()
-            ],
+            ],  */
             axisY: {
                 labelInterpolationFnc: function (value) {
                     return (value / 1);
@@ -313,9 +352,9 @@
             showPoint: true,
             height: 210,
             fullWidth: true,
-            plugins: [
+        /*    plugins: [
                 Chartist.plugins.tooltip()
-            ],
+            ],  */
             axisY: {
                 labelInterpolationFnc: function (value) {
                     return (value / 1) + '%';
@@ -337,39 +376,83 @@
                 var title = result['keterangan'];
                 
                 var events = [];
+                var coolor = [];
                 for(var i = 0; i < startdate.length; i++) 
                 {
                     events.push( {
                             title: title[i], 
                             start: startdate[i], 
                             end: enddate[i]
-                    })
+                    });
                 }
+                coolor.push('#7bcef3');
 
-                $('#calendar2').fullCalendar({
-                    dayClick: function(date, allDay, jsEvent, view) {
-                    /*  if (allDay) {
-                            $('#calendar2')
-                                .fullCalendar('changeView', 'basicDay')
-                                .fullCalendar('gotoDate',
-                                    date.getFullYear(), date.getMonth(), date.getDate());
-                        }   */
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('ajax.get-note') }}',
+                    dataType: 'json',
+                    success: function (resultnote) {
+                        var resultnote = JSON.parse(resultnote);
+                        var startdatenote = resultnote['tanggal'];
+                        var enddatenote = resultnote['tanggal'];
+                        var titlenote = resultnote['keterangan'];
+                        var color = ['#ff7676', '#2cabe3', '#53e69d', '#7bcef3', '#ff63f7', '#fbfcb0', '#ffca60', '#60fff1', '#847bfc', '#ff9696', '#2e7a3c', '#87197c'];
+                    
+                        
+                        for(var j = 0; j < startdatenote.length; j++) 
+                        {
+                            events.push({
+                                title: titlenote[j], 
+                                start: startdatenote[j], 
+                                end: startdatenote[j]
+                            });
+                        }
+                        coolor.push('#2cabe3');
 
-                        var check = $(this).find('i.checkbox');
-                        check.toggleClass('marked');
-                    //  $(this).css('background-color', '#4f92ff');
-                        $("#add-event").modal("show");
-                        $("#add-event-body").html(date.format('YYYY-MM-D'));
-                    },
+                        console.log(coolor);
+                        $('#calendar2').fullCalendar({
+                            dayClick: function(date, allDay, jsEvent, view) {
+                            /*  if (allDay) {
+                                    $('#calendar2')
+                                        .fullCalendar('changeView', 'basicDay')
+                                        .fullCalendar('gotoDate',
+                                            date.getFullYear(), date.getMonth(), date.getDate());
+                                }   */
 
-                    dayRender: function(date, cell) {
-                        var check = document.createElement('i');
-                        check.classList.add('checkbox');
-                        cell.append(check);
-                        $('.fc-sat, .fc-sun').css('background-color', '#e6eaf2');
-                    },
-                    events: events,
-                    height: 410
+                                var check = $(this).find('i.checkbox');
+                                check.toggleClass('marked');
+                            //  $(this).css('background-color', '#4f92ff');
+                                $("#add-event").modal("show");
+                                
+                                var tanggalnote = date.format('YYYY-MM-D');
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '{{ route('ajax.get-detail-note') }}',
+                                    data: {'tanggal' : tanggalnote, '_token' : $("meta[name='csrf-token']").attr('content')},
+                                    dataType: 'json',
+                                    success: function (detailnote) {
+                                        var resultdetailnote = JSON.parse(detailnote);
+                                        
+                                        $("#judul").val(resultdetailnote['judul']);
+                                        $("#catatan").val(resultdetailnote['catatan']);
+                                        $("#tanggal").val(date.format('YYYY-MM-D'));
+                                        
+                                    }
+                                });
+                            },
+
+                            dayRender: function(date, cell) {
+                                var check = document.createElement('i');
+                                check.classList.add('checkbox');
+                                cell.append(check);
+                                $('.fc-sat, .fc-sun').css('background-color', '#e6eaf2');
+                            },
+                                       
+                            events: events,
+                            eventColor: coolor[0],
+                            height: 410
+                        });
+                    }
                 });
             }
         });
@@ -418,67 +501,7 @@
         });
     }
 
-
-
-    //  // This is for Morris-chart-2
-    // Morris.Area({
-    //     element: 'chart-2',
-    //     data: [
-    //     @for($i=1; $i<=12; $i++) 
-    //         { 
-    //             period: '{{ date('M',  mktime(0, 0, 0, $i, 10)) }}', 
-    //             SiteA: {{ employee_rate($i) }}
-    //         }
-    //         @if($i !=12),@endif  
-    //     @endfor
-
-    //     // {
-    //     //         period: '2010',
-    //     //         SiteA: 0,
-
-    //     // }, {
-    //     //         period: '2011',
-    //     //         SiteA: 130,
-
-    //     // }, {
-    //     //         period: '2012',
-    //     //         SiteA: 80,
-
-    //     // }, {
-    //     //         period: '2013',
-    //     //         SiteA: 70,
-
-    //     // }, {
-    //     //         period: '2014',
-    //     //         SiteA: 180,
-
-    //     // }, {
-    //     //         period: '2015',
-    //     //         SiteA: 105,
-
-    //     // },
-    //     //     {
-    //     //         period: '2016',
-    //     //         SiteA: 250,
-
-    //     // }
-        
-    //     ],
-    //     xkey: 'period',
-    //     ykeys: ['SiteA'],
-    //     labels: ['Site A'],
-    //     pointSize: 0,
-    //     fillOpacity: 0.4,
-    //     pointStrokeColors: ['#2cabe3'],
-    //     behaveLikeLine: true,
-    //     gridLineColor: '#e0e0e0',
-    //     lineWidth: 0,
-    //     smooth: false,
-    //     hideHover: 'auto',
-    //     lineColors: ['#2cabe3'],
-    //     resize: true
-
-    // });
+    
 </script>
 @endsection
 @endsection

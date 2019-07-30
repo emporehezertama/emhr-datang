@@ -10,7 +10,9 @@
                 <h4 class="page-title">@lang('setting.city')</h4> 
             </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                @if(\Auth::user()->project_id == 1)
                 <a href="javascript:void(0)" id="form_add_modal" class="btn btn-success btn-sm pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus"></i> @lang('general.add')</a>
+                @endif
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)">Dashboard</a></li>
                     <li class="active">@lang('setting.city')</li>
@@ -27,7 +29,9 @@
                                     <th width="70" class="text-center">#</th>
                                     <th>@lang('setting.provinsi')</th>
                                     <th>@lang('setting.city')</th>
+                                    @if(\Auth::user()->project_id == 1)
                                     <th>#</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,6 +40,7 @@
                                         <td class="text-center">{{ $no+1 }}</td>   
                                         <td>{{ isset($item->provinsi->nama) ? $item->provinsi->nama : '' }}</td>
                                         <td>{{ $item->nama }}</td>
+                                        @if(\Auth::user()->project_id == 1)
                                         <td>
                                             <a href="javascript:void(0)" class="btn btn-info btn-xs" style="float: left; margin-right:5px"data-url="{{ route('administrator.kabupaten.update', $item->id_kab) }}" data-id_prov="{{ $item->id_prov }}" data-nama="{{ $item->nama }}" onclick="edit_modal(this)"><i class="fa fa-edit"></i> edit </a>
 
@@ -46,6 +51,7 @@
                                             </form> 
                                             
                                         </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

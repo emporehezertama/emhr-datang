@@ -28,24 +28,39 @@ class IndexController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {  
+    {   
+        $user = \Auth::user();
         if(\Auth::user()->project_id != Null){
-            $jumlahdata = DB::table('organisasi_division')
+        /*    $jumlahdata = DB::table('organisasi_division')
+                    //    ->selectRaw('COUNT(structure_organization_custom.organisasi_division_id) AS jumlah')
+                        ->selectRaw('count(organisasi_division.id)')
                         ->join('structure_organization_custom', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
                         ->join('users', 'structure_organization_custom.id', '=', 'users.structure_organization_custom_id')
                         ->where('users.project_id', \Auth::user()->project_id)
-                        ->count();
+                        ->groupby('structure_organization_custom.organisasi_division_id')
+                        ->count();  */
+           $jumlah = DB::select('SELECT count(distinct(structure_organization_custom.organisasi_division_id)) as total_divisi
+                                        FROM organisasi_division 
+                                        left join structure_organization_custom on organisasi_division.id = structure_organization_custom.organisasi_division_id 
+                                        left join users on structure_organization_custom.id = users.structure_organization_custom_id 
+                                        where users.project_id = "'.$user->project_id.'"');   
+                                        
+            foreach($jumlah as $jumlahdivisi){
+                $jumlahdata = $jumlahdivisi->total_divisi;
+            } 
+            
             $data = DB::table('organisasi_division')
                         ->select('organisasi_division.name', 'organisasi_division.id')
                         ->join('structure_organization_custom', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
                         ->join('users', 'structure_organization_custom.id', '=', 'users.structure_organization_custom_id')
                         ->where('users.project_id', \Auth::user()->project_id)
+                        ->groupby('structure_organization_custom.organisasi_division_id')
                         ->get();
         }else{
             $jumlahdata = OrganisasiDivision::count();
             $data = OrganisasiDivision::all();
         }
-        
+
         
         $name = [];
         $id = [];
@@ -87,7 +102,6 @@ class IndexController extends Controller
 
         return view('administrator.dashboard', compact('namedivision', 'jumlahperdivisi'));
     }
-
     /**
      * [updateProfile description]
      * @param  Request $request [description]

@@ -1126,3 +1126,22 @@ function cek_cuti_atasan($status='approved')
 		return \App\Models\CutiKaryawan::where('approved_atasan_id', \Auth::user()->id)->count();
 	}
 }
+
+function getTypeProvinsi($id_prov){
+	$user = \Auth::user();
+
+	$check = \App\Models\ProvinsiDetailAllowance::where('id_prov', $id_prov)
+												->where('project_id', $user->project_id)
+												->count();
+	if($check < 1){
+		$type = "";
+	}else{
+
+		$gettype =  \App\Models\ProvinsiDetailAllowance::where('id_prov', $id_prov)
+												->where('project_id', $user->project_id)
+												->first();
+		$type = $gettype->type;
+	}
+	
+	return $type;
+}

@@ -139,6 +139,9 @@ Route::group(['middleware' => ['auth']], function(){
 	
 	Route::post('ajax/delete-karyawan', 'AjaxController@deleteKaryawan')->name('ajax.delete-karyawan');
 	Route::get('ajax/get-libur-nasional', 'AjaxController@getLiburNasional')->name('ajax.get-libur-nasional');
+	Route::get('ajax/get-note', 'AjaxController@getNote')->name('ajax.get-note');
+	Route::post('ajax/get-detail-note', 'AjaxController@getDetailNote')->name('ajax.get-detail-note');
+	Route::post('ajax/store-note', 'AjaxController@storeNote')->name('ajax.store-note');
 	Route::post('ajax/get-filter-join-resign', 'AjaxController@getFilterJoinResign')->name('ajax.get-filter-join-resign');
 	Route::post('ajax/get-filter-attrition', 'AjaxController@getFilterAttrition')->name('ajax.get-filter-attrition');
 	Route::get('ajax/get-user-active', 'AjaxController@getUserActive')->name('ajax.get-user-active');

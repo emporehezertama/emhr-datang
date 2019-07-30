@@ -51,6 +51,7 @@ use App\Models\CutiBersama;
 use App\Models\LiburNasional;
 use App\Models\AbsensiItem;
 use App\Models\SettingApprovalClearance;
+use App\Models\Note;
 
 use App\Helpers\DashboardHelper;
 
@@ -2861,18 +2862,144 @@ class AjaxController extends Controller
     {
         if($request->ajax())
         {
+            $check               = LiburNasional::count();
             $data               = LiburNasional::all();
-            $params = [];
-            foreach($data as $k =>  $item){
-                $tanggal[$k] = $item->tanggal;
-                $keterangan[$k] = $item->keterangan;
+
+            if($check < 1){
+                $tanggal = "";
+                $keterangan = "";
+            }else{
+                $params = [];
+                foreach($data as $k =>  $item){
+                    $tanggal[$k] = $item->tanggal;
+                    $keterangan[$k] = $item->keterangan;
+                }
             }
+            
             $hasil = json_encode(array("tanggal"=>$tanggal, "keterangan"=>$keterangan));
             return response()->json($hasil);
         }
 
           return response()->json($this->respon);
     }
+
+    public function getNote(Request $request)
+    {
+        if($request->ajax())
+        {
+            if(\Auth::user()->project_id != Null){
+                $data               = Note::where('project_id', \Auth::user()->project_id)->get();
+                $check              = Note::where('project_id', \Auth::user()->project_id)->count();
+            }else{
+                $data               = Note::whereNull('project_id')->get();
+                $check              = Note::whereNull('project_id')->count();
+            }
+            
+            if($check < 1){
+                $tanggal = "";
+                $judul = "";
+            }else{
+                $params = [];
+                foreach($data as $k =>  $item){
+                    $tanggal[$k] = $item->tanggal;
+                    $judul[$k] = $item->judul;
+                }
+            }
+            
+            $hasil = json_encode(array("tanggal"=>$tanggal, "keterangan"=>$judul));
+            return response()->json($hasil);
+        }
+
+          return response()->json($this->respon);
+    }
+
+    public function getDetailNote(Request $request)
+    {
+        if($request->ajax())
+        {
+            $tanggalnote            = $request->tanggal;
+            if(\Auth::user()->project_id != Null){
+                $data               = Note::where('tanggal', $tanggalnote)->where('project_id', \Auth::user()->project_id)->get();
+            }else{
+                $data               = Note::where('tanggal', $tanggalnote)->whereNull('project_id')->get();
+            }
+            
+            if(count($data) < 1){
+                $tanggal = $tanggalnote;
+                $judul = "";
+                $catatan = "";
+            }else{
+                $params = [];
+                foreach($data as $k =>  $item){
+                    $tanggal[$k] = $item->tanggal;
+                    $judul[$k] = $item->judul;
+                    $catatan[$k] = $item->catatan;
+                }
+            }
+            
+            $hasil = json_encode(array("tanggal"=>$tanggalnote, "judul"=>$judul, "catatan"=>$catatan));
+            return response()->json($hasil);
+        }
+
+          return response()->json($this->respon);
+    }
+
+
+    public function storeNote(Request $request)
+    {
+        if($request->ajax())
+        {
+            if(\Auth::user()->project_id != Null){
+                $check              = Note::where('tanggal', $request->tanggal)->where('project_id', \Auth::user()->project_id)->count();
+                if($check < 1){
+                    $data               = new Note();
+                    $data->tanggal      = $request->tanggal;
+                    $data->judul        = $request->judul;
+                    $data->catatan      = $request->catatan;
+                    $data->project_id   = \Auth::user()->project_id;
+                    $data->save();
+                }else{
+                    if($request->judul != '' && $request->catatan != ''){
+                        $data               = Note::where('tanggal', $request->tanggal)->where('project_id', \Auth::user()->project_id)->first();
+                        $data->judul        = $request->judul;
+                        $data->catatan      = $request->catatan;
+                        $data->save();
+                    }else{
+                        $data               = Note::where('tanggal', $request->tanggal)->where('project_id', \Auth::user()->project_id)->first();
+                        $data->delete();
+                    }
+                    
+                }
+            }else{
+                $check              = Note::where('tanggal', $request->tanggal)->whereNull('project_id')->count();
+                if($check < 1){
+                    $data               = new Note();
+                    $data->tanggal      = $request->tanggal;
+                    $data->judul        = $request->judul;
+                    $data->catatan      = $request->catatan;
+                    $data->save();
+                }else{
+                    if($request->judul != '' && $request->catatan != ''){
+                        $data               = Note::where('tanggal', $request->tanggal)->whereNull('project_id')->first();
+                        $data->judul        = $request->judul;
+                        $data->catatan      = $request->catatan;
+                        $data->save();
+                    }else{
+                        $data               = Note::where('tanggal', $request->tanggal)->whereNull('project_id')->first();
+                        $data->delete();
+                    }
+                    
+                }
+            }
+            
+            
+            $hasil = json_encode(array("message"=>"success"));
+            return response()->json($hasil);
+        }
+
+          return response()->json($this->respon);
+    }
+
 
 
     public function getUserActive(Request $request){
