@@ -2923,7 +2923,6 @@ class AjaxController extends Controller
                 $data               = Note::where('tanggal', $tanggalnote)->get();
             }
             
-
             if(count($data) < 1){
                 $tanggal = $tanggalnote;
                 $judul = "";
@@ -2959,10 +2958,16 @@ class AjaxController extends Controller
                     $data->project_id   = \Auth::user()->project_id;
                     $data->save();
                 }else{
-                    $data               = Note::where('tanggal', $request->tanggal)->where('project_id', \Auth::user()->project_id)->first();
-                    $data->judul        = $request->judul;
-                    $data->catatan      = $request->catatan;
-                    $data->save();
+                    if($request->judul != '' && $request->catatan != ''){
+                        $data               = Note::where('tanggal', $request->tanggal)->where('project_id', \Auth::user()->project_id)->first();
+                        $data->judul        = $request->judul;
+                        $data->catatan      = $request->catatan;
+                        $data->save();
+                    }else{
+                        $data               = Note::where('tanggal', $request->tanggal)->where('project_id', \Auth::user()->project_id)->first();
+                        $data->delete();
+                    }
+                    
                 }
             }else{
                 $check              = Note::where('tanggal', $request->tanggal)->count();
@@ -2973,10 +2978,16 @@ class AjaxController extends Controller
                     $data->catatan      = $request->catatan;
                     $data->save();
                 }else{
-                    $data               = Note::where('tanggal', $request->tanggal)->get();
-                    $data->judul        = $request->judul;
-                    $data->catatan      = $request->catatan;
-                    $data->save();
+                    if($request->judul != '' && $request->catatan != ''){
+                        $data               = Note::where('tanggal', $request->tanggal)->whereNull('project_id')->first();
+                        $data->judul        = $request->judul;
+                        $data->catatan      = $request->catatan;
+                        $data->save();
+                    }else{
+                        $data               = Note::where('tanggal', $request->tanggal)->whereNull('project_id')->first();
+                        $data->delete();
+                    }
+                    
                 }
             }
             

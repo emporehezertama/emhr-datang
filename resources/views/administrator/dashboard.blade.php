@@ -203,7 +203,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
-                            <input type="text" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal" />
+                            <input type="hidden" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal" />
                             <input type="text" id="judul" name="judul" class="form-control" placeholder="Judul" />
                         </div>
                     </div>
