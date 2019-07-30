@@ -2862,12 +2862,20 @@ class AjaxController extends Controller
     {
         if($request->ajax())
         {
+            $check               = LiburNasional::count();
             $data               = LiburNasional::all();
-            $params = [];
-            foreach($data as $k =>  $item){
-                $tanggal[$k] = $item->tanggal;
-                $keterangan[$k] = $item->keterangan;
+
+            if($check < 1){
+                $tanggal = "";
+                $keterangan = "";
+            }else{
+                $params = [];
+                foreach($data as $k =>  $item){
+                    $tanggal[$k] = $item->tanggal;
+                    $keterangan[$k] = $item->keterangan;
+                }
             }
+            
             $hasil = json_encode(array("tanggal"=>$tanggal, "keterangan"=>$keterangan));
             return response()->json($hasil);
         }
@@ -2885,11 +2893,18 @@ class AjaxController extends Controller
                 $data               = Note::all();
             }
             
-            $params = [];
-            foreach($data as $k =>  $item){
-                $tanggal[$k] = $item->tanggal;
-                $judul[$k] = $item->judul;
+            $check      = Note::where('project_id', \Auth::user()->project_id)->count();
+            if($check < 1){
+                $tanggal = "";
+                $judul = "";
+            }else{
+                $params = [];
+                foreach($data as $k =>  $item){
+                    $tanggal[$k] = $item->tanggal;
+                    $judul[$k] = $item->judul;
+                }
             }
+            
             $hasil = json_encode(array("tanggal"=>$tanggal, "keterangan"=>$judul));
             return response()->json($hasil);
         }
@@ -2905,7 +2920,7 @@ class AjaxController extends Controller
             if(\Auth::user()->project_id != Null){
                 $data               = Note::where('tanggal', $tanggalnote)->where('project_id', \Auth::user()->project_id)->get();
             }else{
-                $data               = Note::where('tanggal', $tanggalnote)->first();
+                $data               = Note::where('tanggal', $tanggalnote)->get();
             }
             
 

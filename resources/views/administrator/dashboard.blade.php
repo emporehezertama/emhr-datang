@@ -203,7 +203,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
-                            <input type="hidden" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal" />
+                            <input type="text" id="tanggal" name="tanggal" class="form-control" placeholder="Tanggal" />
                             <input type="text" id="judul" name="judul" class="form-control" placeholder="Judul" />
                         </div>
                     </div>
@@ -269,6 +269,7 @@
             success: function (ret) {
                 calendarDashboard();
                 $("#add-event").modal("hide");
+                window.location = "<?php echo route('administrator.dashboard'); ?>";
             }
         });
     });
@@ -375,6 +376,7 @@
                 var title = result['keterangan'];
                 
                 var events = [];
+                var coolor = [];
                 for(var i = 0; i < startdate.length; i++) 
                 {
                     events.push( {
@@ -383,6 +385,7 @@
                             end: enddate[i]
                     });
                 }
+                coolor.push('#7bcef3');
 
                 $.ajax({
                     type: 'GET',
@@ -393,7 +396,9 @@
                         var startdatenote = resultnote['tanggal'];
                         var enddatenote = resultnote['tanggal'];
                         var titlenote = resultnote['keterangan'];
-
+                        var color = ['#ff7676', '#2cabe3', '#53e69d', '#7bcef3', '#ff63f7', '#fbfcb0', '#ffca60', '#60fff1', '#847bfc', '#ff9696', '#2e7a3c', '#87197c'];
+                    
+                        
                         for(var j = 0; j < startdatenote.length; j++) 
                         {
                             events.push({
@@ -402,8 +407,9 @@
                                 end: startdatenote[j]
                             });
                         }
-                        
+                        coolor.push('#2cabe3');
 
+                        console.log(coolor);
                         $('#calendar2').fullCalendar({
                             dayClick: function(date, allDay, jsEvent, view) {
                             /*  if (allDay) {
@@ -426,7 +432,7 @@
                                     dataType: 'json',
                                     success: function (detailnote) {
                                         var resultdetailnote = JSON.parse(detailnote);
-
+                                        
                                         $("#judul").val(resultdetailnote['judul']);
                                         $("#catatan").val(resultdetailnote['catatan']);
                                         $("#tanggal").val(date.format('YYYY-MM-D'));
@@ -441,8 +447,9 @@
                                 cell.append(check);
                                 $('.fc-sat, .fc-sun').css('background-color', '#e6eaf2');
                             },
+                                       
                             events: events,
-                            color: ["#ff0000", "#00ff00"],
+                            eventColor: coolor[0],
                             height: 410
                         });
                     }

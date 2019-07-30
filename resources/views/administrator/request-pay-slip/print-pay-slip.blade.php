@@ -81,7 +81,7 @@
 				<table style="width: 100%;">
 					<tr>
 						<th style="width:78%;">Total Earning </th>
-						<th>{{ format_idr($total_earning) }}</th>
+						<th>{{ format_idr($item->total_earnings) }}</th>
 					</tr>
 				</table>
 			</td>
@@ -125,7 +125,7 @@
 				<table style="width: 100%;">
 					<tr>
 						<th style="width: 78%;">Total Deduction </th>
-						<th> {{ format_idr($total_deduction) }}</th>
+						<th> {{ format_idr($item->total_deduction) }}</th>
 					</tr>
 				</table>
 			</td>
