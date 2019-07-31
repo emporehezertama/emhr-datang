@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     @if(get_setting('favicon') != "")
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ get_setting('favicon') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset(get_setting('favicon')) }}">
     @endif
     <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -94,7 +94,7 @@
                     <a class="logo" href="{{ route('administrator.dashboard') }}">
                         @if(get_setting('logo') != "")
                         <span class="hidden-xs">
-                            <img src="{{ get_setting('logo') }}" style="height: 40px;" class="light-logo">
+                            <img src="{{ asset(get_setting('logo')) }}" style="height: 40px;" class="light-logo">
                         </span>
                         @endif
                     </a>

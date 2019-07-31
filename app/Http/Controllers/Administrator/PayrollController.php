@@ -133,6 +133,10 @@ class PayrollController extends Controller
                 }
                 else
                 {
+                    if($year != date('Y') or $month != (int)date('m'))
+                    {
+                        $result = cek_payroll_user_id_array($month, $year);
+                    }
                     return $this->downloadExcel($result->whereIn('user_id', request()->user_id)->get());
                 }                    
             }
@@ -1281,7 +1285,8 @@ class PayrollController extends Controller
                 $params['data']                 = $data;
                 $params['bulan']                = $bulan;
                 $params['tahun']                = $request->tahun;
-            //    $params['total_earning']        = $payroll->total_earnings;
+
+           //     $params['total_earning']        = $payroll->total_earnings;
             //    $params['total_deduction']      = $payroll->total_deduction;
 
                 $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);

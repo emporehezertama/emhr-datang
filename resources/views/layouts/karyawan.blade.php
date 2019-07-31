@@ -86,7 +86,7 @@
                     <a class="logo" href="{{ route('karyawan.dashboard') }}">
                         @if(get_setting('logo') != "")
                         <span class="hidden-xs">
-                            <img src="{{ get_setting('logo') }}" style="height: 40px;" class="light-logo">
+                            <img src="{{ asset(get_setting('logo')) }}" style="height: 40px;" class="light-logo">
                         </span>
                         @endif
                     </a>

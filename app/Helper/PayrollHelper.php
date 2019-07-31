@@ -1,6 +1,18 @@
 <?php 
 
 /**
+ * Cek Payroll User ID array
+ */
+function cek_payroll_user_id_array($month, $year)
+{
+	// Payroll History
+	$result = \App\Models\PayrollHistory::whereMonth('created_at', $month)->whereYear('created_at', $year);
+
+	return $result;
+}
+
+
+/**
  * Cek Payroll User ID
  */
 function get_payroll_history($user_id, $month, $year)
@@ -17,13 +29,13 @@ function get_payroll_history($user_id, $month, $year)
 function cek_payroll_user_id($user_id, $month, $year)
 {
 	// Payroll History
-	$count = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->count();
+	$count = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->first();
 
-	if($count) return true;
+	if($count) return $count;
 
-	$count = \App\Models\Payroll::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->count();
+	$count = \App\Models\Payroll::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->first();
 
-	if($count) return true;
+	if($count) return $count;
 
 	return false;
 }

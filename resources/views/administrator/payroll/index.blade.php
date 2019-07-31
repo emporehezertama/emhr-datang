@@ -121,6 +121,7 @@
                             </thead>
                             <tbody>
                            	@php ($i = 1)
+                            @php ($new=false)
                             @if(isset($data))	
 	                            @foreach($data as $no => $item)
 	                            	@if(isset($item->user))
@@ -160,13 +161,18 @@
                                                 @endif
                                                 
                                                 @if(\Session::get('month') and \Session::get('year'))
-                                                    @if(cek_payroll_user_id($item->user_id, \Session::get('month'), \Session::get('year') ) == FALSE)
-                                                        <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ \Session::get('year') }}-{{ \Session::get('month') }}-{{ date('d') }}" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
+                                                    @php($history_ = cek_payroll_user_id($item->user_id, \Session::get('month'), \Session::get('year') ))
+                                                    
+                                                    @if(!$history_)
+                                                        <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ \Session::get('year') }}-{{ \Session::get('month') }}-01" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
                                                         @php($new = true)
+                                                        @php($item->is_lock = 0)
+                                                    @else
+                                                        @php($item->is_lock = $history_->is_lock)
                                                     @endif
                                                 @endif
                                                 
-                                                @if($item->is_lock==1 and !isset($new))
+                                                @if($item->is_lock==1)
                                                     <a href="" class="pull-right text-danger" title="Lock Payroll" style="font-size: 25px;"><i class="fa fa-lock"></i></a> 
                                                 @endif
                                             </td>
