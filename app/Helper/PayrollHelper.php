@@ -1,6 +1,18 @@
 <?php 
 
 /**
+ * Cek Payroll User ID array
+ */
+function cek_payroll_user_id_array($month, $year)
+{
+	// Payroll History
+	$result = \App\Models\PayrollHistory::whereMonth('created_at', $month)->whereYear('created_at', $year);
+
+	return $result;
+}
+
+
+/**
  * Cek Payroll User ID
  */
 function get_payroll_history($user_id, $month, $year)

@@ -133,6 +133,10 @@ class PayrollController extends Controller
                 }
                 else
                 {
+                    if($year != date('Y') or $month != (int)date('m'))
+                    {
+                        $result = cek_payroll_user_id_array($month, $year);
+                    }
                     return $this->downloadExcel($result->whereIn('user_id', request()->user_id)->get());
                 }                    
             }
