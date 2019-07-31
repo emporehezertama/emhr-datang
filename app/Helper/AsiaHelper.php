@@ -5,7 +5,11 @@ function getPlafondTraining($lokasi_kegiatan,$tempat_tujuan)
 	//tempat_tujuan kemudia dia di cek kabupaten dan dapatkan ke provinsi
 	$position = \Auth::user()->structure->position->id;
 
-	$plafond = \App\Models\Kabupaten::select('provinsi.type')->where('kabupaten.nama',$tempat_tujuan)->join('provinsi','provinsi.id_prov','=','kabupaten.id_prov')->first();
+//	$plafond = \App\Models\Kabupaten::select('provinsi.type')->where('kabupaten.nama',$tempat_tujuan)->join('provinsi','provinsi.id_prov','=','kabupaten.id_prov')->first();
+	$plafond = \App\Models\Kabupaten::select('provinsi_detail_allowance.type')
+										->where('kabupaten.nama',$tempat_tujuan)
+										->join('provinsi_detail_allowance','provinsi_detail_allowance.id_prov','=','kabupaten.id_prov')
+										->first();
 
 	if($lokasi_kegiatan == 'Dalam Negeri'){
 		if($plafond == NULL)

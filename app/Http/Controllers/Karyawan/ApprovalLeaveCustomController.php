@@ -105,8 +105,8 @@ class ApprovalLeaveCustomController extends Controller
 
      public function detail($id)
     {   
-        $params['datas'] = CutiKaryawan::where('id', $id)->first();
-        $params['history'] = HistoryApprovalLeave::where('cuti_karyawan_id',$id)->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
+        $params['datas'] = CutiKaryawan::where('user_id', $id)->first();
+        $params['history'] = HistoryApprovalLeave::where('cuti_karyawan_id', $params['datas']->id)->where('structure_organization_custom_id', \Auth::user()->structure_organization_custom_id)->first();
 
         return view('karyawan.approval-leave-custom.detail')->with($params);
     }
