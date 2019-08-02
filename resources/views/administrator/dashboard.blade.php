@@ -409,7 +409,6 @@
                         }
                         coolor.push('#2cabe3');
 
-                        console.log(coolor);
                         $('#calendar2').fullCalendar({
                             dayClick: function(date, allDay, jsEvent, view) {
                             /*  if (allDay) {

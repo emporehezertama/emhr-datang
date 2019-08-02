@@ -1056,7 +1056,11 @@ function asset_type($id=null)
 	if($id != null)
 		return \App\Models\AssetType::where('id', $id)->get();
 	else
-		return \App\Models\AssetType::all();
+		if(\Auth::user()->project_id != Null){
+			return \App\Models\AssetType::where('project_id', \Auth::user()->project_id)->get();
+		}else{
+			return \App\Models\AssetType::all();
+		}
 }
 
 /**

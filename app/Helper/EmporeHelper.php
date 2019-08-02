@@ -95,10 +95,26 @@ function empore_jabatan($id)
 		
         $position = \App\Models\StructureOrganizationCustom::
 								select('organisasi_position.name as position')
-								->join('organisasi_division', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
 								->join('organisasi_position', 'organisasi_position.id', '=', 'structure_organization_custom.organisasi_position_id')
 								->where('structure_organization_custom.id', $user->structure_organization_custom_id)
 								->get();
+
+	/*	$division = \App\Models\StructureOrganizationCustom::
+								select('organisasi_division.name as division')
+								->join('organisasi_division', 'organisasi_division.id', '=', 'structure_organization_custom.organisasi_division_id')
+								->where('structure_organization_custom.id', $user->structure_organization_custom_id)
+								->get();
+		if(count($position) < 1 && count($division) < 1){
+			$pos =  "";
+		}else{
+			if(count($position) > 0 && count($division) < 1){
+				$pos =  $position['0']['position'];
+			}elseif(count($position) < 1 && count($division) > 0){
+				$pos =  $division['0']['division'];
+			}else{
+				$pos =  $position['0']['position'].' - '.$division['0']['division'];
+			}
+		}	*/
 
 		$pos =  $position['0']['position'];
 		return $pos;

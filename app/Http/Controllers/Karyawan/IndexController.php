@@ -55,17 +55,31 @@ class IndexController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-            $params['news']             = News::where('news.status', 1)->orderBy('news.id', 'DESC')->join('users','users.id','=','news.user_created')->where('users.project_id', $user->project_id)->select('news.*')->limit(4)->get();
-            $params['internal_memo']    = InternalMemo::orderBy('internal_memo.id', 'DESC')->join('users','users.id','=','internal_memo.user_created')->where('users.project_id', $user->project_id)->select('internal_memo.*')->limit(5)->get();
-            $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('peraturan_perusahaan.id', 'DESC')->join('users','users.id','=','peraturan_perusahaan.user_created')->where('users.project_id', $user->project_id)->select('peraturan_perusahaan.*')->limit(5)->get();
+            $params['news']             = News::where('news.status', 1)
+                                                ->orderBy('news.id', 'DESC')
+                                                ->join('users','users.id','=','news.user_created')
+                                                ->where('users.project_id', $user->project_id)
+                                                ->select('news.*')
+                                                ->limit(4)->get();
+            $params['internal_memo']    = InternalMemo::where('internal_memo.status', 1)
+                                                        ->orderBy('internal_memo.id', 'DESC')
+                                                        ->join('users','users.id','=','internal_memo.user_created')
+                                                        ->where('users.project_id', $user->project_id)
+                                                        ->select('internal_memo.*')
+                                                        ->limit(5)->get();
+            $params['peraturan_perusahaan']    = PeraturanPerusahaan::where('peraturan_perusahaan.status', 1)
+                                                                        ->orderBy('peraturan_perusahaan.id', 'DESC')
+                                                                        ->join('users','users.id','=','peraturan_perusahaan.user_created')
+                                                                        ->where('users.project_id', $user->project_id)
+                                                                        ->select('peraturan_perusahaan.*')->limit(5)->get();
             $params['ulang_tahun']      = User::where('project_id',$user->project_id)->whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
 
         } else
         {
-            $params['news']             = News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
-            $params['internal_memo']    = InternalMemo::orderBy('id', 'DESC')->limit(5)->get();
-            $params['peraturan_perusahaan']    = PeraturanPerusahaan::orderBy('id', 'DESC')->limit(5)->get();
-            $params['ulang_tahun']      = User::whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
+            $params['news']                     = News::where('status', 1)->orderBy('id', 'DESC')->limit(4)->get();
+            $params['internal_memo']            = InternalMemo::where('status', 1)->orderBy('id', 'DESC')->limit(5)->get();
+            $params['peraturan_perusahaan']     = PeraturanPerusahaan::where('status', 1)->orderBy('id', 'DESC')->limit(5)->get();
+            $params['ulang_tahun']              = User::whereMonth('tanggal_lahir', date('m'))->whereDay('tanggal_lahir', date('d'))->get();
         }
 
         $data = User::orderBy('name', 'ASC')->limit(1); 
@@ -119,7 +133,7 @@ class IndexController extends Controller
      */
     public function profile()
     {
-        $params['data'] = User::where('id', \Auth::user()->id)->first();
+        $params['data']             = User::where('id', \Auth::user()->id)->first();
         $params['department']       = OrganisasiDepartment::where('organisasi_division_id', $params['data']['division_id'])->get();
         $params['provinces']        = Provinsi::all();
         $params['dependent']        = UserFamily::where('user_id', \Auth::user()->id)->first();
@@ -212,12 +226,33 @@ class IndexController extends Controller
      */
     public function newsmore()
     {
-        $params['list']             = News::orderBy('id', 'DESC')->get();
-        $params['news_list_right']  = News::orderBy('id', 'DESC')->get();
+        if(\Auth::user()->project_id != Null){
+            $params['list']             = News::select('news.*')
+                                                ->join('users','users.id','=','news.user_created')
+                                                ->where('users.project_id', \Auth::user()->project_id)
+                                                ->orderBy('news.id', 'DESC')->get();
+            $params['news_list_right']  = News::select('news.*')
+                                                ->join('users','users.id','=','news.user_created')
+                                                ->where('users.project_id', \Auth::user()->project_id)
+                                                ->orderBy('news.id', 'DESC')->get();
+        }else{
+            $params['list']             = News::orderBy('id', 'DESC')->get();
+            $params['news_list_right']  = News::orderBy('id', 'DESC')->get();
+        }
+        
 
         if(isset($_GET['keyword-news']) and !empty($_GET['keyword-news']))
         {
-            $params['news_list_right'] = News::where('title', 'LIKE', '%'. $_GET['keyword-news'] .'%')->orderBy('id', 'DESC')->get();
+            if(\Auth::user()->project_id != Null){
+                $params['news_list_right'] = News::select('news.*')
+                                                    ->join('users','users.id','=','news.user_created')
+                                                    ->where('users.project_id', \Auth::user()->project_id)
+                                                    ->where('news.title', 'LIKE', '%'. $_GET['keyword-news'] .'%')
+                                                    ->orderBy('news.id', 'DESC')->get();
+            }else{
+                $params['news_list_right'] = News::where('title', 'LIKE', '%'. $_GET['keyword-news'] .'%')->orderBy('id', 'DESC')->get();
+            }
+            
         }
 
         return view('karyawan.morenews')->with($params);
@@ -229,18 +264,50 @@ class IndexController extends Controller
      */
     public function internalMemoMore()
     {
-        $params['data']                 = InternalMemo::orderBy('id', 'DESC')->get();
-        $params['internal_memo']        = InternalMemo::orderBy('id', 'DESC')->get();
-        $params['peraturan_perusahaan'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
+        if(\Auth::user()->project_id != Null){
+            $params['data']                 = InternalMemo::select('internal_memo.*')
+                                                            ->join('users','users.id','=','internal_memo.user_created')
+                                                            ->where('users.project_id', \Auth::user()->project_id)
+                                                            ->whereorderBy('internal_memo.id', 'DESC')->get();
+            $params['internal_memo']        = InternalMemo::select('internal_memo.*')
+                                                            ->join('users','users.id','=','internal_memo.user_created')
+                                                            ->where('users.project_id', \Auth::user()->project_id)
+                                                            ->orderBy('internal_memo.id', 'DESC')->get();
+            $params['peraturan_perusahaan'] = PeraturanPerusahaan::select('peraturan_perusahaan.*')
+                                                                    ->join('users','users.id','=','peraturan_perusahaan.user_created')
+                                                                    ->where('users.project_id', \Auth::user()->project_id)
+                                                                    ->orderBy('peraturan_perusahaan.id', 'DESC')->get();
+        }else{
+            $params['data']                 = InternalMemo::whereorderBy('id', 'DESC')->get();
+            $params['internal_memo']        = InternalMemo::orderBy('id', 'DESC')->get();
+            $params['peraturan_perusahaan'] = PeraturanPerusahaan::orderBy('id', 'DESC')->get();
+        }
+        
 
         if(isset($_GET['keyword-internal-memo']) and !empty($_GET['keyword-internal-memo']))
         {
-            $params['internal_memo'] = InternalMemo::where('title', 'LIKE', '%'. $_GET['keyword-internal-memo'] .'%')->orderBy('id', 'DESC')->get();
+            if(\Auth::user()->project_id != Null){
+                $params['internal_memo'] = InternalMemo::select('internal_memo.*')
+                                                        ->join('users','users.id','=','internal_memo.user_created')
+                                                        ->where('users.project_id', \Auth::user()->project_id)
+                                                        ->where('internal_memo.title', 'LIKE', '%'. $_GET['keyword-internal-memo'] .'%')
+                                                        ->orderBy('internal_memo.id', 'DESC')->get();
+            }else{
+                $params['internal_memo'] = InternalMemo::where('title', 'LIKE', '%'. $_GET['keyword-internal-memo'] .'%')->orderBy('id', 'DESC')->get();
+            }
         }
 
         if(isset($_GET['keyword-peraturan']) and !empty($_GET['keyword-peraturan']))
         {
-            $params['peraturan_perusahaan'] = PeraturanPerusahaan::where('title', 'LIKE', '%'. $_GET['keyword-peraturan'] .'%')->orderBy('id', 'DESC')->get();
+            if(\Auth::user()->project_id != Null){
+                $params['peraturan_perusahaan'] = PeraturanPerusahaan::select('peraturan_perusahaan.*')
+                                                                        ->join('users','users.id','=','peraturan_perusahaan.user_created')
+                                                                        ->where('users.project_id', \Auth::user()->project_id)
+                                                                        ->where('peraturan_perusahaan.title', 'LIKE', '%'. $_GET['keyword-peraturan'] .'%')
+                                                                        ->orderBy('peraturan_perusahaan.id', 'DESC')->get();
+            }else{
+                $params['peraturan_perusahaan'] = PeraturanPerusahaan::where('title', 'LIKE', '%'. $_GET['keyword-peraturan'] .'%')->orderBy('id', 'DESC')->get();
+            }
         }
 
         return view('karyawan.more-internal-memo')->with($params);

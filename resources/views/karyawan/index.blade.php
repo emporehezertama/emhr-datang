@@ -123,7 +123,7 @@
                             <hr style="margin-top: 5px; margin-bottom:5px;" />
                         @endforeach
                         <br />
-                        <a href="" class="btn btn-rounded btn-success btn-block p-10" style="color: white;"><i class="fa fa-gavel"></i> More </a>
+                        <a href="{{ route('karyawan.internal-memo.more') }}" class="btn btn-rounded btn-success btn-block p-10" style="color: white;"><i class="fa fa-gavel"></i> More </a>
                     </div>
                 </div>
             </div>
