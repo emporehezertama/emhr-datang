@@ -122,7 +122,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Branch</label>
                                     <div class="col-md-6">
-                                        <select class="form-control" name="branch_id">
+                                        <select class="form-control" name="branch_id" id="branch_id">
                                         <option value=""> - choose - </option>
                                         @foreach(cabang() as $item)
                                         <option value="{{ $item["id"] }}" >{{ $item["name"] }}</option>

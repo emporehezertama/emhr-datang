@@ -1099,7 +1099,7 @@ class KaryawanController extends Controller
         $data->branch_type          = $request->branch_type;
         $data->hak_cuti             = 12;
         $data->cuti_yang_terpakai   = 0;
-        $data->cabang_id            =$request->cabang_id;
+        $data->cabang_id            =$request->branch_id;
         $data->nama_rekening        = $request->nama_rekening;
         $data->nomor_rekening       = $request->nomor_rekening;
         $data->bank_id              = $request->bank_id;
@@ -1261,7 +1261,7 @@ class KaryawanController extends Controller
             //$data->branch_type          = $request->branch_type;
             //$data->hak_cuti             = 12;
             //$data->cuti_yang_terpakai   = 0;
-            //$data->cabang_id            =$request->cabang_id;
+            $data->cabang_id            =$request->branch_id;
             $data->nama_rekening        = $request->nama_rekening;
             $data->nomor_rekening       = $request->nomor_rekening;
             $data->bank_id              = $request->bank_id;
