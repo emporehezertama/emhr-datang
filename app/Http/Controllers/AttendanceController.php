@@ -9,9 +9,7 @@ use App\Models\AbsensiItem;
 use App\Models\AbsensiSetting;
 use App\Models\AttendanceExport;
 use App\User;
-
 use Maatwebsite\Excel\Facades\Excel;
-
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use DB;
@@ -85,7 +83,7 @@ class AttendanceController extends Controller
             }
 
             if(request()->import == 1){
-                $filter_start       = \Session::get('filter_start');
+            /*    $filter_start       = \Session::get('filter_start');
                 $filter_end         = \Session::get('filter_end');
                 $nama_nik           = \Session::get('nama_nik');
                 $id                 = \Session::get('id');
@@ -94,7 +92,10 @@ class AttendanceController extends Controller
                 $start = str_replace('/', '-', $filter_start);
                 $end = str_replace('/', '-', $filter_end);
                 
-                $this->importAttendance($start, $end, $branch, $id);
+                $this->importAttendance($start, $end, $branch, $id);    */
+
+                $name_excel = 'Attendance'.date('YmdHis');
+                return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
             }
         }
 
@@ -173,9 +174,10 @@ class AttendanceController extends Controller
     //    $file = $destination ."//". $name_excel.'.xlsx';
 
     //    Excel::store(new AttendanceExport($params), $name_excel.'.xlsx');
-        Excel::store(new AttendanceExport($start, $end, $branch, $id), $name_excel.'.xlsx');
+    //    Excel::store(new AttendanceExport($start, $end, $branch, $id), $name_excel.'.xlsx');
+        return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
 
-        return redirect()->route('attendance.index');
+    //    return redirect()->route('attendance.index');
     }
 
 }
