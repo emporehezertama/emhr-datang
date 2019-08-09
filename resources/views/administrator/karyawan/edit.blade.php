@@ -78,7 +78,7 @@
                                 </thead>
                                 <tbody class="no-padding-td">
                                     @if(isset($data->absensiItem))
-                                        @foreach(attendanceKaryawan($data->name) as $item)
+                                        @foreach(attendanceKaryawan($data->id) as $item)
                                         <tr>
                                             <td>{{ $item[0]['date'] }}</td>
                                             <td>{{ $item[0]['timetable'] }}</td>

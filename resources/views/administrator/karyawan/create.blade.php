@@ -826,7 +826,7 @@
             showAutocompleteOnFocus: true
         });
 
-        
+          
         function open_dialog_photo()
         {
             $("input[name='foto']").trigger('click');   
