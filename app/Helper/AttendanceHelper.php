@@ -200,6 +200,8 @@ function dataAttendance($start, $end, $branch, $id){
 
             if(!empty($start) && !empty($end)){
                 $dataabsen = $dataabsen->whereBetween('absensi_item.date', [$start, $end]);
+            }else{
+                $dataabsen = $dataabsen->whereBetween('absensi_item.date', [date('Y-m-d'), date('Y-m-d')]);
             }
         }else{
             $dataabsen      = App\Models\AbsensiItem::groupBy('date')
