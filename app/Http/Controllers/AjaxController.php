@@ -3064,4 +3064,24 @@ class AjaxController extends Controller
         }
         return response()->json($this->respon);
     }
+
+/*    public function importAttendance(Request $request){
+        if($request->ajax())
+        {
+            $user   = \Auth::user();
+            if($user->project_id != NULL){
+                $params['data']     = AbsensiItem::join('users','users.id','=','absensi_item.user_id')
+                                                    ->where('users.project_id', $user->project_id)
+                                                    ->select('absensi_item.*')
+                                                    ->orderBy('absensi_item.id', 'DESC')->paginate(100);
+            }else{
+                $params['data']     = AbsensiItem::orderBy('id', 'DESC')->paginate(100);
+            }
+
+            $destination = storage_path('app');
+            $name_excel = 'Attendance'.date('YmdHis');
+
+            return Excel::store(new AttendanceExport($params), $name_excel.'.xlsx');
+        }
+    }   */
 }

@@ -78,29 +78,30 @@
                                 </thead>
                                 <tbody class="no-padding-td">
                                     @if(isset($data->absensiItem))
-                                        @foreach($data->absensiItem as $item)
+                                        @foreach(attendanceKaryawan($data->name) as $item)
                                         <tr>
-                                            <td>{{ $item->date }}</td>
-                                            <td>{{ $item->timetable }}</td>
+                                            <td>{{ $item[0]['date'] }}</td>
+                                            <td>{{ $item[0]['timetable'] }}</td>
                                             <td>
-                                                @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic))
-                                                    <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
+                                                @if(!empty($item[0]['long']) || !empty($item[0]['lat']) || !empty($item[0]['pic'])) 
+                                                    <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item[0]['date']))?> <?=$item[0]['clock_in']?>" data-long="<?=$item[0]['long']?>" data-lat="<?=$item[0]['lat']?>" data-pic="<?=asset('upload/attendance/'.$item[0]['pic'])?>" data-time="<?=$item[0]['clock_in']?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item[0]['clock_in'] }}</a> 
                                                     <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
                                                 @else
-                                                    {{ $item->clock_in }}
+                                                    {{ $item[0]['clock_in'] }}
                                                 @endif
                                             </td>
                                             <td>
                                                 @if(!empty($item->long_out) || !empty($item->lat_out) || !empty($item->pic_out))
-                                                    <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a> 
+                                                    
+                                                    <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item[0]['date']))?> <?=$item[0]['clock_out']?>" data-long="<?=$item[0]['long_out']?>" data-lat="<?=$item[0]['lat_out']?>" data-pic="<?=asset('upload/attendance/'.$item[0]['pic_out'])?>" data-time="<?=$item[0]['clock_out']?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item[0]['clock_out'] }}</a>
                                                     <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
                                                 @else
-                                                    {{ $item->clock_out }}
+                                                    {{ $item[0]['clock_out'] }}
                                                 @endif
                                             </td>
-                                            <td>{{ $item->late }}</td>    
-                                            <td>{{ $item->early }}</td>    
-                                            <td>{{ $item->work_time }}</td>
+                                            <td>{{ $item[0]['late'] }}</td>   
+                                            <td>{{ $item[0]['early'] }}</td>    
+                                            <td>{{ $item[0]['work_time'] }}</td> 
                                         </tr>
                                         @endforeach
                                     @endif
@@ -354,16 +355,27 @@
                         <div role="tabpanel" class="tab-pane fade" id="department">
                         @if(get_setting('struktur_organisasi') == 3)
                             <div class="form-group">
-                                    <label class="col-md-12">Position</label>
-                                    <div class="col-md-6">
-                                        <select class="form-control" name="structure_organization_custom_id">
-                                        <option value=""> - choose - </option>
-                                        @foreach($structure as $item)
-                                        <option value="{{ $item["id"] }}" {{ $item["id"]== $data->structure_organization_custom_id ? 'selected' : '' }}>{{ $item["name"] }}</option>
-                                        @endforeach
-                                    </select>
-                                    </div>
+                                <label class="col-md-12">Branch</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="branch_id">
+                                    <option value=""> - choose - </option>
+                                    @foreach(cabang() as $item)
+                                    <option value="{{ $item["id"] }}" {{ $item["id"]== $data->cabang_id ? 'selected' : '' }}>{{ $item["name"] }}</option>
+                                    @endforeach
+                                </select>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">Position</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="structure_organization_custom_id">
+                                    <option value=""> - choose - </option>
+                                    @foreach($structure as $item)
+                                    <option value="{{ $item["id"] }}" {{ $item["id"]== $data->structure_organization_custom_id ? 'selected' : '' }}>{{ $item["name"] }}</option>
+                                    @endforeach
+                                </select>
+                                </div>
+                            </div>
                         @else
                             <div class="form-group">
                                 <label class="col-md-12">Office Type</label>

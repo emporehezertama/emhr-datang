@@ -104,7 +104,7 @@
                                     <th>TELEPHONE</th>
                                     <th>EMAIL</th>
                                     <th>POSITION </th>
-                                    <th>DIVISION</th>
+                                    <th>DIVISION / BRANCH</th>
                                     <th>
                                         @if($countPos > 0)
                                             <a href="{{ route('administrator.karyawan.index', ['position'=> 1])}}"><label class="btn btn-danger btn-xs" style="text-align: center;" title="">{{$countPos}}</label></a>
@@ -128,6 +128,9 @@
                                         <td>{{ isset($item->structure->position) ? $item->structure->position->name:''}}</td>
                                         <td>
                                             {{ isset($item->structure->division) ? $item->structure->division->name:'' }}
+                                            @if(!empty($item->cabang_id))
+                                                / {{ getNamaCabang($item->cabang_id)->name }}
+                                            @endif
                                         </td>
                                         @else
                                         <td>

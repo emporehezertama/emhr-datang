@@ -56,7 +56,6 @@
                                             <th>ASSET OWNERSHIP</th>
                                             <th>ASSET CONDITION</th>
                                             <th>HANDOVER DATE</th>
-                                            <th>EMPLOYEE CHECKED</th>
                                             <th>APPROVAL CHECKED</th>
                                             <th>NOTE</th>
                                         </tr>
@@ -80,9 +79,7 @@
                                                 @endif </td>
                                             <td>{{ $item->asset->asset_condition }}</td>
                                             <td>{{ $item->asset->handover_date != "" ?  format_tanggal($item->asset->handover_date) : '' }}</td>
-                                            <td style="text-align: center;">
-                                                <input type="checkbox" value="1" {{ $item->user_check == 1 ? 'checked' : '' }} name="user_check[{{$no}}]">
-                                            </td>
+                                            
                                             <td style="text-align: center;">
                                                 @if($item->approval_check == 1)
                                                 <label class="bt btn-success btn-xs"><i class="fa fa-check"></i> </label>
