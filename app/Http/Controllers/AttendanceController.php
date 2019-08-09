@@ -82,21 +82,23 @@ class AttendanceController extends Controller
                 $branch = $branch;
             }
 
-            if(request()->import == 1){
-            /*    $filter_start       = \Session::get('filter_start');
-                $filter_end         = \Session::get('filter_end');
-                $nama_nik           = \Session::get('nama_nik');
-                $id                 = \Session::get('id');
-                $branch             = \Session::get('branch');
-        
-                $start = str_replace('/', '-', $filter_start);
-                $end = str_replace('/', '-', $filter_end);
-                
-                $this->importAttendance($start, $end, $branch, $id);    */
+            
+        }
 
-                $name_excel = 'Attendance'.date('YmdHis');
-                return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
-            }
+        if(request()->import == 1){
+        /*    $filter_start       = \Session::get('filter_start');
+            $filter_end         = \Session::get('filter_end');
+            $nama_nik           = \Session::get('nama_nik');
+            $id                 = \Session::get('id');
+            $branch             = \Session::get('branch');
+    
+            $start = str_replace('/', '-', $filter_start);
+            $end = str_replace('/', '-', $filter_end);
+            
+            $this->importAttendance($start, $end, $branch, $id);    */
+
+            $name_excel = 'Attendance'.date('YmdHis');
+            return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
         }
 
         
