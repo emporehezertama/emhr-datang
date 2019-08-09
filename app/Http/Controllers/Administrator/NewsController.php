@@ -152,6 +152,8 @@ class NewsController extends Controller
         if($user->project_id != NULL)
         {
             $data->user_created = $user->id;
+        }else{
+            $data->user_created = "";
         }
         
         $data->save();

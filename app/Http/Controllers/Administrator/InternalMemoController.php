@@ -124,6 +124,8 @@ class InternalMemoController extends Controller
         $data->title            = $request->title;
         $data->content          = $request->content;
         $data->status           = $request->status;
+
+        
         
         $user = \Auth::user();
         if($user->project_id != NULL)
@@ -166,6 +168,12 @@ class InternalMemoController extends Controller
 
             $data->image = $fileName;
         }
+        if($user->project_id != Null){
+            $data->user_created           = \Auth::user()->id;
+        }else{
+            $data->user_created           = "";
+        }
+        
 
 
         $data->save();
