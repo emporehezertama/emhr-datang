@@ -223,7 +223,7 @@ function dataAttendance($start, $end, $branch, $id){
 
             if($user->project_id != NULL){
                 $karyawan   = \App\User::where('project_id', \Auth::user()->project_id)
-                                        ->where('access_id', 2)
+                                        ->whereIn('access_id', ['1', '2'])
                                         ->where(function($query) use($tanggal, $j){
                                             $query->whereNull('resign_date')
                                                     ->orWhere('resign_date', '>=', $tanggal[$j]);
@@ -236,7 +236,7 @@ function dataAttendance($start, $end, $branch, $id){
                     $karyawan = $karyawan->where('id', $id);
                 }
             }else{
-                $karyawan   = \App\User::where('access_id', 2)
+                $karyawan   = \App\User::whereIn('access_id', ['1', '2'])
                                         ->where(function($query) use($tanggal, $j){
                                             $query->whereNull('resign_date')
                                                     ->orWhere('resign_date', '>=', $tanggal[$j]);
