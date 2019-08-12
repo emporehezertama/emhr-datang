@@ -114,6 +114,10 @@ class AttendanceController extends Controller
         }
 
         $params['data'] = dataAttendance($start, $end, $branch, $id);
+    //    $params['datas'] = \App\Models\AbsensiItem::where('date', '2019-08-01')->where('user_id', '15734')->get();
+
+    //dd(json_encode($params['datas']));
+   // dd(json_encode($params['datas']), json_encode($params['data']));
 
         return view('attendance.index')->with($params);
     }

@@ -1125,6 +1125,27 @@
     }
 </style>
 @section('footer-script')
+
+    
+<?php
+    if($data->jabatan_cabang == 'Head'){
+?>
+    <style type="text/css">
+        .head-branch-select { display: block; }
+    </style>
+<?php
+    }
+?>
+
+<?php
+    if($data->jabatan_cabang == 'Staff'){
+?>
+    <style type="text/css">
+        .staff-branch-select { display: block; }
+    </style>
+<?php
+    }
+?>
     <style type="text/css">
         .no-padding-td td {
             padding-top:2px !important;
@@ -1133,14 +1154,6 @@
         .staff-branch-select, .head-branch-select {
             display: none;
         }
-
-        @if($data->jabatan_cabang == 'Head')
-        .head-branch-select { display: block; }
-        @endif
-
-        @if($data->jabatan_cabang == 'Staff')
-        .staff-branch-select { display: block; }
-        @endif
 
     </style>
     <!-- Date picker plugins css -->

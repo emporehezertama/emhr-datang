@@ -54,7 +54,6 @@
                     <table class="data_table_no_pagging table table-background">
                         <thead>
                             <tr>
-                                <th rowspan="2" style="width: 80px;">No</th>
                                 <th rowspan="2">NIK</th>
                                 <th rowspan="2">Name</th>
                                 <th rowspan="2">Date</th>
@@ -71,8 +70,10 @@
                         </thead>
                         <tbody>
                             @foreach($data as $key => $item)
-                                <tr>
-                                    <td>{{ $key+1 }}</td>    
+                            @if(empty($item['date']))
+                            <?php continue; ?>
+                            @endif
+                                <tr> 
                                     <td>{{ $item['nik'] }} </td>    
                                     <td>{{ $item['name'] }}</td>    
                                     <td>{{ $item['date'] }}</td>    
@@ -100,8 +101,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <!--div class="col-m-6 pull-left text-left">Showing  $data->firstItem()  to  $data->lastItem()  of  {{count($data)}}  entries</div>
-                    <div class="col-md-6 pull-right text-right"> count($data)->appends($_GET)->render() </div><div class="clearfix"></div-->
+                    <!--div class="col-m-6 pull-left text-left">Showing $data->first  $data[0]->firstItem()  to  $data->lastItem()  of  {{count($data)}}  entries</div>
+                    <div class="col-md-6 pull-right text-right"> $data[1]->appends($_GET)->render() </div><div class="clearfix"></div-->
                 </div>
             </div> 
         </div>
