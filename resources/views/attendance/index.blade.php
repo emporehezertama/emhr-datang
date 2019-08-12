@@ -71,9 +71,6 @@
                         </thead>
                         <tbody>
                             @foreach($data as $key => $item)
-                                @if(!empty($item[$key]['nik']))
-                                    <?php continue; ?>
-                                @endif
                                 <tr>
                                     <td>{{ $key+1 }}</td>    
                                     <td>{{ $item['nik'] }} </td>    
