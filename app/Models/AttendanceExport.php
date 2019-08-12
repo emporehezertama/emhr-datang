@@ -20,7 +20,6 @@ class AttendanceExport implements FromView
 //    public function __construct($params)
     public function __construct($start, $end, $branch, $id)
     {
-    //    $this->params = $params;
         $this->start = $start;
         $this->end = $end;
         $this->branch = $branch;
@@ -34,7 +33,6 @@ class AttendanceExport implements FromView
         $branch = $this->branch;
         $id = $this->id;
         return view('attendance.export', [
-        //    'params'  => $this->params
             'params'  => dataAttendance($start, $end, $branch, $id)
         ]);
         

@@ -116,12 +116,26 @@ function getAttendanceList($SN)
 }
 
 function attendanceKaryawan($id){
+    $activeemployee = App\User::where('id', $id)->first();
+
     $absensi = App\Models\AbsensiItem::join('users', 'users.id', '=', 'absensi_item.user_id')
                                         ->where('users.project_id', \Auth::user()->project_id)
                                         ->groupBy('absensi_item.date')
-                                        ->select('absensi_item.*')
-                                        ->orderBy('absensi_item.date', 'DESC')
-                                        ->get();
+                                        ->select('absensi_item.*');
+    if(!empty($activeemployee->join_date) && !empty($activeemployee->resign_date)){
+        $absensi = $absensi->whereBetween('absensi_item.date', [$activeemployee->join_date, $activeemployee->resign_date]);
+    }else{
+        if(!empty($activeemployee->join_date) && empty($activeemployee->resign_date)){
+            $absensi = $absensi->where('absensi_item.date', '>=', $activeemployee->join_date);
+        }else if(empty($activeemployee->join_date) && !empty($activeemployee->resign_date)){
+            $absensi = $absensi->where('absensi_item.date', '<=', $activeemployee->resign_date);
+        }else{
+            $absensi = $absensi->whereNotNull('absensi_item.date');
+        }
+    }
+
+    $absensi = $absensi->orderBy('absensi_item.date', 'DESC')->get();
+
     $a = 0;
     $b = 0;
     $c = 0;
@@ -209,6 +223,8 @@ function dataAttendance($start, $end, $branch, $id){
 
             if(!empty($start) && !empty($end)){
                 $dataabsen = $dataabsen->whereBetween('date', [$start, $end]);
+            }else{
+                $dataabsen = $dataabsen->whereBetween('date', [date('Y-m-d'), date('Y-m-d')]);
             }
         }
 
