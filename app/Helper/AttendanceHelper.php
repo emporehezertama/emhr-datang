@@ -116,25 +116,12 @@ function getAttendanceList($SN)
 }
 
 function attendanceKaryawan($id){
-    $activeemployee = App\User::where('id', $id)->first();
     $absensi = App\Models\AbsensiItem::join('users', 'users.id', '=', 'absensi_item.user_id')
                                         ->where('users.project_id', \Auth::user()->project_id)
                                         ->groupBy('absensi_item.date')
-                                        ->select('absensi_item.*');
-    if(!empty($activeemployee->join_date) && !empty($activeemployee->resign_date)){
-        $absensi = $absensi->whereBetween('absensi_item.date', [$activeemployee->join_date, $activeemployee->resign_date]);
-    }else{
-        if(!empty($activeemployee->join_date) && empty($activeemployee->resign_date)){
-            $absensi = $absensi->where('absensi_item.date', '>=', $activeemployee->join_date);
-        }else if(empty($activeemployee->join_date) && !empty($activeemployee->resign_date)){
-            $absensi = $absensi->where('absensi_item.date', '<=', $activeemployee->resign_date);
-        }else{
-            $absensi = $absensi->whereNotNull('absensi_item.date');
-        }
-    }
-
-    $absensi = $absensi->orderBy('absensi_item.date', 'DESC')->get();
-
+                                        ->select('absensi_item.*')
+                                        ->orderBy('absensi_item.date', 'DESC')
+                                        ->get();
     $a = 0;
     $b = 0;
     $c = 0;
@@ -146,14 +133,14 @@ function attendanceKaryawan($id){
         $tanggal[$b] = $absensi[$i]->date;
         $arrayhari = array("Minggu"=>"Sun", "Senin"=>"Mon", "Selasa"=>"Tue", "Rabu"=>"Wed", "Kamis"=>"Thu", "Jumat"=>"Fri", "Sabtu"=>"Sat");
         $day[$v] = array_search(date_format(date_create($tanggal[$b]), "D"), $arrayhari);
-        $data[$c] = App\Models\AbsensiItem::where('name', $name)
+        $data[$c] = App\Models\AbsensiItem::where('user_id', $id)
                                         ->where('date', $tanggal[$b])
                                         ->get();
         if(count($data[$c]) < 1){
             $array = array(
                 'id'  => "",
                 'absensi_id'  => "",
-                'user_id'  => "",
+                'user_id'  => $id,
                 'emp_no' => "", 
                 'ac_no' => "", 
                 'name' => "", 
@@ -222,15 +209,13 @@ function dataAttendance($start, $end, $branch, $id){
 
             if(!empty($start) && !empty($end)){
                 $dataabsen = $dataabsen->whereBetween('date', [$start, $end]);
-            }else{
-                $dataabsen = $dataabsen->whereBetween('date', [date('Y-m-d'), date('Y-m-d')]);
             }
         }
 
         $dataabsen = $dataabsen->get();
 
-        $tanggal = $tgl = $data = $dd = $name = [];
-        $x = $j = $y = $z = $w = $v = 0;
+        $tanggal = $tgl = $data = $dd = $name = $user_id = [];
+        $x = $j = $y = $z = $w = $v = $a = 0;
         for($i = 0; $i < count($dataabsen); $i++){
             $tanggal[$j] = $dataabsen[$i]->date;
             $arrayhari = array("Minggu"=>"Sun", "Senin"=>"Mon", "Selasa"=>"Tue", "Rabu"=>"Wed", "Kamis"=>"Thu", "Jumat"=>"Fri", "Sabtu"=>"Sat");
@@ -238,7 +223,7 @@ function dataAttendance($start, $end, $branch, $id){
 
             if($user->project_id != NULL){
                 $karyawan   = \App\User::where('project_id', \Auth::user()->project_id)
-                                        ->where('access_id', 2)
+                                        ->whereIn('access_id', ['1', '2'])
                                         ->where(function($query) use($tanggal, $j){
                                             $query->whereNull('resign_date')
                                                     ->orWhere('resign_date', '>=', $tanggal[$j]);
@@ -251,7 +236,7 @@ function dataAttendance($start, $end, $branch, $id){
                     $karyawan = $karyawan->where('id', $id);
                 }
             }else{
-                $karyawan   = \App\User::where('access_id', 2)
+                $karyawan   = \App\User::whereIn('access_id', ['1', '2'])
                                         ->where(function($query) use($tanggal, $j){
                                             $query->whereNull('resign_date')
                                                     ->orWhere('resign_date', '>=', $tanggal[$j]);
@@ -271,17 +256,18 @@ function dataAttendance($start, $end, $branch, $id){
             for($no = 0; $no < count($karyawan); $no++){
                 $nik[$w] = $karyawan[$no]->nik;
                 $name[$z] = $karyawan[$no]->name;
+                $user_id[$a] = $karyawan[$no]->id;
                 if($user->project_id != NULL){
                     $data[$x]     = App\Models\AbsensiItem::join('users','users.id','=','absensi_item.user_id')
                                                             ->where('users.project_id', $user->project_id)
                                                             ->where('absensi_item.date', $tanggal[$j])
-                                                            ->where('users.name', $name[$z])
+                                                            ->where('users.id', $user_id[$a])
                                                             ->select('absensi_item.*', 'users.nik')
                                                             ->orderBy('absensi_item.date', 'DESC')
                                                             ->paginate(100);
                 }else{
                     $data[$x]     = App\Models\AbsensiItem::where('date', $tanggal[$j])
-                                                            ->where('name', $name[$z])
+                                                            ->where('user_id', $user_id[$a])
                                                             ->orderBy('date', 'DESC')
                                                             ->paginate(100);
                 }
@@ -310,6 +296,7 @@ function dataAttendance($start, $end, $branch, $id){
 
                 $dd[$x] = $data[$x][0];
                 $name[$z++];
+                $user_id[$a++];
                 $nik[$w++];
                 $data[$x++];
             }
