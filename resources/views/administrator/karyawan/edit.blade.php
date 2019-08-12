@@ -91,7 +91,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if(!empty($item->long_out) || !empty($item->lat_out) || !empty($item->pic_out))
+                                                @if(!empty($item[0]['long_out']) || !empty($item[0]['lat_out']) || !empty($item[0]['pic_out']))
                                                     
                                                     <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item[0]['date']))?> <?=$item[0]['clock_out']?>" data-long="<?=$item[0]['long_out']?>" data-lat="<?=$item[0]['lat_out']?>" data-pic="<?=asset('upload/attendance/'.$item[0]['pic_out'])?>" data-time="<?=$item[0]['clock_out']?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item[0]['clock_out'] }}</a>
                                                     <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
