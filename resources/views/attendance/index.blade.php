@@ -21,9 +21,9 @@
                             <i class="fa fa-refresh"></i>
                         </button>
                         <!--div aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light " onclick="importAttendance()">Import Data -->
-                        <!--button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light "  type="button" href="javascript:void(0)"  onclick="importAttendance()">Eksport Data 
+                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light "  type="button" href="javascript:void(0)"  onclick="importAttendance()">Eksport Data 
                             <i class="fa fa-download"></i>
-                        </button-->
+                        </button>
                     </div>
                     <div class="col-md-3 pull-right">
                         <input type="text" name="nama_nik" id="nama_nik" class="form-control form-control-line autocomplete-karyawan" placeholder="Nik / Name" value="{{request()->nama_nik}}">

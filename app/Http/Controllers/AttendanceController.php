@@ -171,15 +171,29 @@ class AttendanceController extends Controller
     public function importAttendance($start, $end, $branch, $id){
         $params['data'] =   dataAttendance($start, $end, $branch, $id);
 
-    //    $destination = storage_path('app');
         $name_excel = 'Attendance'.date('YmdHis');
-    //    $file = $destination ."//". $name_excel.'.xlsx';
-
-    //    Excel::store(new AttendanceExport($params), $name_excel.'.xlsx');
     //    Excel::store(new AttendanceExport($start, $end, $branch, $id), $name_excel.'.xlsx');
         return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
 
-    //    return redirect()->route('attendance.index');
+    //  return redirect()->route('attendance.index');
     }
+
+/*    public function importAttendance(Request $request){
+    //    if($request->ajax())
+    //    {
+            $start = $request->filter_start;
+            $end = $request->filter_end;
+            $branch = $request->branch;
+            $id = $request->id;
+            $params['data'] =   dataAttendance($start, $end, $branch, $id);
+            $name_excel = 'Attendance'.date('YmdHis');
+            return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
+        //    (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
+
+        //    $hasil = "ok";
+        //    return response()->json($hasil);
+    //    }
+    //    return response()->json($this->respon);
+    }   */
 
 }

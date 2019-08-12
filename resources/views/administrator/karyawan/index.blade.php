@@ -116,6 +116,9 @@
                             </thead>
                             <tbody>
                                 @foreach($data as $no => $item)
+                                    @if(!empty($item->nik))
+                                    <?php continue; ?>
+                                    @endif
                                     <tr>
                                         <td><input type="checkbox" class="checked_id" name="checked_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
                                         <td class="text-center">{{ $no+1 }}</td>
