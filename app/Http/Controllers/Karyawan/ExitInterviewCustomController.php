@@ -194,7 +194,7 @@ class ExitInterviewCustomController extends Controller
             foreach($request->asset as $key => $item)
             {
                 $dataAset = ExitInterviewAssets::where('id', $request->asset[$key])->first();
-                $dataAset->user_check  = isset($request->user_check[$key]) ? 1 : 0;
+            //  $dataAset->user_check  = isset($request->user_check[$key]) ? 1 : 0;
                 $dataAset->catatan     = $request->catatan[$key];
                 $dataAset->save();
             }

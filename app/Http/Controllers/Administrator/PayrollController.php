@@ -1285,6 +1285,7 @@ class PayrollController extends Controller
                 $params['data']                 = $data;
                 $params['bulan']                = $bulan;
                 $params['tahun']                = $request->tahun;
+
            //     $params['total_earning']        = $payroll->total_earnings;
             //    $params['total_deduction']      = $payroll->total_deduction;
 

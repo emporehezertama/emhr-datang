@@ -132,6 +132,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('ajax/structure-custome-delete', 'AjaxController@structureCustomeDelete')->name('ajax.structure-custome-delete');		
 	Route::post('ajax/structure-custome-edit', 'AjaxController@structureCustomeEdit')->name('ajax.structure-custome-edit');		
 	Route::get('attendance/index', 'AttendanceController@index')->name('attendance.index');
+	Route::post('attendance/index', 'AttendanceController@index')->name('attendance.index');
 	Route::get('attendance/detail-attendance/{SN}', 'AttendanceController@AttendanceList')->name('attendance.detail-attendance');
 	Route::post('ajax/get-year-pay-slip', 'AjaxController@getYearPaySlip')->name('ajax.get-year-pay-slip');		
 	Route::post('ajax/get-year-pay-slip-all', 'AjaxController@getYearPaySlipAll')->name('ajax.get-year-pay-slip-all');	
@@ -150,6 +151,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('attendance-setting', 'AttendanceController@setting')->name('attendance-setting.index');
 	Route::post('attendance-setting-store', 'AttendanceController@settingStore')->name('attendance-setting.store');
 	Route::get('attendance-setting-delete/{id}', 'AttendanceController@settingDelete')->name('attendance-setting.delete');
+	Route::post('import-attendance', 'AttendanceController@importAttendance')->name('import-attendance');
 });
 
 /**

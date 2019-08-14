@@ -9,13 +9,13 @@
             <div class="col-sm-12">
                 <div class="col-sm-12">
                     <div class="row white-box">
-                        <div class="form-group">
+                        <div class="form-group" autocomplete="off">
                             <label class="col-md-12">Filter Date</label>
                             <div class="col-md-3">
-                                <input type="text" id="filter_start" name="filter_start" class="form-control datepicker" id="from" placeholder="Start Date" />
+                                <input type="text" id="filter_start" name="filter_start" class="form-control datepicker" id="from" placeholder="Start Date" autocomplete="off" />
                             </div>
                             <div class="col-md-3">
-                                <input type="text" id="filter_end"  name="filter_end" class="form-control datepicker" id="to" placeholder="End Date">
+                                <input type="text" id="filter_end"  name="filter_end" class="form-control datepicker" id="to" placeholder="End Date" autocomplete="off">
                             </div>
                             <div class="col-md-2">
                                 <div id="filter-dashboard" class="btn btn-xs btn-danger"><i class="fa fa-search" style="font-size: 20px"></i> Submit</div>
@@ -409,7 +409,6 @@
                         }
                         coolor.push('#2cabe3');
 
-                        console.log(coolor);
                         $('#calendar2').fullCalendar({
                             dayClick: function(date, allDay, jsEvent, view) {
                             /*  if (allDay) {

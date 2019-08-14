@@ -120,6 +120,17 @@
                         <div role="tabpanel" class="tab-pane fade" id="department">
                             @if(get_setting('struktur_organisasi') == 3)
                                 <div class="form-group">
+                                    <label class="col-md-12">Branch</label>
+                                    <div class="col-md-6">
+                                        <select class="form-control" name="branch_id" id="branch_id">
+                                        <option value=""> - choose - </option>
+                                        @foreach(cabang() as $item)
+                                        <option value="{{ $item["id"] }}" >{{ $item["name"] }}</option>
+                                        @endforeach
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-12">Position</label>
                                     <div class="col-md-6">
                                         <select class="form-control" name="structure_organization_custom_id">
@@ -815,7 +826,7 @@
             showAutocompleteOnFocus: true
         });
 
-        
+          
         function open_dialog_photo()
         {
             $("input[name='foto']").trigger('click');   

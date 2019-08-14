@@ -107,7 +107,7 @@
 						Save Up To Tens Of Millions Of Rupiah <br />
 						Easy, Practical & Efficient 	
 					</p>
-					<button class="btn_trial_1" onclick="form_free_trial()">Create Free Member</button>
+					<button class="btn_trial_1" onclick="form_free_trial()">Create Member</button>
 				</div>
 
 				<div class="col-md-8 float-right section-1" >
@@ -302,7 +302,7 @@
 							<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
 							{{ csrf_field() }}
 							<div class="bg-form-title">
-								<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 10px !important;" class="py-2 px-0 mx-0 mt-0">Free Register Member</h3>
+								<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 10px !important;" class="py-2 px-0 mx-0 mt-0">Register Member</h3>
 							</div>
 							@if (count($errors) > 0)
 								<div class="alert alert-danger">
@@ -379,7 +379,7 @@
 								</div> -->
 							</div>
 							<div class="form-group text-center">
-								<button class="btn_trial_2" type="submit">Create Free Member</button>
+								<button class="btn_trial_2" type="submit">Create Member</button>
 							</div>
 						</form>
 
