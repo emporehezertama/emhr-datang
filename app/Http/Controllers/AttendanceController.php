@@ -33,36 +33,18 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        getAttendanceDevice();
-
         $user = \Auth::user();
 
-        \Session::forget('filter_start',  request()->filter_start);
-        \Session::forget('filter_end',  request()->filter_end);
-        \Session::forget('nama_nik',  request()->nama_nik);
-        \Session::forget('id',  request()->id);
-        \Session::forget('branch',  request()->branch);
-
-        $start       = "";
-        $end         = "";
-        $nama_nik    = "";
-        $id          = "";
-        $branch      = "";       
-
-        $data     = AbsensiItem::select('absensi_item.*');
-
-        if(request()->filter_start || request()->filter_end || request()->branch || request()->id)
+        if(request()->filter_start || request()->filter_end || request()->branch || request()->name)
         {
             \Session::put('filter_start', request()->filter_start);
             \Session::put('filter_end', request()->filter_end);
-            \Session::put('nama_nik', request()->nama_nik);
-            \Session::put('id', request()->id);
-            \Session::put('branch', request()->branch);
+            \Session::put('name', request()->name);
         }
+
         $filter_start       = \Session::get('filter_start');
         $filter_end         = \Session::get('filter_end');
-        $nama_nik           = \Session::get('nama_nik');
-        $id                 = \Session::get('id');
+        $name               = \Session::get('name');
         $branch             = \Session::get('branch');
 
         $start = str_replace('/', '-', $filter_start);
@@ -81,43 +63,38 @@ class AttendanceController extends Controller
             if(!empty($branch)){
                 $branch = $branch;
             }
-
-            
         }
-
         if(request()->import == 1){
-        /*    $filter_start       = \Session::get('filter_start');
-            $filter_end         = \Session::get('filter_end');
-            $nama_nik           = \Session::get('nama_nik');
-            $id                 = \Session::get('id');
-            $branch             = \Session::get('branch');
-    
-            $start = str_replace('/', '-', $filter_start);
-            $end = str_replace('/', '-', $filter_end);
-            
-            $this->importAttendance($start, $end, $branch, $id);    */
-
             $name_excel = 'Attendance'.date('YmdHis');
-            return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
+            return (new AttendanceExport($start, $end, $branch))->download($name_excel.'.xlsx');
         }
 
-        
         if(request()->reset == 1)
         { 
             \Session::forget('filter_start');
             \Session::forget('filter_end');
-            \Session::forget('nama_nik');
-            \Session::forget('id');
+            \Session::forget('name');
             \Session::forget('branch');
-
             return redirect()->route('attendance.index');
         }
 
-        $params['data'] = dataAttendance($start, $end, $branch, $id);
-    //    $params['datas'] = \App\Models\AbsensiItem::where('date', '2019-08-01')->where('user_id', '15734')->get();
+        $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+                                    ->orderBy('absensi_item.id', 'DESC');
+        if(!empty($name))
+        {
+            $name = explode('-', $name);
+            $params['data'] = $params['data']->where(function($table) use($name){
+                                $table->where('users.name', 'LIKE', '%'. ltrim(@$name[1]) .'%')
+                                        ->orWhere('users.nik', 'LIKE', '%'. rtrim(@$name[0]) .'%');
+                              });
+        }
+        $params['data'] = $params['data']->paginate(100);
 
-    //dd(json_encode($params['datas']));
-   // dd(json_encode($params['datas']), json_encode($params['data']));
+        //$params['data'] = dataAttendance($start, $end, $branch, $id);
+        //$params['datas'] = \App\Models\AbsensiItem::where('date', '2019-08-01')->where('user_id', '15734')->get();
+
+        //dd(json_encode($params['datas']));
+        //dd(json_encode($params['datas']), json_encode($params['data']));
 
         return view('attendance.index')->with($params);
     }

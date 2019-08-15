@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <select class="form-control" name="position_id">
+                            <select class="form-control form-control-line" name="position_id">
                                 <option value=""> - choose Position - </option>
                                 @foreach($position as $item)
                                 <option value="{{ $item->id }}" {{ $item->id== request()->position_id ? 'selected' : '' }}>{{ $item->name }}</option>
