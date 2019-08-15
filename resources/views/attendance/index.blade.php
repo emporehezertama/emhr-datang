@@ -5,7 +5,7 @@
 @section('content')        
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row bg-title">
+        <div class="row bg-title" style="overflow: inherit;">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Manage Attendance</h4> 
             </div>
@@ -15,32 +15,35 @@
                     <input type="hidden" name="action" value="view">
                     <input type="hidden" name="reset" value="0">
                     <input type="hidden" name="import" value="0">
+
                     <div class="pull-right">
+                        <div class="btn-group m-l-10 m-r-10 pull-right">
+                            <a href="javascript:void(0)" aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-sm dropdown-toggle">Action 
+                                <i class="fa fa-gear"></i>
+                            </a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a href="javascript:void(0)" onclick="reset_filter()"><i class="fa fa-refresh"></i> Reset Filter </a></li>
+                                <li><a href="javascript:void(0)" onclick="eksportAttendance()"><i class="fa fa-download"></i> Eksport </a></li>
+                            </ul>
+                        </div>
                         <button id="filter_view" class="btn btn-default btn-sm btn-outline"> <i class="fa fa-search-plus"></i></button>
-                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light " type="button" href="javascript:void(0)" onclick="reset_filter()">Reset Filter 
-                            <i class="fa fa-refresh"></i>
-                        </button>
-                        <!--div aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light " onclick="importAttendance()">Import Data -->
-                        <button aria-expanded="false" data-toggle="dropdown" class="btn btn-sm btn-info dropdown-toggle waves-effect waves-light "  type="button" href="javascript:void(0)"  onclick="importAttendance()">Eksport Data 
-                            <i class="fa fa-download"></i>
-                        </button>
                     </div>
                     <div class="col-md-2 pull-right">
                         <select name="branch" class="form-control form-control-line" id="branch">
-                            <option value="" selected>- Pilih Cabang -</option>
+                            <option value="" selected>- Branch -</option>
                             @foreach(cabang() as $item)
-                                <option {{ $item->id == request()->branch ? 'selected' : '' }} value="{{$item->id}}">{{$item->name}}</option>
+                                <option {{ $item->id == \Session::get('branch') ? 'selected' : '' }} value="{{$item->id}}">{{$item->name}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-md-2 pull-right">
-                        <input type="text"  name="filter_end" class="form-control datepicker form-control-line" id="filter_end" placeholder="End Date" value="{{ request()->filter_end }}">
+                        <input type="text"  name="filter_end" class="form-control datepicker form-control-line" id="filter_end" placeholder="End Date" value="{{ \Session::get('filter_end') }}">
                     </div> 
                     <div class="col-md-2 pull-right">
-                        <input type="text" name="filter_start" class="form-control datepicker form-control-line" id="filter_start" placeholder="Start Date" value="{{ request()->filter_start }}" />
+                        <input type="text" name="filter_start" class="form-control datepicker form-control-line" id="filter_start" placeholder="Start Date" value="{{ \Session::get('filter_start') }}" />
                     </div>
                     <div class="col-md-3 pull-right">
-                        <input type="text" name="name" id="nama_nik" class="form-control form-control-line autocomplete-karyawan" placeholder="Nik / Name" value="{{request()->name}}">
+                        <input type="text" name="name" id="nama_nik" class="form-control form-control-line autocomplete-karyawan" placeholder="Nik / Name" value="{{ \Session::get('name')}}">
                     </div>
                     <div class="clearfix"></div>
                 </form>
@@ -163,8 +166,8 @@
         $("#filter-form").submit();
     }
 
-    function importAttendance(){
-        $("#filter-form input.form-control, #filter-form select").val("");
+    function eksportAttendance(){
+        //$("#filter-form input.form-control, #filter-form select").val("");
         $("input[name='import']").val(1);
         $("#filter-form").submit();
 

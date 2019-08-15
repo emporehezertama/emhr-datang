@@ -53,7 +53,7 @@
                     <button id="filter_view" class="btn btn-default btn-sm pull-right btn-outline"> <i class="fa fa-search-plus"></i></button>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <select class="form-control" name="division_id">
+                            <select class="form-control form-control-line" name="division_id">
                                 <option value=""> - choose Division - </option>
                                 @foreach($division as $item)
                                 <option value="{{ $item->id }}" {{ $item->id== request()->division_id ? 'selected' : '' }}>{{ $item->name }}</option>

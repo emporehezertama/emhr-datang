@@ -14,28 +14,17 @@ class AttendanceExport implements FromView
     use Exportable;
 
     protected $data;
-
-    protected $title;
     
-//    public function __construct($params)
-    public function __construct($start, $end, $branch, $id)
+    public function __construct($data)
     {
-        $this->start = $start;
-        $this->end = $end;
-        $this->branch = $branch;
-        $this->id = $id;
+        $this->data = $data;
     }
 
     public function view(): View
     {
-        $start = $this->start;
-        $end = $this->end;
-        $branch = $this->branch;
-        $id = $this->id;
         return view('attendance.export', [
-            'params'  => dataAttendance($start, $end, $branch, $id)
+            'data'  => $this->data->get()
         ]);
         
     }
-
 }

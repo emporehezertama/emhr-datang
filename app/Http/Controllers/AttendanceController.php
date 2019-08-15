@@ -55,18 +55,6 @@ class AttendanceController extends Controller
                 $start = str_replace('/', '-', $filter_start);
                 $end = str_replace('/', '-', $filter_end);
             }
-
-            if(!empty($id)){
-                $id = $id;
-            }
-
-            if(!empty($branch)){
-                $branch = $branch;
-            }
-        }
-        if(request()->import == 1){
-            $name_excel = 'Attendance'.date('YmdHis');
-            return (new AttendanceExport($start, $end, $branch))->download($name_excel.'.xlsx');
         }
 
         if(request()->reset == 1)
@@ -79,6 +67,8 @@ class AttendanceController extends Controller
         }
 
         $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+                                    ->whereIn('users.access_id', ['1', '2'])
+                                    ->whereNotIn('absensi_item.date', ['1970-01-01'])
                                     ->orderBy('absensi_item.id', 'DESC');
         if(!empty($name))
         {
@@ -88,13 +78,21 @@ class AttendanceController extends Controller
                                         ->orWhere('users.nik', 'LIKE', '%'. rtrim(@$name[0]) .'%');
                               });
         }
+        if(!empty($filter_start) and !empty($filter_end))
+        {
+            $params['data'] = $params['data']->whereBetween('absensi_item.date', [$start, $end]);
+        }
+        if(!empty($branch))
+        {
+            $params['data'] = $params['data']->where('users.branch_id', $branch);
+        }
+
+        if(request()->import == 1)
+        {
+            return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
+        }
+
         $params['data'] = $params['data']->paginate(100);
-
-        //$params['data'] = dataAttendance($start, $end, $branch, $id);
-        //$params['datas'] = \App\Models\AbsensiItem::where('date', '2019-08-01')->where('user_id', '15734')->get();
-
-        //dd(json_encode($params['datas']));
-        //dd(json_encode($params['datas']), json_encode($params['data']));
 
         return view('attendance.index')->with($params);
     }
