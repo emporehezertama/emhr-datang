@@ -146,7 +146,7 @@
     </div>
 </div>
 @section('js')
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRgq8t2LVvUmdem_fxgOY-N7OQHmW1OzQ"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"
     async defer></script>
 
 <script type="text/javascript">

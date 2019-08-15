@@ -78,30 +78,31 @@
                                 </thead>
                                 <tbody class="no-padding-td">
                                     @if(isset($data->absensiItem))
-                                        @foreach(attendanceKaryawan($data->id) as $item)
+                                        <!--foreach(attendanceKaryawan($data->id) as $item)-->
+                                        @foreach($data->absensiItem as $item)
                                         <tr>
-                                            <td>{{ $item[0]['date'] }}</td>
-                                            <td>{{ $item[0]['timetable'] }}</td>
+                                            <td>{{ $item->date }}</td>
+                                            <td>{{ $item->timetable }}</td>
                                             <td>
-                                                @if(!empty($item[0]['long']) || !empty($item[0]['lat']) || !empty($item[0]['pic'])) 
-                                                    <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item[0]['date']))?> <?=$item[0]['clock_in']?>" data-long="<?=$item[0]['long']?>" data-lat="<?=$item[0]['lat']?>" data-pic="<?=asset('upload/attendance/'.$item[0]['pic'])?>" data-time="<?=$item[0]['clock_in']?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item[0]['clock_in'] }}</a> 
+                                                @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic)) 
+                                                    <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
                                                     <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
                                                 @else
-                                                    {{ $item[0]['clock_in'] }}
+                                                    {{ $item->clock_in }}
                                                 @endif
                                             </td>
                                             <td>
-                                                @if(!empty($item[0]['long_out']) || !empty($item[0]['lat_out']) || !empty($item[0]['pic_out']))
+                                                @if(!empty($item->long_out) || !empty($item->lat_out) || !empty($item->pic_out))
                                                     
-                                                    <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item[0]['date']))?> <?=$item[0]['clock_out']?>" data-long="<?=$item[0]['long_out']?>" data-lat="<?=$item[0]['lat_out']?>" data-pic="<?=asset('upload/attendance/'.$item[0]['pic_out'])?>" data-time="<?=$item[0]['clock_out']?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item[0]['clock_out'] }}</a>
+                                                    <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a>
                                                     <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
                                                 @else
-                                                    {{ $item[0]['clock_out'] }}
+                                                    {{ $item->clock_out }}
                                                 @endif
                                             </td>
-                                            <td>{{ $item[0]['late'] }}</td>   
-                                            <td>{{ $item[0]['early'] }}</td>    
-                                            <td>{{ $item[0]['work_time'] }}</td> 
+                                            <td>{{ $item->late }}</td>   
+                                            <td>{{ $item->early }}</td>    
+                                            <td>{{ $item->work_time }}</td> 
                                         </tr>
                                         @endforeach
                                     @endif
@@ -1166,7 +1167,11 @@
             bootbox.alert('<img src="{{ asset('storage/fotoktp/') }}/'+ img +'" style = \'width: 100%;\' />');
         }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"></script>
+    {{-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"></script> --}}
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"
+    async defer></script>
+    
     <script type="text/javascript">
 
         function detail_attendance(el)
