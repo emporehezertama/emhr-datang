@@ -277,7 +277,7 @@ class KaryawanController extends Controller
             {
                 $user               = new User();
                 $user->nik          = $item->nik;
-                $user->password         = bcrypt('password'); // set default password
+                $user->password         = bcrypt('12345'); // set default password
             }
 
             $user->name         = empty($item->name) ? $user->name : $item->name;
