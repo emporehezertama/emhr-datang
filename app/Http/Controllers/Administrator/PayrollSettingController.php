@@ -10,6 +10,7 @@ use App\Models\PayrollOthers;
 use App\Models\PayrollEarnings;
 use App\Models\PayrollDeductions;
 use App\Models\Setting;
+use App\Models\PayrollNpwp;
 
 class PayrollSettingController extends Controller
 {   
@@ -38,6 +39,7 @@ class PayrollSettingController extends Controller
         $params['ptkp']     = PayrollPtkp::all();
         $params['pph']      = PayrollPPH::all();
         $params['others']   = PayrollOthers::all();
+        $params['npwp']   = PayrollNpwp::all();
 
         return view('administrator.payroll-setting.index')->with($params);
     }
@@ -88,6 +90,22 @@ class PayrollSettingController extends Controller
     public function updateOthers(Request $request, $id)
     {
         $data           = PayrollOthers::where('id', $id)->first();
+        $data->label    = $request->label;
+        $data->value    = $request->value;
+        $data->save();
+
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'Data berhasil disimpan');
+    }
+
+    public function editNpwp($id)
+    {
+        $params['data'] = PayrollNpwp::where('id', $id)->first();
+
+        return view('administrator.payroll-setting.edit-npwp')->with($params);
+    }
+    public function updateNpwp(Request $request, $id)
+    {
+        $data           = PayrollNpwp::where('id', $id)->first();
         $data->label    = $request->label;
         $data->value    = $request->value;
         $data->save();

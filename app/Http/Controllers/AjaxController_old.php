@@ -385,10 +385,8 @@ class AjaxController extends Controller
         {
             //$params = \App\Payroll::select(\DB::raw('month(created_at) as bulan'))->whereYear('created_at', '=', $request->tahun)->where('user_id', $request->user_id)->get();
 
-            //$params = User::select(\DB::raw('month(join_date) as bulan'))->whereYear('join_date', '=', $request->tahun)->where('id', $request->user_id)->first();
+            $params = User::select(\DB::raw('month(join_date) as bulan'))->whereYear('join_date', '=', $request->tahun)->where('id', $request->user_id)->first();
 
-	/*
- 	    $params = User::select(\DB::raw('month(join_date) as bulan'))->where('id', $request->user_id)->first();
             $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
             
             $bulan = [];
@@ -400,24 +398,8 @@ class AjaxController extends Controller
                     $bulan[$b]['name'] = $bulanArray[$b];
                 }    
             }
-*/
-	   $bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
-            
-            $bulan = [];
-            if($request->tahun < date('Y')){
-                for($b = 1; $b <= 12; $b++)
-                {
-                    $bulan[$b]['id'] = $b;
-                    $bulan[$b]['name'] = $bulanArray[$b];
-                } 
-            }else if($request->tahun == date('Y')){
-                for($b = 1; $b <= date('m'); $b++)
-                {
-                    $bulan[$b]['id'] = $b;
-                    $bulan[$b]['name'] = $bulanArray[$b];
-                }  
-            }
         }
+
         return response()->json($bulan);
     }
 
@@ -439,8 +421,8 @@ class AjaxController extends Controller
             $request->salary    = replace_idr($request->salary);
             $request->bonus     = replace_idr($request->bonus);
 
-            // $bpjs_ketenagakerjaan_persen = get_setting('bpjs_jkk_company') + get_setting('bpjs_jkm_company');
-            // $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
+            $bpjs_ketenagakerjaan_persen = get_setting('bpjs_jkk_company') + get_setting('bpjs_jkm_company');
+            $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
             $bpjs_ketenagakerjaan2_persen = get_setting('bpjs_jaminan_jht_employee');
             $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
@@ -453,62 +435,21 @@ class AjaxController extends Controller
                 }
             }
             // end custom
-            //JHT COMPANY
-            $bpjs_jht_company_persen = get_setting('bpjs_jht_company');
-            $bpjs_jht_company = ($request->salary * $bpjs_jht_company_persen / 100);
-             // start custom
-            if($request->edit_bpjs_jht_company != 0 )
-            {
-                if(replace_idr($request->bpjs_jht_company) != $bpjs_jht_company)
-                {
-                    $bpjs_jht_company = replace_idr($request->bpjs_jht_company);                    
-                }
-            }
-            // end custom
-            //JP EMPLOYEE 
-            $bpjs_pensiun2        = 0;
-            $bpjs_pensiun2_persen = get_setting('bpjs_jaminan_jp_employee');
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun2     = ($request->salary * $bpjs_pensiun2_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
-            }
-            // start custom
-            if($request->edit_edit_bpjs_pensiun_employee != 0)
-            {
-                if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
-                {
-                    $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
-                }
-            }
-            // end custom
-            //JP COMPANY
-            $bpjs_pensiun_company_persen = get_setting('bpjs_pensiun_company');
-            $bpjs_pensiun_company = 0;
-            
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun_company     = ($request->salary * $bpjs_pensiun_company_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun_company     = ($bpjs_pensiunan_batas * $bpjs_pensiun_company_persen / 100);
-            }
-             // start custom
-            if($request->edit_bpjs_pensiun_company != 0 )
-            {
-                if(replace_idr($request->bpjs_pensiun_company) != $bpjs_pensiun_company)
-                {
-                    $bpjs_pensiun_company = replace_idr($request->bpjs_pensiun_company);                    
-                }
-            }
-            // end custom
-            //KESEHATAN EMPLOYEE
+
+            $bpjs_kesehatan         = 0;
             $bpjs_kesehatan2        = 0;
-            $bpjs_kesehatan2_persen  = get_setting('bpjs_kesehatan_employee');
+            $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
+            $bpjs_kesehatan2_persen = 1;
+
+            if($request->salary <= $bpjs_kesehatan_batas)
+            {
+                $bpjs_kesehatan     = ($request->salary * $bpjs_kesehatan_persen / 100); 
+            }
+            else 
+            {
+                $bpjs_kesehatan     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_persen / 100);
+            }
+
             if($request->salary <= $bpjs_kesehatan_batas)
             {
                 $bpjs_kesehatan2     = ($request->salary * $bpjs_kesehatan2_persen / 100); 
@@ -527,57 +468,41 @@ class AjaxController extends Controller
                 }
             }
             // end custom
-            //KESEHATAN COMPANY
-            $bpjs_kesehatan_company = 0;
-            $bpjs_kesehatan_company_persen = get_setting('bpjs_kesehatan_company');
-            if($request->salary <= $bpjs_kesehatan_batas)
+
+            $bpjs_pensiun         = 0;
+            $bpjs_pensiun2        = 0;
+            $bpjs_pensiun_persen  = 2;
+            $bpjs_pensiun2_persen = get_setting('bpjs_jaminan_jp_employee');
+
+            if($request->salary <= $bpjs_pensiunan_batas)
             {
-                $bpjs_kesehatan_company     = ($request->salary * $bpjs_kesehatan_company_persen / 100); 
+                $bpjs_pensiun     = ($request->salary * $bpjs_pensiun_persen / 100); 
             }
             else
             {
-                $bpjs_kesehatan_company     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_company_persen / 100);
+                $bpjs_pensiun     = ($bpjs_pensiunan_batas * $bpjs_pensiun_persen / 100);
             }
-            // start custom
-            if($request->edit_bpjs_kesehatan_company !=0 )
+
+            if($request->salary <= $bpjs_pensiunan_batas)
             {
-                if(replace_idr($request->bpjs_kesehatan_company) != $bpjs_kesehatan_company)
-                {
-                    $bpjs_kesehatan_company = replace_idr($request->bpjs_kesehatan_company);                    
-                }
+                $bpjs_pensiun2     = ($request->salary * $bpjs_pensiun2_persen / 100); 
             }
-            // end custom
-            //JKK COMPANY
-            $bpjs_jkk_company_persen = get_setting('bpjs_jkk_company');
-            $bpjs_jkk_company = ($request->salary * $bpjs_jkk_company_persen / 100);
+            else
+            {
+                $bpjs_pensiun2     = ($bpjs_pensiunan_batas * $bpjs_pensiun2_persen / 100);
+            }
 
             // start custom
-            if($request->edit_bpjs_jkk_company != 0 )
+            if($request->edit_edit_bpjs_pensiun_employee != 0)
             {
-                if(replace_idr($request->bpjs_jkk_company) != $bpjs_jkk_company)
+                if(replace_idr($request->bpjs_pensiun_employee) != $bpjs_pensiun2)
                 {
-                    $bpjs_jkk_company = replace_idr($request->bpjs_jkk_company);                    
+                    $bpjs_pensiun2 = replace_idr($request->bpjs_pensiun_employee);
                 }
             }
             // end custom
 
-            //JKM COMPANY
-            $bpjs_jkm_company_persen = get_setting('bpjs_jkm_company');
-            $bpjs_jkm_company = ($request->salary * $bpjs_jkm_company_persen / 100);
-            // start custom
-            if($request->edit_bpjs_jkm_company != 0 )
-            {
-                if(replace_idr($request->bpjs_jkm_company) != $bpjs_jkm_company)
-                {
-                    $bpjs_jkm_company = replace_idr($request->bpjs_jkm_company);                    
-                }
-            }
-            // end custom
-            $bpjstotalearning = $bpjs_jkk_company + $bpjs_jkm_company + $bpjs_jht_company + $bpjs_pensiun_company + $bpjs_kesehatan_company;
-            //$bpjspenambahan = $bpjstotalearning;
-            //$bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2 +$bpjs_kesehatan2 + $bpjstotalearning;
-
-            $bpjspenambahan = $bpjs_jkk_company + $bpjs_jkm_company+$bpjs_kesehatan_company;
+            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
             $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
 
             $earnings = 0;
@@ -602,10 +527,7 @@ class AjaxController extends Controller
  
             $total_deduction = ($bpjspengurangan * 12) + ($burden_allow * 12);
             
-            //$net_yearly_income          = $gross_income - $total_deduction;
-            $net_yearly_val          = $gross_income - $total_deduction;
-            $net_yearly_ratusan      = substr($net_yearly_val, -3);
-            $net_yearly_income       = $net_yearly_val - $net_yearly_ratusan;
+            $net_yearly_income          = $gross_income - $total_deduction;
 
             $untaxable_income = 0;
 
@@ -696,25 +618,17 @@ class AjaxController extends Controller
                 }
             }
             
-            $thp = ($request->salary + $request->bonus + $earnings + $bpjstotalearning) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax + $bpjstotalearning);
+            $thp = ($request->salary + $request->bonus + $earnings) - ($deductions + $bpjs_ketenagakerjaan2 + $bpjs_kesehatan2 + $bpjs_pensiun2 + $monthly_income_tax);
 
             $params['untaxable_income']     = number_format($untaxable_income);
             $params['gross_income']         = number_format($gross_income); 
             $params['burden_allow']         = number_format($burden_allow);
-            //$params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
+            $params['bpjs_ketenagakerjaan'] = number_format($bpjs_ketenagakerjaan);
             $params['bpjs_ketenagakerjaan2'] = number_format($bpjs_ketenagakerjaan2);
-            //$params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
+            $params['bpjs_kesehatan']         = number_format($bpjs_kesehatan);
             $params['bpjs_kesehatan2']        = number_format($bpjs_kesehatan2);
-            //$params['bpjs_pensiun']         = number_format($bpjs_pensiun);
+            $params['bpjs_pensiun']         = number_format($bpjs_pensiun);
             $params['bpjs_pensiun2']        = number_format($bpjs_pensiun2);
-            
-            $params['bpjs_jkk_company']         = number_format($bpjs_jkk_company);
-            $params['bpjs_jkm_company']         = number_format($bpjs_jkm_company);
-            $params['bpjs_jht_company']         = number_format($bpjs_jht_company);
-            $params['bpjs_pensiun_company']     = number_format($bpjs_pensiun_company);
-            $params['bpjs_kesehatan_company']   = number_format($bpjs_kesehatan_company);
-            $params['bpjstotalearning']         = number_format($bpjstotalearning);
-
             $params['total_deduction']      = number_format($total_deduction);
             $params['net_yearly_income']    = number_format($net_yearly_income);
             $params['untaxable_income']     = number_format($untaxable_income);
@@ -724,7 +638,7 @@ class AjaxController extends Controller
             $params['income_tax_calculation_25']    = number_format($income_tax_calculation_25); 
             $params['income_tax_calculation_30']    = number_format($income_tax_calculation_30); 
             $params['yearly_income_tax']            = number_format($yearly_income_tax);
-            $params['gross_income_per_month']       = number_format($gross_income_per_month);
+            $params['gross_income_per_month']                 = number_format($gross_income_per_month);
             $params['less']                         = number_format($less);
 
             $non_bonus = $this->getCalculatePayrollNonBonus($request);
@@ -760,8 +674,8 @@ class AjaxController extends Controller
             $request->salary    = replace_idr($request->salary);
             $request->bonus     = replace_idr($request->bonus);
 
-            // $bpjs_ketenagakerjaan_persen = get_setting('bpjs_jkk_company') + get_setting('bpjs_jkm_company');
-            // $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
+            $bpjs_ketenagakerjaan_persen = get_setting('bpjs_jkk_company') + get_setting('bpjs_jkm_company');
+            $bpjs_ketenagakerjaan = ($request->salary * $bpjs_ketenagakerjaan_persen / 100);
             $bpjs_ketenagakerjaan2_persen = get_setting('bpjs_jaminan_jht_employee');
             $bpjs_ketenagakerjaan2 = ($request->salary * $bpjs_ketenagakerjaan2_persen / 100);
 
@@ -775,22 +689,52 @@ class AjaxController extends Controller
             }
             // end custom
 
-            //JHT COMPANY
-            $bpjs_jht_company_persen = get_setting('bpjs_jht_company');
-            $bpjs_jht_company = ($request->salary * $bpjs_jht_company_persen / 100);
-             // start custom
-            if($request->edit_bpjs_jht_company != 0 )
+            $bpjs_kesehatan         = 0;
+            $bpjs_kesehatan2        = 0;
+            $bpjs_kesehatan_persen  = get_setting('bpjs_kesehatan_company');
+            $bpjs_kesehatan2_persen = 1;
+
+            if($request->salary <= $bpjs_kesehatan_batas)
             {
-                if(replace_idr($request->bpjs_jht_company) != $bpjs_jht_company)
+                $bpjs_kesehatan     = ($request->salary * $bpjs_kesehatan_persen / 100); 
+            }
+            else 
+            {
+                $bpjs_kesehatan     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_persen / 100);
+            }
+
+            if($request->salary <= $bpjs_kesehatan_batas)
+            {
+                $bpjs_kesehatan2     = ($request->salary * $bpjs_kesehatan2_persen / 100); 
+            }
+            else
+            {
+                $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
+            }
+
+            // start custom
+            if($request->edit_bpjs_kesehatan_employee !=0 )
+            {
+                if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
                 {
-                    $bpjs_jht_company = replace_idr($request->bpjs_jht_company);                    
+                    $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
                 }
             }
             // end custom
 
-            //JP EMPLOYEE 
+            $bpjs_pensiun         = 0;
             $bpjs_pensiun2        = 0;
+            $bpjs_pensiun_persen  = 2;
             $bpjs_pensiun2_persen = get_setting('bpjs_jaminan_jp_employee');
+
+            if($request->salary <= $bpjs_pensiunan_batas)
+            {
+                $bpjs_pensiun     = ($request->salary * $bpjs_pensiun_persen / 100); 
+            }
+            else
+            {
+                $bpjs_pensiun     = ($bpjs_pensiunan_batas * $bpjs_pensiun_persen / 100);
+            }
 
             if($request->salary <= $bpjs_pensiunan_batas)
             {
@@ -811,104 +755,7 @@ class AjaxController extends Controller
             }
             // end custom
 
-            //JP COMPANY
-            $bpjs_pensiun_company_persen = get_setting('bpjs_pensiun_company');
-            $bpjs_pensiun_company = 0;
-            
-            if($request->salary <= $bpjs_pensiunan_batas)
-            {
-                $bpjs_pensiun_company     = ($request->salary * $bpjs_pensiun_company_persen / 100); 
-            }
-            else
-            {
-                $bpjs_pensiun_company     = ($bpjs_pensiunan_batas * $bpjs_pensiun_company_persen / 100);
-            }
-             // start custom
-            if($request->edit_bpjs_pensiun_company != 0 )
-            {
-                if(replace_idr($request->bpjs_pensiun_company) != $bpjs_pensiun_company)
-                {
-                    $bpjs_pensiun_company = replace_idr($request->bpjs_pensiun_company);                    
-                }
-            }
-            // end custom
-
-            //KESEHATAN EMPLOYEE
-            $bpjs_kesehatan2        = 0;
-            $bpjs_kesehatan2_persen  = get_setting('bpjs_kesehatan_employee');
-            if($request->salary <= $bpjs_kesehatan_batas)
-            {
-                $bpjs_kesehatan2     = ($request->salary * $bpjs_kesehatan2_persen / 100); 
-            }
-            else
-            {
-                $bpjs_kesehatan2     = ($bpjs_kesehatan_batas * $bpjs_kesehatan2_persen / 100);
-            }
-
-            // start custom
-            if($request->edit_bpjs_kesehatan_employee !=0 )
-            {
-                if(replace_idr($request->bpjs_kesehatan_employee) != $bpjs_kesehatan2)
-                {
-                    $bpjs_kesehatan2 = replace_idr($request->bpjs_kesehatan_employee);                    
-                }
-            }
-            // end custom
-
-             //KESEHATAN COMPANY
-             $bpjs_kesehatan_company = 0;
-             $bpjs_kesehatan_company_persen = get_setting('bpjs_kesehatan_company');
-             if($request->salary <= $bpjs_kesehatan_batas)
-             {
-                 $bpjs_kesehatan_company     = ($request->salary * $bpjs_kesehatan_company_persen / 100); 
-             }
-             else
-             {
-                 $bpjs_kesehatan_company     = ($bpjs_kesehatan_batas * $bpjs_kesehatan_company_persen / 100);
-             }
- 
-             // start custom
-             if($request->edit_bpjs_kesehatan_company !=0 )
-             {
-                 if(replace_idr($request->bpjs_kesehatan_company) != $bpjs_kesehatan_company)
-                 {
-                     $bpjs_kesehatan_company = replace_idr($request->bpjs_kesehatan_company);                    
-                 }
-             }
-             // end custom
- 
-             //JKK COMPANY
-             $bpjs_jkk_company_persen = get_setting('bpjs_jkk_company');
-             $bpjs_jkk_company = ($request->salary * $bpjs_jkk_company_persen / 100);
- 
-              // start custom
-             if($request->edit_bpjs_jkk_company != 0 )
-             {
-                 if(replace_idr($request->bpjs_jkk_company) != $bpjs_jkk_company)
-                 {
-                     $bpjs_jkk_company = replace_idr($request->bpjs_jkk_company);                    
-                 }
-             }
-             // end custom
- 
-             //JKM COMPANY
-             $bpjs_jkm_company_persen = get_setting('bpjs_jkm_company');
-             $bpjs_jkm_company = ($request->salary * $bpjs_jkm_company_persen / 100);
- 
-              // start custom
-             if($request->edit_bpjs_jkm_company != 0 )
-             {
-                 if(replace_idr($request->bpjs_jkm_company) != $bpjs_jkm_company)
-                 {
-                     $bpjs_jkm_company = replace_idr($request->bpjs_jkm_company);                    
-                 }
-             }
-             // end custom
-             $bpjstotalearning = $bpjs_jkk_company + $bpjs_jkm_company + $bpjs_jht_company + $bpjs_pensiun_company + $bpjs_kesehatan_company;
-             //$bpjspenambahan = $bpjstotalearning;
-             //$bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2 +$bpjs_kesehatan2 + $bpjstotalearning;
-             
-             $bpjspenambahan = $bpjs_jkk_company + $bpjs_jkm_company+$bpjs_kesehatan_company;
+            $bpjspenambahan = $bpjs_ketenagakerjaan + $bpjs_kesehatan;
             $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
 
             $earnings = 0;
@@ -933,10 +780,7 @@ class AjaxController extends Controller
  
             $total_deduction = ($bpjspengurangan * 12) + ($burden_allow * 12);
             
-            //$net_yearly_income          = $gross_income - $total_deduction;
-            $net_yearly_val          = $gross_income - $total_deduction;
-            $net_yearly_ratusan      = substr($net_yearly_val, -3);
-            $net_yearly_income       = $net_yearly_val - $net_yearly_ratusan;
+            $net_yearly_income          = $gross_income - $total_deduction;
 
             $untaxable_income = 0;
 
@@ -1115,12 +959,8 @@ class AjaxController extends Controller
  
             $total_deduction = ($bpjspengurangan * 12) + ($burden_allow*12);
 
-             //$net_yearly_income          = $gross_income - $total_deduction;
-             $net_yearly_val          = $gross_income - $total_deduction;
-             $net_yearly_ratusan      = substr($net_yearly_val, -3);
-             $net_yearly_income       = $net_yearly_val - $net_yearly_ratusan;
- 
- 
+            $net_yearly_income          = $gross_income - $total_deduction;
+
             $untaxable_income = 0;
 
             $ptkp = PayrollPtkp::where('id', 1)->first();
@@ -1192,7 +1032,7 @@ class AjaxController extends Controller
             }
 
             $yearly_income_tax = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
-            $monthly_income_tax             = $yearly_income_tax / 12;
+            $monthly_income_tax = $yearly_income_tax / 12;
             $gross_income_per_month       = $gross_income / 12;
 
             $less               = $bpjspengurangan + $monthly_income_tax; 

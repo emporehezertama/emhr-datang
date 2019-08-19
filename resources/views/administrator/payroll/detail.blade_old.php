@@ -96,39 +96,14 @@
                                     <td style="vertical-align: middle;">Bonus / THR</td>
                                     <td><input type="text" class="form-control price_format calculate" {{ $is_lock ? 'disabled' : '' }} name="bonus" value="{{ $data->bonus }}" placeholder="Rp. " /></td> 
                                 </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Jaminan Kecelakaan Kerja (JKK) (Company)</td>
-                                    <td>
-                                        <input type="text" name="bpjs_jkk_company" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_jkk_company) }}"  class="form-control bpjs_jkk_company" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Jaminan Kematian (JKM) (Company)</td>
-                                    <td>
-                                        <input type="text" name="bpjs_jkm_company" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_jkm_company) }}"  class="form-control bpjs_jkm_company" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Company)</td>
-                                    <td>
-                                        <input type="text" name="bpjs_jht_company" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_jht_company) }}"  class="form-control bpjs_jht_company" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Pensiun (Company)</td>
-                                    <td>
-                                        <input type="text" name="bpjs_pensiun_company" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_pensiun_company) }}"  class="form-control bpjs_pensiun_company" />
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td style="vertical-align: middle;">BPJS Kesehatan (Company)</td>
-                                    <td>
-                                        <input type="text" name="bpjs_kesehatan_company" {{ $is_lock ? 'disabled' : '' }} value="{{ number_format($data->bpjs_kesehatan_company) }}"  class="form-control bpjs_kesehatan_company" />
-                                    </td>
-                                </tr>
                                 @foreach(get_earnings() as $item)
-                                   @php($earning = getEarningEmployeeDataHistory($item->id, $data->id))
+                                    @if(isset($update_history))
+                                        @php($earning = getEarningEmployee($item->id, $data->id, 'history'))
+                                    @else
+                                        @php($earning = getEarningEmployee($item->id, $data->id))
+                                    @endif
+
                                     @if($earning)
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $earning->payrollEarnings->title }}</td>
@@ -172,8 +147,6 @@
                         <h3>Deduction</h3>
                         <table class="table table-stripped" id="list_deductions">
                             <thead>
-                                <input type="hidden" name="burden_allow"  value="{{ number_format($data->burden_allow) }}" class="form-control burden_allow" />
-                                <input type="hidden" name="yearly_income_tax"  value="{{ number_format($data->yearly_income_tax) }}" class="form-control yearly_income_tax" />
                                 <tr>
                                     <td style="vertical-align: middle;">BPJS Jaminan Hari Tua (JHT) (Employee)</td>
                                     <td colspan="2">
@@ -198,16 +171,12 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;">Total BPJS (Company)</td>
-                                    <td colspan="2">
-                                        <div class="col-md-12 p-r-0 p-l-0">
-                                            <input type="text" name="bpjstotalearning" readonly="true" value="{{ number_format($data->bpjstotalearning) }}" class="form-control bpjstotalearning" />
-                                        </div>
-                                    </td>
-                                </tr>
                                 @foreach(get_deductions() as $item)
-                                    @php($deduction = getDeductionEmployeeDataHistory($item->id, $data->id))
+                                    @if(isset($update_history))
+                                        @php($deduction = getDeductionEmployee($item->id, $data->id, 'history'))
+                                    @else
+                                        @php($deduction = getDeductionEmployee($item->id, $data->id))
+                                    @endif
                                     @if($deduction)
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $deduction->payrollDeductions->title }}</td>
@@ -243,13 +212,10 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
-                <input type="hidden" name="bpjs_jkk_company" value="{{ $data->bpjs_jkk_company }}"/>
-                <input type="hidden" name="bpjs_jkm_company" value="{{ $data->bpjs_jkm_company }}"/>
-                <input type="hidden" name="bpjs_jht_company" value="{{ $data->bpjs_jht_company }}"/>
-                <input type="hidden" name="bpjs_pensiun_company" value="{{ $data->bpjs_pensiun_company }}"/>
-                <input type="hidden" name="bpjs_kesehatan_company" value="{{ $data->bpjs_kesehatan_company }}"/>
-                <input type="hidden" name="bpjstotalearning" value="{{ $data->bpjstotalearning }}"/>
-
+                
+                <input type="hidden" name="bpjs_ketenagakerjaan" value="{{ $data->bpjs_ketenagakerjaan }}" />
+                <input type="hidden" name="bpjs_kesehatan" value="{{ $data->bpjs_kesehatan }}" />
+                <input type="hidden" name="bpjs_pensiun" value="{{ $data->bpjs_pensiun }}" />
                 <input type="hidden" name="bpjs_ketenagakerjaan2" value="{{ $data->bpjs_ketenagakerjaan2 }}" />
                 <input type="hidden" name="bpjs_kesehatan2" value="{{ $data->bpjs_kesehatan2 }}" />
                 <input type="hidden" name="bpjs_pensiun2" value="{{ $data->bpjs_pensiun2 }}" />
@@ -257,10 +223,6 @@
                 <input type="hidden" name="total_earnings" value="{{ $data->total_earnings }}" />
                 <input type="hidden" name="thp" value="{{ $data->thp }}" />
                 <input type="hidden" name="pph21" value="{{ $data->pph21 }}" />
-                <input type="hidden" name="burden_allow" value="{{ $data->burden_allow }}" />
-                 <input type="hidden" name="yearly_income_tax" value="{{ $data->yearly_income_tax }}" />
-                
-                
                 <input type="hidden" name="_method" value="PUT">
             </form>                    
         </div>
@@ -276,12 +238,6 @@
     var var_edit_bpjs_kesehatan_employee             = 0;
     var var_edit_bpjs_pensiun_employee               = 0;
     
-    var var_edit_bpjs_jkk_company                    = 0;
-    var var_edit_bpjs_jkm_company                    = 0;
-    var var_edit_bpjs_jht_company                    = 0;
-    var var_edit_bpjs_pensiun_company                = 0;
-    var var_edit_bpjs_kesehatan_company              = 0;
-
     function form_finalized()
     {
         $("input[name='is_lock']").val(1);
@@ -319,28 +275,6 @@
         var_edit_bpjs_pensiun_employee = 1;
         calculate();
     });
-
-    $("input[name='bpjs_jkk_company']").on('input', function(){
-        var_edit_bpjs_jkk_company = 1;
-        calculate();
-    });
-    $("input[name='bpjs_jkm_company']").on('input', function(){
-        var_edit_bpjs_jkm_company = 1;
-        calculate();
-    });
-    $("input[name='bpjs_jht_company']").on('input', function(){
-        var_edit_bpjs_jht_company = 1;
-        calculate();
-    });
-    $("input[name='bpjs_pensiun_company']").on('input', function(){
-        var_edit_bpjs_pensiun_company = 1;
-        calculate();
-    });
-    $("input[name='bpjs_kesehatan_company']").on('input', function(){
-        var_edit_bpjs_kesehatan_company = 1;
-        calculate();
-    });
-    
     // end custom
 
     function init_calculate()
@@ -466,17 +400,6 @@
                 edit_bpjs_ketenagakerjaan_employee : var_edit_bpjs_ketenagakerjaan_employee,
                 edit_bpjs_kesehatan_employee : var_edit_bpjs_kesehatan_employee,
                 edit_edit_bpjs_pensiun_employee : var_edit_bpjs_pensiun_employee,
-
-                bpjs_jkk_company: $('.bpjs_jkk_company').val(),
-                bpjs_jkm_company: $('.bpjs_jkm_company').val(),
-                bpjs_jht_company: $('.bpjs_jht_company').val(),
-                bpjs_pensiun_company: $('.bpjs_pensiun_company').val(),
-                bpjs_kesehatan_company: $('.bpjs_kesehatan_company').val(),
-                edit_bpjs_jkk_company : var_edit_bpjs_jkk_company,
-                edit_bpjs_jkm_company : var_edit_bpjs_jkm_company,
-                edit_bpjs_jht_company : var_edit_bpjs_jht_company,
-                edit_bpjs_pensiun_company : var_edit_bpjs_pensiun_company,
-                edit_bpjs_kesehatan_company : var_edit_bpjs_kesehatan_company,
                 // end custom
                 
                 '_token' : $("meta[name='csrf-token']").attr('content')
@@ -484,42 +407,26 @@
             success: function( data ) {
                 var thp  = data.thp.split(',').join('');
                 $('.td-thp').html(numberWithDot(thp));
-                //var thp = parseInt(data.thp.split('.').join(''));
-                //$('.td-thp').html(numberWithDot(data.thp));
-
                 $('.td-pph21').html(data.monthly_income_tax);
-                //$("input[name='bpjs_ketenagakerjaan']").val(data.bpjs_ketenagakerjaan);
+                $("input[name='bpjs_ketenagakerjaan']").val(data.bpjs_ketenagakerjaan);
                 $("input[name='bpjs_ketenagakerjaan2']").val(data.bpjs_ketenagakerjaan2);
-                //$("input[name='bpjs_kesehatan']").val(data.bpjs_kesehatan);
+                $("input[name='bpjs_kesehatan']").val(data.bpjs_kesehatan);
                 $("input[name='bpjs_kesehatan2']").val(data.bpjs_kesehatan2);
-                //$("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
+                $("input[name='bpjs_pensiun']").val(data.bpjs_pensiun);
                 $("input[name='bpjs_pensiun2']").val(data.bpjs_pensiun2);
-
-                $("input[name='bpjs_jkk_company']").val(data.bpjs_jkk_company);
-                $("input[name='bpjs_jkm_company']").val(data.bpjs_jkm_company);
-                $("input[name='bpjs_jht_company']").val(data.bpjs_jht_company);
-                $("input[name='bpjs_pensiun_company']").val(data.bpjs_pensiun_company);
-                $("input[name='bpjs_kesehatan_company']").val(data.bpjs_kesehatan_company);
-                $("input[name='bpjstotalearning']").val(data.bpjstotalearning);
-                
                 $("input[name='thp']").val(parseInt(thp));
-                //$("input[name='thp']").val(parseInt(data.thp));
                 $("input[name='pph21']").val(data.monthly_income_tax);
                 $('.bpjs_ketenagakerjaan_employee').val(data.bpjs_ketenagakerjaan2);
                 $('.bpjs_kesehatan_employee').val(data.bpjs_kesehatan2);
                 $('.bpjs_pensiun_employee').val(data.bpjs_pensiun2);
-                $("input[name='burden_allow']").val(data.burden_allow);
-                $('.burden_allow').val(data.burden_allow);
-                $("input[name='yearly_income_tax']").val(data.yearly_income_tax);
-                $('.yearly_income_tax').val(data.yearly_income_tax);
-                
+
                 bonus = bonus != 0 ? bonus.split('.').join('') : 0;
 
                 sum_earnings    = sum_earnings + parseInt(salary.split('.').join('')) + parseInt(bonus);
-                sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjstotalearning.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''));
+                sum_deductions  = parseInt(data.monthly_income_tax.split(',').join('')) + sum_deductions + parseInt(data.bpjs_ketenagakerjaan2.split(',').join('')) + parseInt(data.bpjs_kesehatan2.split(',').join('')) + parseInt(data.bpjs_pensiun2.split(',').join(''));
                 
                 // start custom
-                sum_earnings    = parseInt(sum_earnings) + parseInt(data.monthly_income_tax.split(',').join(''))+ parseInt(data.bpjstotalearning.split(',').join(''));
+                sum_earnings    = parseInt(sum_earnings) + parseInt(data.monthly_income_tax.split(',').join(''));
                 // end custom
                  
                 $("input[name='total_earnings']").val(sum_earnings);

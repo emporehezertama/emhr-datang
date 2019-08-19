@@ -21,11 +21,10 @@
                                 <li><a href="javascript:void(0)" onclick="reset_filter()"> <i class="fa fa-refresh"></i> Reset Filter</a></li>
                                 <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
-                                <li><a href="#" onclick="submit_filter_bank_download()"><i class="fa fa-download"></i> Download Format Bank</a></li>
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
                                 <li><a href="#" onclick="submit_bukti_potong()" title="Download Bukti Potong"><i class="fa fa-download"></i> Bukti Potong</a></li>
-                                <li><a href="javascript:void(0)" onclick="submit_sendpayslip()" title="Send Payslip"><i class="fa fa-send-o"></i> Send Payslip</a></li>
+                                <li><a href="javascript:void(0)" onclick="send_payslip()" title="Send Payslip"><i class="fa fa-send-o"></i> Send Payslip</a></li>
                                 <li><a href="javascript:void(0)" onclick="submit_lock()" title="Lock Payslip"><i class="fa fa-lock"></i> Lock Payslip</a></li>
                             </ul>
                         </div>
@@ -82,7 +81,7 @@
                         <div class="form-group m-b-0">
                             <select class="form-control form-control-line" name="year">
                                 <option value="">- Year - </option>
-                                @for($year=2018; $year <= ((Int)date('Y') + 5); $year++))
+                                @for($year=2019; $year <= ((Int)date('Y') + 5); $year++))
                                 <option {{ (\Session::get('year') == $year) ? 'selected' : '' }}>{{ $year }}</option>
                                 @endfor
                             </select>
@@ -121,11 +120,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @php ($i = 1)
+                           	@php ($i = 1)
                             @php ($new=false)
-                            @if(isset($data))   
-                                @foreach($data as $no => $item)
-                                    @if(isset($item->user))
+                            @if(isset($data))	
+	                            @foreach($data as $no => $item)
+	                            	@if(isset($item->user))
                                         @if(\Session::get('month') and \Session::get('year'))
                                             @if( \Session::get('month') != (Int)date('m') || \Session::get('year') != date('Y'))
                                                 @php($history = get_payroll_history($item->user_id, \Session::get('month'), \Session::get('year') ))
@@ -135,46 +134,41 @@
                                                 @endif
                                             @endif
                                         @endif
-                                        <tr>
+			                            <tr>
                                             <td><input type="checkbox" name="payroll_id[]" data-user_id="{{ $item->user_id }}" value="{{ $item->id }}"></td>
-                                            <td>{{ $i }}</td>
+			                                <td>{{ $i }}</td>
                                             <td>{{ $item->user->nik }}</td>
-                                            <td>{{ $item->user->name }}</td>
+			                                <td>{{ $item->user->name }}</td>
                                             <td>{{ number_format($item->total_earnings) }}</td>
-                                            <td>{{ number_format($item->total_deduction) }}</td>
-                                            <td>{{ number_format($item->thp) }}</td>
-                                            <td class="">
+			                                <td>{{ number_format($item->total_deduction) }}</td>
+			                                <td>{{ number_format($item->thp) }}</td>
+			                                <td class="">
+			                                    @if($item->is_calculate == 0)
+			                                        <label class="btn btn-warning btn-xs btn-circle" title="Not Calculate"><i class="fa fa-close"></i></label>
+			                                    @else
+			                                         <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
+			                                    @endif
+			                                </td>
+			                                <td>
                                                 @if(\Session::get('month') and \Session::get('year'))
-                                                    @php($history_ = cek_payroll_user_id($item->user_id, \Session::get('month'), \Session::get('year') ))
-                                                    @if(!$history_)
-                                                        <label class="btn btn-warning btn-xs btn-circle" title="Not Calculate"><i class="fa fa-close"></i></label>
-                                                    @elseif($history_)
-                                                        <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
+                                                    @if(\Session::get('month') == date('m') and \Session::get('year') == date('Y'))
+    			                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
+                                                    @elseif(isset($history))
+                                                     <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                     @endif
                                                 @else
-                                                    @if($item->is_calculate == 0)
-                                                        <label class="btn btn-warning btn-xs btn-circle" title="Not Calculate"><i class="fa fa-close"></i></label>
-                                                    @else
-                                                        <label class="btn btn-success btn-xs  btn-circle"  title="Calculated"><i class="fa fa-check"></i> </label>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if(\Session::get('month') and \Session::get('year'))
-                                                    @php($history = get_payroll_history($item->user_id, \Session::get('month'), \Session::get('year') ))
-                                                    @if(\Session::get('month') == date('m') and \Session::get('year') == date('Y'))
-                                                     <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail</a>
-                                                    @elseif(isset($history))
-                                                     <a href="{{ route('administrator.payroll.detail-history', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail</a>
-                                                    @endif
+                                                    <a href="{{ route('administrator.payroll.detail', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> detail </a>
                                                 @endif
                                                 
                                                 @if(\Session::get('month') and \Session::get('year'))
                                                     @php($history_ = cek_payroll_user_id($item->user_id, \Session::get('month'), \Session::get('year') ))
+                                                    
                                                     @if(!$history_)
                                                         <a href="{{ route('administrator.payroll.create-by-payroll-id', $item->id) }}?date={{ \Session::get('year') }}-{{ \Session::get('month') }}-01" class="btn btn-warning btn-xs"><i class="fa fa-plus"></i> Create Payroll </a>
                                                         @php($new = true)
                                                         @php($item->is_lock = 0)
+                                                    @else
+                                                        @php($item->is_lock = $history_->is_lock)
                                                     @endif
                                                 @endif
                                                 
@@ -182,11 +176,11 @@
                                                     <a href="" class="pull-right text-danger" title="Lock Payroll" style="font-size: 25px;"><i class="fa fa-lock"></i></a> 
                                                 @endif
                                             </td>
-                                        </tr> 
-                                        @php ($i ++)
-                                    @endIf
-                                @endforeach
-                            @endIf
+			                            </tr> 
+			                            @php ($i ++)
+			                        @endIf
+	                            @endforeach
+	                        @endIf
                             </tbody>
                         </table>
                     </div>
@@ -231,6 +225,38 @@
     <!-- /.modal-dialog -->
 </div>
 
+<!-- modal send pay slip  -->
+<div id="modal_send_pay_slip" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">Send Pay Slip</h4> </div>
+            <form method="POST" class="form-horizontal form_send_payslip" action="{{ route('administrator.payroll.index') }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="send-pay-slip">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-6">Year</label>
+                        <label class="col-md-6">Month</label>
+                        <div class="col-md-6">
+                            <select class="form-control modal-select-year" required name="tahun">
+                                <option value="">- Select -</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 modal-select-month"></div>
+                        <div class="section-user-id"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="submit_payslip()"><i class="fa fa-send-o"></i> Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section('footer-script')
 <style type="text/css" media="screen">
     .ui-datepicker-year {
@@ -240,25 +266,11 @@
     }
 </style>
 <script type="text/javascript">
+    
     function submit_lock()
     {
         $("#filter-form input[name='action']").val('lock');
 
-        $("#filter-form").submit();
-    }
-    
-    function submit_sendpayslip()
-    {
-        $("#filter-form input[name='action']").val('submitpayslip');
-
-        var count   = $("input[name='payroll_id[]']").filter(':checked');
-        var html    = '';
-
-        $(count).each(function(k,v){
-            html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
-
-        });
-        $('.section-user-id').html(html);
         $("#filter-form").submit();
     }
 
@@ -309,13 +321,84 @@
       }).attr("readonly", false);
 
     var payroll_selected = 0;
+    var send_payslip = function(){
+        $("#modal_send_pay_slip").modal("show");
+
+       $.ajax({
+            type: 'POST',
+            url: '{{ route('ajax.get-year-pay-slip-all') }}',
+            data: {'_token' : $("meta[name='csrf-token']").attr('content')},
+            dataType: 'json',
+            success: function (data) {
+                var el = '<option value="">- Select -</option>';
+                    
+                $.each(data.result, function(k,v){
+                    el += '<option value="'+ v.tahun +'">'+ v.tahun +'</option>';
+                });              
+
+                $("#modal_send_pay_slip .modal-select-year").html(el);
+            }
+        }); 
+
+        var count   = $("input[name='payroll_id[]']").filter(':checked');
+        var html    = '';
+
+        $(count).each(function(k,v){
+            html += '<input type="hidden" name="user_id[]" value="'+ $(v).data('user_id') +'" />';
+
+        });
+
+        $('.section-user-id').html(html);
+    }
+
+    function submit_payslip()
+    {
+        var year    = $('.modal-select-year').val();
+        var bulan   = $("input[name='bulan[]']").filter(':checked').length;
+
+        if(year == "" || bulan <= 0)
+        {
+            _alert('Year / Month required.');
+            return false;
+        }
+
+        if(payroll_selected > 0)
+        {
+            _confirm_submit('Send payslip ?', $('form.form_send_payslip'));
+        }
+        else
+        {
+            _alert('Select payroll !');
+        }
+    }
+
+    $("#modal_send_pay_slip .modal-select-year").on('change', function(){
+
+       var tahun = $(this).val();
+
+        if($(this).val() != "")
+        {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('ajax.get-bulan-pay-slip-all') }}',
+                data: {'tahun': tahun, '_token' : $("meta[name='csrf-token']").attr('content')},
+                dataType: 'json',
+                success: function (data) {
+                    var el = '';
+
+                    $.each(data, function(k, v){
+                        el += '<label><input type="checkbox" value="'+ v.id +'" name="bulan[]" /> '+ v.name +'</label> &nbsp; ';
+
+                    });
+
+                    $('#modal_send_pay_slip .modal-select-month').html(el);
+                }
+            });
+        }
+    });
 
     function submit_bukti_potong()
     {
-        $("#filter-form input[name='action']").val('bukti-potong');
-
-        $("#filter-form").submit();
-        /*
         if(payroll_selected > 0)
         {
             $("#form_table_payroll").attr('target', '_blank')
@@ -325,17 +408,17 @@
         {
             _alert('Select payroll !');
         }
-        */
     }
 
     $("input[name='check_all']").click(function () {    
         $('input:checkbox').prop('checked', this.checked);  
+
         check_button_payslip();
     });
 
     function check_button_payslip()
     {
-        payroll_selected = $("input:checkbox").filter(':checked').length;
+        payroll_selected = $("input:checkbox").filter(':checked').length; 
     }
 
     $('input:checkbox').click(function(){
@@ -366,18 +449,12 @@
         $("#filter-form").submit();
     }
 
-    var submit_filter_bank_download = function(){
-        $("#filter-form input[name='action']").val('downloadBank');
-
-        $("#filter-form").submit();
-    }
-
-
     $("#btn_import").click(function(){
 
         if($("input[type='file']").val() == "")
         {
-            bootbox.alert('File can not be empty');
+            bootbox.alert('File harus dipilih');
+
             return false;
         }
 
@@ -388,9 +465,6 @@
     });
 
     $("#add-import-karyawan").click(function(){
-        if($("select[type='year']").val() == ""){
-            alert("a");
-        }
         $("#modal_import").modal("show");
         $('.div-proses-upload').hide();
         $("#form-upload").show();

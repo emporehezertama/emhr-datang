@@ -82,7 +82,7 @@
 				<td style="border: 1px solid #000000;">EARNING {{ $key+1 }}</td>
 				@php($earning = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($earning += get_payroll_earning_history_param((isset($data[$month]->id) ? $data[$month]->id : 0), $year, $month, $item->id))
+				@php($earning += get_payroll_earning_history_param($data[$month], $year, $month, $item->id))
         		<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($earning) }}</th>
         		@php($gross[$month] += $earning)
 				@endfor
@@ -113,7 +113,7 @@
 				<td style="border: 1px solid #000000;"> BPJS Kesehatan (company) </td>
 				@php($bpjs3 = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($bpjs3 += get_payroll_history_param($user_id, $year, $month, 'bpjs_kesehatan_company') )
+				@php($bpjs3 += get_payroll_history_param($user_id, $year, $month, 'bpjs_jht_company') )
 				<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bpjs3) }}</th>
         		@php($gross[$month] += $bpjs3)
 				@endfor
@@ -121,11 +121,19 @@
 			<tr>
 				<td style="border: 1px solid #000000;"> THR/Bonus </td>
 				<td style="border: 1px solid #000000;"> </td>
-				@php($bonus = 0)
+				@php($bonus=0)
+				@php($bonus_=0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($bonus += get_payroll_history_param($user_id, $year, $month, 'bonus') )
-				<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bonus) }}</th>
-        		@php($gross[$month] += $bonus)
+				
+				@php($bns = get_payroll_history_param($user_id, $year, $month, 'bonus') )
+				
+				@if($bns != 0)
+					@php($bonus_ = $bns)
+				@endif
+
+				@php($bonus += $bns )
+        		<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bonus_) }}</th>
+        		@php($gross[$month] += $bonus_)
 				@endfor
 			</tr>
 			<tr>
@@ -157,18 +165,17 @@
 				<td style="border: 1px solid #000000;"> 5% * SALARY</td>
 				@php($tunjangan = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($tunjangan += get_payroll_history_param($user_id, $year, $month, 'burden_allow'))
+				@php($tunjangan += 5 * get_payroll_history_param($user_id, $year, $month, 'salary') / 100 )
         		<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($tunjangan) }}</th>
         		@php($total_deduction[$month] += $tunjangan)
         		@endfor
 			</tr>
-		
 			<tr>
 				<td style="border: 1px solid #000000;"> Jaminan Tunjangan Hari Tua (JHT) - Staff</td>
 				<td style="border: 1px solid #000000;"> BPJS JHT (employee)</td>
 				@php($bpjs1 = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($bpjs1 += get_payroll_history_param($user_id, $year, $month, 'bpjs_ketenagakerjaan_employee'))
+				@php($bpjs1 += get_payroll_history_param($user_id, $year, $month, 'salary') * get_payroll_history_param($user_id, $year, $month, 'bpjs_jaminan_jht_employee') / 100 )
 				<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bpjs1) }}</th>
         		@php($total_deduction[$month] += $bpjs1)
 				@endfor
@@ -178,7 +185,7 @@
 				<td style="border: 1px solid #000000;"> BPJS JP (employee)</td>
 				@php($bpjs2 = 0)
 				@for ($month = 1; $month <= 12; $month++) 
-				@php($bpjs2 += get_payroll_history_param($user_id, $year, $month, 'bpjs_pensiun_employee'))
+				@php($bpjs2 += get_payroll_history_param($user_id, $year, $month, 'salary') * get_payroll_history_param($user_id, $year, $month, 'bpjs_jaminan_jp_employee') / 100 )
 				<th style="border: 1px solid #000000; width: 15px;">{{ format_idr($bpjs2) }}</th>
         		@php($total_deduction[$month] += $bpjs2)
 				@endfor
@@ -196,14 +203,6 @@
 				@for ($month = 1; $month <= 12; $month++) 
         		<th style="border: 1px solid #000000; width: 15px;background: #deeaf6;">{{ format_idr($gross[$month] - $total_deduction[$month]) }}</th>
 				@endfor
-			</tr>
-			<tr>
-				<td style="border: 1px solid #000000;"> Nett Salary / year (C ) </td>
-				<td style="border: 1px solid #000000;"> </td>
-				@for ($month = 1; $month <= 12; $month++)
-        		<th style="border: 1px solid #000000; width: 15px;background: #deeaf6;">{{ format_idr((($gross[$month] - $total_deduction[$month])*12 / $month)) }}</th>
-				@endfor
-
 			</tr>
 			<tr>
 				<td style="border: 1px solid #000000;"> PTKP Status</td>
@@ -239,7 +238,7 @@
 				<td style="border: 1px solid #000000; background: #deeaf6;"> <strong> Penghasilan Kena Pajak PKP / year (D-E) </strong></td>
 				<td style="border: 1px solid #000000; background: #deeaf6;"> </td>
 				@for ($month = 1; $month <= 12; $month++) 
-        		<th style="border: 1px solid #000000; width: 15px; background: #deeaf6;">{{ format_idr(((($gross[$month] - $total_deduction[$month])*12 / $month) - get_ptkp($user_id))) }}</th>
+        		<th style="border: 1px solid #000000; width: 15px; background: #deeaf6;">{{ format_idr( abs(($gross[$month] - $total_deduction[$month]) - get_ptkp($user_id))) }}</th>
 				@endfor	
 			</tr>
 			<tr>
@@ -247,8 +246,16 @@
 				<td style="border: 1px solid #000000; background: #deeaf6;"></td>
 				@for ($month = 1; $month <= 12; $month++)  
 				<td style="border: 1px solid #000000; background: #deeaf6;">
-					@php($pph_terutang = ((($gross[$month] - $total_deduction[$month])*12 / $month) - get_ptkp($user_id)))
-					{{ format_idr( getpphYear($pph_terutang)) }}
+					@php($pph_terutang = abs(($gross[$month] - $total_deduction[$month]) - get_ptkp($user_id)))
+					@if($pph_terutang <=50000000)
+					{{ format_idr( 5 * $pph_terutang / 100 ) }}
+					@elseif($pph_terutang <=250000000)
+					{{ format_idr( (($pph_terutang - 50000000) * 15 / 100) +(50000000 * 5 / 100)) }}
+					@elseif($pph_terutang <=500000000)
+					{{ format_idr( ( ( ($pph_terutang-250000000)*25 / 100)+(50000000*5 / 100)+(200000000*15 / 100))) }}
+					@elseif($pph_terutang <=500000000)
+					{{ format_idr( (($pph_terutang-500000000) * 30 / 100)+(50000000 * 5 / 100)+(200000000*15 / 100)+(250000000*25 / 100)) }}
+					@endif
 				</td>
 				@endfor
 			</tr>

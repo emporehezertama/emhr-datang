@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Payslip {{ $data->user->nik .'/'. $data->user->name }}</title>
+	<title>Payslip {{ $user->nik .'/'. $user->name }}</title>
 	<style type="text/css">
 		table {
 			border-collapse: collapse;
@@ -17,26 +17,26 @@
 	@foreach($dataArray as $k => $item)
 	<img src="{{  asset(get_setting('logo')) }}" style="height: 80; float: right;" /> 
 	<h3>{{ get_setting('title') }} </h3>
-	<p><strong>PAYSLIP {{ $bulan[$k] }} {{ $tahun }}</strong></p>
+	<p><strong>PAYSLIP {{ $bulan }} {{ $tahun }}</strong></p>
 	<br />
 	<table style="width: 100%;">
 		<tr>
 			<th style="width: 20%;">EMPLOYEE ID</th>
-			<th style="width: 30%;"> : {{ $data->user->nik }}</th>
+			<th style="width: 30%;"> : {{ $user->nik }}</th>
 			<th style="width: 25%;">Status</th>
-			<th style="width: 25%;"> : {{ $data->user->organisasi_status }}</th>
+			<th style="width: 25%;"> : {{ $user->organisasi_status }}</th>
 		</tr>
 		<tr>
 			<th>Name</th>
-			<th> : {{ $data->user->name }}</th>
+			<th> : {{ $user->name }}</th>
 			<th>NPWP</th>
-			<th> : {{ $data->user->npwp_number }}</th>
+			<th> : {{ $user->npwp_number }}</th>
 		</tr>
 		<tr>
 			<th>Position Title</th>
-			<th> : {{ empore_jabatan($data->user->id) }}</th>
+			<th> : {{ empore_jabatan($user->id) }}</th>
 			<th>BPJS Karyawan Number</th>
-			<th> : {{ $data->user->bpjs_number }}</th>
+			<th> : {{ $user->bpjs_number }}</th>
 		</tr>
 	</table>
 	<br />
@@ -114,7 +114,6 @@
 					</tr>
 					<tr>
 						<td>BPJS Jaminan Hari Tua (JHT) {{ get_setting('bpjs_jaminan_jht_employee') }}% (Employee) </td>
-						<!-- <td style="text-align: right;">{{ format_idr($item->salary * get_setting('bpjs_jaminan_jht_employee') / 100) }}</td> -->
 						<td style="text-align: right;">{{ format_idr( $item->bpjs_ketenagakerjaan_employee ) }}</td>
 					</tr>
 					<tr> 
@@ -174,22 +173,18 @@
 		</tr>
 		<tr>
 			<td>Bank</td>
-			<td> : {{ isset($data->user->bank->name) ? $data->user->bank->name : '' }}</td>
+			<td> : {{ isset($user->bank->name) ? $user->bank->name : '' }}</td>
 		</tr>
 		<tr>
 			<td>A/C no</td>
-			<td> : {{ isset($data->user->nomor_rekening) ? $data->user->nomor_rekening : '' }}</td>
+			<td> : {{ isset($user->nomor_rekening) ? $user->nomor_rekening : '' }}</td>
 		</tr>
 		<tr>
 			<td>Account name</td>
-			<td> : {{ isset($data->user->nama_rekening) ? $data->user->nama_rekening : '' }}</td>
+			<td> : {{ isset($user->nama_rekening) ? $user->nama_rekening : '' }}</td>
 		</tr>
 	</table>
 	
-	@if($total == 0)
-	@elseif(($k+1) != $total)
-		<div style="page-break-before:always"></div>
-	@endif
 	@endforeach
 </body>
 </html>

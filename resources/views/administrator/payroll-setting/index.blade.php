@@ -22,6 +22,7 @@
                         <li role="presentation"><a href="#pph" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> PPH</span></a></li>
                         <li role="presentation" class=""><a href="#ptkp" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs"> PTKP</span></a></li>
                         <li role="presentation" class=""><a href="#others" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs"> Others</span></a></li>
+                        <li role="presentation" class=""><a href="#npwp" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">NPWP</span></a></li>
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="general">
@@ -95,7 +96,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-4">BPJS Kesehatan  (Employee)</label>
+                                            <label class="col-md-4">BPJS Kesehatan (Employee)</label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
                                                     <input type="number" name="setting[bpjs_kesehatan_employee]" class="form-control" value="{{ get_setting('bpjs_kesehatan_employee') }}" />
@@ -240,8 +241,34 @@
                                             <td>{{ $item->label }}</td>
                                             <td>{{ number_format($item->value) }}</td>
                                             <td>
-                                                <!-- <a href="{{ route('administrator.payroll-setting.delete-others', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs "><i class="fa fa-trash"></i> </a> -->
                                                 <a href="{{ route('administrator.payroll-setting.edit-others', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                            </td>
+                                        </tr>
+                                       @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="npwp">
+                            <h3 class="box-title m-b-0">NPWP Setting</h3>
+                            <div class="table-responsive">
+                                <table class="display nowrap data_table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="70" class="text-center">#</th>
+                                            <th>LABEL</th>
+                                            <th>VALUE</th>
+                                            <th>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       @foreach($npwp as $no => $item)
+                                        <tr>
+                                            <td>{{ $no+1 }}</td>
+                                            <td>{{ $item->label }}</td>
+                                            <td>{{ $item->value }}</td>
+                                            <td>
+                                                <a href="{{ route('administrator.payroll-setting.edit-npwp', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
                                         </tr>
                                        @endforeach

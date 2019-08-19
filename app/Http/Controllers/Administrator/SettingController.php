@@ -72,7 +72,7 @@ class SettingController extends Controller
         \Mail::send('email.blank', ['data' => $request->test_message],
             function($message) use($request) {
                 //$message->from(get_setting('mail_address'), 'Testing Message');
-                $message->from('ramdoni@empore.co.id', 'Testing Message');
+                //$message->from('ramdoni@empore.co.id', 'Testing Message');
                 $message->to($request->to);
                 $message->subject($request->subject);
             }

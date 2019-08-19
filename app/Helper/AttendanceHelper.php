@@ -300,10 +300,13 @@ function dataAttendance($start, $end, $branch, $id){
                 $user_id[$a++];
                 $nik[$w++];
                 $data[$x++];
+                
             }
             $tanggal[$j++];
             $day[$v++];
         }
+    //    dd(json_encode($name), json_encode($tanggal));
+        
         $dataabsensi = $dd;
     
 
