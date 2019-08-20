@@ -1149,3 +1149,11 @@ function getTypeProvinsi($id_prov){
 	
 	return $type;
 }
+
+function getNamaHari($date){
+//	$arrayhari = array("Minggu"=>"Sun", "Senin"=>"Mon", "Selasa"=>"Tue", "Rabu"=>"Wed", "Kamis"=>"Thu", "Jumat"=>"Fri", "Sabtu"=>"Sat");
+	$arrayhari = array("Sunday"=>"Sun", "Monday"=>"Mon", "Tuesday"=>"Tue", "Wednesday"=>"Wed", "Thursday"=>"Thu", "Friday"=>"Fri", "Saturday"=>"Sat");
+	$day = array_search(date_format(date_create($date), "D"), $arrayhari);
+	
+	return $day;
+}

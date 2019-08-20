@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use DB;
+use App\Imports\AttendanceImport;
 
 class AttendanceController extends Controller
 {
@@ -66,10 +67,19 @@ class AttendanceController extends Controller
             return redirect()->route('attendance.index');
         }
 
-        $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+        if($user->project_id != Null){
+            $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+                                    ->whereIn('users.access_id', ['1', '2'])
+                                    ->whereNotIn('absensi_item.date', ['1970-01-01'])
+                                    ->where('users.project_id', $user->project_id)
+                                    ->orderBy('absensi_item.id', 'DESC');
+        }else{
+            $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
                                     ->whereIn('users.access_id', ['1', '2'])
                                     ->whereNotIn('absensi_item.date', ['1970-01-01'])
                                     ->orderBy('absensi_item.id', 'DESC');
+        }    
+
         if(!empty($name))
         {
             $name = explode('-', $name);
@@ -88,6 +98,11 @@ class AttendanceController extends Controller
         }
 
         if(request()->import == 1)
+        {
+            return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
+        }
+
+        if(request()->eksport == 1)
         {
             return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
         }
@@ -147,7 +162,7 @@ class AttendanceController extends Controller
         return redirect()->route('attendance-setting.index')->with('message-success', 'Setting Deleted.');
     }
 
-    public function importAttendance($start, $end, $branch, $id){
+/*    public function exportAttendance($start, $end, $branch, $id){
         $params['data'] =   dataAttendance($start, $end, $branch, $id);
 
         $name_excel = 'Attendance'.date('YmdHis');
@@ -155,5 +170,29 @@ class AttendanceController extends Controller
         return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
 
     //  return redirect()->route('attendance.index');
+    }   */
+
+    public function importAttendance(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+        
+        if($request->hasFile('file'))
+        {
+            // menangkap file excel
+            $file = $request->file('file');
+     
+            // membuat nama file unik
+            $nama_file = rand().$file->getClientOriginalName();
+     
+            // upload ke folder file_siswa di dalam folder public
+            $file->move('storage',$nama_file);
+     
+            // import data
+            Excel::import(new AttendanceImport, public_path('/storage/'.$nama_file));
+
+            return redirect()->route('attendance.index')->with('message-success', 'Attendance saved.');
+        }
     }
 }
