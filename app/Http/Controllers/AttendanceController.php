@@ -180,6 +180,41 @@ class AttendanceController extends Controller
         
         if($request->hasFile('file'))
         {
+            
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = [];
+            foreach ($worksheet->getRowIterator() AS $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                $cells = [];
+                foreach ($cellIterator as $cell) {
+                    $cells[] = $cell->getValue();
+                }
+                $rows[] = $cells;
+            }
+
+            $i = 0;
+            foreach($rows as $key => $item)
+            {
+                $i++;
+                $count_row = 5;
+                if($key == 0) continue;
+
+                $user = User::where('nik', $item[0])->first();
+
+                $data                          = new AbsensiItem();
+                $data->user_id                 = $item[0];
+                $data->name                    = $item[1].$key;
+                $data->date                    = $item[2];
+                $data->clock_in                = $item[3];
+                $data->clock_out               = $item[4];
+                $data->timetable               = $item[0];
+                $data->save();
+            }
+
+            
+     
             // menangkap file excel
             $file = $request->file('file');
      
@@ -190,7 +225,7 @@ class AttendanceController extends Controller
             $file->move('storage',$nama_file);
      
             // import data
-            Excel::import(new AttendanceImport, public_path('/storage/'.$nama_file));
+        //    Excel::import(new AttendanceImport, public_path('/storage/'.$nama_file));
 
             return redirect()->route('attendance.index')->with('message-success', 'Attendance saved.');
         }
