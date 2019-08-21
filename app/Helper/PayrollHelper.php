@@ -477,3 +477,21 @@ function get_deductions()
     	return \App\Models\PayrollDeductions::all();
     }
 }
+
+function get_setting_payroll($id){
+	if(\Auth::user()->project_id != NULL){
+		$value = \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->where('project_id', \Auth::user()->project_id)->get();
+		if(count($value) < 1){
+			return "";
+		}else{
+			return \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->where('project_id', \Auth::user()->project_id)->first()->value;
+		}
+	}else{
+		$value = \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->whereNull('project_id')->get();
+		if(count($value) < 1){
+			return "kakaka";
+		}else{
+			return \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->whereNull('project_id')->first()->value;
+		}
+	}
+}
