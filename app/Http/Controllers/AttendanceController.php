@@ -204,12 +204,12 @@ class AttendanceController extends Controller
                 $user = User::where('nik', $item[0])->first();
 
                 $data                          = new AbsensiItem();
-                $data->user_id                 = $item[0];
-                $data->name                    = $item[1].$key;
+                $data->user_id                 = $user->id;
+                $data->name                    = $user->name;
                 $data->date                    = $item[2];
                 $data->clock_in                = $item[3];
                 $data->clock_out               = $item[4];
-                $data->timetable               = $item[0];
+                $data->timetable               = getNamaHari($item[0]);
                 $data->save();
             }
 

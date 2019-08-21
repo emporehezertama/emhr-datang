@@ -93,6 +93,13 @@
                                 <input type="file" name="file" class="form-control" />
                             </div>
                         </div>
+                        
+                        <br>
+                        <div class="form-group">
+                            <div>
+                                <a href="{{ asset('storage/sample/Sample-Cabang.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
