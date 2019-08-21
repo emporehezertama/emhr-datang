@@ -258,7 +258,9 @@
                                             <th width="70" class="text-center">#</th>
                                             <th>LABEL</th>
                                             <th>VALUE</th>
+                                            @if(\Auth::user()->project_id == 1)
                                             <th>#</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -267,9 +269,11 @@
                                             <td>{{ $no+1 }}</td>
                                             <td>{{ $item->label }}</td>
                                             <td>{{ $item->value }}</td>
+                                            @if(\Auth::user()->project_id == 1)
                                             <td>
                                                 <a href="{{ route('administrator.payroll-setting.edit-npwp', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
+                                            @endif
                                         </tr>
                                        @endforeach
                                     </tbody>
