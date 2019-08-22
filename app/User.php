@@ -32,6 +32,15 @@ class User extends Authenticatable
     ];
 
     /**
+     * Absensi Setting
+     * @return void
+     */
+    public function absensiSetting()
+    {
+        return $this->hasOne('App\Models\AbsensiSetting', 'id', 'absensi_setting_id');
+    }
+
+    /**
      * [assets description]
      * @return [type] [description]
      */

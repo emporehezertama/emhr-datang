@@ -151,8 +151,14 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('attendance-setting', 'AttendanceController@setting')->name('attendance-setting.index');
 	Route::post('attendance-setting-store', 'AttendanceController@settingStore')->name('attendance-setting.store');
 	Route::get('attendance-setting-delete/{id}', 'AttendanceController@settingDelete')->name('attendance-setting.delete');
+	Route::post('import-attendance', 'AttendanceController@importAttendance')->name('import-attendance');
+	Route::post('attendance/import','AttendanceController@attendanceImport')->name('attendance.import');
+	Route::post('attendance/import-all','AttendanceController@importAll')->name('attendance.import-all');
+	Route::post('attendance/set-position','AttendanceController@setPosition')->name('attendance-setting.set-position');
+	Route::get('attendance/preview','AttendanceController@attendancePreview')->name('attendance.preview');
+	
 	Route::post('export-attendance', 'AttendanceController@exportAttendance')->name('export-attendance');
-	Route::post('attendance-import', 'AttendanceController@importAttendance')->name('attendance.import');
+	//Route::post('attendance-import', 'AttendanceController@importAttendance')->name('attendance.import');
 });
 
 /**

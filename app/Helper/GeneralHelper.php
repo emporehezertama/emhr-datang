@@ -11,7 +11,6 @@ function get_shift_attendance()
 	}else{
 		return \App\Models\AbsensiSetting::all();
 	}
-	
 }
 
 /**
