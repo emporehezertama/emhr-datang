@@ -343,11 +343,25 @@ class PayrollController extends Controller
             $params[$k]['Position']         = empore_jabatan($item->user_id);
             $params[$k]['Joint Date']       = $item->user->join_date;
             $params[$k]['Resign Date']      = $item->user->resign_date;
+
+            //  earnings
             $params[$k]['Salary']           = $item->salary;
             $params[$k]['Bonus / THR']      = $item->bonus;
 
-            // earnings
-            foreach(PayrollEarnings::all() as $i)
+            $params[$k]['BPJS Jaminan Kecelakaan Kerja (JKK) (Company) '. get_setting('bpjs_jkk_company').'%']  = $item->bpjs_jkk_company;
+            $params[$k]['BPJS Jaminan Kematian (JKM) (Company) '. get_setting('bpjs_jkm_company').'%']          = $item->bpjs_jkm_company;
+            $params[$k]['BPJS Jaminan Hari Tua (JHT) (Company) '. get_setting('bpjs_jht_company').'%']          = $item->bpjs_jht_company;
+            $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->bpjs_pensiun_company;
+            $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->bpjs_kesehatan_company; //$item->salary *  get_setting('bpjs_kesehatan_company') / 100;
+            
+            
+            if(\Auth::user()->project_id != Null){
+                $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
+            }else{
+                $payrollearning = PayrollEarnings::all();
+            }
+
+            foreach($payrollearning as $i)
             {   
                 if($year != date('Y') or $month != (int)date('m'))
                 {
@@ -367,9 +381,17 @@ class PayrollController extends Controller
 
                 $params[$k][$i->title] = $earning;
             }
+            $params[$k]['Monthly Income Tax / PPh21']                                                           = $item->pph21;
+            $params[$k]['Total Earnings']                                                                       = $item->total_earnings;
 
-            // earnings
-            foreach(PayrollDeductions::all() as $i)
+
+            // deductions
+            if(\Auth::user()->project_id != Null){
+                $payrolldeduction = PayrollDeductions::where('user_created', \Auth::user()->id)->get();
+            }else{
+                $payrolldeduction = PayrollDeductions::all();
+            }
+            foreach($payrolldeduction as $i)
             {   
                 if($year != date('Y') or $month != (int)date('m'))
                 {
@@ -390,17 +412,10 @@ class PayrollController extends Controller
                 $params[$k][$i->title] = $deduction;
             }
 
-            $params[$k]['Monthly Income Tax / PPh21']                                                           = $item->pph21;
-            $params[$k]['BPJS Jaminan Kecelakaan Kerja (JKK) (Company) '. get_setting('bpjs_jkk_company').'%']  = $item->bpjs_jkk_company;
-            $params[$k]['BPJS Jaminan Kematian (JKM) (Company) '. get_setting('bpjs_jkm_company').'%']          = $item->bpjs_jkm_company;
-            $params[$k]['BPJS Jaminan Hari Tua (JHT) (Company) '. get_setting('bpjs_jht_company').'%']          = $item->bpjs_jht_company;
-            $params[$k]['BPJS Pensiun (Company) '. get_setting('bpjs_pensiun_company').'%']                     = $item->bpjs_pensiun_company;
-            $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->bpjs_kesehatan_company; //$item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->bpjs_ketenagakerjaan_employee;
-            $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
             $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
+            $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
-            $params[$k]['Total Earnings']                       = $item->total_earnings;
             $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
             $params[$k]['Take Home Pay']                        = $item->thp;
             $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
