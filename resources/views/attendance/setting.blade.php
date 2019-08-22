@@ -48,6 +48,7 @@
                                     </td>
                                     <td>
                                         <a href="javascript:void(0)" onclick="_confirm('Delete Data ?', '{{ route('attendance-setting.delete', $item->id) }}')" class="text-danger" style="font-size: 15px;"><i class="fa fa-trash"></i></a>
+                                        <a href="javascript:void(0)" onclick="set_position(this)" data-id="{{ $item->id }}" class="btn btn-info btn-xs"><i class="fa fa-gear"></i> Set to Position</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -60,6 +61,40 @@
     </div>
     @include('layouts.footer')
 </div>
+
+<!-- sample modal content -->
+<div id="modal_set_to_position" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Set to Position</h4>
+            </div>
+          <form class="form-horizontal" autocomplete="off" enctype="multipart/form-data" action="{{ route('attendance-setting.set-position') }}" method="POST">
+            {{ csrf_field() }}
+            <input type="hidden" name="shift_id">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label col-md-3">Position</label>
+                    <div class="col-md-6">
+                        <select class="form-control" name="structure_organization_custom_id">
+                            <option value=""> - choose - </option>
+                            @foreach(getStructureName() as $item)
+                            <option value="{{ $item["id"] }}">{{ $item["name"] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect btn-sm pull-left" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                <button type="submit" class="btn btn-info waves-effect btn-sm pull-right"><i class="fa fa-gear"></i> Set Position</button>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+
 <!-- sample modal content -->
 <div id="modal_add" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -98,6 +133,7 @@
         </div>
     </div>
 </div>
+
 <style type="text/css" media="screen">
     .clockpicker-popover { z-index: 9999 !important; }
 </style>
@@ -105,6 +141,12 @@
 <link href="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css') }}" rel="stylesheet">
 <script src="{{ asset('admin-css/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.js') }}"></script>
 <script type="text/javascript">
+
+function set_position(el)
+{
+    $("#modal_set_to_position input[name='shift_id']").val($(el).data('id'))
+    $("#modal_set_to_position").modal("show");
+}
 
 $(function(){
     //toggle `popup` / `inline` mode

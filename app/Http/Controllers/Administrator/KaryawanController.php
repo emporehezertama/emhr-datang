@@ -325,32 +325,8 @@ class KaryawanController extends Controller
             $user->nama_rekening        = $item->bank_account_name_1;
             $user->nomor_rekening       = $item->bank_account_number;
 
-            //$user->sisa_cuti            = $item->cuti_sisa_cuti;
-            //$user->cuti_yang_terpakai   = $item->cuti_terpakai;
-            //$user->length_of_service    = $item->cuti_length_of_service;
-            //$user->cuti_status          = $item->cuti_status;
-            //$user->cuti_2018            = $item->cuti_cuti_2018;
             $user->organisasi_status    = empty($item->organisasi_status) ? $user->organisasi_status : $item->organisasi_status ;
-            /*
-            $user->cabang_id            = empty($item->organisasi_branch) ? $user->cabang_id : $item->organisasi_branch;
-            $user->branch_type          = strtoupper(empty($item->organisasi_ho_or_branch) ? $user->branch_type : $item->organisasi_ho_or_branch);
-            $user->organisasi_status    = empty($item->organisasi_status) ? $user->organisasi_status : $item->organisasi_status ;
-
-            if(!empty($item->empore_organisasi_direktur))
-            {
-                $user->empore_organisasi_direktur   = $item->empore_organisasi_direktur;
-            }
-
-            if(!empty($item->empore_organisasi_manager_id))
-            {
-                $user->empore_organisasi_manager_id = $item->empore_organisasi_manager_id;
-            }
-
-            if(!empty($item->empore_organisasi_staff_id))
-            {
-                $user->empore_organisasi_staff_id   = $item->empore_organisasi_staff_id;
-            }
-            */
+        
             $projectId = \Auth::user()->project_id;
             if(!empty($projectId))
             {
@@ -373,48 +349,6 @@ class KaryawanController extends Controller
                     $c->save();
                 }
             }
-            /*
-            if(!empty($item->cuti_cuti_2018) || !empty($item->cuti_terpakai) || !empty($item->cuti_sisa_cuti))
-            {
-                // cek exist cuti
-                $c = UserCuti::where('user_id', $user->id)->where('cuti_id', 1)->first();
-                if(!$c)
-                {
-                    // insert data cuti
-                    $c = new UserCuti();
-                    $c->user_id     = $user->id;
-                }
-
-                $c->cuti_id     = 1;
-                if(!empty($item->cuti_status))
-                {
-                    $c->status      = $item->cuti_status;
-                }
-
-                if(!empty($item->cuti_cuti_2018))
-                {
-                    $c->kuota       = $item->cuti_cuti_2018;
-                }
-
-                if(!empty($item->cuti_terpakai))
-                {
-                    $c->cuti_terpakai= $item->cuti_terpakai;
-                }
-
-                if(!empty($item->cuti_sisa_cuti))
-                {
-                    $c->sisa_cuti   = $item->cuti_sisa_cuti;
-                }
-
-                if(!empty($item->cuti_length_of_service))
-                {
-                    $c->length_of_service= $item->cuti_length_of_service;
-                }
-
-                $c->save();
-            }
-            */
-
 
             // EDUCATION
             foreach(UserEducationTemp::where('user_temp_id', $item->id)->get() as $edu)

@@ -123,6 +123,18 @@ class AttendanceController extends Controller
     }
 
     /**
+     * Set Position
+     * @param Request $request
+     */
+    public function setPosition(Request $request)
+    {
+        User::where('structure_organization_custom_id', $request->structure_organization_custom_id)
+                ->update(['absensi_setting_id' => $request->shift_id]);
+        
+        return redirect()->route('attendance-setting.index')->with('message-success', 'Setting saved');
+    }
+
+    /**
      * Absensi Setting Store
      * @return view
      */
@@ -144,6 +156,8 @@ class AttendanceController extends Controller
     public function settingDelete($id)
     {
         AbsensiSetting::where('id', $id)->delete();
+
+        User::where('absensi_setting_id', $id)->update(['absensi_setting_id' => null]);;
 
         return redirect()->route('attendance-setting.index')->with('message-success', 'Setting Deleted.');
     }

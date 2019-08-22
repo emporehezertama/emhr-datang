@@ -6,6 +6,11 @@
  */
 function get_shift_attendance()
 {
+	if(\Auth::user()->project_id != "")
+	{
+		return \App\Models\AbsensiSetting::where('project_id', \Auth::user()->project_id)->get();
+	}
+
 	return \App\Models\AbsensiSetting::all();
 }
 
