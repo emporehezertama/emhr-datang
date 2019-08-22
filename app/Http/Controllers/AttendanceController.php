@@ -249,14 +249,12 @@ class AttendanceController extends Controller
                         $diff  = $akhir - $awal;
                         $jam   = floor($diff / (60 * 60));
                         $menit = ($diff - $jam * (60 * 60)) / 60;
-                        
                         if($diff > 0)
                         {
                             $awal  = date_create($data->date .' '. $data->user->absensiSetting->clock_out .':00');
-                            $akhir = date_create($data->date .' '. $data->clock_out .':00'); // waktu sekarang, pukul 06:13
-                            $diff  = date_diff( $akhir, $awal );
-                            
-                            $data->early = $diff->h .':'. $diff->i; 
+                            $akhir = date_create($data->date .' '. $data->clock_out); // waktu sekarang, pukul 06:13
+                            $diff  = @date_diff( $akhir, $awal );
+                            $data->early = @$diff->h .':'. @$diff->i;
                         }
                     }
 
@@ -317,63 +315,4 @@ class AttendanceController extends Controller
 
         return redirect()->route('attendance.index')->with('message-success', 'Import success');
     }  
-
-    public function importAttendance(Request $request)
-    {
-        $this->validate($request, [
-            'file' => 'required|mimes:csv,xls,xlsx'
-        ]);
-        
-        if($request->hasFile('file'))
-        {
-            
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
-            $worksheet = $spreadsheet->getActiveSheet();
-            $rows = [];
-            foreach ($worksheet->getRowIterator() AS $row) {
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
-                $cells = [];
-                foreach ($cellIterator as $cell) {
-                    $cells[] = $cell->getValue();
-                }
-                $rows[] = $cells;
-            }
-
-            $i = 0;
-            foreach($rows as $key => $item)
-            {
-                $i++;
-                $count_row = 5;
-                if($key == 0) continue;
-
-                $user = User::where('nik', $item[0])->first();
-
-                $data                          = new AbsensiItem();
-                $data->user_id                 = $user->id;
-                $data->name                    = $user->name;
-                $data->date                    = $item[2];
-                $data->clock_in                = $item[3];
-                $data->clock_out               = $item[4];
-                $data->timetable               = getNamaHari($item[0]);
-                $data->save();
-            }
-
-            
-     
-            // menangkap file excel
-            $file = $request->file('file');
-     
-            // membuat nama file unik
-            $nama_file = rand().$file->getClientOriginalName();
-     
-            // upload ke folder file_siswa di dalam folder public
-            $file->move('storage',$nama_file);
-     
-            // import data
-        //    Excel::import(new AttendanceImport, public_path('/storage/'.$nama_file));
-
-            return redirect()->route('attendance.index')->with('message-success', 'Attendance saved.');
-        }
-    }
 }
