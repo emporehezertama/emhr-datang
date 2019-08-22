@@ -250,14 +250,13 @@ class AttendanceController extends Controller
                         $jam   = floor($diff / (60 * 60));
                         $menit = ($diff - $jam * (60 * 60)) / 60;
                         
-                        if($jam > 0 || $menit > 0)
+                        if($diff > 0)
                         {
-                            $jam = abs($jam);
-                            $menit = abs($menit);
-                            $jam = $jam <= 9 ? "0".$jam : $jam;
-                            $menit = $menit <= 9 ? "0".$menit : $menit;
-
-                            $data->early = $jam .':'. $menit; 
+                            $awal  = date_create($data->date .' '. $data->user->absensiSetting->clock_out .':00');
+                            $akhir = date_create($data->date .' '. $data->clock_out .':00'); // waktu sekarang, pukul 06:13
+                            $diff  = date_diff( $akhir, $awal );
+                            
+                            $data->early = $diff->h .':'. $diff->i; 
                         }
                     }
 
