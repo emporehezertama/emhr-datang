@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use DB;
+use App\Imports\AttendanceImport;
 
 class AttendanceController extends Controller
 {
@@ -67,10 +68,19 @@ class AttendanceController extends Controller
             return redirect()->route('attendance.index');
         }
 
-        $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+        if($user->project_id != Null){
+            $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+                                    ->whereIn('users.access_id', ['1', '2'])
+                                    ->whereNotIn('absensi_item.date', ['1970-01-01'])
+                                    ->where('users.project_id', $user->project_id)
+                                    ->orderBy('absensi_item.id', 'DESC');
+        }else{
+            $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
                                     ->whereIn('users.access_id', ['1', '2'])
                                     ->whereNotIn('absensi_item.date', ['1970-01-01'])
                                     ->orderBy('absensi_item.id', 'DESC');
+        }    
+
         if(!empty($name))
         {
             $name = explode('-', $name);
@@ -89,6 +99,11 @@ class AttendanceController extends Controller
         }
 
         if(request()->import == 1)
+        {
+            return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
+        }
+
+        if(request()->eksport == 1)
         {
             return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
         }
@@ -302,5 +317,64 @@ class AttendanceController extends Controller
         AbsensiItemTemp::truncate();
 
         return redirect()->route('attendance.index')->with('message-success', 'Import success');
+    }  
+
+    public function importAttendance(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+        
+        if($request->hasFile('file'))
+        {
+            
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = [];
+            foreach ($worksheet->getRowIterator() AS $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                $cells = [];
+                foreach ($cellIterator as $cell) {
+                    $cells[] = $cell->getValue();
+                }
+                $rows[] = $cells;
+            }
+
+            $i = 0;
+            foreach($rows as $key => $item)
+            {
+                $i++;
+                $count_row = 5;
+                if($key == 0) continue;
+
+                $user = User::where('nik', $item[0])->first();
+
+                $data                          = new AbsensiItem();
+                $data->user_id                 = $user->id;
+                $data->name                    = $user->name;
+                $data->date                    = $item[2];
+                $data->clock_in                = $item[3];
+                $data->clock_out               = $item[4];
+                $data->timetable               = getNamaHari($item[0]);
+                $data->save();
+            }
+
+            
+     
+            // menangkap file excel
+            $file = $request->file('file');
+     
+            // membuat nama file unik
+            $nama_file = rand().$file->getClientOriginalName();
+     
+            // upload ke folder file_siswa di dalam folder public
+            $file->move('storage',$nama_file);
+     
+            // import data
+        //    Excel::import(new AttendanceImport, public_path('/storage/'.$nama_file));
+
+            return redirect()->route('attendance.index')->with('message-success', 'Attendance saved.');
+        }
     }
 }

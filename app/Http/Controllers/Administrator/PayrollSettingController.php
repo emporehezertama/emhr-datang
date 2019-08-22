@@ -97,6 +97,55 @@ class PayrollSettingController extends Controller
         return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'Data berhasil disimpan');
     }
 
+
+    public function storeNpwp(Request $request){
+        $user = \Auth::user();
+
+        if($request->npwp)
+        {
+            if($user->project_id != NULL)
+            {
+                $id = 0;
+                for($i=0; $i < count($request->npwp); $i++){
+                    $id = $id+1;
+                    $npwp = PayrollNpwp::where('id_payroll_npwp', $id)->where('project_id',$user->project_id)->get();
+                    if(count($npwp) < 1){
+                        $npwp = new PayrollNpwp();
+                        $npwp->label = $request->label[$i];
+                        $npwp->value = $request->npwp[$i];
+                        $npwp->id_payroll_npwp = $id;
+                        $npwp->project_id = $user->project_id;
+                        $npwp->save();
+                    }else{
+                        $npwp = PayrollNpwp::where('id_payroll_npwp', $id)->where('project_id',$user->project_id)->first();
+                        $npwp->value = $request->npwp[$i];
+                        $npwp->save();
+                    }
+                }
+            }else{
+                $id = 0;
+                for($i=0; $i < count($request->npwp); $i++){
+                    $id = $id+1;
+                    $npwp = PayrollNpwp::where('id_payroll_npwp', $id)->whereNull('project_id')->get();
+                    if(count($npwp) < 1){
+                        $npwp = new PayrollNpwp();
+                        $npwp->label = $request->label[$i];
+                        $npwp->value = $request->npwp[$i];
+                        $npwp->id_payroll_npwp = $id;
+                        $npwp->project_id = $user->project_id;
+                        $npwp->save();
+                    }else{
+                        $npwp = PayrollNpwp::where('id_payroll_npwp', $id)->whereNull('project_id')->first();
+                        $npwp->value = $request->npwp[$i];
+                        $npwp->save();
+                    }
+                }
+            }
+        }
+
+        return redirect()->route('administrator.payroll-setting.index')->with('message-success', 'Data berhasil disimpan');
+    
+    }
     public function editNpwp($id)
     {
         $params['data'] = PayrollNpwp::where('id', $id)->first();

@@ -21,7 +21,7 @@
                                 <li><a href="javascript:void(0)" onclick="reset_filter()"> <i class="fa fa-refresh"></i> Reset Filter</a></li>
                                 <li><a href="{{ route('administrator.payroll.create') }}"> <i class="fa fa-plus"></i> Create</a></li>
                                 <li><a href="#" onclick="submit_filter_download()"><i class="fa fa-download"></i> Download</a></li>
-                                <li><a href="#" onclick="submit_filter_bank_download()"><i class="fa fa-download"></i> Download Format Bank</a></li>
+                                <!--li><a href="#" onclick="submit_filter_bank_download()"><i class="fa fa-download"></i> Download Format Bank</a></li-->
                                 <li><a href="javascript:void(0)" id="calculate"><i class="fa fa-refresh"></i> Calculate</a></li>
                                 <li><a id="add-import-karyawan"> <i class="fa fa-file"></i> Import</a></li>
                                 <li><a href="#" onclick="submit_bukti_potong()" title="Download Bukti Potong"><i class="fa fa-download"></i> Bukti Potong</a></li>

@@ -9,9 +9,6 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Setting Payroll</h4> 
             </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="document.getElementById('form-setting').submit()"><i class="fa fa-save"></i> Save Setting </button>
-            </div>
         </div>
         <!-- .row -->
         <div class="row">
@@ -26,6 +23,11 @@
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="general">
+                            
+                            <div class="col-lg-12 col-sm-8 col-md-8 col-xs-12">
+                                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-left" onclick="document.getElementById('form-setting').submit()"><i class="fa fa-save"></i> Save Setting </button>
+                            </div>
+                            <br><br><br><br>
                             <div class="col-md-12">
                                 <form method="POST" id="form-setting" action="{{ route('administrator.payroll-setting.store-general') }}" class="form-horizontal">
                                     {{ csrf_field() }}
@@ -250,15 +252,48 @@
                             </div>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="npwp">
+                            <div class="col-lg-12 col-sm-8 col-md-8 col-xs-12">
+                                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-left" onclick="document.getElementById('form-setting-npwp').submit();"><i class="fa fa-save"></i> Save Setting </button>
+                            </div>
+                            <br><br><br><br>
                             <h3 class="box-title m-b-0">NPWP Setting</h3>
+                            <form method="POST" id="form-setting-npwp" action="{{ route('administrator.payroll-setting.store-npwp') }}" class="form-horizontal">
+                                {{ csrf_field() }}
+                                <div class="table-responsive">
+                                    <br>
+                                    <div class="col-md-12 p-l-0">
+                                        <div class="form-group">
+                                            <label class="col-md-2">Nama Perusahaan </label>
+                                            <div class="col-md-2">
+                                                <div class="input-form">
+                                                    <input type="hidden" name="label[]" value="Nama Perusahaan" class="form-control" />
+                                                    <input type="text" name="npwp[]" value="{{ get_setting_payroll('1') }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                            <label class="col-md-2">Nomor NPWP </label>
+                                            <div class="col-md-2">
+                                                <div class="input-form">
+                                                    <input type="hidden" name="label[]" value="Nomor NPWP" class="form-control" />
+                                                    <input type="text" name="npwp[]" value="{{ get_setting_payroll('2') }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             <div class="table-responsive">
-                                <table class="display nowrap data_table" cellspacing="0" width="100%">
+                                <!--table class="display nowrap data_table" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th width="70" class="text-center">#</th>
                                             <th>LABEL</th>
                                             <th>VALUE</th>
+                                            @if(\Auth::user()->project_id == 1)
                                             <th>#</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -267,13 +302,15 @@
                                             <td>{{ $no+1 }}</td>
                                             <td>{{ $item->label }}</td>
                                             <td>{{ $item->value }}</td>
+                                            @if(\Auth::user()->project_id == 1)
                                             <td>
                                                 <a href="{{ route('administrator.payroll-setting.edit-npwp', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
+                                            @endif
                                         </tr>
                                        @endforeach
                                     </tbody>
-                                </table>
+                                </table-->
                             </div>
                         </div>
                     </div>

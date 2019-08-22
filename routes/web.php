@@ -156,6 +156,8 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('attendance/import-all','AttendanceController@importAll')->name('attendance.import-all');
 	Route::post('attendance/set-position','AttendanceController@setPosition')->name('attendance-setting.set-position');
 	Route::get('attendance/preview','AttendanceController@attendancePreview')->name('attendance.preview');
+	Route::post('export-attendance', 'AttendanceController@exportAttendance')->name('export-attendance');
+	Route::post('attendance-import', 'AttendanceController@importAttendance')->name('attendance.import');
 });
 
 /**

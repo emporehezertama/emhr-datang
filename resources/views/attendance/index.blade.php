@@ -14,6 +14,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="action" value="view">
                     <input type="hidden" name="reset" value="0">
+                    <input type="hidden" name="eksport" value="0">
                     <input type="hidden" name="import" value="0">
 
                     <div class="pull-right">
@@ -178,6 +179,38 @@
     </div>
 </div>
 
+<div id="modal_import_attendance" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Import Data</h4> </div>
+                    <form method="POST" id="form-upload" enctype="multipart/form-data" class="form-horizontal frm-modal-education" action="{{ route('attendance.import') }}">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-md-3">File (xls)</label>
+                            <div class="col-md-9">
+                                <input type="file" name="file" class="form-control" />
+                            </div>
+                        </div>
+                        <a href="{{ asset('storage/sample/Sample-Attendance.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                        <label class="btn btn-info btn-sm" id="btn_import">Import</label>
+                    </div>
+                </form>
+                <div style="text-align: center;display: none;" class="div-proses-upload">
+                    <h3>Uploading !</h3>
+                    <h1 class=""><i class="fa fa-spin fa-spinner"></i></h1>
+                </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 @section('js')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"
     async defer></script>
@@ -199,27 +232,25 @@
         $("#filter-form").submit();
     }
 
+    function importAttendance(){
+        $('#modal_import_attendance').modal('show');
+        $('.div-proses-upload').hide();
+        $("#form-upload").show();
+    }
+
+    $("#btn_import").click(function(){
+
+        $("#form-upload").submit();
+        $("#form-upload").hide();
+        $('.div-proses-upload').show();
+
+    });
+
     function eksportAttendance(){
-        //$("#filter-form input.form-control, #filter-form select").val("");
-        $("input[name='import']").val(1);
+        $("input[name='eksport']").val(1);
         $("#filter-form").submit();
 
-        $("input[name='import']").val(0);
-
-    /*    var start = $('#filter_start').val();
-        var end = $('#filter_end').val();
-        var id = $('#id').val();
-        var branch = $('#branch').val();
-        
-        $.ajax({
-            type: 'POST',
-            url: '{{ route('import-attendance') }}',
-            data: {'start' : start, 'end' : end, 'id' : id, 'branch' : branch, '_token' : $("meta[name='csrf-token']").attr('content')},
-            dataType: 'json',
-            success : function(data){
-                alert('ok');
-            }
-        }); */
+        $("input[name='eksport']").val(0);
     }
 </script>
 <script>

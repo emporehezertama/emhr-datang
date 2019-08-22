@@ -29,13 +29,21 @@ function get_payroll_history($user_id, $month, $year)
 function cek_payroll_user_id($user_id, $month, $year)
 {
 	// Payroll History
-	$count = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->first();
+	// $count = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->first();
 
-	if($count) return $count;
+	// if($count) return $count;
 
-	$count = \App\Models\Payroll::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->first();
+	// $count = \App\Models\Payroll::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->first();
 
-	if($count) return $count;
+	// if($count) return $count;
+
+	$count = \App\Models\PayrollHistory::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->count();
+
+	if($count) return true;
+
+	$count = \App\Models\Payroll::where('user_id', $user_id)->whereMonth('created_at', $month)->whereYear('created_at', $year)->count();
+
+	if($count) return true;
 
 	return false;
 }
@@ -82,6 +90,58 @@ function get_ptkp($user_id)
 
     return $data;
 }
+function getpphYear($nominal)
+{
+	$pph_setting_1  = \App\Models\PayrollPPH::where('id', 1)->first();
+    // Perhitungan 5 persen
+    $income_tax_calculation_5 = 0;
+    if($nominal < 0)
+    {
+        $income_tax_calculation_5 = 0;   
+	}
+	elseif($nominal <= $pph_setting_1->batas_atas)
+    {
+    	$income_tax_calculation_5 = ($pph_setting_1->tarif / 100) * $nominal;
+    }
+    if($nominal >= $pph_setting_1->batas_atas)
+    {
+    	$income_tax_calculation_5 = ($pph_setting_1->tarif / 100) * $pph_setting_1->batas_atas;
+    }
+    $pph_setting_2  = \App\Models\PayrollPPH::where('id', 2)->first();
+    // Perhitungan 15 persen
+            $income_tax_calculation_15 = 0;
+            if($nominal >= $pph_setting_2->batas_atas)
+            {
+                $income_tax_calculation_15 = ($pph_setting_2->tarif / 100) * ($pph_setting_2->batas_atas - $pph_setting_2->batas_bawah);
+            }
+            if($nominal >= $pph_setting_2->batas_bawah and $nominal <= $pph_setting_2->batas_atas)
+            {
+                $income_tax_calculation_15 = ($pph_setting_2->tarif / 100) * ($nominal - $pph_setting_2->batas_bawah);
+            }
+
+            $pph_setting_3  = \App\Models\PayrollPPH::where('id', 3)->first();
+            // Perhitungan 25 persen
+            $income_tax_calculation_25 = 0;
+            if($nominal >= $pph_setting_3->batas_atas)
+            {
+                $income_tax_calculation_25 = ($pph_setting_3->tarif / 100)  * ($pph_setting_3->batas_atas - $pph_setting_3->batas_bawah);
+            }
+ 
+            if($nominal <= $pph_setting_3->batas_atas and $nominal >= $pph_setting_3->batas_bawah)
+            {
+                $income_tax_calculation_25 = ($pph_setting_3->tarif / 100) * ($nominal - $pph_setting_3->batas_bawah);
+            }
+
+            $pph_setting_4  = \App\Models\PayrollPPH::where('id', 4)->first();
+            $income_tax_calculation_30 = 0;
+            if($nominal >= $pph_setting_4->batas_atas)
+            {
+                $income_tax_calculation_30 = ($pph_setting_4->tarif / 100) * ($nominal - $pph_setting_4->batas_bawah);
+            }
+
+            $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
+    return $yearly_income_tax;
+}
 
 /**
  * Get History Earning
@@ -90,7 +150,8 @@ function get_payroll_earning_history_param($payroll_id, $year, $month, $id)
 {
 	if(!isset($payroll_id)) return 0;
 
-	$data = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id->payroll_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
+	// $data = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id->payroll_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
+	$data = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id)->whereYear('created_at', $year)->whereMonth('created_at', $month)->orderBy('created_at', 'DESC')->first();
 
 	if($data)
 	{
@@ -189,6 +250,98 @@ function bukti_potong($id, $type)
 	return $nominal;		
 }
 
+function send_bukti_potong($id, $tahun,$type)
+{
+	$data_arr = \App\Models\PayrollHistory::select('*',DB::raw('MONTH(created_at) month'))->where('user_id', $id)->whereYear('created_at',$tahun)->groupBy('month')->orderBy('id', 'DESC')->get();
+	
+	$data_start = \App\Models\PayrollHistory::select('*',DB::raw('MONTH(created_at) month'))->where('user_id', $id)->whereYear('created_at',$tahun)->groupBy('month')->orderBy('month', 'ASC')->first();
+	
+	$data_end = \App\Models\PayrollHistory::select('*',DB::raw('MONTH(created_at) month'))->where('user_id', $id)->whereYear('created_at',$tahun)->groupBy('month')->orderBy('month', 'DESC')->first();
+
+	$data = [];
+	foreach($data_arr as $item)
+	{
+		$row = \App\Models\PayrollHistory::select('*',DB::raw('MONTH(created_at) month'))->whereMonth("created_at", $item->month)->where('user_id', $id)->orderBy('id', 'DESC')->first();
+
+		$data[] = $row;
+ 	}
+
+ 	$nominal = 0;
+
+ 	if($type == 'start')
+ 	{
+ 		$nominal = $data_start->month;
+ 	}
+ 	if($type =='end')
+ 	{
+ 		$nominal = $data_end->month;
+ 	}
+
+	if($type == 'gaji' || $type== 'bruto')
+	{
+		foreach($data as $k => $item)
+		{
+			$nominal 	+= $item->salary;
+		}	
+	}
+
+	if($type == 'pph21')
+	{
+		foreach($data as $k => $item)
+		{
+			$nominal 	+= $item->pph21;
+		}	
+	}
+
+	if($type == 'tunjangan' || $type== 'bruto')
+	{
+		foreach($data as $k => $item)
+		{
+			$earning = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_id', $item->id)->groupBy('payroll_earning_id')->orderBy('created_at', 'DESC')->get();
+	
+			if($earning)
+			{
+				foreach($earning as $i)
+				{
+					$nominal 	+= $i->nominal;					
+				}
+			}
+		}	
+	}
+
+	if($type == 'premi' || $type== 'bruto')
+	{	
+		foreach($data as $k => $item)
+		{
+			$nominal 	+= $item->bpjs_jkk_company + $item->bpjs_jkm_company + $item->bpjs_kesehatan_company;
+		}	
+	}
+
+	if($type == 'bonus' || $type== 'bruto')
+	{
+		foreach($data as $k => $item)
+		{
+			$nominal 	+= $item->bonus;
+		}	
+	}
+	if($type == 'burden' || $type=='pengurang')
+	{
+		foreach($data as $k => $item)
+		{
+			$nominal 	+= $item->burden_allow;
+		}	
+	}
+	if($type == 'jht' || $type=='pengurang')
+	{
+		foreach($data as $k => $item)
+		{
+			$nominal 	+= $item->bpjs_pensiun_employee + $item->bpjs_ketenagakerjaan_employee;
+		}	
+	}
+
+	return $nominal;		
+}
+
 /**
  * Get All Year Payroll
  * @return array
@@ -237,6 +390,17 @@ function getEarningEmployee($id, $payroll_id, $type='current')
 
 	return $item;
 }
+function getDeductionEmployeeDataHistory($id, $payroll_id)
+{
+	$item = \App\Models\PayrollDeductionsEmployeeHistory::where('payroll_deduction_id', $id)->where('payroll_id', $payroll_id)->first();
+	return $item;
+}
+
+function getEarningEmployeeDataHistory($id, $payroll_id)
+{
+	$item = \App\Models\PayrollEarningsEmployeeHistory::where('payroll_earning_id', $id)->where('payroll_id', $payroll_id)->first();
+	return $item;
+}
 
 /**
  * Deduction Employee History
@@ -254,6 +418,35 @@ function payrollEarningsEmployeeHistory($id)
 {
 	return App\Models\PayrollEarningsEmployeeHistory::where('payroll_id', $id)->get();
 }
+
+
+function payrollEarningsEmployeeData($id,$bulan,$tahun)
+{
+	$bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+	
+	$intBulan = array_search($bulan, $bulanArray);
+
+	if($intBulan == (Int)date('m') and $tahun == date('Y'))
+    {
+    	return App\Models\PayrollEarningsEmployee::where('payroll_id', $id)->get();
+    }else{
+    	return \App\Models\PayrollEarningsEmployeeHistory::where('payroll_id', $id)->get();
+    }
+}
+
+function payrollDeductionsEmployeeData($id,$bulan,$tahun)
+{
+	$bulanArray = [1=>'Januari',2=>'Februari',3=>'Maret',4=>'April',5=>'Mei',6=>'Juni',7=>'Juli',8=>'Augustus',9=>'September',10=>'Oktober',11=>'November',12=>'Desember'];
+	$intBulan = array_search($bulan, $bulanArray);
+
+	if($intBulan == (Int)date('m') and $tahun == date('Y'))
+    {
+    	return App\Models\PayrollDeductionsEmployee::where('payroll_id', $id)->get();
+    }else{
+    	return \App\Models\PayrollDeductionsEmployeeHistory::where('payroll_id', $id)->get();
+    }
+}
+
 
 /**
  * Earning
@@ -283,4 +476,22 @@ function get_deductions()
     }else{
     	return \App\Models\PayrollDeductions::all();
     }
+}
+
+function get_setting_payroll($id){
+	if(\Auth::user()->project_id != NULL){
+		$value = \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->where('project_id', \Auth::user()->project_id)->get();
+		if(count($value) < 1){
+			return "";
+		}else{
+			return \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->where('project_id', \Auth::user()->project_id)->first()->value;
+		}
+	}else{
+		$value = \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->whereNull('project_id')->get();
+		if(count($value) < 1){
+			return "kakaka";
+		}else{
+			return \App\Models\PayrollNpwp::where('id_payroll_npwp',$id)->whereNull('project_id')->first()->value;
+		}
+	}
 }

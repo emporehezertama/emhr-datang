@@ -236,8 +236,17 @@ class PayrollController extends Controller
         {
             $params['data']       = PayrollHistory::groupBy('user_id')->whereIn('user_id', $dataRequest->user_id)->get();
             $params['tahun']      = $dataRequest->year;
-            $params['nama_npwp']  = PayrollNpwp::where('id',1)->first()->value;
-            $params['no_npwp']    = PayrollNpwp::where('id',2)->first()->value;
+        /*    if(\Auth::user()->project_id != Null){
+                $params['nama_npwp']  = PayrollNpwp::where('id',1)->where('project_id', \Auth::user()->project_id)->first()->value;
+                $params['no_npwp']    = PayrollNpwp::where('id',2)->where('project_id', \Auth::user()->project_id)->first()->value;
+            }else{
+                $params['nama_npwp']  = PayrollNpwp::where('id',1)->whereNull('project_id')->first()->value;
+                $params['no_npwp']    = PayrollNpwp::where('id',2)->whereNull('project_id')->first()->value;
+            }   */
+
+            $params['nama_npwp']  = get_setting_payroll(1);
+            $params['no_npwp']    = get_setting_payroll(2);
+            
 
             $view = view('administrator.payroll.bukti-potong')->with($params);
             $pdf = \App::make('dompdf.wrapper');
@@ -309,6 +318,7 @@ class PayrollController extends Controller
         return (new \App\Models\PayrollExportYear($request->year, $request->user_id))->download('EM-HR.Payroll-'. $request->year .'.xlsx');
     }
 
+    
     /**
      * [downloadExlce description]
      * @param  Request $request [description]
@@ -796,7 +806,12 @@ class PayrollController extends Controller
      */
     public function download()
     {
-        $users = \App\User::where('access_id', 2)->get();
+        if(\Auth::user()->project_id != Null){
+            $users = \App\User::where('access_id', 2)->where('project_id', \Auth::user()->project_id)->get();
+        }else{
+            $users = \App\User::where('access_id', 2)->get();
+        }
+        
 
         $params = [];
 
