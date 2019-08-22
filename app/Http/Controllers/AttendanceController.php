@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Absensi;
 use App\Models\AbsensiDevice;
 use App\Models\AbsensiItem;
+use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiSetting;
 use App\Models\AttendanceExport;
 use App\User;
@@ -147,13 +148,145 @@ class AttendanceController extends Controller
         return redirect()->route('attendance-setting.index')->with('message-success', 'Setting Deleted.');
     }
 
-    public function importAttendance($start, $end, $branch, $id){
-        $params['data'] =   dataAttendance($start, $end, $branch, $id);
+    /**
+     * Import Attendance
+     * @param  Request $request
+     * @return void
+     */
+    public function attendanceImport(Request $request)
+    {
+        if($request->hasFile('file'))
+        {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = [];
+            foreach ($worksheet->getRowIterator() AS $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                $cells = [];
+                foreach ($cellIterator as $cell) {
+                    $cells[] = $cell->getValue();
+                }
+                $rows[] = $cells;
+            }
 
-        $name_excel = 'Attendance'.date('YmdHis');
-    //    Excel::store(new AttendanceExport($start, $end, $branch, $id), $name_excel.'.xlsx');
-        return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
+            AbsensiItemTemp::truncate();
+            // delete all table temp
+            foreach($rows as $key => $item)
+            {
+                if(empty($item[1])) continue;
+                
+                if($key ==0) continue;
+                
+                // check nik 
+                $user =  User::where('nik', $item[1])->first();
+                if($user)
+                {
+                    $date           = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[2]);
+                    $clock_in       = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[3]);
+                    $clock_out      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[4]);
+                    
+                    $data               = new AbsensiItemTemp();
+                    $data->user_id      = $user->id;
+                    $data->date         = $date->format('Y-m-d');
+                    $data->timetable    = date('l', strtotime($data->date));   
+                    $data->clock_in     = $clock_in->format('H:i:s');
+                    $data->clock_out    = $clock_out->format('H:i:s');
 
-    //  return redirect()->route('attendance.index');
+                    // Clock In
+                    if(isset($data->user->absensiSetting->clock_in))
+                    {
+                        $awal  = strtotime($data->date .' '. $data->user->absensiSetting->clock_in .':00');
+                        $akhir = strtotime($data->date .' '. $data->clock_in);
+                        $diff  = $akhir - $awal;
+                        $jam   = floor($diff / (60 * 60));
+                        $menit = ($diff - $jam * (60 * 60)) / 60;
+                        
+                        if($diff > 0)
+                        {
+                            $jam = abs($jam);
+                            $menit = abs($menit);
+                            $jam = $jam <= 9 ? "0".$jam : $jam;
+                            $menit = $menit <= 9 ? "0".$menit : $menit;
+
+                            $data->late = $jam .':'. $menit;
+                        }
+                    }
+
+                    if(isset($data->user->absensiSetting->clock_out))
+                    {
+                        $akhir  = strtotime($data->date .' '. $data->user->absensiSetting->clock_out .':00');
+                        $awal = strtotime($data->date .' '. $data->clock_out);
+                        $diff  = $akhir - $awal;
+                        $jam   = floor($diff / (60 * 60));
+                        $menit = ($diff - $jam * (60 * 60)) / 60;
+                        
+                        if($jam > 0 || $menit > 0)
+                        {
+                            $jam = abs($jam);
+                            $menit = abs($menit);
+                            $jam = $jam <= 9 ? "0".$jam : $jam;
+                            $menit = $menit <= 9 ? "0".$menit : $menit;
+
+                            $data->early = $jam .':'. $menit; 
+                        }
+                    }
+
+                    if(!empty($data->clock_out) and !empty($data->clock_in))
+                    {
+                        $awal  = strtotime($data->date .' '. $data->clock_in);
+                        $akhir = strtotime($data->date .' '. $data->clock_out);
+                        $diff  = $akhir - $awal;
+                        $jam   = floor($diff / (60 * 60));
+                        $menit = ($diff - $jam * (60 * 60) ) / 60;
+
+                        $jam = $jam <= 9 ? "0".$jam : $jam;
+
+                        $data->work_time        = $jam .':'. $menit;  
+                    }
+
+                    $data->save();
+                }
+            }   
+        }
+
+        return redirect()->route('attendance.preview')->with('message-success', 'Import success');
+    }
+
+    /**
+     * Import Attendance
+     * @param  Request $request
+     * @return void
+     */
+    public function attendancePreview()
+    {
+        $params['data'] = AbsensiItemTemp::all();
+
+        return view('attendance.preview')->with($params);
+    }
+
+    /**
+     * Import All
+     * @return void
+     */
+    public function importAll()
+    {
+        $data = AbsensiItemTemp::all();
+        foreach($data as $i)
+        {
+            $item               = new AbsensiItem();
+            $item->user_id      = $i->user_id;
+            $item->date         = $i->date;
+            $item->timetable    = $i->timetable;
+            $item->clock_in     = $i->clock_in; 
+            $item->clock_out    = $i->clock_out; 
+            $item->early        = $i->early; 
+            $item->late         = $i->late; 
+            $item->save();
+        }
+
+        AbsensiItemTemp::truncate();
+
+        return redirect()->route('attendance.index')->with('message-success', 'Import success');
     }
 }

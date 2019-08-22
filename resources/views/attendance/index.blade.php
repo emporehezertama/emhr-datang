@@ -24,6 +24,7 @@
                             <ul role="menu" class="dropdown-menu">
                                 <li><a href="javascript:void(0)" onclick="reset_filter()"><i class="fa fa-refresh"></i> Reset Filter </a></li>
                                 <li><a href="javascript:void(0)" onclick="eksportAttendance()"><i class="fa fa-download"></i> Eksport </a></li>
+                                <li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_import"><i class="fa fa-upload"></i> Import </a></li>
                             </ul>
                         </div>
                         <button id="filter_view" class="btn btn-default btn-sm btn-outline"> <i class="fa fa-search-plus"></i></button>
@@ -112,6 +113,37 @@
     @include('layouts.footer')
 </div>
 
+
+<div id="modal_import" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="POST" class="form-horizontal" action="{{ route('attendance.import') }}" enctype="multipart/form-data">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Import Attendance</h4> 
+            </div>
+            <div class="modal-body">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <label class="col-md-12">File </label>
+                    <div class="col-md-6">
+                        <input type="file" class="form-control" required name="file">
+                    </div>
+                    <div class="col-md-12">
+                        <a href="{{ asset('storage/sample/Sample-attendance.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-info waves-effect btn-sm">Import</button>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+
+
 <div id="modal_detail_attendance" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -145,6 +177,7 @@
         </div>
     </div>
 </div>
+
 @section('js')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApcqhDgYwp6yKi4Xs-V6QIcd0KDyzu5d8"
     async defer></script>
