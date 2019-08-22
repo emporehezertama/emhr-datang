@@ -219,14 +219,14 @@ class AttendanceController extends Controller
                     $data->user_id      = $user->id;
                     $data->date         = $date->format('Y-m-d');
                     $data->timetable    = date('l', strtotime($data->date));   
-                    $data->clock_in     = $clock_in->format('H:i:s');
-                    $data->clock_out    = $clock_out->format('H:i:s');
+                    $data->clock_in     = $clock_in->format('H:i');
+                    $data->clock_out    = $clock_out->format('H:i');
 
                     // Clock In
                     if(isset($data->user->absensiSetting->clock_in))
                     {
                         $awal  = strtotime($data->date .' '. $data->user->absensiSetting->clock_in .':00');
-                        $akhir = strtotime($data->date .' '. $data->clock_in);
+                        $akhir = strtotime($data->date .' '. $data->clock_in.":00");
                         $diff  = $akhir - $awal;
                         $jam   = floor($diff / (60 * 60));
                         $menit = ($diff - $jam * (60 * 60)) / 60;
@@ -245,14 +245,14 @@ class AttendanceController extends Controller
                     if(isset($data->user->absensiSetting->clock_out))
                     {
                         $akhir  = strtotime($data->date .' '. $data->user->absensiSetting->clock_out .':00');
-                        $awal = strtotime($data->date .' '. $data->clock_out);
+                        $awal = strtotime($data->date .' '. $data->clock_out.":00");
                         $diff  = $akhir - $awal;
                         $jam   = floor($diff / (60 * 60));
                         $menit = ($diff - $jam * (60 * 60)) / 60;
                         if($diff > 0)
                         {
                             $awal  = date_create($data->date .' '. $data->user->absensiSetting->clock_out .':00');
-                            $akhir = date_create($data->date .' '. $data->clock_out); // waktu sekarang, pukul 06:13
+                            $akhir = date_create($data->date .' '. $data->clock_out.":00"); // waktu sekarang, pukul 06:13
                             $diff  = @date_diff( $akhir, $awal );
                             $data->early = @$diff->h .':'. @$diff->i;
                         }
@@ -260,8 +260,8 @@ class AttendanceController extends Controller
 
                     if(!empty($data->clock_out) and !empty($data->clock_in))
                     {
-                        $awal  = strtotime($data->date .' '. $data->clock_in);
-                        $akhir = strtotime($data->date .' '. $data->clock_out);
+                        $awal  = strtotime($data->date .' '. $data->clock_in.":00");
+                        $akhir = strtotime($data->date .' '. $data->clock_out.":00");
                         $diff  = $akhir - $awal;
                         $jam   = floor($diff / (60 * 60));
                         $menit = ($diff - $jam * (60 * 60) ) / 60;
