@@ -1,13 +1,13 @@
 @extends('layouts.administrator')
 
-@section('title', 'General Setting')
+@section('title', 'Attendance & Shift')
 
 @section('content')
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row bg-title">
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                <h4 class="page-title">Attendance Setting</h4> </div>
+                <h4 class="page-title">Attendance & Shift</h4> </div>
             <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal_add"><i class="fa fa-plus"></i> Add Setting</button>
             </div>
