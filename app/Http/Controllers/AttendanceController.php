@@ -308,6 +308,7 @@ class AttendanceController extends Controller
             $item->clock_out    = $i->clock_out; 
             $item->early        = $i->early; 
             $item->late         = $i->late; 
+            $item->work_time    = $i->work_time; 
             $item->save();
         }
 
