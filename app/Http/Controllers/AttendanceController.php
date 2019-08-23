@@ -300,15 +300,39 @@ class AttendanceController extends Controller
         $data = AbsensiItemTemp::all();
         foreach($data as $i)
         {
-            $item               = new AbsensiItem();
-            $item->user_id      = $i->user_id;
-            $item->date         = $i->date;
-            $item->timetable    = $i->timetable;
-            $item->clock_in     = $i->clock_in; 
-            $item->clock_out    = $i->clock_out; 
-            $item->early        = $i->early; 
-            $item->late         = $i->late; 
-            $item->work_time    = $i->work_time; 
+            $item = AbsensiItem::where('user_id', $i->user_id)->whereDate('date', $i->date)->first();
+            if(!$item)
+            {
+                $item               = new AbsensiItem();
+                $item->user_id      = $i->user_id;
+                $item->date         = $i->date;
+                $item->timetable    = $i->timetable;
+                $item->clock_in     = $i->clock_in; 
+                $item->clock_out    = $i->clock_out; 
+                $item->early        = $i->early; 
+                $item->late         = $i->late; 
+                $item->work_time    = $i->work_time;
+            }
+            else
+            {
+                if(empty($item->clock_in))
+                {
+                    $item->clock_in     = $i->clock_in; 
+                    $item->early        = $i->early;  
+                }
+
+                if(empty($item->clock_out))
+                {
+                    $item->clock_out     = $i->clock_out;  
+                    $item->late         = $i->late; 
+                }
+
+                if(empty($item->work_time))
+                {
+                    $item->work_time    = $i->work_time;
+                }
+            }
+ 
             $item->save();
         }
 
