@@ -355,13 +355,11 @@ class PayrollController extends Controller
             $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->bpjs_kesehatan_company; //$item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             
             
-            // if(\Auth::user()->project_id != Null){
-            //     $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
-            // }else{
-            //     $payrollearning = PayrollEarnings::all();
-            // }
-
-            $payrollearning = PayrollEarnings::all();
+             if(\Auth::user()->project_id != Null){
+                 $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
+             }else{
+                 $payrollearning = PayrollEarnings::all();
+             }
 
             foreach($payrollearning as $i)
             {   
