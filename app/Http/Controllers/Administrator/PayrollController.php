@@ -269,7 +269,8 @@ class PayrollController extends Controller
 
                 if(!isset($dataHistory)) continue;
                 if(isset($dataHistory)){
-                    $payroll = PayrollHistory::where('id', $dataHistory->id)->update(['is_lock' => 1]);
+                    $payrollhist = PayrollHistory::where('id', $dataHistory->id)->update(['is_lock' => 1]);
+                    $payroll = Payroll::where('id', PayrollHistory::where('id', $dataHistory->id)->first()->payroll_id)->update(['is_lock' => 1]);
                 }  
             }
         }
@@ -381,7 +382,7 @@ class PayrollController extends Controller
 
                 $params[$k][$i->title] = $earning;
             }
-            $params[$k]['Monthly Income Tax / PPh21']                                                           = $item->pph21;
+            $params[$k]['Monthly Income Tax (Company)']                                                           = $item->pph21;
             $params[$k]['Total Earnings']                                                                       = $item->total_earnings;
 
 
@@ -418,7 +419,7 @@ class PayrollController extends Controller
             $params[$k]['Total BPJS (Company) ']   = PayrollHistory::where('payroll_id', $item->id)->latest()->first()->bpjstotalearning;
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
-            $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
+            $params[$k]['Monthly Income Tax (Employee)']                    = $item->yearly_income_tax;
             $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
             $params[$k]['Acc Name']                             = isset($item->user->nama_rekening) ? $item->user->nama_rekening : '';
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
@@ -924,8 +925,9 @@ class PayrollController extends Controller
      */
     public function detail($id)
     {
-        //$params['data'] = Payroll::where('id', $id)->first();
-        $params['data'] = PayrollHistory::where('id', $id)->first();
+         $params['data'] = Payroll::where('id', $id)->first();
+
+        //$params['data'] = PayrollHistory::where('id', $id)->first();
         //$params['create_by_payroll_id'] = false;
         $params['update_history'] = true;
 
