@@ -416,7 +416,8 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->bpjs_ketenagakerjaan_employee;
             $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
-            $params[$k]['Total BPJS (Company) ']   = Payroll::where('id', $item->id)->first()->bpjstotalearning;
+        //    $params[$k]['Total BPJS (Company) ']   = Payroll::where('id', $item->id)->first()->bpjstotalearning;
+            $params[$k]['Total BPJS (Company) ']   = $item->bpjstotalearning;
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Monthly Income Tax (Employee)']                    = $item->pph21;
