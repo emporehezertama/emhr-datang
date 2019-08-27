@@ -415,12 +415,16 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->bpjs_ketenagakerjaan_employee;
             $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
+            $params[$k]['Total BPJS (Company) ']   = PayrollHistory::where('payroll_id', $item->id)->latest()->first()->bpjstotalearning;
+            
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
             $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
-            $params[$k]['Take Home Pay']                        = $item->thp;
             $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
             $params[$k]['Acc Name']                             = isset($item->user->nama_rekening) ? $item->user->nama_rekening : '';
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
+
+            
+            $params[$k]['Take Home Pay']                        = $item->thp;
         }
 
         return (new \App\Models\PayrollExportMonth(request()->year, request()->month, $params))->download('EM-HR.Payroll-'. $request->year .'-'. $request->month.'.xlsx');
@@ -1574,7 +1578,7 @@ class PayrollController extends Controller
             $history->bpjs_ketenagakerjaan2            = $temp->bpjs_ketenagakerjaan2;
             $history->bpjs_kesehatan2                  = $temp->bpjs_kesehatan2;
             $history->bpjs_pensiun2                    = $temp->bpjs_pensiun2;
-            $history->total_deduction                  = $temp->total_deductions;
+            $history->total_deduction                  = $temp->total_deduction;
             $history->total_earnings                   = $temp->total_earnings;
             $history->pph21                            = $temp->pph21;
             

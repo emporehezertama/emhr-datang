@@ -107,11 +107,19 @@ function employee($status='all')
 	if($status== 'active')
 	{
 	//	$employee = \App\Models\AbsensiItem::whereDate('date','=', $today)->count();
-		$employee = DB::table('absensi_item')
+		if($user->project_id != NULL)
+		{
+			$employee = DB::table('absensi_item')
 						->join('users', 'absensi_item.user_id','=', 'users.id')
 						->where('users.project_id', \Auth::user()->project_id)
 						->whereDate('absensi_item.date','=', $today)
 						->count();
+		}else{
+			$employee = DB::table('absensi_item')
+						->whereDate('date','=', $today)
+						->count();
+		}
+		
 
 	}
 
@@ -159,11 +167,11 @@ function employee($status='all')
 
 	if($status == 'late-comers')
 	{
-		$employee = \App\Models\AbsensiItem::where('late', 1)->whereDate('date','=', $today)->count();
+	//	$employee = \App\Models\AbsensiItem::whereNotNull('late')->whereDate('date','=', $today)->count();
 		$employee = DB::table('absensi_item')
 						->join('users', 'absensi_item.user_id','=', 'users.id')
 						->where('users.project_id', \Auth::user()->project_id)
-						->where('absensi_item.late', 1)
+						->whereNotNull('absensi_item.late')
 						->whereDate('absensi_item.date','=', $today)
 						->count();
 	}
