@@ -419,7 +419,7 @@ class PayrollController extends Controller
             $params[$k]['Total BPJS (Company) ']   = PayrollHistory::where('payroll_id', $item->id)->latest()->first()->bpjstotalearning;
             
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
-            $params[$k]['Monthly Income Tax (Employee)']                    = $item->yearly_income_tax;
+            $params[$k]['Monthly Income Tax (Employee)']                    = $item->pph21;
             $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
             $params[$k]['Acc Name']                             = isset($item->user->nama_rekening) ? $item->user->nama_rekening : '';
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
@@ -927,7 +927,7 @@ class PayrollController extends Controller
     {
          $params['data'] = Payroll::where('id', $id)->first();
 
-        //$params['data'] = PayrollHistory::where('id', $id)->first();
+        //$params['data'] = PayrollHistory::where('payroll_id', $id)->first();
         //$params['create_by_payroll_id'] = false;
         $params['update_history'] = true;
 
@@ -1637,9 +1637,17 @@ class PayrollController extends Controller
             foreach($request->user_id as $user_id)
             {
                 $user = User::where('id', $user_id)->first();
-                $dataArray   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $month ." and user_id=". $user_id ." and YEAR(created_at) =". $year. ' ORDER BY id DESC'));
+            //    $dataArray   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $month ." and user_id=". $user_id ." and YEAR(created_at) =". $year. ' ORDER BY id DESC'));
+                $dataArray   = PayrollHistory::where('user_id', $user_id)
+                                                 ->where(\DB::raw('month(created_at)'), $month)
+                                                 ->where(\DB::raw('year(created_at)'), $year)
+                                                
+                                                ->select('payroll_history.*', \DB::raw('month(created_at)'))->get();
+                    
+
                     if(!$dataArray)
                     {
+                        
                         continue;
                     }else
                     {
