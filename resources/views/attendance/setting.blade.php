@@ -13,9 +13,47 @@
             </div>
         </div>
         <div class="row">
-            <form class="form-horizontal" id="form-setting" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.save') }}" method="POST">
-                {{ csrf_field() }}
-                <div class="col-md-12 p-l-0 p-r-0">
+
+            <div class="col-md-6 p-l-0 p-r-0">
+                <div class="white-box">
+                    <h3 class="box-title">Mobile Setting</h3>
+                    <form class="form-horizontal" id="form-setting" enctype="multipart/form-data" name="form_setting" action="{{ route('administrator.attendance.setting-save') }}" method="POST">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <label class="col-md-12">Logo</label>
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" name="attendance_logo" />
+                            </div>
+                            <div class="col-md-6">
+                                @if(!empty(get_setting('attendance_logo')))
+                                <img src="{{ get_setting('attendance_logo') }}" style="height: 50px; " />
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Name Company</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="setting[attendance_company]" value="{{ get_setting('attendance_company') }}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Notification / News / Memo</label>
+                            <div class="col-md-12">
+                                <textarea name="setting[attendance_news]" class="form-control">{{ get_setting('attendance_news') }}</textarea>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 p-r-0">
+                <form class="form-horizontal" id="form-setting" name="form_setting" enctype="multipart/form-data" action="{{ route('administrator.setting.save') }}" method="POST">
+                    {{ csrf_field() }}
                     <div class="white-box">
                         <table class="data_table_no_pagging table table-background">
                             <thead>
@@ -55,8 +93,8 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </form>                   
+                </form>  
+            </div>                 
         </div>
     </div>
     @include('layouts.footer')

@@ -9,6 +9,7 @@ use App\Models\AbsensiItem;
 use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiSetting;
 use App\Models\AttendanceExport;
+use App\Models\Setting;
 use App\User;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -112,6 +113,67 @@ class AttendanceController extends Controller
 
         return view('attendance.index')->with($params);
     }
+
+    /**
+     * Save Setting
+     * @param  Request $request
+     * @return void
+     */
+    public function settingSave(Request $request)
+    {
+        $user = \Auth::user();
+
+        if($request->setting)
+        {
+            foreach($request->setting as $key => $value)
+            {
+                if($user->project_id != NULL)
+                {
+                    $setting = Setting::where('key', $key)->where('project_id',$user->project_id)->first();
+                }else{
+                    $setting = Setting::where('key', $key)->first();
+                }
+                if(!$setting)
+                {
+                    $setting = new Setting();
+                    $setting->key = $key;
+                }
+                $setting->user_created = $user->id;
+                $setting->project_id = $user->project_id;
+                $setting->value = $value;
+                $setting->save();
+            }
+        }
+        
+        if ($request->hasFile('attendance_logo'))
+        {
+            $file = $request->file('attendance_logo');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/upload/setting');
+            $file->move($destinationPath, $fileName);
+
+            if($user->project_id != NULL)
+            {
+                $setting = Setting::where('key', 'attendance_logo')->where('project_id',$user->project_id)->first();
+            } else{
+                $setting = Setting::where('key', 'attendance_logo')->first();
+            }
+            if(!$setting)
+            {
+                $setting = new Setting();
+                $setting->key = 'attendance_logo';
+            }
+            $setting->user_created = $user->id;
+            $setting->project_id = $user->project_id;
+            $setting->value = '/upload/setting/' . $fileName;
+            $setting->save();
+        }
+
+        return redirect()->route('attendance-setting.index')->with('message-success', 'Setting saved');
+
+    }   
+
 
     /**
      * Detail Attandance
@@ -254,7 +316,11 @@ class AttendanceController extends Controller
                             $awal  = date_create($data->date .' '. $data->user->absensiSetting->clock_out .':00');
                             $akhir = date_create($data->date .' '. $data->clock_out.":00"); // waktu sekarang, pukul 06:13
                             $diff  = @date_diff( $akhir, $awal );
-                            $data->early = @$diff->h .':'. @$diff->i;
+
+                            $jam    = @$diff->h <= 9 ? "0".$diff->h : $diff->h;
+                            $menit  = @$diff->i <= 9 ? "0".$diff->i : $diff->i;
+
+                            $data->early = $jam .':'. $menit;
                         }
                     }
 
@@ -267,6 +333,7 @@ class AttendanceController extends Controller
                         $menit = ($diff - $jam * (60 * 60) ) / 60;
 
                         $jam = $jam <= 9 ? "0".$jam : $jam;
+                        $menit = $menit <= 9 ? "0".$menit : $menit;
 
                         $data->work_time        = $jam .':'. $menit;  
                     }

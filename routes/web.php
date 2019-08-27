@@ -157,6 +157,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('attendance/set-position','AttendanceController@setPosition')->name('attendance-setting.set-position');
 	Route::get('attendance/preview','AttendanceController@attendancePreview')->name('attendance.preview');
 	Route::post('export-attendance', 'AttendanceController@exportAttendance')->name('export-attendance');
+	Route::post('attendance/setting-save', 'AttendanceController@settingSave')->name('administrator.attendance.setting-save');
 });
 
 /**
