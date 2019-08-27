@@ -269,8 +269,7 @@ class PayrollController extends Controller
 
                 if(!isset($dataHistory)) continue;
                 if(isset($dataHistory)){
-                    $payrollhist = PayrollHistory::where('id', $dataHistory->id)->update(['is_lock' => 1]);
-                    $payroll = Payroll::where('id', PayrollHistory::where('id', $dataHistory->id)->first()->payroll_id)->update(['is_lock' => 1]);
+                    $payroll = PayrollHistory::where('id', $dataHistory->id)->update(['is_lock' => 1]);
                 }  
             }
         }
@@ -356,11 +355,11 @@ class PayrollController extends Controller
             $params[$k]['BPJS Kesehatan (Company) '. get_setting('bpjs_kesehatan_company').'%']                 = $item->bpjs_kesehatan_company; //$item->salary *  get_setting('bpjs_kesehatan_company') / 100;
             
             
-             if(\Auth::user()->project_id != Null){
-                 $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
-             }else{
-                 $payrollearning = PayrollEarnings::all();
-             }
+            if(\Auth::user()->project_id != Null){
+                $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
+            }else{
+                $payrollearning = PayrollEarnings::all();
+            }
 
             foreach($payrollearning as $i)
             {   
@@ -382,7 +381,7 @@ class PayrollController extends Controller
 
                 $params[$k][$i->title] = $earning;
             }
-            $params[$k]['Monthly Income Tax (Company)']                                                           = $item->pph21;
+            $params[$k]['Monthly Income Tax / PPh21']                                                           = $item->pph21;
             $params[$k]['Total Earnings']                                                                       = $item->total_earnings;
 
 
@@ -416,17 +415,12 @@ class PayrollController extends Controller
             $params[$k]['BPJS Jaminan Hari Tua (JHT) (Employee) '. get_setting('bpjs_jaminan_jht_employee').'%']= $item->bpjs_ketenagakerjaan_employee;
             $params[$k]['BPJS Kesehatan (Employee) '. get_setting('bpjs_kesehatan_employee').'%']               = $item->bpjs_kesehatan_employee; //$item->salary *  get_setting('bpjs_kesehatan_employee') / 100;
             $params[$k]['BPJS Jaminan Pensiun (JP) (Employee) '. get_setting('bpjs_jaminan_jp_employee').'%']   = $item->bpjs_pensiun_employee;
-        //    $params[$k]['Total BPJS (Company) ']   = Payroll::where('id', $item->id)->first()->bpjstotalearning;
-            $params[$k]['Total BPJS (Company) ']   = $item->bpjstotalearning;
-            
             $params[$k]['Total Deduction (Burden + BPJS)']      = $item->total_deduction;
-            $params[$k]['Monthly Income Tax (Employee)']                    = $item->pph21;
+            $params[$k]['Yearly Income Tax']                    = $item->yearly_income_tax;
+            $params[$k]['Take Home Pay']                        = $item->thp;
             $params[$k]['Acc No']                               = isset($item->user->nomor_rekening) ? $item->user->nomor_rekening : '';
             $params[$k]['Acc Name']                             = isset($item->user->nama_rekening) ? $item->user->nama_rekening : '';
             $params[$k]['Bank Name']                            = isset($item->user->bank->name) ? $item->user->bank->name : '';
-
-            
-            $params[$k]['Take Home Pay']                        = $item->thp;
         }
 
         return (new \App\Models\PayrollExportMonth(request()->year, request()->month, $params))->download('EM-HR.Payroll-'. $request->year .'-'. $request->month.'.xlsx');
@@ -850,13 +844,7 @@ class PayrollController extends Controller
                 $params[$k]['Salary']                    = $payroll->salary;
                 $params[$k]['Bonus / THR']  = $payroll->bonus;
                 
-
-                if(\Auth::user()->project_id != Null){
-                    $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
-                }else{
-                    $payrollearning = PayrollEarnings::all();
-                }
-                foreach($payrollearning as $item)
+                foreach(PayrollEarnings::all() as $item)
                 {   
                     $earning = PayrollEarningsEmployee::where('payroll_id', $payroll->id)->where('payroll_earning_id', $item->id)->first();
                     if($earning) 
@@ -870,12 +858,7 @@ class PayrollController extends Controller
                 }
 
                 // earnings
-                if(\Auth::user()->project_id != Null){
-                    $payrolldeduction = PayrollDeductions::where('user_created', \Auth::user()->id)->get();
-                }else{
-                    $payrolldeduction = PayrollDeductions::all();
-                }
-                foreach($payrolldeduction as $item)
+                foreach(PayrollDeductions::all() as $item)
                 {   
                     $deduction = PayrollDeductionsEmployee::where('payroll_id', $payroll->id)->where('payroll_deduction_id', $item->id)->first();
                     if($deduction) 
@@ -893,23 +876,13 @@ class PayrollController extends Controller
                 $params[$k]['Salary']                     = 0;
                 $params[$k]['Bonus / THR']                = 0;
 
-                if(\Auth::user()->project_id != Null){
-                    $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
-                }else{
-                    $payrollearning = PayrollEarnings::all();
-                }
-                foreach($payrollearning as $item)
+                foreach(PayrollEarnings::all() as $item)
                 {   
                     $params[$k][$item->title] = 0;
                 }
 
                 // earnings
-                if(\Auth::user()->project_id != Null){
-                    $payrolldeduction = PayrollDeductions::where('user_created', \Auth::user()->id)->get();
-                }else{
-                    $payrolldeduction = PayrollDeductions::all();
-                }
-                foreach($payrolldeduction as $item)
+                foreach(PayrollDeductions::all() as $item)
                 {   
                     $params[$k][$item->title] = 0;
                 }
@@ -926,9 +899,8 @@ class PayrollController extends Controller
      */
     public function detail($id)
     {
-        // $params['data'] = Payroll::where('id', $id)->first();
-
-        $params['data'] = PayrollHistory::where('payroll_id', $id)->first();
+        //$params['data'] = Payroll::where('id', $id)->first();
+        $params['data'] = PayrollHistory::where('id', $id)->first();
         //$params['create_by_payroll_id'] = false;
         $params['update_history'] = true;
 
@@ -1581,7 +1553,7 @@ class PayrollController extends Controller
             $history->bpjs_ketenagakerjaan2            = $temp->bpjs_ketenagakerjaan2;
             $history->bpjs_kesehatan2                  = $temp->bpjs_kesehatan2;
             $history->bpjs_pensiun2                    = $temp->bpjs_pensiun2;
-            $history->total_deduction                  = $temp->total_deduction;
+            $history->total_deduction                  = $temp->total_deductions;
             $history->total_earnings                   = $temp->total_earnings;
             $history->pph21                            = $temp->pph21;
             
@@ -1638,17 +1610,9 @@ class PayrollController extends Controller
             foreach($request->user_id as $user_id)
             {
                 $user = User::where('id', $user_id)->first();
-            //    $dataArray   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $month ." and user_id=". $user_id ." and YEAR(created_at) =". $year. ' ORDER BY id DESC'));
-                $dataArray   = PayrollHistory::where('user_id', $user_id)
-                                                 ->where(\DB::raw('month(created_at)'), $month)
-                                                 ->where(\DB::raw('year(created_at)'), $year)
-                                                
-                                                ->select('payroll_history.*', \DB::raw('month(created_at)'))->get();
-                    
-
+                $dataArray   = \DB::select(\DB::raw("SELECT payroll_history.*, month(created_at) as bulan FROM payroll_history WHERE MONTH(created_at)=". $month ." and user_id=". $user_id ." and YEAR(created_at) =". $year. ' ORDER BY id DESC'));
                     if(!$dataArray)
                     {
-                        
                         continue;
                     }else
                     {
@@ -1889,6 +1853,7 @@ class PayrollController extends Controller
 
     	if($request->hasFile('file'))
         {
+            //$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
             $worksheet = $spreadsheet->getActiveSheet();
             $rows = [];
@@ -1940,12 +1905,7 @@ class PayrollController extends Controller
                     // jika payroll belum ada insert baru
                     if($new==1)
                     {
-                        if(\Auth::user()->project_id != Null){
-                            $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
-                        }else{
-                            $payrollearning = PayrollEarnings::all();
-                        }
-                        foreach($payrollearning as $item)
+                        foreach(PayrollEarnings::all() as $item)
                         {   
                             if(!empty($row[$count_row]))
                             {
@@ -1958,12 +1918,7 @@ class PayrollController extends Controller
                             $count_row++;
                         }
 
-                        if(\Auth::user()->project_id != Null){
-                            $payrolldeduction = PayrollDeductions::where('user_created', \Auth::user()->id)->get();
-                        }else{
-                            $payrolldeduction = PayrollDeductions::all();
-                        }
-                        foreach($payrolldeduction as $item)
+                        foreach(PayrollDeductions::all() as $item)
                         {   
                             if(!empty($row[$count_row]))
                             {
@@ -1978,12 +1933,7 @@ class PayrollController extends Controller
                     }
                     if($new==0)
                     {
-                        if(\Auth::user()->project_id != Null){
-                            $payrollearning = PayrollEarnings::where('user_created', \Auth::user()->id)->get();
-                        }else{
-                            $payrollearning = PayrollEarnings::all();
-                        }
-                        foreach($payrollearning as $i)
+                        foreach(PayrollEarnings::all() as $i)
                         {   
                             if(!empty($row[$count_row]))
                             {
@@ -2003,12 +1953,7 @@ class PayrollController extends Controller
                         }
 
                         // earnings
-                        if(\Auth::user()->project_id != Null){
-                            $payrolldeduction = PayrollDeductions::where('user_created', \Auth::user()->id)->get();
-                        }else{
-                            $payrolldeduction = PayrollDeductions::all();
-                        }
-                        foreach($payrolldeduction as $i)
+                        foreach(PayrollDeductions::all() as $i)
                         {   
                             if(!empty($row[$count_row]))
                             {

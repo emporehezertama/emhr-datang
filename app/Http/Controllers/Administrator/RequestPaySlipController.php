@@ -82,46 +82,69 @@ class RequestPaySlipController extends Controller
             {
                 $dataArray[$k] = $items[0];
             }
-        }
 
-        $params['total']        = $total;
-        $params['dataArray']    = $dataArray;
-        $params['data']         = $data;
-        $params['bulan']        = $bulan;
-        $params['tahun']        = $request->tahun;
+            
 
-        $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);
+            if(!$items)
+            {
+                
+                continue;
+            }else
+            {
+                
+                if($items)
+                {
+                    
+                    $skip = 0;
+                    foreach ($items as $key => $value) {
+                        # code...
+                        if($value->is_lock == 0 || empty($value->is_lock) || $value->is_lock == null) {
+                            $skip = 1;
+                            continue;
+                        }else{
+                            $params['total']        = $total;
+                            $params['dataArray']    = $dataArray;
+                            $params['data']         = $data;
+                            $params['bulan']        = $bulan;
+                            $params['tahun']        = $request->tahun;
 
-        $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
+                            $view =  view('administrator.request-pay-slip.print-pay-slip')->with($params);
 
-        $pdf->stream();
+                            $pdf = \App::make('dompdf.wrapper');
+                            $pdf->loadHTML($view);
 
-        $output = $pdf->output();
-        $destinationPath = public_path('/storage/temp/');
+                            $pdf->stream();
 
-        file_put_contents( $destinationPath . $data->user->nik .'.pdf', $output);
+                            $output = $pdf->output();
+                            $destinationPath = public_path('/storage/temp/');
 
-        $file = $destinationPath . $data->user->nik .'.pdf';
+                            file_put_contents( $destinationPath . $data->user->nik .'.pdf', $output);
 
-        // send email
-        $objDemo = new \stdClass();
-        $objDemo->content = view('administrator.request-pay-slip.email-pay-slip'); 
-        
-        if($data->user->email != "")
-        { 
-            \Mail::send('administrator.request-pay-slip.email-pay-slip', $params,
-                function($message) use($file, $data, $bulan) {
-                    $message->from('info@system.com');
-                    $message->to($data->user->email);
-                    $message->subject('Request Pay-Slip Bulan ('. implode('/', $bulan) .')');
-                    $message->attach($file, array(
-                            'as' => 'Payslip-'. $data->user->nik .'('. implode('/', $bulan) .').pdf', 
-                            'mime' => 'application/pdf')
-                    );
-                    $message->setBody('');
+                            $file = $destinationPath . $data->user->nik .'.pdf';
+
+                            // send email
+                            $objDemo = new \stdClass();
+                            $objDemo->content = view('administrator.request-pay-slip.email-pay-slip'); 
+                            
+                            if($data->user->email != "")
+                            { 
+                                \Mail::send('administrator.request-pay-slip.email-pay-slip', $params,
+                                    function($message) use($file, $data, $bulan) {
+                                        $message->from('info@system.com');
+                                        $message->to($data->user->email);
+                                        $message->subject('Request Pay-Slip Bulan ('. implode('/', $bulan) .')');
+                                        $message->attach($file, array(
+                                                'as' => 'Payslip-'. $data->user->nik .'('. implode('/', $bulan) .').pdf', 
+                                                'mime' => 'application/pdf')
+                                        );
+                                        $message->setBody('');
+                                    }
+                                );
+                            }
+                        }
+                    }
                 }
-            );
+            }
         }
         
         $data->note     = $request->note;

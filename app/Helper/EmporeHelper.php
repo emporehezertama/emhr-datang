@@ -90,8 +90,7 @@ function empore_jabatan($id)
 {
 	$user = \App\User::where('id', $id)->first();
 
-	if($user)
-	{
+	if($user){
 		
         $position = \App\Models\StructureOrganizationCustom::
 								select('organisasi_position.name as position')
@@ -116,11 +115,18 @@ function empore_jabatan($id)
 			}
 		}	*/
 
-		$pos =  $position['0']['position'];
-		return $pos;
+	//	$pos =  $position['0']['position'];
+		if(count($position) < 1){
+			$pos =  "";
+		}else{
+			$pos = $pos =  $position['0']['position'];
+		}
+		
+	}else{
+		$pos = "";
 	}
 
-	return;
+	return $pos;
 }
 
 /**
