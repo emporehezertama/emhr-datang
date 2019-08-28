@@ -29,7 +29,8 @@ class PayrollExportYear implements WithMultipleSheets
     {
         $sheets = [];
 
-      	$data = \App\Models\PayrollHistory::groupBy('user_id')->whereIn('user_id', $this->user)->get();
+    //  	$data = \App\Models\PayrollHistory::groupBy('user_id')->whereIn('user_id', $this->user)->get();
+      	$data = \App\Models\Payroll::groupBy('user_id')->whereIn('user_id', $this->user)->get();
 
       	foreach($data as $item)
       	{
