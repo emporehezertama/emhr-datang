@@ -145,6 +145,7 @@ class IndexController extends Controller
         $params['division']         = OrganisasiDivision::all();
         $params['section']          = OrganisasiSection::where('division_id', $params['data']['division_id'])->get();
         $params['absensi']          = AbsensiItem::whereMonth('date', '=', date('m'))
+                                                    ->whereYear('date', '=', date('Y'))
                                                     ->where('user_id', \Auth::user()->id)
                                                     ->get();
 
