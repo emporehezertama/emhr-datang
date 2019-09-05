@@ -86,6 +86,7 @@
                             <li role="presentation" class=""><a href="#rekening_bank" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Bank Account</span></a></li>
                             <li role="presentation" class=""><a href="#inventaris" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Inventory</span></a></li>
                             <li role="presentation" class=""><a href="#cuti" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Leave</span></a></li>
+                            <li role="presentation" class=""><a href="#absensi" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-settings"></i></span> <span class="hidden-xs">Attendance</span></a></li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane fade" id="inventaris" style="overflow: auto;">
@@ -133,6 +134,60 @@
                                 </table>
                                 <br />
                             </div>
+                            
+
+                            <div role="tabpanel" class="tab-pane fade" id="absensi">
+                                <h3 class="box-title m-b-0">Attendance</h3>
+                                <table class="table">
+                                    <thead class="header" >
+                                        <tr>
+                                            <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Date</th>
+                                            <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Day</th>
+                                            <th colspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Clock</th>
+                                            <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Late CLOCK In</th>
+                                            <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Early CLOCK Out</th>
+                                            <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Duration</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="padding: 3px 5px;vertical-align: middle;text-align:center;">In</th>
+                                            <th style="padding: 3px 5px;vertical-align: middle;text-align:center;">Out</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="no-padding-td">
+                                        @foreach($absensi as $item)
+                                        <tr>
+                                            <td><?php echo substr($item->date, 0, 10) ?></td>
+                                            <td>{{ $item->timetable }}</td>
+                                            <td>
+                                                @if(!empty($item->long) || !empty($item->lat) || !empty($item->pic)) 
+                                                    <a href="javascript:void(0)" data-title="Clock In <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_in?>" data-long="<?=$item->long?>" data-lat="<?=$item->lat?>" data-pic="<?=asset('upload/attendance/'.$item->pic)?>" data-time="<?=$item->clock_in?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_in }}</a> 
+                                                    <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                                @else
+                                                    {{ $item->clock_in }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(!empty($item->long_out) || !empty($item->lat_out) || !empty($item->pic_out))
+                                                    
+                                                    <a href="javascript:void(0)" data-title="Clock Out  <?=date('d F Y', strtotime($item->date))?> <?=$item->clock_out?>" data-long="<?=$item->long_out?>" data-lat="<?=$item->lat_out?>" data-pic="<?=asset('upload/attendance/'.$item->pic_out)?>" data-time="<?=$item->clock_out?>" onclick="detail_attendance(this)" title="Mobil Attendance"> {{ $item->clock_out }}</a>
+                                                    <i title="Mobile Attendance" class="fa fa-mobile pull-right" style="font-size: 20px;"></i>
+                                                @else
+                                                    {{ $item->clock_out }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $item->late }}</td>   
+                                            <td>{{ $item->early }}</td>    
+                                            <td>{{ $item->work_time }}</td> 
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <br />
+                            </div>
+
+                            
+
+
                             <div role="tabpanel" class="tab-pane fade" id="cuti">
                                 <h3 class="box-title m-b-0">Leave / Permit</h3>
                                 <table class="table">
