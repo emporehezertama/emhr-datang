@@ -59,6 +59,26 @@
 						<td style="text-align: right;">{{ format_idr($item->bonus) }}</td>
 					</tr>
 					@endif
+					<tr>
+						<td>BPJS JKK {{ get_setting('bpjs_jkk_company') }}% (Company) </td>
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_jkk_company ) }}</td>
+					</tr>
+					<tr>
+						<td>BPJS JKM {{ get_setting('bpjs_jkm_company') }}% (Company) </td>
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_jkm_company ) }}</td>
+					</tr>
+					<tr>
+						<td>BPJS JHT {{ get_setting('bpjs_jht_company') }}% (Company) </td>
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_jht_company ) }}</td>
+					</tr>
+					<tr>
+						<td>BPJS Pensiun {{ get_setting('bpjs_pensiun_company') }}% (Company) </td>
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_pensiun_company ) }}</td>
+					</tr>
+					<tr>
+						<td>BPJS Kesehatan {{ get_setting('bpjs_kesehatan_company') }}% (Company) </td>
+						<td style="text-align: right;">{{ format_idr( $item->bpjs_kesehatan_company ) }}</td>
+					</tr>
 					@foreach(payrollEarningsEmployeeHistory($item->id) as $i)
                         @if(isset($i->payrollEarnings->title))
                           <tr>
@@ -106,6 +126,10 @@
 						<td style="text-align: right;"> {{ format_idr($item->bpjs_pensiun_employee) }} </td>
 					</tr>
 					<tr>
+						<td>Total BPJS Company</td>
+						<td style="text-align: right;"> {{ format_idr($item->bpjstotalearning) }} </td>
+					</tr>
+					<tr>
 						<td>PPH21</td>
 						<td style="text-align: right;">{{ format_idr($item->pph21) }}</td>
 					</tr>
@@ -117,7 +141,7 @@
                           	</td>
                           	<td style="text-align: right;">
                           		{{ format_idr($i->nominal) }}
-                          	</ td>
+                          	</td>
                           </tr>
                         @endif
                     @endforeach

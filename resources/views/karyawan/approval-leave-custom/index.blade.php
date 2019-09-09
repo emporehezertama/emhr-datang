@@ -66,16 +66,16 @@
                                     <td>{{ isset($item->cutiKaryawan->cuti) ? $item->cutiKaryawan->cuti->description : '' }}</td>
                                     <td>{{ $item->total_cuti }} Day/s</td>
                                     <td>{{ $item->keperluan }}</td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->cutiKaryawan->created_at }}</td>
                                     <td><a onclick="detail_approval_leaveCustom({{ $item->id }})">
                                             {!! status_cuti($item->status) !!}
                                             </a>
                                     </td>
                                     <td>
                                         @if($item->is_approved === NULL and $item->status < 2)
-                                            <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> process </button></a>
+                                            <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->cutiKaryawan->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-arrow-right"></i> process </button></a>
                                         @else
-                                            <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail </button></a>
+                                            <a href="{{ route('karyawan.approval.leave-custom.detail', ['id' => $item->cutiKaryawan->id]) }}"> <button class="btn btn-info btn-xs m-r-5"><i class="fa fa-search-plus"></i> detail </button></a>
                                         @endif
 
                                                                                 

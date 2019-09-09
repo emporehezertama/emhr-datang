@@ -21,6 +21,7 @@ use App\Models\InternalMemo;
 use App\Models\PeraturanPerusahaan;
 use App\Models\RelatedSearchKaryawan;
 use App\Models\RequestPaySlip;
+use App\Models\AbsensiItem;
 
 class IndexController extends Controller
 {
@@ -143,6 +144,10 @@ class IndexController extends Controller
         $params['kelurahan']        = Kelurahan::where('id_kec', $params['data']['kecamatan_id'])->get();
         $params['division']         = OrganisasiDivision::all();
         $params['section']          = OrganisasiSection::where('division_id', $params['data']['division_id'])->get();
+        $params['absensi']          = AbsensiItem::whereMonth('date', '=', date('m'))
+                                                    ->whereYear('date', '=', date('Y'))
+                                                    ->where('user_id', \Auth::user()->id)
+                                                    ->get();
 
         return view('karyawan.profile')->with($params);
     }

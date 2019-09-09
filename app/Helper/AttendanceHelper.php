@@ -200,9 +200,10 @@ function dataAttendance($start, $end, $branch, $id){
 
             if(!empty($start) && !empty($end)){
                 $dataabsen = $dataabsen->whereBetween('absensi_item.date', [$start, $end]);
-            }else{
-                $dataabsen = $dataabsen->whereBetween('absensi_item.date', [date('Y-m-d'), date('Y-m-d')]);
             }
+        /*    else{
+                $dataabsen = $dataabsen->whereBetween('absensi_item.date', [date('Y-m-d'), date('Y-m-d')]);
+            }   */
         }else{
             $dataabsen      = App\Models\AbsensiItem::groupBy('date')
                                                     ->orderBy('date', 'DESC');
@@ -212,7 +213,7 @@ function dataAttendance($start, $end, $branch, $id){
             }
         }
 
-        $dataabsen = $dataabsen->get();
+        $dataabsen = $dataabsen->paginate(100);
 
         $tanggal = $tgl = $data = $dd = $name = $user_id = [];
         $x = $j = $y = $z = $w = $v = $a = 0;
@@ -250,7 +251,7 @@ function dataAttendance($start, $end, $branch, $id){
                 }
             }
             
-            $karyawan = $karyawan->orderBy('name', 'ASC')->get();
+            $karyawan = $karyawan->orderBy('name', 'ASC')->paginate(100);
             
 
             for($no = 0; $no < count($karyawan); $no++){
@@ -287,7 +288,7 @@ function dataAttendance($start, $end, $branch, $id){
                                     'clock_in' => "00:00",
                                     'clock_out' => "00:00"
                                 );
-                    if(date('Y-m-d H:i:s') > $tanggal[$j]." 17:00:00"){
+                    if(date('Y-m-d') > $tanggal[$j]){
                         $array2 = [];
                         array_push($array2, $array);
                         $data[$x] = $array2;
@@ -299,10 +300,13 @@ function dataAttendance($start, $end, $branch, $id){
                 $user_id[$a++];
                 $nik[$w++];
                 $data[$x++];
+                
             }
             $tanggal[$j++];
             $day[$v++];
         }
+    //    dd(json_encode($name), json_encode($tanggal));
+        
         $dataabsensi = $dd;
     
 

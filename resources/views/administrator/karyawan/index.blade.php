@@ -53,7 +53,7 @@
                     <button id="filter_view" class="btn btn-default btn-sm pull-right btn-outline"> <i class="fa fa-search-plus"></i></button>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <select class="form-control" name="division_id">
+                            <select class="form-control form-control-line" name="division_id">
                                 <option value=""> - choose Division - </option>
                                 @foreach($division as $item)
                                 <option value="{{ $item->id }}" {{ $item->id== request()->division_id ? 'selected' : '' }}>{{ $item->name }}</option>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-md-2 pull-right">
                         <div class="form-group m-b-0">
-                            <select class="form-control" name="position_id">
+                            <select class="form-control form-control-line" name="position_id">
                                 <option value=""> - choose Position - </option>
                                 @foreach($position as $item)
                                 <option value="{{ $item->id }}" {{ $item->id== request()->position_id ? 'selected' : '' }}>{{ $item->name }}</option>
@@ -381,7 +381,7 @@
                                 <input type="file" name="file" class="form-control" />
                             </div>
                         </div>
-                        <a href="{{ asset('storage/sample/Sample-Karyawan-2019-7-16.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
+                        <a href="{{ asset('storage/sample/Sample-Karyawan-2019-7-23.xlsx') }}"><i class="fa fa-download"></i> Download Sample Excel</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default waves-effect btn-sm" data-dismiss="modal">Close</button>

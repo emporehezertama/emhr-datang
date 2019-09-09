@@ -168,6 +168,7 @@ class InternalMemoController extends Controller
 
             $data->image = $fileName;
         }
+        
         if($user->project_id != Null){
             $data->user_created           = \Auth::user()->id;
         }else{

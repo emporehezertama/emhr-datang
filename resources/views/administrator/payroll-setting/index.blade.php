@@ -9,9 +9,6 @@
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="page-title">Setting Payroll</h4> 
             </div>
-            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-right" onclick="document.getElementById('form-setting').submit()"><i class="fa fa-save"></i> Save Setting </button>
-            </div>
         </div>
         <!-- .row -->
         <div class="row">
@@ -22,9 +19,15 @@
                         <li role="presentation"><a href="#pph" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="true"><span class="visible-xs"><i class="ti-home"></i></span><span class="hidden-xs"> PPH</span></a></li>
                         <li role="presentation" class=""><a href="#ptkp" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs"> PTKP</span></a></li>
                         <li role="presentation" class=""><a href="#others" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs"> Others</span></a></li>
+                        <li role="presentation" class=""><a href="#npwp" aria-controls="messages" role="tab" data-toggle="tab" aria-expanded="false"><span class="visible-xs"><i class="ti-email"></i></span> <span class="hidden-xs">NPWP</span></a></li>
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="general">
+                            
+                            <div class="col-lg-12 col-sm-8 col-md-8 col-xs-12">
+                                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-left" onclick="document.getElementById('form-setting').submit()"><i class="fa fa-save"></i> Save Setting </button>
+                            </div>
+                            <br><br><br><br>
                             <div class="col-md-12">
                                 <form method="POST" id="form-setting" action="{{ route('administrator.payroll-setting.store-general') }}" class="form-horizontal">
                                     {{ csrf_field() }}
@@ -95,7 +98,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-4">BPJS Kesehatan  (Employee)</label>
+                                            <label class="col-md-4">BPJS Kesehatan (Employee)</label>
                                             <div class="col-md-3">
                                                 <div class="input-group">
                                                     <input type="number" name="setting[bpjs_kesehatan_employee]" class="form-control" value="{{ get_setting('bpjs_kesehatan_employee') }}" />
@@ -240,13 +243,74 @@
                                             <td>{{ $item->label }}</td>
                                             <td>{{ number_format($item->value) }}</td>
                                             <td>
-                                                <!-- <a href="{{ route('administrator.payroll-setting.delete-others', $item->id) }}" onclick="return confirm('Delete this data?')" class="btn btn-danger btn-xs "><i class="fa fa-trash"></i> </a> -->
                                                 <a href="{{ route('administrator.payroll-setting.edit-others', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
                                             </td>
                                         </tr>
                                        @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="npwp">
+                            <div class="col-lg-12 col-sm-8 col-md-8 col-xs-12">
+                                <button type="submit" class="btn btn-sm btn-info waves-effect waves-light m-r-10 pull-left" onclick="document.getElementById('form-setting-npwp').submit();"><i class="fa fa-save"></i> Save Setting </button>
+                            </div>
+                            <br><br><br><br>
+                            <h3 class="box-title m-b-0">NPWP Setting</h3>
+                            <form method="POST" id="form-setting-npwp" action="{{ route('administrator.payroll-setting.store-npwp') }}" class="form-horizontal">
+                                {{ csrf_field() }}
+                                <div class="table-responsive">
+                                    <br>
+                                    <div class="col-md-12 p-l-0">
+                                        <div class="form-group">
+                                            <label class="col-md-2">Nama Perusahaan </label>
+                                            <div class="col-md-2">
+                                                <div class="input-form">
+                                                    <input type="hidden" name="label[]" value="Nama Perusahaan" class="form-control" />
+                                                    <input type="text" name="npwp[]" value="{{ get_setting_payroll('1') }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                            <label class="col-md-2">Nomor NPWP </label>
+                                            <div class="col-md-2">
+                                                <div class="input-form">
+                                                    <input type="hidden" name="label[]" value="Nomor NPWP" class="form-control" />
+                                                    <input type="text" name="npwp[]" value="{{ get_setting_payroll('2') }}" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive">
+                                <!--table class="display nowrap data_table" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="70" class="text-center">#</th>
+                                            <th>LABEL</th>
+                                            <th>VALUE</th>
+                                            @if(\Auth::user()->project_id == 1)
+                                            <th>#</th>
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       @foreach($npwp as $no => $item)
+                                        <tr>
+                                            <td>{{ $no+1 }}</td>
+                                            <td>{{ $item->label }}</td>
+                                            <td>{{ $item->value }}</td>
+                                            @if(\Auth::user()->project_id == 1)
+                                            <td>
+                                                <a href="{{ route('administrator.payroll-setting.edit-npwp', $item->id) }}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> edit </a>
+                                            </td>
+                                            @endif
+                                        </tr>
+                                       @endforeach
+                                    </tbody>
+                                </table-->
                             </div>
                         </div>
                     </div>

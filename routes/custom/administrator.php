@@ -181,6 +181,10 @@ Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middle
 	Route::get('payroll-setting/add-others', 'PayrollSettingController@addOthers')->name('administrator.payroll-setting.add-others');
 	Route::get('payroll-setting/edit-others/{id}', 'PayrollSettingController@editOthers')->name('administrator.payroll-setting.edit-others');
 	Route::post('payroll-setting/update-others/{id}', 'PayrollSettingController@updateOthers')->name('administrator.payroll-setting.update-others');
+	Route::get('payroll-setting/edit-npwp/{id}', 'PayrollSettingController@editNpwp')->name('administrator.payroll-setting.edit-npwp');
+	Route::post('payroll-setting/store-npwp', 'PayrollSettingController@storeNpwp')->name('administrator.payroll-setting.store-npwp');
+	Route::post('payroll-setting/update-npwp/{id}', 'PayrollSettingController@updateNpwp')->name('administrator.payroll-setting.update-npwp');
+
 	Route::get('payroll-setting/edit-ptkp/{id}', 'PayrollSettingController@editPtkp')->name('administrator.payroll-setting.edit-ptkp');
 	Route::get('payroll-setting/delete-earnings/{id}', 'PayrollSettingController@deleteEarnings')->name('administrator.payroll-setting.delete-earnings');
 	Route::get('payroll-setting/delete-deductions/{id}', 'PayrollSettingController@deleteDeductions')->name('administrator.payroll-setting.delete-deductions');

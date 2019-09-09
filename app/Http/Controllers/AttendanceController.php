@@ -6,13 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Absensi;
 use App\Models\AbsensiDevice;
 use App\Models\AbsensiItem;
+use App\Models\AbsensiItemTemp;
 use App\Models\AbsensiSetting;
 use App\Models\AttendanceExport;
+use App\Models\Setting;
 use App\User;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use DB;
+use App\Imports\AttendanceImport;
 
 class AttendanceController extends Controller
 {
@@ -33,36 +36,18 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        getAttendanceDevice();
-
         $user = \Auth::user();
 
-        \Session::forget('filter_start',  request()->filter_start);
-        \Session::forget('filter_end',  request()->filter_end);
-        \Session::forget('nama_nik',  request()->nama_nik);
-        \Session::forget('id',  request()->id);
-        \Session::forget('branch',  request()->branch);
-
-        $start       = "";
-        $end         = "";
-        $nama_nik    = "";
-        $id          = "";
-        $branch      = "";       
-
-        $data     = AbsensiItem::select('absensi_item.*');
-
-        if(request()->filter_start || request()->filter_end || request()->branch || request()->id)
+        if(request()->filter_start || request()->filter_end || request()->branch || request()->name)
         {
             \Session::put('filter_start', request()->filter_start);
             \Session::put('filter_end', request()->filter_end);
-            \Session::put('nama_nik', request()->nama_nik);
-            \Session::put('id', request()->id);
-            \Session::put('branch', request()->branch);
+            \Session::put('name', request()->name);
         }
+
         $filter_start       = \Session::get('filter_start');
         $filter_end         = \Session::get('filter_end');
-        $nama_nik           = \Session::get('nama_nik');
-        $id                 = \Session::get('id');
+        $name               = \Session::get('name');
         $branch             = \Session::get('branch');
 
         $start = str_replace('/', '-', $filter_start);
@@ -73,50 +58,122 @@ class AttendanceController extends Controller
                 $start = str_replace('/', '-', $filter_start);
                 $end = str_replace('/', '-', $filter_end);
             }
-
-            if(!empty($id)){
-                $id = $id;
-            }
-
-            if(!empty($branch)){
-                $branch = $branch;
-            }
-
-            
         }
 
-        if(request()->import == 1){
-        /*    $filter_start       = \Session::get('filter_start');
-            $filter_end         = \Session::get('filter_end');
-            $nama_nik           = \Session::get('nama_nik');
-            $id                 = \Session::get('id');
-            $branch             = \Session::get('branch');
-    
-            $start = str_replace('/', '-', $filter_start);
-            $end = str_replace('/', '-', $filter_end);
-            
-            $this->importAttendance($start, $end, $branch, $id);    */
-
-            $name_excel = 'Attendance'.date('YmdHis');
-            return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
-        }
-
-        
         if(request()->reset == 1)
         { 
             \Session::forget('filter_start');
             \Session::forget('filter_end');
-            \Session::forget('nama_nik');
-            \Session::forget('id');
+            \Session::forget('name');
             \Session::forget('branch');
-
             return redirect()->route('attendance.index');
         }
 
-        $params['data'] = dataAttendance($start, $end, $branch, $id);
+        if($user->project_id != Null){
+            $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+                                    ->whereIn('users.access_id', ['1', '2'])
+                                    ->whereNotIn('absensi_item.date', ['1970-01-01'])
+                                    ->where('users.project_id', $user->project_id)
+                                    ->orderBy('absensi_item.id', 'DESC');
+        }else{
+            $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
+                                    ->whereIn('users.access_id', ['1', '2'])
+                                    ->whereNotIn('absensi_item.date', ['1970-01-01'])
+                                    ->orderBy('absensi_item.id', 'DESC');
+        }    
+
+        if(!empty($name))
+        {
+            $name = explode('-', $name);
+            $params['data'] = $params['data']->where(function($table) use($name){
+                                $table->where('users.name', 'LIKE', '%'. ltrim(@$name[1]) .'%')
+                                        ->orWhere('users.nik', 'LIKE', '%'. rtrim(@$name[0]) .'%');
+                              });
+        }
+        if(!empty($filter_start) and !empty($filter_end))
+        {
+            $params['data'] = $params['data']->whereBetween('absensi_item.date', [$start, $end]);
+        }
+        if(!empty($branch))
+        {
+            $params['data'] = $params['data']->where('users.branch_id', $branch);
+        }
+
+        if(request()->import == 1)
+        {
+            return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
+        }
+
+        if(request()->eksport == 1)
+        {
+            return (new AttendanceExport($params['data']))->download('EM-HR.Attendance-'.date('Y-m-d').'.xlsx');
+        }
+
+        $params['data'] = $params['data']->paginate(100);
 
         return view('attendance.index')->with($params);
     }
+
+    /**
+     * Save Setting
+     * @param  Request $request
+     * @return void
+     */
+    public function settingSave(Request $request)
+    {
+        $user = \Auth::user();
+
+        if($request->setting)
+        {
+            foreach($request->setting as $key => $value)
+            {
+                if($user->project_id != NULL)
+                {
+                    $setting = Setting::where('key', $key)->where('project_id',$user->project_id)->first();
+                }else{
+                    $setting = Setting::where('key', $key)->first();
+                }
+                if(!$setting)
+                {
+                    $setting = new Setting();
+                    $setting->key = $key;
+                }
+                $setting->user_created = $user->id;
+                $setting->project_id = $user->project_id;
+                $setting->value = $value;
+                $setting->save();
+            }
+        }
+        
+        if ($request->hasFile('attendance_logo'))
+        {
+            $file = $request->file('attendance_logo');
+            $fileName = md5($file->getClientOriginalName() . time()) . "." . $file->getClientOriginalExtension();
+
+            $destinationPath = public_path('/upload/setting');
+            $file->move($destinationPath, $fileName);
+
+            if($user->project_id != NULL)
+            {
+                $setting = Setting::where('key', 'attendance_logo')->where('project_id',$user->project_id)->first();
+            } else{
+                $setting = Setting::where('key', 'attendance_logo')->first();
+            }
+            if(!$setting)
+            {
+                $setting = new Setting();
+                $setting->key = 'attendance_logo';
+            }
+            $setting->user_created = $user->id;
+            $setting->project_id = $user->project_id;
+            $setting->value = '/upload/setting/' . $fileName;
+            $setting->save();
+        }
+
+        return redirect()->route('attendance-setting.index')->with('message-success', 'Setting saved');
+
+    }   
+
 
     /**
      * Detail Attandance
@@ -143,6 +200,18 @@ class AttendanceController extends Controller
     }
 
     /**
+     * Set Position
+     * @param Request $request
+     */
+    public function setPosition(Request $request)
+    {
+        User::where('structure_organization_custom_id', $request->structure_organization_custom_id)
+                ->update(['absensi_setting_id' => $request->shift_id]);
+        
+        return redirect()->route('attendance-setting.index')->with('message-success', 'Setting saved');
+    }
+
+    /**
      * Absensi Setting Store
      * @return view
      */
@@ -165,21 +234,177 @@ class AttendanceController extends Controller
     {
         AbsensiSetting::where('id', $id)->delete();
 
+        User::where('absensi_setting_id', $id)->update(['absensi_setting_id' => null]);;
+
         return redirect()->route('attendance-setting.index')->with('message-success', 'Setting Deleted.');
     }
 
-    public function importAttendance($start, $end, $branch, $id){
-        $params['data'] =   dataAttendance($start, $end, $branch, $id);
+    /**
+     * Import Attendance
+     * @param  Request $request
+     * @return void
+     */
+    public function attendanceImport(Request $request)
+    {
+        if($request->hasFile('file'))
+        {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($request->file);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = [];
+            foreach ($worksheet->getRowIterator() AS $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(FALSE); // This loops through all cells,
+                $cells = [];
+                foreach ($cellIterator as $cell) {
+                    $cells[] = $cell->getValue();
+                }
+                $rows[] = $cells;
+            }
 
-    //    $destination = storage_path('app');
-        $name_excel = 'Attendance'.date('YmdHis');
-    //    $file = $destination ."//". $name_excel.'.xlsx';
+            AbsensiItemTemp::truncate();
+            // delete all table temp
+            foreach($rows as $key => $item)
+            {
+                if(empty($item[1])) continue;
+                
+                if($key ==0) continue;
+                
+                // check nik 
+                $user =  User::where('nik', $item[1])->first();
+                if($user)
+                {
+                    $date           = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[2]);
+                    $clock_in       = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[3]);
+                    $clock_out      = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[4]);
+                    
+                    $data               = new AbsensiItemTemp();
+                    $data->user_id      = $user->id;
+                    $data->date         = $date->format('Y-m-d');
+                    $data->timetable    = date('l', strtotime($data->date));   
+                    $data->clock_in     = $clock_in->format('H:i');
+                    $data->clock_out    = $clock_out->format('H:i');
 
-    //    Excel::store(new AttendanceExport($params), $name_excel.'.xlsx');
-    //    Excel::store(new AttendanceExport($start, $end, $branch, $id), $name_excel.'.xlsx');
-        return (new AttendanceExport($start, $end, $branch, $id))->download($name_excel.'.xlsx');
+                    // Clock In
+                    if(isset($data->user->absensiSetting->clock_in))
+                    {
+                        $awal  = strtotime($data->date .' '. $data->user->absensiSetting->clock_in .':00');
+                        $akhir = strtotime($data->date .' '. $data->clock_in.":00");
+                        $diff  = $akhir - $awal;
+                        $jam   = floor($diff / (60 * 60));
+                        $menit = ($diff - $jam * (60 * 60)) / 60;
+                        
+                        if($diff > 0)
+                        {
+                            $jam = abs($jam);
+                            $menit = abs($menit);
+                            $jam = $jam <= 9 ? "0".$jam : $jam;
+                            $menit = $menit <= 9 ? "0".$menit : $menit;
 
-    //    return redirect()->route('attendance.index');
+                            $data->late = $jam .':'. $menit;
+                        }
+                    }
+
+                    if(isset($data->user->absensiSetting->clock_out))
+                    {
+                        $akhir  = strtotime($data->date .' '. $data->user->absensiSetting->clock_out .':00');
+                        $awal = strtotime($data->date .' '. $data->clock_out.":00");
+                        $diff  = $akhir - $awal;
+                        $jam   = floor($diff / (60 * 60));
+                        $menit = ($diff - $jam * (60 * 60)) / 60;
+                        if($diff > 0)
+                        {
+                            $awal  = date_create($data->date .' '. $data->user->absensiSetting->clock_out .':00');
+                            $akhir = date_create($data->date .' '. $data->clock_out.":00"); // waktu sekarang, pukul 06:13
+                            $diff  = @date_diff( $akhir, $awal );
+
+                            $jam    = @$diff->h <= 9 ? "0".$diff->h : $diff->h;
+                            $menit  = @$diff->i <= 9 ? "0".$diff->i : $diff->i;
+
+                            $data->early = $jam .':'. $menit;
+                        }
+                    }
+
+                    if(!empty($data->clock_out) and !empty($data->clock_in))
+                    {
+                        $awal  = strtotime($data->date .' '. $data->clock_in.":00");
+                        $akhir = strtotime($data->date .' '. $data->clock_out.":00");
+                        $diff  = $akhir - $awal;
+                        $jam   = floor($diff / (60 * 60));
+                        $menit = ($diff - $jam * (60 * 60) ) / 60;
+
+                        $jam = $jam <= 9 ? "0".$jam : $jam;
+                        $menit = $menit <= 9 ? "0".$menit : $menit;
+
+                        $data->work_time        = $jam .':'. $menit;  
+                    }
+
+                    $data->save();
+                }
+            }   
+        }
+
+        return redirect()->route('attendance.preview')->with('message-success', 'Import success');
     }
 
+    /**
+     * Import Attendance
+     * @param  Request $request
+     * @return void
+     */
+    public function attendancePreview()
+    {
+        $params['data'] = AbsensiItemTemp::all();
+
+        return view('attendance.preview')->with($params);
+    }
+
+    /**
+     * Import All
+     * @return void
+     */
+    public function importAll()
+    {
+        $data = AbsensiItemTemp::all();
+        foreach($data as $i)
+        {
+            $item = AbsensiItem::where('user_id', $i->user_id)->whereDate('date', $i->date)->first();
+            if(!$item)
+            {
+                $item               = new AbsensiItem();
+                $item->user_id      = $i->user_id;
+                $item->date         = $i->date;
+                $item->timetable    = $i->timetable;
+                $item->clock_in     = $i->clock_in; 
+                $item->clock_out    = $i->clock_out; 
+                $item->early        = $i->early; 
+                $item->late         = $i->late; 
+                $item->work_time    = $i->work_time;
+            }
+            else
+            {
+                if(empty($item->clock_in))
+                {
+                    $item->clock_in     = $i->clock_in; 
+                    $item->early        = $i->early;  
+                }
+
+                if(empty($item->clock_out))
+                {
+                    $item->clock_out     = $i->clock_out;  
+                    $item->late         = $i->late; 
+                }
+
+                if(empty($item->work_time))
+                {
+                    $item->work_time    = $i->work_time;
+                }
+            }
+ 
+            $item->save();
+        }
+
+        AbsensiItemTemp::truncate();
+
+        return redirect()->route('attendance.index')->with('message-success', 'Import success');
+    }  
 }
