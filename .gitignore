@@ -17,4 +17,5 @@ yarn-error.log
 /public/.htaccess
 /public/new/*
 /public/api/*
+/public/upload/*
 /public/uploads/*
