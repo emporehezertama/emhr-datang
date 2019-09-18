@@ -57,6 +57,7 @@
                     <table class="data_table_no_pagging table table-background">
                         <thead>
                             <tr>
+                                <th rowspan="2">No</th>
                                 <th rowspan="2">NIK</th>
                                 <th rowspan="2">Name</th>
                                 <th rowspan="2">Date</th>
@@ -77,6 +78,7 @@
                                 <?php continue; ?>
                                 @endif
                                 <tr> 
+                                    <td>{{ $key+1 }} </td>    
                                     <td>{{ $item->user->nik }} </td>    
                                     <td>{{ $item->user->name }}</td>    
                                     <td>{{ $item->date }}</td>    
