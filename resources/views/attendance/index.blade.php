@@ -24,7 +24,7 @@
                             </a>
                             <ul role="menu" class="dropdown-menu">
                                 <li><a href="javascript:void(0)" onclick="reset_filter()"><i class="fa fa-refresh"></i> Reset Filter </a></li>
-                                <li><a href="javascript:void(0)" onclick="eksportAttendance()"><i class="fa fa-download"></i> Eksport </a></li>
+                                <li><a href="javascript:void(0)" onclick="eksportAttendance()"><i class="fa fa-download"></i> Exsport </a></li>
                                 <li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_import"><i class="fa fa-upload"></i> Import </a></li>
                             </ul>
                         </div>
@@ -113,8 +113,6 @@
     <!-- /.container-fluid -->
     @include('layouts.footer')
 </div>
-
-
 <div id="modal_import" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -143,8 +141,6 @@
         </div>
     </div>
 </div>
-
-
 <div id="modal_detail_attendance" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
