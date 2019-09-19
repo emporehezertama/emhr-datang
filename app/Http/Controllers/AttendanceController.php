@@ -74,12 +74,14 @@ class AttendanceController extends Controller
                                     ->whereIn('users.access_id', ['1', '2'])
                                     ->whereNotIn('absensi_item.date', ['1970-01-01'])
                                     ->where('users.project_id', $user->project_id)
-                                    ->orderBy('absensi_item.id', 'DESC');
+                                    ->orderBy('absensi_item.date', 'DESC')
+                                    ->orderBy('absensi_item.clock_in', 'DESC');
         }else{
             $params['data'] = AbsensiItem::join('users',  'users.id', '=','absensi_item.user_id')
                                     ->whereIn('users.access_id', ['1', '2'])
                                     ->whereNotIn('absensi_item.date', ['1970-01-01'])
-                                    ->orderBy('absensi_item.id', 'DESC');
+                                    ->orderBy('absensi_item.date', 'DESC')
+                                    ->orderBy('absensi_item.clock_in', 'DESC');
         }    
 
         if(!empty($name))
