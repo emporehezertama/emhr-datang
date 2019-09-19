@@ -35,6 +35,7 @@ use App\Models\Cuti;
 use App\Models\OrganisasiDivision;
 use App\Models\OrganisasiPosition;
 use App\Models\AbsensiSetting;
+use App\Models\AbsensiItem;
 use PHPExcel_Worksheet_Drawing;
 
 class KaryawanController extends Controller
@@ -969,6 +970,10 @@ class KaryawanController extends Controller
         $params['payroll']          = Payroll::where('user_id', $id)->first();
         $params['list_manager']     = EmporeOrganisasiManager::where('empore_organisasi_direktur_id', $params['data']['empore_organisasi_direktur'])->get();
         $params['list_staff']       = EmporeOrganisasiStaff::where('empore_organisasi_manager_id', $params['data']['empore_organisasi_manager_id'])->get();
+        $params['absensi_item']     = AbsensiItem::where('user_id', $id)
+                                                   ->orderBy('date', 'DESC')             
+                                                   ->orderBy('clock_in', 'DESC')             
+                                                   ->get();
         $params['structure']    = getStructureName();
 
         return view('administrator.karyawan.edit')->with($params);

@@ -147,6 +147,8 @@ class IndexController extends Controller
         $params['absensi']          = AbsensiItem::whereMonth('date', '=', date('m'))
                                                     ->whereYear('date', '=', date('Y'))
                                                     ->where('user_id', \Auth::user()->id)
+                                                    ->orderBy('date', 'DESC')
+                                                    ->orderBy('clock_in', 'DESC')
                                                     ->get();
 
         return view('karyawan.profile')->with($params);
