@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                             </form>
-                            <table class="table table-bordered">
+                            <table class="table table-bordered ">
                                 <thead class="header" style="background: #f5f5f5;">
                                     <tr>
                                         <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Date</th>

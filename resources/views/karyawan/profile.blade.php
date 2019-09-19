@@ -138,7 +138,7 @@
 
                             <div role="tabpanel" class="tab-pane fade" id="absensi">
                                 <h3 class="box-title m-b-0">Attendance</h3>
-                                <table class="table">
+                                <table class="data_table_no_pagging table table-background">
                                     <thead class="header" >
                                         <tr>
                                             <th rowspan="2" style="padding: 3px 5px;vertical-align: middle;text-align:center;">Date</th>
