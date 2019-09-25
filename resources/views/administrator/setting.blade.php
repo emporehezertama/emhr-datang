@@ -94,7 +94,11 @@
                             <a href="{{ route('administrator.bank.index') }}"><i class="mdi mdi-bank fa-fw"></i><span class="hide-menu">Bank</span></a>
                         </div>
                         <div class="col-md-2">
-                            <a href="javascript:void(0)" class="disabled" onclick="alert('You do not have permission to access this menu')"><i class="mdi mdi-backup-restore fa-fw"></i><span class="hide-menu">Backup App & Database</span></a>
+                            @if(\Auth::user()->project_id == '1' || \Auth::user()->project_id == Null)
+                                <a href="{{ route('administrator.setting.backup') }}" ><i class="mdi mdi-backup-restore fa-fw"></i><span class="hide-menu">Backup App & Database</span></a>
+                            @else
+                                <a href="javascript:void(0)" class="disabled" onclick="alert('You do not have permission to access this menu')"><i class="mdi mdi-backup-restore fa-fw"></i><span class="hide-menu">Backup App & Database</span></a>
+                            @endif
                         </div>
                         <div class="col-md-2">
                             @if(checkModuleAdmin(13))

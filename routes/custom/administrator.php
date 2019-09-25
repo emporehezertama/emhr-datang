@@ -3,7 +3,7 @@
 /**
  * Administrator Routing
  */
-Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middleware' => ['auth', 'access:1']], function(){
+Route::group(['prefix' => 'administrator', 'namespace'=>'Administrator', 'middleware' => ['auth', 'access:3']], function(){
 	
 	Route::get('user-login', 'LoginController@user-login')->name('administrator.payroll.detail-history');
 

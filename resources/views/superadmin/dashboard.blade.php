@@ -34,8 +34,8 @@
                             @endforeach
                             <div class="col-md-12">
                                 <label>
-                                    <input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id  item_product[]" name="project_product_id[{{$item->id}}]" value="{{$item->id}}" onclick="calculateprice({{$item->id}});" > {{$item->name}}
-                                    <!--input type="text" style="margin-left: 20px;" class="form-control price[{{$item->id}}]" name="price" value="{{$item->price}}"-->
+                                    <input type="checkbox" {{$check}}  disabled style="margin-right: 10px; margin-bottom: 10px" class="project_product_id  item_product[]" name="project_product_id[{{$item->id}}]" value="{{$item->id}}" <?php //onclick="calculateprice({{$item->id}});" ?> > {{$item->name}}
+                                    <input type="text" onblur="findTotal();" style="margin-left: 20px;" class="form-control price{{$item->id}}" name="price" value="{{$item->price}}">
                                 </label>
                                 @if($item->user_limit == 1)
                                     <input type="text" style="margin-left: 20px;" disabled value="{{$limit}}" class="form-control limit_user" name="limit_user[{{$item->id}}]" placeholder="User Limit">
@@ -98,13 +98,17 @@
                 </div>
             </div>
 
-            <!--div class="col-md-6">
+            <div class="col-md-6">
                 <div class="white-box">
-                    <input type="text" style="margin-left: 20px;"  class="form-control total" name="total" placeholder="Total">
+                    <input type="text" style="margin-left: 20px;"  class="form-control total" name="total" id="total"  placeholder="Total">
                                 
                 </div>
-            </div-->
+            </div>
         </form>
+
+        <script type="text/javascript">
+            
+        </script>
         </div>
         
     </div>
@@ -148,41 +152,60 @@ function editModule() {
     //document.getElementById('project_type_id').removeAttribute('readonly');
     //$(".project_type_id").removeAttr("disabled", "disabled");
     document.getElementById('btnUpdate').style.display = "block";
+
+    var arr = document.getElementsByName('price');
+    var tot=0;
+    for(var i=0;i<arr.length;i++){
+        if(parseInt(arr[i].value))
+            tot += parseInt(arr[i].value);
+    }
+    document.getElementById('total').value = tot;
 }
 function handleClick(cb) {
     //di cek semua yang tercentang nilainya
 
-    alert("Clicked, new value = " + cb.checked);
+    //alert("Clicked, new value = " + cb.checked);
 }
 
 
-$(".project_product_id").click(function(){
-    var getcheck = $(this).val();
-    alert(getcheck);
+// $(".project_product_id").click(function(){
+//     var getcheck = $(this).val();
+//     alert(getcheck);
    
-});
+// });
 
-function calculateprice(id){
-/*    if($("input[name='project_product_id["+id+"]']:checked")){
+//function calculateprice(id){
+    // if($("input[name='project_product_id["+id+"]']:checked")){
         
-        var totalharga = [];
-        $.each($("input[name^='price']"), function(){           
-            totalharga.push($(this).val());
-        });
-        var val = $("input[name='project_product_id["+id+"]']").val();
-        console.log(val);
+    //     var totalharga = [];
+    //     $.each($("input[name^='price']"), function(){           
+    //         totalharga.push($(this).val());
+    //     });
+    //     var val = $("input[name='project_product_id["+id+"]']").val();
+    //     console.log(val);
 
-        var array = totalharga,
-        s = 0,
-        p = 1,
-        i;
+    //     var array = totalharga,
+    //     s = 0,
+    //     p = 1,
+    //     i;
   
-        for(i = 0; i < array.length; i += 1){
-            s += parseInt(array[i]);
-        } 
-        $("input[name='total']").val(s);
-    }  */ 
-}
+    //     for(i = 0; i < array.length; i += 1){
+    //         s += parseInt(array[i]);
+    //     } 
+    //     $("input[name='total']").val(s);
+    // }
+    
+
+    $('input[type="checkbox"]').click(function(){
+        var val = $(".price"+ $(this).val()).val();
+        if($(this).is(":checked")){
+            $("input[name='total']").val(parseInt($("input[name='total']").val()) + parseInt(val));
+        }
+        else if($(this).is(":not(:checked)")){
+            $("input[name='total']").val(parseInt($("input[name='total']").val()) - parseInt(val));
+        }
+    });
+//}
 </script>
 @endsection
 @endsection
