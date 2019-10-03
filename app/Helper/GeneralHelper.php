@@ -183,7 +183,9 @@ function month_name()
 
 function cek_leave_approval()
 {
-	$cuti = \App\Models\HistoryApprovalLeave::join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')->orderBy('cuti_karyawan_id', 'DESC');
+	$cuti = \App\Models\HistoryApprovalLeave::select('history_approval_leave.*', 'cuti_karyawan.*')
+											->join('cuti_karyawan','cuti_karyawan.id','=','history_approval_leave.cuti_karyawan_id')
+											->orderBy('cuti_karyawan_id', 'DESC');
 
 
 	if(\Auth::user()->project_id != "")
