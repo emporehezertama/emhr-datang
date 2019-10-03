@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cabang;
+use Illuminate\Support\Facades\Validator;
+
 
 class CabangController extends Controller
 {
@@ -15,6 +17,7 @@ class CabangController extends Controller
      */
     public function __construct()
     {
+//        parent::__construct();
         $this->middleware('auth');
     }
 
@@ -32,7 +35,7 @@ class CabangController extends Controller
         }else{
             $params['data'] = Cabang::all();
         }
-        
+
         return view('administrator.cabang.index')->with($params);
     }
 
@@ -41,7 +44,7 @@ class CabangController extends Controller
      * @return [type] [description]
      */
     public function create()
-    {   
+    {
         return view('administrator.cabang.create');
     }
 
@@ -64,15 +67,29 @@ class CabangController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make(request()->all(), [
+            'name'  => 'required|max:30'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($validator->errors());
+        }
+
         $data       = Cabang::where('id', $id)->first();
         $data->name             = $request->name;
-        $data->alamat           = $request->alamat; 
-        $data->telepon          = $request->telepon; 
-        $data->fax              = $request->fax; 
+        $data->alamat           = $request->alamat;
+        $data->telepon          = $request->telepon;
+        $data->fax              = $request->fax;
+        $data->latitude         = $request->latitude;
+        $data->longitude        = $request->longitude;
+        $data->radius           = $request->radius;
         $data->save();
 
         return redirect()->route('administrator.cabang.index')->with('message-success', 'Data berhasil disimpan');
-    }   
+    }
 
     /**
      * [desctroy description]
@@ -85,7 +102,7 @@ class CabangController extends Controller
         $data->delete();
 
         return redirect()->route('administrator.cabang.index')->with('message-sucess', 'Data berhasi di hapus');
-    } 
+    }
 
     /**
      * [import description]
@@ -114,13 +131,13 @@ class CabangController extends Controller
                 if($key >= 5)
                 {
                     if($item[2] == "") continue;
-                    
+
                     $data  = new Cabang();
                     $data->name     = strtoupper($item[2]);
                     $data->alamat   = $item[3];
                     $data->telepon  = $item[4];
                     $data->fax      = $item[5];
-                    
+
                     $user = \Auth::user();
                     if($user->project_id != NULL)
                     {
@@ -141,17 +158,31 @@ class CabangController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make(request()->all(), [
+            'name'  => 'required|max:30'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($validator->errors());
+        }
+
         $data           = new Cabang();
         $data->name             = $request->name;
-        $data->alamat           = $request->alamat; 
-        $data->telepon          = $request->telepon; 
+        $data->alamat           = $request->alamat;
+        $data->telepon          = $request->telepon;
         $data->fax              = $request->fax;
+        $data->latitude         = $request->latitude;
+        $data->longitude        = $request->longitude;
+        $data->radius           = $request->radius;
 
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
             $data->user_created = $user->id;
-        } 
+        }
         $data->save();
 
         return redirect()->route('administrator.cabang.index')->with('message-success', 'Data berhasil disimpan !');
