@@ -317,7 +317,7 @@ class KaryawanController extends Controller
             $user->kk_number        = empty($item->kk_number) ? $user->kk_number : $item->kk_number;
             $user->npwp_number      = empty($item->npwp_number) ? $user->npwp_number : $item->npwp_number;
             $user->ext              = empty($item->ext) ? $user->ext : $item->ext;
-
+            $user->absensi_setting_id= empty($item->absensi_setting_id) ? $user->absensi_setting_id : $item->absensi_setting_id;
             if($item->email != "-") $user->email            = $item->email;
 
             // find bank
