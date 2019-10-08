@@ -249,7 +249,7 @@
 						</div>
 					</div>
 					<div class="col-md-6" >
-						<img style="margin: 0 15%; width: 58%;" alt="Facility Management" src="{{ asset('landing-page/2019-05-28/facility Management.png') }}"/>
+						<img style="margin: 0 15%; width: 58%;" alt="Facility Management" src="{{ asset('landing-page/2019-05-28/facility management.png') }}"/>
 						<div class="col-md-12" style="padding: 2% 30% 0 20%; text-align: center; font-size: 18px;">
 							<p>asset management settings used by employees</p>
 						</div>
