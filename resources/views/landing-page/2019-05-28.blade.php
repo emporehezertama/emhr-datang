@@ -203,7 +203,7 @@
 							</div>
 						</div>
 						<div class="col-md-4" >
-							<img style="margin: 0 14%; width: 80%;" alt="Overtime Request" src="{{ asset('landing-page/2019-05-28/Overtime Request.png') }}"/>
+							<img style="margin: 0 14%; width: 80%;" alt="Overtime Request" src="{{ asset('landing-page/2019-05-28/overtime request.png') }}"/>
 							
 							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
 								<p>Determine calculation of overtime rate in terms of number of hours and wages</p>
@@ -226,14 +226,14 @@
 							</div>
 						</div>
 						<div class="col-md-4" >
-							<img style="margin: 0 5%; width: 100%;" alt="Exit Interview & Clearance" src="{{ asset('landing-page/2019-05-28/Exit Training & Clearance.png') }}"/>
+							<img style="margin: 0 5%; width: 100%;" alt="Exit Interview & Clearance" src="{{ asset('landing-page/2019-05-28/Exit Training & clearance.png') }}"/>
 							
 							<div class="col-md-12" style="padding: 5% 10% 0 20%; text-align: center; font-size: 18px;">
 								<p>Procedure to validating employee has no pending obligation to the company</p>
 							</div>
 						</div>
 						<div class="col-md-4" >
-							<img style="margin: 0 38%; width: 43%;" alt="Attendance" src="{{ asset('landing-page/2019-05-28/Attendance.png') }}"/>
+							<img style="margin: 0 38%; width: 43%;" alt="Attendance" src="{{ asset('landing-page/2019-05-28/attendance.png') }}"/>
 							<div class="col-md-12" style="padding: 5% 0 0 20%; text-align: center; font-size: 18px;">
 								<p>integrating several attendance devices such as finger print machines, mobile attendance is an integrated Em-HR system</p>
 							</div>
@@ -243,13 +243,13 @@
 				
 				<div class="row">
 					<div class="col-md-6" >
-						<img style="margin: 0 45%; width: 28%;" alt="Dashboard" src="{{ asset('landing-page/2019-05-28/Dashboard.png') }}"/>
+						<img style="margin: 0 45%; width: 28%;" alt="Dashboard" src="{{ asset('landing-page/2019-05-28/dashboard.png') }}"/>
 						<div class="col-md-12" style="padding: 5% 10% 0 30%; text-align: center; font-size: 18px;">
 							<p>Brief information on module selection in the form of diagrams or graphic value</p>
 						</div>
 					</div>
 					<div class="col-md-6" >
-						<img style="margin: 0 15%; width: 58%;" alt="Facility Management" src="{{ asset('landing-page/2019-05-28/Facility Management.png') }}"/>
+						<img style="margin: 0 15%; width: 58%;" alt="Facility Management" src="{{ asset('landing-page/2019-05-28/facility Management.png') }}"/>
 						<div class="col-md-12" style="padding: 2% 30% 0 20%; text-align: center; font-size: 18px;">
 							<p>asset management settings used by employees</p>
 						</div>
