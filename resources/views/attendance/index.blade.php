@@ -350,11 +350,3 @@
     </script>
 @endsection
 @endsection
-<<<<<<< HEAD
-@endsection
-<<<<<<< HEAD
-@endsection
-=======
-=======
->>>>>>> 78c56134d3c9acc3e5d71e808650c023ee876eda
->>>>>>> 3be4d554eb4747b25558521180c0f47d26dd92c4
