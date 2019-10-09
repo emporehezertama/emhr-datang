@@ -403,7 +403,8 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<img style="width: 70%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/>
+								<!--img style="width: 70%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/-->
+								<img style="width: 50%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/Google Play.png') }}"/>
 							</div>
 						</div>
 					</div>
