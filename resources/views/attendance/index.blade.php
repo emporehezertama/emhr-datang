@@ -210,8 +210,10 @@
     </div>
 
 @section('js')
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTctq_RFrwKOd84ZbvJYvU3MEcrLmPNJ8"
-            async defer></script>
+            async defer>
+            </script>
 
     <script type="text/javascript">
         $("#filter_view").click(function(){
@@ -222,7 +224,7 @@
                 $("#filter-form").submit();
             }
         });
-
+        
         function reset_filter()
         {
             $("#filter-form input.form-control, #filter-form select").val("");
