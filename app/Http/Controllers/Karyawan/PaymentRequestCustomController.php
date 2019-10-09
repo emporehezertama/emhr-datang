@@ -63,12 +63,17 @@ class PaymentRequestCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $checkApproval = \Auth::user()->approvalLeave->level1PaymentRequest;
+        $checkApproval = \Auth::user()->approvalLeave;
 
         if($checkApproval == null)
         {
-            return redirect()->route('karyawan.payment-request-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            return redirect()->route('karyawan.payment-request-custom.index')->with('message-error', 'Your position is not defined yet. Please contact your admin!');
         }else{
+            $checkApproval = $checkApproval->level1PaymentRequest;
+            if($checkApproval == null){
+                return redirect()->route('karyawan.payment-request-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            }
+            if($checkApproval)
             $data                       = new PaymentRequest();
             $data->user_id              = \Auth::user()->id;
             $data->transaction_type     = $request->transaction_type;

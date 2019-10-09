@@ -109,7 +109,7 @@ class IndexController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        $user = User::where('id', \Auth::user()->id)->count();
+        $user = User::where('id', \Auth::user()->id)->first();
         
         if($user)
         {   
