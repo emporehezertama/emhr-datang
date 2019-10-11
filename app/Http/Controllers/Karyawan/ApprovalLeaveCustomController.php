@@ -27,12 +27,7 @@ class ApprovalLeaveCustomController extends Controller
      */
     public function index()
     {
-      //
-        //$data = cek_leave_approval();
-        //dd($data);
         $params['datas'] = cek_leave_approval();
-
-//        dd(cek_leave_approval());
        
         return view('karyawan.approval-leave-custom.index')->with($params);
     }

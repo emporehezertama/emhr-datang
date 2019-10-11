@@ -97,7 +97,7 @@
 	<div>
 		<a href="{{ route('login') }}" class="btn btn-info float-right btn_login">Login</a>
 		<div class="bg-2" >
-		  <div class="container">
+		  <div class="container" style="overflow: hidden;">
 			<div class="row" > 
 				<div class="col-md-4 float-left section-1">
 					<h1 style="color: #acce22; font-size: 53px;">EM-HR</h1>
@@ -110,8 +110,8 @@
 					<button class="btn_trial_1" onclick="form_free_trial()">Create Member</button>
 				</div>
 
-				<div class="col-md-8 float-right section-1" >
-					<img src="{{ asset('landing-page/2019-05-28/modelEMHRsmall.png') }}" style="width: 125%; position: absolute; bottom: -10px; right: -195px;">
+				<div class="col-md-8 float-right section-1">
+					<img src="{{ asset('landing-page/2019-05-28/modelEMHRsmall.png') }}" style="width: 100%; position: absolute; bottom: -15px; right: -5px; ">
 				</div>
 			</div>
 		  </div>
@@ -173,21 +173,21 @@
 					</div>
 					<div class="row">
 						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="leave and permit" src="{{ asset('landing-page/2019-05-28/Core HR.png') }}"/>
+							<img style="margin: 0 35%; width: 40%;" alt="Core HR" src="{{ asset('landing-page/2019-05-28/Core HR.png') }}"/>
 							
 							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
 								<p>Standard modules that are often used in managing human resource</p>
 							</div>
 						</div>
 						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="leave and permit" src="{{ asset('landing-page/2019-05-28/Payroll.png') }}"/>
+							<img style="margin: 0 35%; width: 40%;" alt="Payroll" src="{{ asset('landing-page/2019-05-28/Payroll.png') }}"/>
 							
 							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
 								<p>Detail of personal pay rate calculation net / gross</p>
 							</div>
 						</div>
 						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 60%;" alt="Leave and permit" src="{{ asset('landing-page/2019-05-28/Leave and permit.png') }}"/>
+							<img style="margin: 0 27%; width: 58%;" alt="Leave and permit" src="{{ asset('landing-page/2019-05-28/Leave and permit.png') }}"/>
 							
 							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
 								<p>For employee who will apply for leave or for permission</p>
@@ -210,7 +210,7 @@
 							</div>
 						</div>
 						<div class="col-md-4" >
-							<img style="margin: 0 8%; width: 112%;" alt="Medical Reimbursement" src="{{ asset('landing-page/2019-05-28/Medical Reimbursement.png') }}"/>
+							<img style="margin: 0 7%; width: 100%;" alt="Medical Reimbursement" src="{{ asset('landing-page/2019-05-28/Medical Reimbursement.png') }}"/>
 							
 							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
 								<p>Advance claim or any payment related to employee task</p>
@@ -403,7 +403,8 @@
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<img style="width: 70%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/>
+								<!--img style="width: 70%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/-->
+								<img style="width: 50%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/Google Play.png') }}"/>
 							</div>
 						</div>
 					</div>
