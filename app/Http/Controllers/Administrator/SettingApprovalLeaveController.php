@@ -146,20 +146,31 @@ class SettingApprovalLeaveController extends Controller
     {
         //
         //cek data udah ada belum level segitu
-        $checkdata = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
-        $checkDataStruktur = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('structure_organization_custom_id', $request->structure_organization_custom_id)->first();
-        
         if ($request->structure_organization_custom_id == NULL) {
             # code...
-            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval position is incomplete!');
-        }else
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors("Approval position is incomplete!");
+//            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval position is incomplete!');
+        }
+        else if ($request->setting_approval_level_id == NULL) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors("Approval level is incomplete!");
+//            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval position is incomplete!');
+        }
+        else
         {
-            if(isset($checkDataStruktur))
+            $checkdata         = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('setting_approval_level_id', $request->setting_approval_level_id)->first();
+            $checkDataStruktur = SettingApprovalLeaveItem::where('setting_approval_leave_id', $request->setting_approval_leave_id)->where('structure_organization_custom_id', $request->structure_organization_custom_id)->first();
+            if(isset($checkDataStruktur) || isset($checkdata))
             {
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
-            }elseif(isset($checkdata))
-            {
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->withErrors("Data already exists!");
             }else
             {
                 $data       = new SettingApprovalLeaveItem();
@@ -168,7 +179,6 @@ class SettingApprovalLeaveController extends Controller
                 $data->structure_organization_custom_id  = $request->structure_organization_custom_id;
                 $data->description = $request->description;
                 $data->save();
-
                 return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-success', 'Data successfully saved!');
             }
         }
@@ -207,11 +217,17 @@ class SettingApprovalLeaveController extends Controller
         */
         if ($request->structure_organization_custom_id == NULL) {
             # code...
-            return redirect()->route('administrator.setting-approvalLeave.indexItem', $request->setting_approval_leave_id)->with('message-error', 'Approval position is incomplete!');
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors("Approval level is incomplete!");
         }else{
             if(isset($checkDataStruktur))
             {
-                return redirect()->route('administrator.setting-approvalLeave.indexItem', $data->setting_approval_leave_id)->with('message-error', 'Data already exists!');
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->withErrors("Data already exists!");
                 /*
                 if($checkDataStruktur->setting_approval_level_id != $request->setting_approval_level_id)
                 {

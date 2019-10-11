@@ -57,9 +57,41 @@ class KaryawanController extends Controller
      */
     public function index()
     {
+
         $params['structure'] = getStructureName();
         
         $user = \Auth::user();
+
+        if(isset($_GET['layout_karyawan']))
+        {
+            $auth = $user;
+            if($auth)
+            {
+                if($auth->project_id != NULL)
+                {
+                    $setting = \App\Models\Setting::where('key', 'layout_karyawan')->where('project_id',$auth->project_id)->first();
+                } else{
+                    $setting = \App\Models\Setting::where('key', 'layout_karyawan')->first();
+                }
+            }else{
+                $setting = \App\Models\Setting::where('key', 'layout_karyawan')->first();
+            }
+
+            if(!$setting)
+            {
+                info($auth);
+                $setting = new \App\Models\Setting();
+                $setting->key = 'layout_karyawan';
+                if($auth->project_id != NULL)
+                {
+                    $setting->project_id = $auth->project_id;
+                }
+            }
+
+            $setting->value = $_GET['layout_karyawan'];
+            $setting->save();
+        }
+
         if($user->project_id != NULL)
         {
 
@@ -115,7 +147,7 @@ class KaryawanController extends Controller
             }
         }
 
-        $params['data'] = $data->orderBy('id', 'DESC')->paginate(50);
+        $params['data'] = $data->orderBy('users.id', 'DESC')->paginate(50);
 
         return view('administrator.karyawan.index')->with($params);
     }
