@@ -2,6 +2,7 @@
 /**
  * get Employee Rate
  */
+
 function employee_rate($month)
 {
 	$period = 0;

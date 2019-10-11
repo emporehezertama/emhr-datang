@@ -60,7 +60,7 @@
                                     <div class="form-group">
                                         <label class="col-md-12">Business Trip Type</label>
                                         <div class="col-md-12">
-                                            <select name="training_type_id" required class="form-control">
+                                            <select name="training_type_id" required class="form-control input">
                                                 <option value="">Choose Business Trip Type</option>@foreach($trainingType as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
@@ -78,22 +78,22 @@
                                     <div class="form-group">
                                         <label class="col-md-12">Destination</label>
                                         <div class="col-md-12">
-                                            <input type="text" class="form-control" required name="tempat_tujuan" id="tempat_tujuan"/>
+                                            <input type="text" class="form-control input" required name="tempat_tujuan" id="tempat_tujuan"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-12">Activity Topic</label>
                                         <div class="col-md-12">
-                                            <textarea class="form-control" required name="topik_kegiatan"></textarea>
+                                            <textarea class="form-control input" required name="topik_kegiatan"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-12">Activity Date</label>
                                         <div class="col-md-6">
-                                            <input type="text" name="tanggal_kegiatan_start" id="from" required class="form-control" placeholder="From Date">
+                                            <input type="text" name="tanggal_kegiatan_start" id="from" required class="form-control input" placeholder="From Date">
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" name="tanggal_kegiatan_end" id="to" required class="form-control" placeholder="To Date">
+                                            <input type="text" name="tanggal_kegiatan_end" id="to" required class="form-control input" placeholder="To Date">
                                         </div>
                                     </div>
                                     <hr />
@@ -305,7 +305,11 @@
     });
 
     $('.next_').click(function(){
-
+        var validate = validate_form();
+        if(!validate) {
+            bootbox.alert('Form must be completed!');
+            return false;
+        }
         $("a[href='#pesawat']").parent().addClass('active');        
 
         $("a[href='#kegiatan']").parent().removeClass('active');
@@ -347,6 +351,20 @@
             }
         }
     });
+    function validate_form()
+    {
+        var validate = true;
+
+        $('.input').each(function(){
+
+            if($(this).val() == "")
+            {
+                console.log('cek');
+                validate = false;
+            }
+        });
+        return validate;
+    }
 
     $( "#from_tanggal_pengajuan, #to_tanggal_pengajuan" ).datepicker({
         defaultDate: "+1w",

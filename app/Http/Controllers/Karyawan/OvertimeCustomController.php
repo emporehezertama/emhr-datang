@@ -57,11 +57,15 @@ class OvertimeCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $checkApproval = \Auth::user()->approvalLeave->level1Overtime;
+        $checkApproval = \Auth::user()->approvalLeave;
         if($checkApproval == null)
         {
-            return redirect()->route('karyawan.overtime-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            return redirect()->route('karyawan.overtime-custom.index')->with('message-error', 'Your position is not defined yet. Please contact your admin!');
         }else{
+            $checkApproval = $checkApproval->level1Overtime;
+            if($checkApproval == null){
+                return redirect()->route('karyawan.overtime-custom.index')->with('message-error', 'Setting approval is not define yet. Please contact your admin !');
+            }
             $data                       = new OvertimeSheet();
             $data->user_id              = \Auth::user()->id;
             $data->status               = 1;  

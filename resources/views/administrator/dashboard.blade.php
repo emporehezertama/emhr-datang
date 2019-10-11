@@ -113,8 +113,8 @@
                     <div class="clearfix"></div>
                     <div id="chart-1" style="height: 220px"></div>
                     <p class="text-center">
-                        <label><i class="fa fa-circle" style="color:#d70206;"></i></label> Monthly resignees
-                        <label><i class="fa fa-circle" style="color:#f05b4f;"></i></label> Monthly joinees
+                        <label><i class="fa fa-circle" style="color:#f05b4f;"></i></label> Monthly resignees
+                        <label><i class="fa fa-circle" style="color:green;"></i></label> Monthly joinees
                     </p>
                 </div>
             </div>
@@ -234,6 +234,9 @@
     .col-in h3 {
         font-size: 20px;
     }
+    .ct-series.ct-series-b .ct-area { fill: green; }
+    .ct-series.ct-series-b .ct-line { stroke: green; }
+    .ct-series.ct-series-b .ct-point { stroke: green; }
 </style>
 <link href="{{ asset('admin-css/plugins/bower_components/css-chart/css-chart.css') }}" rel="stylesheet">
 <script src="{{ asset('admin-css/plugins/bower_components/chartist-js/dist/chartist.min.js') }}"></script>
@@ -311,6 +314,7 @@
     }
 
     function filterMonthlyJoinResign(bulan_label, employee_resign, employee_join){
+        console.log(employee_join);
         new Chartist.Line('#chart-1', {
             high: 100,
             labels: bulan_label,
@@ -321,7 +325,7 @@
             showlabel: true
         }, {
             top: 0,
-            low: 1,
+            low: 0,
             showPoint: true,
             height: 210,
             fullWidth: true,

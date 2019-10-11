@@ -57,11 +57,15 @@ class LeaveController extends Controller
     public function store(Request $request)
     {
         //
-        $checkApproval = \Auth::user()->approvalLeave->level1;
+        $checkApproval = \Auth::user()->approvalLeave;
         if($checkApproval == null)
         {
-            return redirect()->route('karyawan.leave.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            return redirect()->route('karyawan.leave.index')->with('message-error', 'Your position is not defined yet. Please contact your admin!');
         }else{
+            $checkApproval = $checkApproval->level1;
+            if($checkApproval == null){
+                return redirect()->route('karyawan.leave.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            }
             $data                   = new CutiKaryawan();
             $data->user_id          = \Auth::user()->id;
             $data->jenis_cuti       = $request->jenis_cuti;

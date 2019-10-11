@@ -59,17 +59,19 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-content-lembur">
-                                        <!--
+
                                         <tr>
                                             <td>1</td>
-                                            <td><input type="text" name="tanggal[]" class="form-control datepicker date_overtime"></td>
+                                            <td><input type="text" name="tanggal[]" class="form-control datepicker date_overtime input"></td>
                                             <td><input type="text" name="description[]" class="form-control"></td>
-                                            <td><input type="text" name="awal[]" class="form-control time-picker awal" /></td>
-                                            <td><input type="text" name="akhir[]" class="form-control time-picker akhir" /></td>
-                                            <td><input type="text" name="total_lembur[]" class="form-control total_lembur" readonly="true" /></td>
-                                            <td><a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i></a></td>
+                                            <td><input type="text" name="awal[]" class="form-control time-picker awal input" /></td>
+                                            <td><input type="text" name="akhir[]" class="form-control time-picker akhir input" /></td>
+                                            <td><input type="text" name="total_lembur[]" class="form-control total_lembur input" readonly="true" /></td>
+                                            <td>
+                                                {{--<a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i></a>--}}
+                                            </td>
                                         </tr>
-                                        -->
+
                                     </tbody>
                                 </table>
                                 <a class="btn btn-info btn-xs pull-right" id="add"><i class="fa fa-plus"></i> Add</a>
@@ -99,6 +101,12 @@
     $("#btn_submit").click(function(){
 
         var total = $('.table-content-lembur tr').length;
+        var validation = validate_form();
+        if(!validation)
+        {
+            bootbox.alert('Form must be completed!');
+            return false;
+        }
 
         if(total == 0) return false;
         bootbox.confirm('Do you want to submit Overtime?', function(result){
@@ -108,6 +116,21 @@
             }
         });
     });
+
+    function validate_form()
+    {
+        var validate = true;
+
+        $('.input').each(function(){
+
+            if($(this).val() == "")
+            {
+                console.log('cek');
+                validate = false;
+            }
+        });
+        return validate;
+    }
 
    
     var disabledDates = [];
@@ -170,11 +193,11 @@
         var no = $('.table-content-lembur tr').length;
         var html = '<tr>';
             html += '<td>'+ (no+1) +'</td>';
-            html += '<td><input type="text" name="tanggal[]" class="form-control datepicker date_overtime"></td>';
+            html += '<td><input type="text" name="tanggal[]" class="form-control datepicker date_overtime input"></td>';
             html += '<td><input type="text" name="description[]" class="form-control description"></td>';
-            html += '<td><input type="text" name="awal[]" class="form-control time-picker awal" /></td>';
-            html += '<td><input type="text" name="akhir[]" class="form-control time-picker akhir" /></td>';
-            html += '<td><input type="text" name="total_lembur[]" class="form-control total_lembur" readonly="true" /></td>';
+            html += '<td><input type="text" name="awal[]" class="form-control time-picker awal input" /></td>';
+            html += '<td><input type="text" name="akhir[]" class="form-control time-picker akhir input" /></td>';
+            html += '<td><input type="text" name="total_lembur[]" class="form-control total_lembur input" readonly="true" /></td>';
             html += '<td><a class="btn btn-danger btn-xs" onclick="hapus_(this)"><i class="fa fa-trash"></i></a></td>';
             html += '</tr>';
 

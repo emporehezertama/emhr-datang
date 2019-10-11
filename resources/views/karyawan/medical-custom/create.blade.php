@@ -105,7 +105,7 @@
                                   </tr>
                               </thead>
                               <tbody class="table-claim">
-                                <!--
+
                                 <tr class="oninput">
                                     <td>1</td>
                                     <td><input type="text" class="form-control datepicker input" required name="tanggal_kwitansi[]" /></td>
@@ -127,12 +127,12 @@
                                         @endforeach
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control" name="no_kwitansi[]" required /></td> 
+                                    <td><input type="text" class="form-control" name="no_kwitansi[]" required /></td>
                                     <td><input type="number" class="form-control input" name="jumlah[]" required /></td>
                                     <td><input type="file" class="form-control input" name="file_bukti_transaksi[]" required /></td>
                                     <td></td>
                                 </tr>
-                                -->
+
                               </tbody>
                               <tfoot>
                                   <tr>
@@ -168,14 +168,14 @@
 </div>
 
 @section('footer-script')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{{--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">--}}
+{{--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>--}}
 <script type="text/javascript">
 
     validate_form = true;
 
-    show_hide_add();
-    cek_button_add();
+    // show_hide_add();
+    // cek_button_add();
 
     jQuery('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
@@ -185,18 +185,20 @@
 
     $("#btn_submit").click(function(){
         var jumlah = $('.table-claim tr').length;
-        var validate = true;
+
 
         if(jumlah <= 0)
         {
             bootbox.alert('Form not completed. Please check and resubmit.');
             validate = false;
+            return;
         }
-        if(!validate_form){
+        var validate = form_validate();
+        if(!validate){
             bootbox.alert('Form not completed. Please check and resubmit.');
             return false;
         }
-        if(validate){
+        else{
             bootbox.confirm('Process Form Medical Reimbursement ?', function(result){
             if(result)
             {
@@ -206,6 +208,18 @@
         }
         
     });
+    function form_validate() {
+        var validate = true;
+        $('.oninput .input').each(function(){
+
+            if($(this).val() == "")
+            {
+                console.log('aaa');
+                validate = false;
+            }
+        });
+        return validate;
+    }
 
     function select_hubungan(el)
     {
@@ -248,8 +262,8 @@
             dateFormat: 'yy-mm-dd'
         });
 
-        cek_button_add();
-        show_hide_add();
+        // cek_button_add();
+        // show_hide_add();
     });
 
 function show_hide_add()
@@ -297,8 +311,8 @@ function hapus_item(el)
     if(confirm("Delete this item ?"))
     {
         $(el).parent().parent().remove();
-        cek_button_add();
-        show_hide_add();
+        // cek_button_add();
+        // show_hide_add();
     }
 }
 

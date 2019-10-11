@@ -65,6 +65,7 @@ $("#add_modal_bensin").click(function(){
     calculate_amount();
 });
 
+
 function info_bensin(el)
 {
     $("#modal_bensin").modal('show');

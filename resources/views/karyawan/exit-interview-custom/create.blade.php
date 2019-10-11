@@ -63,10 +63,10 @@
                                         <label class="col-md-6">Resign Date </label>
                                         <label class="col-md-6">Date Last Work </label>
                                         <div class="col-md-6">
-                                            <input type="text" name="resign_date" class="form-control datepickerResign" value="" >
+                                            <input type="text" name="resign_date" class="form-control datepickerResign input" value="" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="text" name="last_work_date" class="form-control datepickerLast" value="">
+                                            <input type="text" name="last_work_date" class="form-control datepickerLast input" value="" required>
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -78,7 +78,7 @@
                                     <div class="col-md-12">
                                         <ul class="list-group">
                                             @foreach(get_reason_interview() as $item)
-                                            <li class="list-group-item"><label><input type="radio" name="exit_interview_reason" value="{{ $item->id }}" /> {{ $item->label }}</label>
+                                            <li class="list-group-item"><label><input type="radio" name="exit_interview_reason" value="{{ $item->id }}" class="input" required/> {{ $item->label }}</label>
                                             @if($item->id == 1)
                                             <div class="form-group perusahaan_lain" style="display: none;">
                                                 <hr />
@@ -106,7 +106,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Most memorable moments at this company</label>
                                     <div class="col-md-12">
-                                        <textarea class="form-control" name="hal_berkesan">{{ old('hal_berkesan') }}</textarea>
+                                        <textarea class="form-control input" name="hal_berkesan" required>{{ old('hal_berkesan') }}</textarea>
                                     </div>
                                 </div>
                                 <hr />
@@ -122,7 +122,7 @@
                                 <div class="form-group">
                                     <label class="col-md-12">Suggestion and Critic</label>
                                     <div class="col-md-12">
-                                        <textarea class="form-control" name="masukan">{{ old('masukan') }}</textarea>
+                                        <textarea class="form-control input" name="masukan" required>{{ old('masukan') }}</textarea>
                                     </div>
                                 </div>
                                
@@ -186,7 +186,11 @@
 <script type="text/javascript">
 
     $('#submit_form').click(function(){
-
+        var validate = validate_form();
+        if(!validate){
+            bootbox.alert('Form must be completed!');
+            return false;
+        }
         bootbox.confirm("Do you want to submit this form ?", function(result){
             if(result)
             {
@@ -195,6 +199,20 @@
         });
 
     });
+    function validate_form()
+    {
+        var validate = true;
+
+        $('.input').each(function(){
+
+            if($(this).val() == "")
+            {
+                console.log('cek');
+                validate = false;
+            }
+        });
+        return validate;
+    }
 
     jQuery('.datepickerResign').datepicker({
         dateFormat: 'yy-mm-dd',

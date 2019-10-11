@@ -65,12 +65,16 @@ class MedicalCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $checkApproval = \Auth::user()->approvalLeave->level1Medical;
+        $checkApproval = \Auth::user()->approvalLeave;
         if($checkApproval == null)
         {
-            return redirect()->route('karyawan.medical-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            return redirect()->route('karyawan.medical-custom.index')->with('message-error', 'Your position is not defined yet. Please contact your admin !');
         }else
         {
+            $checkApproval = $checkApproval->level1Medical;
+            if($checkApproval == null){
+                return redirect()->route('karyawan.medical-custom.index')->with('message-error', 'Setting approval is not defined yet. Please contact your admin !');
+            }
             $data                       = new MedicalReimbursement();
             $data->user_id              = \Auth::user()->id;
             $data->tanggal_pengajuan    = $request->tanggal_pengajuan;

@@ -60,14 +60,18 @@ class ExitInterviewCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $checkApproval = \Auth::user()->approvalLeave->level1Exit;
+        $checkApproval = \Auth::user()->approvalLeave;
         if($checkApproval == null)
         {
             return redirect()->route('karyawan.exit-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
         }else {
+            $checkApproval = $checkApproval->level1Exit;
+            if($checkApproval == null){
+                return redirect()->route('karyawan.exit-custom.index')->with('message-error', 'Setting approval is not defined yet. Please contact your admin !');
+            }
             $data       = new ExitInterview();
         $data->status               = 1;
-        $data->user_id              = \Auth::user()->id; 
+        $data->user_id              = \Auth::user()->id;
         $data->resign_date          = date('Y-m-d', strtotime($request->resign_date));
         $data->last_work_date       = date('Y-m-d', strtotime($request->last_work_date));
 
@@ -94,10 +98,10 @@ class ExitInterviewCustomController extends Controller
                 $new->save();
             }
         }
-        
+
         $params['data']     = $data;
         $position = \Auth::user()->structure_organization_custom_id;
-        $settingApproval = \Auth::user()->approvalLeave->id; //idnya 
+        $settingApproval = \Auth::user()->approvalLeave->id; //idnya
         $settingApprovalItem = \Auth::user()->approvalLeave->level1Exit->structure_organization_custom_id;
 
             $historyApproval    = \Auth::user()->approvalLeave->itemsExit;
@@ -112,10 +116,10 @@ class ExitInterviewCustomController extends Controller
             $historyApprov = HistoryApprovalExit::where('exit_interview_id',$data->id)->get();
 
             $userApproval = user_approval_custom($settingApprovalItem);
-            foreach ($userApproval as $key => $value) { 
-                
+            foreach ($userApproval as $key => $value) {
+
                 if($value->email == "") continue;
-                
+
                 $params['data']     = $data;
                 $params['value']    = $historyApprov;
                     $params['text']     = '<p><strong>Dear Sir/Madam '. $value->name .'</strong>,</p> <p> '. $data->user->name .'  / '.  $data->user->nik .' applied for Exit Interview and currently waiting your approval.</p>';
@@ -124,7 +128,7 @@ class ExitInterviewCustomController extends Controller
                     $message->from('emporeht@gmail.com');
                     $message->to($value->email);
                     $message->subject(get_setting('mail_name').' - Exit Interview');
-                }); 
+                });
             }
             return redirect()->route('karyawan.exit-custom.index')->with('message-success', 'Exit Interview succesfully process');
 

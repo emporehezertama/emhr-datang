@@ -66,7 +66,7 @@
                                         @php($no++)
                                         <tr>
                                             <input type="hidden" name="asset[{{$no}}]" value="{{ $item->id }}" />
-                                            <td class="text-center">{{ $no }}</td>   
+                                            <td class="text-center">{{ $no }}</td>
                                             <td>{{ $item->asset->asset_number }}</td>
                                             <td>{{ $item->asset->asset_name }}</td>
                                             <td>{{ isset($item->asset->asset_type->name) ? $item->asset->asset_type->name : ''  }}</td>
@@ -79,13 +79,13 @@
                                                 @endif </td>
                                             <td>{{ $item->asset->asset_condition }}</td>
                                             <td>{{ $item->asset->handover_date != "" ?  format_tanggal($item->asset->handover_date) : '' }}</td>
-                                            
+
                                             <td style="text-align: center;">
                                                 @if($item->approval_check == 1)
                                                 <label class="bt btn-success btn-xs"><i class="fa fa-check"></i> </label>
                                                 @else
                                                 <label class="bt btn-danger btn-xs"><i class="fa fa-close"></i> </label>
-                                                @endif  
+                                                @endif
                                             </td>
                                             <td>
                                                 <input type="text" name="catatan[{{$no}}]" class="form-control catatan" value="{{ $item->catatan }}" />
@@ -107,8 +107,8 @@
                         </div>
 
                     </div>
-                </div>     
-            </form>                    
+                </div>
+            </form>
         </div>
         <!-- /.row -->
         <!-- ============================================================== -->
@@ -169,7 +169,7 @@
 
     $('.next_exit_clearance').click(function(){
 
-        $("a[href='#clearance']").parent().addClass('active');        
+        $("a[href='#clearance']").parent().addClass('active');
 
         $("a[href='#interview']").parent().removeClass('active');
     });

@@ -67,11 +67,15 @@ class TrainingCustomController extends Controller
     public function store(Request $request)
     {
         //
-        $checkApproval = \Auth::user()->approvalLeave->level1Training;
+        $checkApproval = \Auth::user()->approvalLeave;
         if($checkApproval == null)
         {
-            return redirect()->route('karyawan.training-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            return redirect()->route('karyawan.training-custom.index')->with('message-error', 'Your position is not defined yet. Please contact your admin !');
         }else {
+            $checkApproval = $checkApproval->level1Training;
+            if($checkApproval == null){
+                return redirect()->route('karyawan.payment-request-custom.index')->with('message-error', 'Setting approval not define yet. Please contact your admin !');
+            }
             $data                           = new Training();
             $data->user_id                  = \Auth::user()->id;
             // Form Kegiatan
