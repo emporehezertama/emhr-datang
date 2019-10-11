@@ -18,3 +18,4 @@ yarn-error.log
 /public/new/*
 /public/api/*
 /public/upload/*
+bootstrap/cache/config.php
