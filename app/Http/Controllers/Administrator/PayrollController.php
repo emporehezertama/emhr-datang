@@ -299,8 +299,7 @@ class PayrollController extends Controller
      */
     public function createByPayrollId($id)
     {
-        //$params['data'] = Payroll::where('id', $id)->first();
-        $params['data'] = PayrollHistory::where('payroll_id', $id)->first();
+        $params['data'] = Payroll::where('id', $id)->first();
         $params['create_by_payroll_id'] = true;
 
         return view('administrator.payroll.detail')->with($params);

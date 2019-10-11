@@ -19,3 +19,5 @@ yarn-error.log
 /public/api/*
 /public/upload/*
 bootstrap/cache/config.php
+bootstrap/cache/packages.php
+bootstrap/cache/services.php
