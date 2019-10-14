@@ -1924,6 +1924,12 @@ class PayrollController extends Controller
                         $payroll->user_id   = $user->id;
                         $payroll->is_calculate  = 0;
                         $new = 1;
+
+                        
+                        $payrollHistory                 = new PayrollHistory();
+                        $payrollHistory->payroll_id     = $payroll->id;
+                        $payrollHistory->user_id        = $user->id;
+                        $new = 1;
                     }
 
                     $is_calculate = 1;
@@ -1940,6 +1946,9 @@ class PayrollController extends Controller
                     $payroll->is_calculate  = $is_calculate;
                     $payroll->save();
 
+                    $payrollHistory->salary         = replace_idr($row[3]);
+                    $payrollHistory->bonus          = replace_idr($row[4]);
+                    $payrollHistory->save();
                     // jika payroll belum ada insert baru
                     if($new==1)
                     {
