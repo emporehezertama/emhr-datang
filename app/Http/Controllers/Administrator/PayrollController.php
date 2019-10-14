@@ -299,7 +299,7 @@ class PayrollController extends Controller
      */
     public function createByPayrollId($id)
     {
-        $params['data'] = Payroll::where('id', $id)->first();
+        $params['data'] = Payroll::where('id', PayrollHistory::where('id', $id)->first()->payroll_id)->first();
         $params['create_by_payroll_id'] = true;
 
         return view('administrator.payroll.detail')->with($params);
@@ -930,7 +930,8 @@ class PayrollController extends Controller
     {
         // $params['data'] = Payroll::where('id', $id)->first();
 
-        $params['data'] = PayrollHistory::where('payroll_id', $id)->first();
+        //$params['data'] = PayrollHistory::where('payroll_id', $id)->first();
+        $params['data'] = PayrollHistory::where('id', $id)->first();
         //$params['create_by_payroll_id'] = false;
         $params['update_history'] = true;
 
