@@ -1949,7 +1949,6 @@ class PayrollController extends Controller
                     $payrollHistory->salary         = replace_idr($row[3]);
                     $payrollHistory->bonus          = replace_idr($row[4]);
                     $payrollHistory->save();
-
                     // jika payroll belum ada insert baru
                     if($new==1)
                     {
