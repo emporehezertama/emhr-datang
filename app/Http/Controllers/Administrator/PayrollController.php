@@ -43,22 +43,23 @@ class PayrollController extends Controller
         $user = \Auth::user();
         if($user->project_id != NULL)
         {
-            //$result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->where('users.project_id', $user->project_id)->orderBy('payroll.id', 'DESC');
-            $result = PayrollHistory::select('payroll_history.*', 
-                                                DB::raw('max(payroll_history.id) as id'), 
-                                                DB::raw('max(payroll_history.total_deduction) as total_deduction'),
-                                                DB::raw('max(payroll_history.total_earnings) as total_earnings'),
-                                                DB::raw('max(payroll_history.thp) as thp'))
-                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
-                                                ->where('users.project_id', $user->project_id)
-                                                ->groupBy('user_id')
-                                                ->orderBy('payroll_history.id', 'DESC');
+            $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->where('users.project_id', $user->project_id)->orderBy('payroll.id', 'DESC');
+            // $result = PayrollHistory::select('payroll_history.*', 
+            //                                     DB::raw('max(payroll_history.id) as id'), 
+            //                                     DB::raw('max(payroll_history.total_deduction) as total_deduction'),
+            //                                     DB::raw('max(payroll_history.total_earnings) as total_earnings'),
+            //                                     DB::raw('max(payroll_history.thp) as thp'))
+            //                                     ->join('users', 'users.id','=', 'payroll_history.user_id')
+            //                                     ->where('users.project_id', $user->project_id)
+            //                                     ->groupBy('user_id')
+            //                                     ->orderBy('payroll_history.id', 'DESC');
+
             $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
             $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
         } else
         {
-            //$result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
-            $result = PayrollHistory::select('payroll_history.*')->join('users', 'users.id','=', 'payroll_history.user_id')->orderBy('payroll_history.id', 'DESC');
+            $result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->orderBy('payroll.id', 'DESC');
+            // $result = PayrollHistory::select('payroll_history.*')->join('users', 'users.id','=', 'payroll_history.user_id')->orderBy('payroll_history.id', 'DESC');
             $params['division'] = OrganisasiDivision::all();
             $params['position'] = OrganisasiPosition::all();
         }
@@ -229,8 +230,6 @@ class PayrollController extends Controller
 
         $params['data'] = $result->get();
 
-        //dd($params['data']);
-        
         return view('administrator.payroll.index')->with($params);
     }
 
@@ -238,8 +237,10 @@ class PayrollController extends Controller
      * Lock Payroll
      * @return return void
      */
+
     public function buktiPotong()
     {
+
         $dataRequest = request();
         $valuePayroll= PayrollHistory::whereIn('user_id', $dataRequest->user_id)->whereYear('created_at',$dataRequest->year)->get();
 
@@ -303,6 +304,7 @@ class PayrollController extends Controller
         return view('administrator.payroll.detail')->with($params);
     }
 
+
     /**
      * Create Payroll By ID
      * @param  $id
@@ -310,7 +312,8 @@ class PayrollController extends Controller
      */
     public function createByPayrollId($id)
     {
-        $params['data'] = Payroll::where('id', PayrollHistory::where('id', $id)->first()->payroll_id)->first();
+        $params['data'] = Payroll::where('id', $id)->first();
+        //$params['data'] = Payroll::where('id', PayrollHistory::where('id', $id)->first()->payroll_id)->first();
         $params['create_by_payroll_id'] = true;
 
         return view('administrator.payroll.detail')->with($params);
@@ -328,6 +331,7 @@ class PayrollController extends Controller
     public function downloadExcelYear($data)
     {
         $request = request();
+
 
         return (new \App\Models\PayrollExportYear($request->year, $request->user_id))->download('EM-HR.Payroll-'. $request->year .'.xlsx');
     }
@@ -444,6 +448,7 @@ class PayrollController extends Controller
 
         return (new \App\Models\PayrollExportMonth(request()->year, request()->month, $params))->download('EM-HR.Payroll-'. $request->year .'-'. $request->month.'.xlsx');
     }
+    
     public function downloadExcelBank($data)
     {
         $params = [];
@@ -465,6 +470,7 @@ class PayrollController extends Controller
         }
         return (new \App\Models\PayrollExportMonth(request()->year, request()->month, $params))->download('EM-HR.Payroll-'. $request->year .'-'. $request->month.'.xlsx');
     }
+
     /**
      * [import description]
      * @return [type] [description]
@@ -684,7 +690,6 @@ class PayrollController extends Controller
                     }
 
                     $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
-
                     $earning->save();
                 }
                 foreach($request->earning as $key => $value)
@@ -701,6 +706,7 @@ class PayrollController extends Controller
                     $earning->save();
                 }
             }
+
             // save deductions
             if(isset($request->deduction))
             {
@@ -767,7 +773,6 @@ class PayrollController extends Controller
                 $history->burden_allow                 = replace_idr($request->burden_allow);
                 $history->yearly_income_tax                 = replace_idr($request->yearly_income_tax);
 
-
         // if create baru
         if(isset($request->create_by_payroll_id))
         {
@@ -776,8 +781,7 @@ class PayrollController extends Controller
         }
         else{
             $history->save();
-        }
-        
+        }       
             // save earnings
             if(isset($request->earning))
             {
@@ -790,7 +794,6 @@ class PayrollController extends Controller
                         $earning->payroll_id            = $history->id;
                         $earning->payroll_earning_id    = $value;
                     }
-
                     $earning->nominal               = replace_idr($request->earning_nominal[$key]); 
                     if(isset($request->create_by_payroll_id))
                     {
@@ -811,8 +814,7 @@ class PayrollController extends Controller
                         $deduction                        = new PayrollDeductionsEmployeeHistory();
                         $deduction->payroll_id            = $history->id;
                         $deduction->payroll_deduction_id  = $value;
-                    }
-                    
+                    }                  
                     $deduction->nominal               = replace_idr($request->deduction_nominal[$key]);
                     if(isset($request->create_by_payroll_id))
                     {
@@ -939,7 +941,7 @@ class PayrollController extends Controller
      */
     public function detail($id)
     {
-        // $params['data'] = Payroll::where('id', $id)->first();
+        //$params['data'] = Payroll::where('id', $id)->first();
 
         //$params['data'] = PayrollHistory::where('payroll_id', $id)->first();
         $params['data'] = PayrollHistory::where('id', $id)->first();
@@ -1123,6 +1125,7 @@ class PayrollController extends Controller
         $bpjspenambahan = $bpjs_jkk_company + $bpjs_jkm_company+$bpjs_kesehatan_company;
         $bpjspengurangan = $bpjs_ketenagakerjaan2 + $bpjs_pensiun2;
 
+
         $earnings = 0;
         if(isset($item->payrollEarningsEmployee))
         {
@@ -1256,7 +1259,6 @@ class PayrollController extends Controller
                 }
                 continue;
             }
-
             $temp                   = Payroll::where('id', $item->id)->first();
             $ptkp                   = PayrollPtkp::where('id', 1)->first();
             $bpjs_pensiunan_batas   = PayrollOthers::where('id', 3)->first()->value;
@@ -1518,6 +1520,7 @@ class PayrollController extends Controller
 
             $yearly_income_tax              = $income_tax_calculation_5 + $income_tax_calculation_15 + $income_tax_calculation_25 + $income_tax_calculation_30;
             $monthly_income_tax             = $yearly_income_tax / 12;
+
             $gross_income_per_month         = $gross_income / 12;
 
             $less               = $bpjspengurangan + $monthly_income_tax; 
@@ -1573,12 +1576,10 @@ class PayrollController extends Controller
             $temp->burden_allow                 = $burden_allow; 
             $temp->save(); 
 
-
             $bonus = $temp->bonus;
             $user_id        = $temp->user_id;
             $payroll_id     = $temp->id;
             
-
             $history                   = new PayrollHistory();
             $history->payroll_id       = $payroll_id;
             $history->user_id          = $user_id;
@@ -1825,6 +1826,7 @@ class PayrollController extends Controller
                     if(!$items)
                     {
                         $items   = \DB::select(\DB::raw("SELECT * FROM payroll_history WHERE user_id=". $data->user_id ." and YEAR(created_at) =". $request->tahun ." ORDER BY id DESC"));
+                        
                         if(!$items)
                         {
                             continue;
@@ -1936,9 +1938,9 @@ class PayrollController extends Controller
                         $payroll->is_calculate  = 0;
                         $new = 1;
 
-                        $payrollHistory                 = new PayrollHistory();
-                        $payrollHistory->user_id        = $user->id;
-                        $new = 1;
+                        // $payrollHistory                 = new PayrollHistory();
+                        // $payrollHistory->user_id        = $user->id;
+                        // $new = 1;
                     }
 
                     $is_calculate = 1;
@@ -1955,10 +1957,10 @@ class PayrollController extends Controller
                     $payroll->is_calculate  = $is_calculate;
                     $payroll->save();
 
-                    $payrollHistory->salary         = replace_idr($row[3]);
-                    $payrollHistory->bonus          = replace_idr($row[4]);
-                    $payrollHistory->payroll_id     = $payroll->id;
-                    $payrollHistory->save();
+                    // $payrollHistory->salary         = replace_idr($row[3]);
+                    // $payrollHistory->bonus          = replace_idr($row[4]);
+                    // $payrollHistory->payroll_id     = $payroll->id;
+                    // $payrollHistory->save();
                     // jika payroll belum ada insert baru
                     if($new==1)
                     {
