@@ -24,6 +24,7 @@ use App\Models\RequestPaySlipItem;
 use App\Models\OrganisasiDivision;
 use App\Models\OrganisasiPosition;
 use App\Models\PayrollNpwp;
+use DB;
 
 class PayrollController extends Controller
 {   
@@ -43,7 +44,15 @@ class PayrollController extends Controller
         if($user->project_id != NULL)
         {
             //$result = Payroll::select('payroll.*')->join('users', 'users.id','=', 'payroll.user_id')->where('users.project_id', $user->project_id)->orderBy('payroll.id', 'DESC');
-            $result = PayrollHistory::select('payroll_history.*')->join('users', 'users.id','=', 'payroll_history.user_id')->where('users.project_id', $user->project_id)->groupBy('user_id')->orderBy('payroll_history.id', 'DESC');
+            $result = PayrollHistory::select('payroll_history.*', 
+                                                DB::raw('max(payroll_history.id) as id'), 
+                                                DB::raw('max(payroll_history.total_deduction) as total_deduction'),
+                                                DB::raw('max(payroll_history.total_earnings) as total_earnings'),
+                                                DB::raw('max(payroll_history.thp) as thp'))
+                                                ->join('users', 'users.id','=', 'payroll_history.user_id')
+                                                ->where('users.project_id', $user->project_id)
+                                                ->groupBy('user_id')
+                                                ->orderBy('payroll_history.id', 'DESC');
             $params['division'] = OrganisasiDivision::join('users','users.id','=','organisasi_division.user_created')->where('users.project_id', $user->project_id)->select('organisasi_division.*')->get();
             $params['position'] = OrganisasiPosition::join('users','users.id','=','organisasi_position.user_created')->where('users.project_id', $user->project_id)->select('organisasi_position.*')->get();
         } else
@@ -219,6 +228,8 @@ class PayrollController extends Controller
         }
 
         $params['data'] = $result->get();
+
+        //dd($params['data']);
         
         return view('administrator.payroll.index')->with($params);
     }
