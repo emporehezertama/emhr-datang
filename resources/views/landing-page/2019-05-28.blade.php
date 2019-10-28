@@ -1,473 +1,652 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-		
-		<script src="{{ asset('js/bootbox.min.js') }}"></script>
-		
-		<title>EM-HR - HRIS Application System The Best and Complete</title>
-		<style type="text/css">
-			body {
-				font-family: "Trebuchet MS", Helvetica, sans-serif;
-			}
-			.bg-1 {
-				background: url('{{ asset('landing-page/2019-05-28/Background1.png') }}');
-				background-size: contain;
-			}
-			.bg-2 {
-				background: url('{{ asset('landing-page/2019-05-28/Background2.png') }}');
-				background-size: cover;
-				padding-top: 40px;
-			}
-			.form form {
-				background: white;
-			}
-			.btn_trial_1 {
-				background: url('{{ asset('landing-page/2019-05-28/button trial now.png') }}');
-				background-size: cover;
-				border: 0;
-				width: 252px;
-				height: 45px;
-				color : white;
-				font-size: 20px;
-				cursor: pointer;
-			}
-			.btn_trial_2 {
-				background: url('{{ asset('landing-page/2019-05-28/button trial now.png') }}');
-				background-size: cover;
-				border: 0;
-				width: 303px;
-				height: 54px;
-				color : white;
-				font-size: 20px;
-				cursor: pointer;
-			}
-			.btn_trial_3 {
-				background: url('{{ asset('landing-page/2019-05-28/button trial now.png') }}');
-				background-size: cover;
-				border: 0;
-				width: 303px;
-				height: 54px;
-				color : white;
-				font-size: 20px;
-			}
-			.bg-form-title {
-				background: url('{{ asset('landing-page/2019-05-28/button trial start register.png') }}');
-				background-size: cover;
-				border: 0;
-				width: 100%;
-				height: 54px;
-				color : white;
-				font-size: 20px;
-			}
-			.section-1 {
-				margin-top: 15%;
-			}
+ <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" /> -->
+    <meta name="google-site-verification" content="" />
+    <link rel="icon" href="assets/image/Cocok buat/Logo DATANG apps.png" sizes="40x90" />
+    <title>Datang - Absensi Digital Indonesia</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/blog.css" rel="stylesheet">
+    <script src="assets/js/bootstrap.min.js"></script>
 
-			.btn_login 
-			{
-				color: white !important;
-				background: #bfbfbf;
-			    width: 100px;
-			    border-radius: 0 0 17px 17px;
-			    margin-top: -1px;
-			    height: 45px;
-			    margin-right: 25px;
-			    border: 0;
-			    padding-top: 10px;
-			}
-		</style>
-		<script type="text/javascript">
-			function form_free_trial()
-			{
-				$('html, body').animate({
-			        scrollTop: $(".container_bottom").offset().top
-			    }, 1000);
-			}
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-			@if(Session::has('message-success'))
-				alert("{{ Session::get('message-success') }}");
-			@endif
+    
+    
+    <meta name="description" content="Selamat Datang di Inovasi Absensi Digital terkini cocok banget buat kamu yang anti ribet semua ada dalam genggaman" />
+    <meta name="keywords" content="mobile attendance, absensi digital, absensii karyawan, hris, karyawan" />
 
-		</script>
-	</head>
-<body>
-	<div>
-		<a href="{{ route('login') }}" class="btn btn-info float-right btn_login">Login</a>
-		<div class="bg-2" >
-		  <div class="container" style="overflow: hidden;">
-			<div class="row" > 
-				<div class="col-md-4 float-left section-1">
-					<h1 style="color: #acce22; font-size: 53px;">EM-HR</h1>
-					<h3 style="color: #0e9a88; font-size: 29px;">HRIS Application System The Best and Complete</h1>
-					<h4 style="margin-bottom: 4px;margin-top: 15px;">Help Your Company</h4>
-					<p>
-						Save Up To Tens Of Millions Of Rupiah <br />
-						Easy, Practical & Efficient 	
-					</p>
-					<button class="btn_trial_1" onclick="form_free_trial()">Create Member</button>
-				</div>
+    <style>
 
-				<div class="col-md-8 float-right section-1">
-					<img src="{{ asset('landing-page/2019-05-28/modelEMHRsmall.png') }}" style="width: 100%; position: absolute; bottom: -15px; right: -5px; ">
-				</div>
-			</div>
-		  </div>
+      html {
+        scroll-behavior: smooth;
+        color: white;
+      }
+
+      .menu-nav{
+        background-color: rgb(71, 69, 69); width: 160px; height: 40px; border-radius: 0 0 15px 15px; color: rgba(255, 255, 255, 1); margin: 0 3px;
+      }
+
+      .phone_number{
+        background-color: #d40d0d; font-family: Verdana, Geneva, Tahoma, sans-serif; padding: 10px; border-radius: 10px; margin: 15px 5px;
+      }
+
+      .phone_number:hover{
+        background-color: #a80606; color: rgb(194, 189, 189);
+      }
 
 
+      .btn-top{
+        background-color: #ff4000; border-radius: 25px; color: white; position: fixed; bottom: 10vh; right: 5vw; padding: 10px 15px;
+      }
 
-			<div class="container" >
-				<div class="col-md-6 float-left section-1" >
-					<iframe width="100%" height="320px" src="https://www.youtube.com/embed/y8h1fB7lSIQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-				</div>
-				<div class="col-md-6 float-right section-1">
-					<h1 style="font-size: 320%; font-weight: 800; color: #0E9A88;">Em-HR System</h1>
-					<h5 style="text-align: justify;">Still choosing the application that suit your office needs ? Now comes the web based Em-HR application 
-						that makes it easy for Business Owner and HRD to manage and analyze employee performance</h5>
+      .btn-top:hover{
+        background-color: #a80606;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
 
-				</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="container" style="margin-top: 7%; ">
-				<div style="margin: 50px 0;">
-					<div class="row">
-						<div class="col-md-12" style="text-align: center; margin-bottom: 20px;">
-							<h1 style="font-size: 320%; font-weight: 800;">Why do we have to use the system <span style="color: #0E9A88;">Em-HR</span> ?</h1>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4">
-							<img style="margin: 0 25%; width: 30%;" src="{{ asset('landing-page/2019-05-28/simple-and-easy.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 15% 5% 5%; text-align: center; font-size: 18px;">
-								<h3>Simple and Easy to Use</h3>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<img style="margin: 0 30%;  width: 40%;" src="{{ asset('landing-page/2019-05-28/Complete Features.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 10%; text-align: center; font-size: 18px;">
-								<h3>Complete Features</h3>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<img style="margin: 0 30%;  width: 53%;" src="{{ asset('landing-page/2019-05-28/Affordable Prices.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 20%; text-align: center; font-size: 18px;">
-								<h3>Affordable Prices</h3>
-							</div>
-						</div>
-					</div>
-				</div>
-				
+      .soc-med{
+        padding-left: 30px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      .article-tile:hover .bottom-left{
+        display: block;
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+      }
 
+      .container-img {
+        position: relative;
+        text-align: center;
+        color: white;
+      }
 
-				<div>
-					<div class="row" style="margin-top: 10%; margin-bottom: 3%;">
-						<div class="col-md-12" style="text-align: center;">
-							<h2 style="font-size: 320%; font-weight: 800;">What feature do you get from</h2>
-							<h2 style="font-size: 360%; font-weight: 800; color: #0E9A88;">the Em-HR System?</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="Core HR" src="{{ asset('landing-page/2019-05-28/Core HR.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
-								<p>Standard modules that are often used in managing human resource</p>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="Payroll" src="{{ asset('landing-page/2019-05-28/Payroll.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
-								<p>Detail of personal pay rate calculation net / gross</p>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 27%; width: 58%;" alt="Leave and permit" src="{{ asset('landing-page/2019-05-28/Leave and permit.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
-								<p>For employee who will apply for leave or for permission</p>
-							</div>
-						</div>
+      .bottom-left {
+        display: block;
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+      }
 
+    </style>
+  </head>
 
-						<div class="col-md-4" >
-							<img style="margin: 0 15%; width: 75%;" alt="Payment Request" src="{{ asset('landing-page/2019-05-28/Payment Request.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
-								<p>Advance Claim or any payment related to employee task</p>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 14%; width: 80%;" alt="Overtime Request" src="{{ asset('landing-page/2019-05-28/overtime request.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
-								<p>Determine calculation of overtime rate in terms of number of hours and wages</p>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 7%; width: 100%;" alt="Medical Reimbursement" src="{{ asset('landing-page/2019-05-28/Medical Reimbursement.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 5% 15%; text-align: center; font-size: 18px;">
-								<p>Advance claim or any payment related to employee task</p>
-							</div>
-						</div>
+  
+  <body style="width: 100vw; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">    
+
+    <div style="width: 100vw; overflow: hidden;">
+
+      <nav class="navbar navbar-expand-lg navbar-light" style="border-radius: 0 0 50px 0; position: fixed; top: 0px; width: 100vw; z-index: 9999999; background-color: rgba(0,0,0,0.9); color: #d40d0d; box-shadow: 0 4px 8px 0 rgba(212, 13, 13, 0.6), 0 6px 20px 0 rgba(212, 13, 13, 0.6);">
+        <a class="navbar-brand" href="{{ route('landing-page1') }}" style="color: white;">
+          <b><h3 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+            <img src="assets/image/Beranda2/Logo Datang.png" alt="" style="width: 12vw;">
+          </h3></b>
+        </a>
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" style="background-color: white; color: white; box-shadow: 0 4px 8px 0 rgba(212, 13, 13, 0.6), 0 6px 20px 0 rgba(212, 13, 13, 0.6);" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span style="color: white;" class="navbar-toggler-icon"></span>
+        </button> -->
+        <div class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" style="border-radius: 20px 0 20px 0; padding: 3px 5px; background-color: white; color: white; box-shadow: 0 4px 8px 0 rgba(212, 13, 13, 0.6), 0 6px 20px 0 rgba(212, 13, 13, 0.6);" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" id="beranda-btn" href="#beranda" style="color: white;"><b><h5 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Home</h5></b> <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="tentang-btn" href="#tentang" style="color: white;"><b><h5 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Tentang</h5></b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="harga-btn" href="#harga" style="color: white;"><b><h5 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Harga</h5></b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="kontak-btn" href="#kontak" style="color: white;"><b><h5 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Kontak</h5></b></a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <!-- <button class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" data-target=".bd-example-modal-lg" type="submit">Daftar | Masuk</button> -->
+            <button class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" type="submit" onclick="daftar();">Daftar | Masuk</button>
+          </form>
+        </div>
+      </nav>
+
+      <a href="#top">
+      <div class="btn-top">
+        <span>
+          <i class="fa fa-arrow-up"></i>
+        </span>
+      </div>
+    </a>
+    
 
 
-						<div class="col-md-4" >
-							<img style="margin: 0 0; width: 100%;" alt="Training and Business Trip" src="{{ asset('landing-page/2019-05-28/Training and Business Trip.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 0 15%; text-align: center; font-size: 18px;">
-								<p>Claimable expenses or Cash Advance method</p>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 5%; width: 100%;" alt="Exit Interview & Clearance" src="{{ asset('landing-page/2019-05-28/Exit Training & clearance.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 5% 10% 0 20%; text-align: center; font-size: 18px;">
-								<p>Procedure to validating employee has no pending obligation to the company</p>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 38%; width: 43%;" alt="Attendance" src="{{ asset('landing-page/2019-05-28/attendance.png') }}"/>
-							<div class="col-md-12" style="padding: 5% 0 0 20%; text-align: center; font-size: 18px;">
-								<p>integrating several attendance devices such as finger print machines, mobile attendance is an integrated Em-HR system</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-md-6" >
-						<img style="margin: 0 45%; width: 28%;" alt="Dashboard" src="{{ asset('landing-page/2019-05-28/dashboard.png') }}"/>
-						<div class="col-md-12" style="padding: 5% 10% 0 30%; text-align: center; font-size: 18px;">
-							<p>Brief information on module selection in the form of diagrams or graphic value</p>
-						</div>
-					</div>
-					<div class="col-md-6" >
-						<img style="margin: 0 15%; width: 58%;" alt="Facility Management" src="{{ asset('landing-page/2019-05-28/facility management.png') }}"/>
-						<div class="col-md-12" style="padding: 2% 30% 0 20%; text-align: center; font-size: 18px;">
-							<p>asset management settings used by employees</p>
-						</div>
-					</div>
-				</div>
+    <div style="background-color: rgba(255,255,255,0.8); width: 50px; height: auto; position: fixed; left: 0px; top: 60vh; border-radius: 0 20px 20px 0;">
+      <div class="row">
+        <div class="col-12 soc-med" >
+          <a href="https://www.instagram.com/absensidigital.datang/" target="_blank">
+            <span>
+              <i class="fa fa-instagram"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
 
 
-				<div style="margin-top: 11%;">
-					<div class="row" style="padding-bottom: 5%;">
-						<div class="col-md-12" style="text-align: center;">
-							<h1 style="font-size: 320%; font-weight: 800;"><b>Easy Step to Use the <span style="color: #0E9A88;">Em-HR System</span></b></h1>
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="Register for free" src="{{ asset('landing-page/2019-05-28/Register for free.png') }}"/>
-							
-							<div class="col-md-12" style="padding: 2% 20% 0 30%; text-align: center; font-size: 18px;">
-								<h4>Register for free</h4>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="install emhr"src="{{ asset('landing-page/2019-05-28/install emhr.png') }}"/>
-							<div class="col-md-12" style="padding: 2% 20% 0 30%; text-align: center; font-size: 18px;">
-								<h4>Install Em-HR</h4>
-							</div>
-						</div>
-						<div class="col-md-4" >
-							<img style="margin: 0 35%; width: 40%;" alt="feel the ease" src="{{ asset('landing-page/2019-05-28/feel the ease.png') }}"/>
-							<div class="col-md-12" style="padding: 2% 20% 0 30%; text-align: center; font-size: 18px;">
-								<h4>Feel the Ease</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+      <!--    WOW   -->
+      <div style="background-color: #d40d0d; overflow: hidden; " id="beranda">
+        <div style="background-color: black; border-radius: 180px 0 180px 0; overflow: hidden; margin-top: 8vh;">
+          <div class="container">
+            <img src="assets/image/Beranda/Frame2.png" style="width:105%; padding: 15vh 0;">
+          </div>
+        </div>
+      </div>
+      <!--  END WOW   -->
 
-		  <div class="container container_bottom" style="margin-top: 9%;">
-			<div class="col-md-4 float-left">
-				<img src="{{ asset('landing-page/2019-05-28/bubble background.png') }}" style="width: 73%; margin-left: -23px; margin-top: 70px" />
-			</div>
-			<div class="col-md-8 float-right">
-				<h1 class="text-center"><label style="color: #0e9a88;font-size: 29px;">There is ease in</label> <label style="color: #acce22">EM-HR</label> <label  style="color: #0e9a88">Application</label></h1>
-			
-				<div class="form">
-					<div class="row">
-						<div class="col-md-2"></div>
-						<div class="col-md-8">
-							<form method="POST" action="{{ route('post-landing-page1') }}" class="col-md-12 px-0 pt-2" style="padding-top: 0px !important; padding-bottom: 10px">
-							{{ csrf_field() }}
-							<div class="bg-form-title">
-								<h3 style="color: white; text-align: center;font-size: 23px;padding-top: 10px !important;" class="py-2 px-0 mx-0 mt-0">Register Member</h3>
-							</div>
-							@if (count($errors) > 0)
-								<div class="alert alert-danger">
-									<strong>Whoops!</strong> There were some problems with your input.<br><br>
-									<ul>
-									@foreach ($errors->all() as $error)
-										<li>{{ $error }}</li>
-									@endforeach
-									</ul>
-								</div>
-							@endif
-							<div class="px-5 pt-4">
-								<div class="form-group">
-									<input type="text" class="form-control" id="nama" name="nama" placeholder="Full Name" value="{{ old('nama') }}" required>
-								</div>
-								<div class="form-group">
-									<select id="jabatan" name="jabatan" class="form-control">
-										<option value=""> - Position - </option>
-										<option>Owner</option>
-										<option>HRD / Finance</option>
-										<option>IT</option>
-										<option>Others</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-								</div>
-								<!--div class="form-group">
-									<input type="password" class="form-control" name="password" placeholder="Password"  value="{{ old('password') }}" required>
-								</div>
-								<div class="form-group">
-									<input type="password" class="form-control" name="confirm" placeholder="Confirm Password" value="{{ old('confirm') }}" required>
-								</div-->
-								<div class="form-group">
-									<input type="input" class="form-control" id="nama_perusahaan" name="nama_perusahaan" placeholder="Company" value="{{ old('company') }}" required>
-								</div>
-								<div class="form-group">
-									<select class="form-control" id="bidang_usaha" name="bidang_usaha" required>
-										<option value=""> - Choose Business Specialization - </option>
-										<option>Agriculture / Mining</option>
-										<option>Business Services</option>
-										<option>Computers and Electronics</option>
-										<option>Consumer Services</option>
-										<option>Education</option>
-										<option>Energy & Utilities</option>
-										<option>Financial Services</option>
-										<option>Government</option>
-										<option>Healtcare, Pharmaceuticals, & Biotech</option>
-										<option>Manufacturing</option>
-										<option>Media & Entertainment</option>
-										<option>Non Profit</option>
-										<option>Real Estate & Contruction</option>
-										<option>Retail</option>
-										<option>Software & Internet</option>
-										<option>Telecommunications</option>
-										<option>Transportation & Storage</option>
-										<option>Travel, Recreation, & Leisure</option>
-										<option>Wholesale & Distribution</option>
-										<option>Consumer Products</option>
-										<option>Others</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<input type="text" id="handphone" name="handphone" class="form-control" placeholder="Handphone Number" value="{{ old('handphone') }}" required>
-								</div>
-								<!-- <div class="form-group">
-									<div class="float-left px-0 mx-0" style="width: 15px">
-										<input type="checkbox" name="agree" value="1" required>
-									</div>
-									<div class="float-left col-md-11" style="padding-left: 7px !important; padding-top: 2px !important;">
-										<label style="font-size: 12px;">I have read and agree to the EM-HR.com and End User License Agreement</label>
-									</div>
-									<div class="clearfix"></div>
-								</div> -->
-							</div>
-							<div class="form-group text-center">
-								<button class="btn_trial_2" type="submit">Create Member</button>
-							</div>
-						</form>
+      <div style="background-color: black; overflow: hidden;" id="tentang">
+        <div style="background-color: #d40d0d; border-radius: 180px 0 0 180px; overflow: hidden;">
+          <div class="container" style="overflow: hidden; padding: 15vh 0;">
+            <div class="row">
+              <div class="col-6" id="tentang-model" style="display: block;">
+                <img id="tentang-logo-datang" src="assets/image/Beranda2/Logo Datang.png" style="width: 90%;">
+                <img src="assets/image/Beranda/Model.png"  style="width: 85%; margin-left: 5vw;">
+              </div>
+              <div class="col-6">
+                <img id="tentang-hands" src="assets/image/Beranda2/hand with Handphone.png" style="width: 68%; ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-						</div>
-						
-						<div class="col-md-4"></div>
-					</div>
-					
-				</div>
-			</div>
-			<div class="clearfix"></div>
-			<div class="row" style="margin: 120px 0 0 0;">
-				<div class="col-md-4">
-						<img style="width: 80%;" alt="hand with phone" src="{{ asset('landing-page/2019-05-28/hand with phone.png') }}"/>
-					</div>
-					<div class="col-md-8">
-					<br><br>
-						<div class="row">
-							<h3>Get <span style="color: #0E9A88;">Em-HR Mobile Attendance</span> service with 2 easy steps</h3>
-							<p>Register your company on this site, then download the EMHR Attendance Application on :</p>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<!--img style="width: 70%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/playstore dan IOS.png') }}"/-->
-								<img style="width: 50%; padding: 0 0 0 20%;" src="{{ asset('landing-page/2019-05-28/Google Play.png') }}"/>
-							</div>
-						</div>
-					</div>
-			</div>	
-		</div>
+      <div style="background-color: #d40d0d;" id="">
+          <div style="background-color: black; border-radius: 0 180px 0 180px; padding: 15vh 0;">
+              <div class="container" style="color: white; min-height: 80vh;">
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <img src="assets/image/Beranda2/Logo Datang.png" style="width: 90%;">
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <br><br>
+                <div class="row" style="width: 100%;">
+                  <div class="col-1"></div>
+                  <div class="col-10">
+                      <h3 style="font-size:140%; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; text-align: justify; line-height: 180%;">
+                        <b>Kehadiran DATANG di Nusantara Indonesia untuk menjawab ketidakpuasan dan keluh kesah sebagian besar owner, pengusaha dan HRD untuk untuk 
+                            memantau usahanya yang semakin tumbuh besar, jumlah karyawan pun dari hari ke hari semakin bertambah jauh dari pantauan untuk itu diperlukan 
+                            sistem yang sederhana, mudah dan ringkas. Semuanya bisa dipantau secara langsung dan akurat dimanapun dan kapanpun.</b>
+                      </h3>
+                  </div>
+                  <div class="col-1"></div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="col-2"></div>
+                  <div class="col-8">
+                    <div class="row">
+                      <div class="col-8">
+                          <img src="assets/image/Beranda2/Cocok Buat Apa Saja.png" style="width: 90%; margin: 10vh 0;">
+                      </div>
+                      <div class="col-4">
+                          <img src="assets/image/Beranda2/hand with Handphone small.png" style="width: 80%;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                      
+                  </div>
+                </div>
+              </div>
+          </div>
+      </div>
+
+      <!--    Harga   -->
+      <div style="background-color: black;" id="harga">
+        <div style="background-color: #d40d0d; border-radius: 0 180px 180px 0; overflow: hidden;">
+          <div class="container">
+            <div class="row"  style="padding: 15vh 0;">
+              <div class="col-6">
+                  <img src="assets/image/Harga/Diskon Off.png" style="width:95%; height: auto;">
+                </div>
+                <div class="col-6" style="overflow: hidden;">
+                  <img src="assets/image/Harga/Font_Absensi Digital Tanpa Ribet.png" style="width:90%; height: auto;">
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--    End Harga   -->
+
+      <!--    Unduh   -->
+      <div style="background-color: #d40d0d;" id="kontak">
+        <div style="background-color: black; border-radius: 180px 0 180px 0; color: white; padding: 15vh 0; ">
+          <div class="container" style="text-align: center;">
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="row">
+                <!-- <div class="col-6">
+                  <div>
+                    <div style="padding: 10px 0; padding-left: 60%;">
+                      <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">MAU COBA</h3>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="col-12" >
+                  <!-- <a  style="color: white;" >
+                    <span style="padding: 10px; background-color:rgb(158, 158, 158); border-radius: 15px;"><h3 >UNDUH GRATIS</h3></span>
+                  </a> -->
+                  <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6">
+                    <a href="#unduh" style="color: white; text-decoration: none;">
+                      <div style="padding: 10px 0; background-color:rgb(158, 158, 158); border-radius: 15px;">
+                        <span style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                          <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 15wv;">UNDUH SEKARANG</h3>
+                        </span>
+                      </div>
+                    </a>
+                    </div>
+                    <div class="col-3"></div>
+                  </div>
+                </div>
+                
+                </div>
+              </div>
+              <div class="col-2"></div>
+              
+            </div>
+            <br>
+
+            <div>
+              <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">BERLANGGANAN SEKARANG</h3>
+            </div>
+            <br>
+
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="row">
+                  <div class="col-12">
+                    <a href="https://api.whatsapp.com/send?phone=6281225561122&text=Saya tertarik menggunakan Absensi Digital Datang untuk perusahaan saya 
+                      dan saya ingin request untuk berlangganan/demo." target="_blank" style="color: white; text-decoration: none;">
+                      <span class="col-6 phone_number"><i class="fa fa-whatsapp"></i><span style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"> 0812.2556.1122</span></span>
+                    </a>
+                    <a href="https://api.whatsapp.com/send?phone=6281519046047&text=Saya tertarik menggunakan Absensi Digital Datang untuk perusahaan saya
+                      dan saya ingin request untuk berlangganan/demo." target="_blank" style="color: white; text-decoration: none;">
+                      <span class="col-6 phone_number"><i class="fa fa-whatsapp"></i><span style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"> 0815.1904.6047</span></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2"></div>
+            </div>
+            <br>
+
+            <div style="margin-top: 2vh;">
+                <a href="https://mail.google.com/mail/?subject=Request Berlangganan Absensi Digital Datang&view=cm&fs=1&tf=1&to=marketing@empore.co.id
+                &cc=emporeht@gmail.com
+                &bcc=mailempore@gmail.com
+                &body=Dear Marketing Datang,%0D%0ASaya tertarik menggunakan Absensi Digital Datang untuk perusahaan saya dan saya ingin request untuk berlangganan/demo." target="_blank" 
+                style="color: white; text-decoration: none;">
+                  <span class="col-4 phone_number" style="padding: 18px;"><i class="fa fa-envelope"></i><span style="font-size:160%;"> marketing@empore.co.id</span></span>
+                </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!--    End Unduh   -->
+
+      <!--    Usaha   -->
+      <div style="background-color: black;" id="">
+        <div style="background-color: #d40d0d; height: 100vh; border-radius: 180px 0 0 180px;">
+          <div class="container" style="padding-top: 10vh; padding-bottom: 12vh;">
+              <div class="row" >
+                <div class="col-12" style="text-align: center; color: white;">
+                  <h1 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 4vw;">
+                    <b>Cocok buat usaha apa saja DATANG ?</b>
+                  </h1>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                <div class="row" style="margin-top: 5vh;">
+                <div class="col-3" style="padding-right: 5vw;">
+                  <img src="assets/image/Cocok Buat/Hands1.png" alt="" style="width: 15vw; ">
+                </div>
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-4">
+                      <img src="assets/image/Cocok Buat/Cafe.png" alt="" style="width: 90%; margin-bottom: 5vh;">
+                    </div>
+                    <div class="col-4">
+                      <img src="assets/image/Cocok Buat/salo.png" alt="" style="width: 90%;  margin-bottom: 5vh;">
+                    </div>
+                    <div class="col-4">
+                      <img src="assets/image/Cocok Buat/outlet.png" alt="" style="width: 90%;  margin-bottom: 5vh;">
+                    </div>
+
+                    <div class="col-4">
+                      <img src="assets/image/Cocok Buat/Supermarket.png" alt="" style="width: 90%;">
+                    </div>
+                    <div class="col-4">
+                      <img src="assets/image/Cocok Buat/UMKM.png" alt="" style="width: 90%;">
+                    </div>
+                    <div class="col-4">
+                      <img src="assets/image/Cocok Buat/Butik.png" alt="" style="width: 90%;">
+                    </div>
+                  </div>
+                  <br><br>
+                  <div class="row">
+                    <div class="col-12" style="text-align: center; color: white;">
+                      <h2 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 2.5vw;">
+                        <b>dan jenis usaha lainnya </b>
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                </div>
+                <div class="col-1"></div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <!--    End Usaha   -->
+
+      <!--    Video   -->
+      <div style="background-color: #d40d0d;" id="">
+        <div style="background-color: black; height: 60vh; border-radius: 0 180px 0 180px;">
+            <div class="container" style="color: white;">
+                <!-- <h1>TONTON VIDEO DATANG</h1> -->
+            </div>
+        </div>
+      </div>
+      <!--    End Video   -->
 
 
-		<div style="text-align: center;">
-			<img src="{{ asset('landing-page/2019-05-28/line botton.png') }}" style="width: 100%;">
-			<div style="padding: 1% 0;">
-				<div class="xb-col-12">
-					<div class="bottom-footer center">
-						<div class="copyright no-social" style="font-size: 100%; color: rgba(0, 0, 0, 0.4)">Copyright © PT. Empore Hezer Tama <?php echo date('Y'); ?></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	  </div>
-	</div>
+      <!--    Article     -->
+      <div style="background-color: black;" id="">
+        <div style="background-color: #d40d0d; border-radius: 0 180px 180px 0;">
+          <div class="container" style="padding: 15vh 0;">
+            <div class="row" >
+                <div class="col-12" style="color: white; text-align: center; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"">
+                  <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><b>ARTIKEL</b></h3>
+                </div>
+            </div>
+            <hr>
+            
+            <div class="row" >
+              <a class="col-4" href="" class="article-tile">
+                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
+                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
+                  <div class="bottom-left">
+                  </div>
+                </div>
+                <h5><b style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">Artikel 1</b></h5>
 
-<script type="text/javascript">
-	$('#nama').on('input', function(){
-		$('#nama2').val($('#nama').val());
-	});
-	$('#jabatan').change(function(){
-		$('#jabatan2').val($('#jabatan').val());
-	});
-	$('#email').on('input', function(){
-		$('#email2').val($('#email').val());
-	});
-	$('#nama_perusahaan').on('input', function(){
-		$('#nama_perusahaan2').val($('#nama_perusahaan').val());
-	});
-	$('#bidang_usaha').on('change', function(){
-		$('#bidang_usaha2').val($('#bidang_usaha').val());
-	});
-	$('#handphone').on('input', function(){
-		$('#handphone2').val($('#handphone').val());
-	});
+              </a>
+              <a class="col-4" href="" class="article-tile">
+                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
+                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
+                  <div class="bottom-left">
+                  </div>
+                </div>
+                <h5><b style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">Artikel 2</b></h5>
+
+              </a>
+              <a class="col-4" href="" class="article-tile">
+                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
+                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
+                  <div class="bottom-left">
+                  </div>
+                </div>
+                <h5><b style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">Artikel 3</b></h5>
+
+              </a>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--    End Article     -->
+
+      <div style="background-color: #d40d0d;" id="">
+        <div style="background-color: black; height: 10vh; border-radius: 180px 0 160px 0;">
+        </div>
+      </div>
 
 
-	function submitFormPricelist(){
-		if($('#nama2').val() != '' || $('#jabatan2').val() != '' || $('#email2').val() != '' || $('#nama_perusahaan2').val() != '' || $('#bidang_usaha2').val() != '' || $('#handphone2').val() != ''){
-			$('#form-price-list').submit();
-		}else{
-			bootbox.confirm({
-                title : "<i class=\"fa fa-warning\"></i> EMPORE SYSTEM",
-                message: "Field tidak boleh kosong",
-                closeButton: false,
-                buttons: {
+      <!--    Jabodetabek   -->
+      <div style="background-color: black;" id="">
+        <div style="background-color: #d40d0d; border-radius: 180px 0 0 180px;">
+          <div class="container">
+            <div class="row" style=" padding: 15vh 0;">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <img src="assets/image/Cocok Buat/Area Refrensentative DATANg.png" alt="" style="width: 50vw; height: auto; margin: auto;">
+              </div>
+              <div class="col-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--    End Jabodetabek   -->
 
-                },
-                callback: function (result) {
-                    if(result)
-                    { 
-                        
-                    }
-                }
-            });
-		}
-	}
-	
-</script>
 
-</body>
+      <!--    BLANK     -->
+      <div style="background-color: #d40d0d;" id="">
+        <div style="background-color: black; height: 10vh; border-radius: 0 180px 0 180px;">
+        </div>
+      </div>
+
+      <div style="background-color: black;" id="">
+        <div style="background-color: #d40d0d; border-radius: 0 180px 180px 0;">
+          <div class="container" style="padding: 15vh 0;">
+            <div class="row" >
+              <div class="col-12" style="color: white; text-align: center; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                <h1 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><b>Cek siapa saja teman kamu yang sudah pakai DATANG</b></h1>
+              </div>
+            </div>
+            <hr>
+            <br>
+            <div class="row">
+              <div class="col-3">
+                <a href="http://glek.id" target="_blank">
+                  <img src="assets/image/Cocok Buat/Glek.png" alt="" style="width: 60%;">
+                </a>
+                
+              </div>
+              
+              <div class="col-3">
+                <a href="https://nominomidelight.com" target="_blank">
+                  <img src="assets/image/Cocok Buat/Nominomi.png" alt="" style="width: 60%;">
+                </a>
+                
+              </div>
+              <div class="col-3" style="padding: 3vh 0;">
+                <a href="https://www.instagram.com/kopingjogja/?hl=id" target="_blank">
+                <img src="assets/image/Cocok Buat/Koping.png" alt="" style="width:70%;">
+                </a>
+              </div>
+              <div class="col-3">
+                <a href="http://makassarpet.com" target="_blank">
+                <img src="assets/image/Cocok Buat/Mpc.png" alt="" style="width: 60%;">
+                </a>
+              </div>
+              
+            </div>
+            <br><br>
+            <div class="row">
+              <div class="col-3">
+                <a href="https://www.instagram.com/toottle/?hl=id" target="_blank">
+                <img src="assets/image/Cocok Buat/Tootle.png" alt="" style="width: 60%;">
+                </a>
+              </div>
+              <div class="col-3">
+                <a href="https://www.instagram.com/rendang_uninam/?hl=id" target="_blank">
+                <img src="assets/image/Cocok Buat/Uninam.png" alt="" style="width: 60%;">
+                </a>
+              </div>
+              <div class="col-3">
+                <a href="http://petmart.co.id" target="_blank">
+                <img src="assets/image/Cocok Buat/Petmart.png" alt="" style="width: 60%;">
+                </a>
+              </div>
+              <div class="col-3">
+                <a href="https://www.instagram.com/typoworks/?hl=id" target="_blank">
+                <img src="assets/image/Cocok Buat/Typowork.png" alt="" style="width: 60%;">
+                </a>
+              </div>
+              
+            </div>
+            <br><br><br>
+            <div class="row" >
+              <div class="col-12" style="color: white; text-align: center; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                <h1 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><b>dan lebih banyak lagi yang menggunakan DATANG</b></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background-color: #d40d0d;" id="">
+        <div style="background-color: black; height: 10vh; border-radius: 180px 0 160px 0;">
+        </div>
+      </div>
+      <!--    END BLANK     -->
+
+
+      <!--    Footer   -->
+      <div style="background-color: black;" id="unduh">
+        <div style="background-color:#d40d0d; border-radius: 180px 0 180px 0; padding-bottom: 2%; color: white; text-align: center;">
+          <div class="container">
+            <div class="row" style="padding-top: 15vh;">
+              <div class="col-12" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+                <h3 style="font-size: 275%; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Cek dan Download Aplikasinya di </h3>
+              </div>            
+            </div><br>
+            <div class="row" style="padding-bottom: 10vh;">
+              <div class="col-12">
+              <a href="https://play.google.com/store" target="_blank">
+                <span><img src="assets/image/Cocok Buat/Google Play.png" alt="" style="width: 25%;"></span>
+              </a>
+              </div>
+            </div>
+            <br><br>
+            <div class="row" style="text-align: center;">
+              <div class="col-4"></div>
+              <div class="col-4"><p style="font-size: 15px;">Powered By <i>PT. Empore Hezer Tama @2019</i></p></div>
+              <div class="col-4"></div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--    End Footer   -->
+
+    </div>
+    
+      
+
+    
+
+  <!-- MODAL -->
+
+    <!-- Large modal -->
+    <div id="modal-daftar" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 9999999999999;">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #d40d0d; color: white;">
+            <h5 class="modal-title" id="exampleModalLabel" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Daftar sebagai Member</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-4" style="padding: 10% 5%;">
+                <img src="assets/image/Beranda2/hand with Handphone.png" style="width: 100%;">
+                
+              </div>
+              <div class="col-8">
+                <form action="{{ route('post-landing-page1') }}" method="post" id="form-daftar">
+                {{csrf_field()}}
+                  <div class="form-group">
+                    <label for="nama" class="col-form-label">Nama</label>
+                    <input type="text" class="form-control" id="nama" name="nama">
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="col-form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email">
+                  </div>
+                  <div class="form-group">
+                    <label for="phone" class="col-form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone">
+                  </div>
+                  <div class="form-group">
+                    <label for="company" class="col-form-label">Company</label>
+                    <input type="text" class="form-control" id="company" name="company">
+                  </div>
+                  
+                </form>
+                <a id="login" href="{{ route('login') }}">Sudah punya akun ? Login di sini</a>
+              </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+            <button type="button" class="btn btn-danger" onclick="daftarDatang();" id="submitdatang" >Daftar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script stype="text/javascript">
+
+      function daftar(){
+        $('#modal-daftar').modal('show');
+      }
+
+      // $(document).ready(function(){
+
+      //   $('#tentang-btn').click(function(){
+      //     // $("#tentang-model").animate({left: '750px'});
+      //     $("#tentang-model").fadeIn();
+      //   })
+      // });
+
+      // $(document).on('scroll', function() {
+      //   if($(this).scrollTop()>=$('#tentang').position().top and $(this).scrollTop()<$('#harga').position().top){
+      //       alert('tentang');
+      //   }
+      // })
+
+      // $('#tentang').appear(function() {
+      //   $(this).text('Hello world');
+      // });
+
+      $('#submitdatang').click(function(){
+        $('#form-daftar').submit();
+      });
+      
+    </script>
+      
+  </body>
 </html>
