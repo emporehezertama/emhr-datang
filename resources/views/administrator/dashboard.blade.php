@@ -42,18 +42,18 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-lg-2 col-sm-6 row-in-br  b-r-none">
+                        <!-- <div class="col-lg-2 col-sm-6 row-in-br  b-r-none">
                             <ul class="col-in">
                                 <li>
                                     <span class="circle circle-md bg-info" style="font-size: 18px !important;padding-top: 18px;">
-                                    {{ employee('on-leave') }}
+                                    employee('on-leave')
                                     </span>
                                 </li>
                                 <li class="col-middle">
                                     <h4>On Leave</h4>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="col-lg-2 col-sm-6 row-in-br">
                             <ul class="col-in">
                                 <li>
@@ -78,18 +78,18 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-lg-2 col-sm-6  b-0">
+                        <!-- <div class="col-lg-2 col-sm-6  b-0">
                             <ul class="col-in">
                                 <li>
                                     <span class="circle circle-md" style="font-size: 18px !important;padding-top: 18px;background: grey;">
-                                        {{ employee('on-tour') }}
+                                        employee('on-tour')
                                     </span>
                                 </li>
                                 <li class="col-middle">
                                     <h4>On Tour</h4>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div class="col-lg-2 col-sm-6  b-0">
                             <ul class="col-in">
                                 <li>
