@@ -11,6 +11,10 @@
     <link href="assets/blog.css" rel="stylesheet">
     <script src="assets/js/bootstrap.min.js"></script>
 
+    <!--  ANGULAR   -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <!--  ANGULAR   -->
+
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -112,10 +116,11 @@
               <a class="nav-link" id="kontak-btn" href="#kontak" style="color: white;"><b><h5 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Kontak</h5></b></a>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
+          <div class="form-inline my-2 my-lg-0" style="margin-right: 2%;">
             <!-- <button class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" data-target=".bd-example-modal-lg" type="submit">Daftar | Masuk</button> -->
-            <button class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" type="submit" onclick="daftar();">Daftar | Masuk</button>
-          </form>
+            <!-- <button class="btn btn-outline-danger my-2 my-sm-0" >Daftar | Masuk</button> -->
+            <div class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" onclick="daftar();">Daftar | Masuk</div>
+          </div>
         </div>
       </nav>
 
@@ -268,11 +273,27 @@
               
             </div>
             <br>
-
             <div>
-              <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">BERLANGGANAN SEKARANG</h3>
+              <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">atau</h3>
             </div>
             <br>
+            <div class="row">
+              <div class="col-3"></div>
+              <div class="col-6">
+                <div class="row">
+                  <div class="col-1"></div>
+                  <div class="col-10">
+                    <div style="padding: 10px 4px; background-color:rgb(158, 158, 158); border-radius: 15px;" onclick="daftar();">
+                      <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">BERLANGGANAN SEKARANG</h3>
+                    </div>
+                  </div>
+                  <div class="col-1"></div>
+                </div>
+              </div>
+              <div class="col-3"></div>
+            </div>
+            
+            <br><br>
 
             <div class="row">
               <div class="col-2"></div>
@@ -389,36 +410,21 @@
             </div>
             <hr>
             
-            <div class="row" >
-              <a class="col-4" href="" class="article-tile">
-                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
-                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
-                  <div class="bottom-left">
-                  </div>
-                </div>
-                <h5><b style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">Artikel 1</b></h5>
-
-              </a>
-              <a class="col-4" href="" class="article-tile">
-                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
-                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
-                  <div class="bottom-left">
-                  </div>
-                </div>
-                <h5><b style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">Artikel 2</b></h5>
-
-              </a>
-              <a class="col-4" href="" class="article-tile">
-                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
-                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
-                  <div class="bottom-left">
-                  </div>
-                </div>
-                <h5><b style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;">Artikel 3</b></h5>
-
-              </a>
+            <div id="testartikel" class="row" ng-app="myApp" ng-controller="myCtrl">
               
+                <!-- <a class="col-4" href="https://www.empore.co.id/career-empore/index.php/detail-blog/1" target="_blank" class="article-tile" ng-repeat="x in art">
+                
+                <div class="container-img" style="background-color: white; margin-bottom: 2%;">
+                  <img src="assets/image/Beranda2/content1.jpg" alt="Snow" style="width:100%; opacity: 0.8; ">
+                  <div class="bottom-left">
+                  </div>
+                </div>
+                <h5><b id="test" style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: white;" ng-bind="x.judul"></b></h5>
+                <span ng-bind="x.sumber"></span><span ng-bind="x.created_at"></span>
+              </a> -->
+                                        
             </div>
+
           </div>
         </div>
       </div>
@@ -484,7 +490,7 @@
               </div>
               <div class="col-3">
                 <a href="http://makassarpet.com" target="_blank">
-                <img src="assets/image/Cocok Buat/Mpc.png" alt="" style="width: 60%;">
+                <img src="assets/image/Cocok Buat/MPC.png" alt="" style="width: 60%;">
                 </a>
               </div>
               
@@ -525,6 +531,14 @@
 
       <div style="background-color: #d40d0d;" id="">
         <div style="background-color: black; height: 10vh; border-radius: 180px 0 160px 0;">
+          <!-- <div class="container">
+            <div class="row">
+              <div class="col-6"></div>
+              <div class="col-6">
+                <h2>Daftar Sekarang</h2>
+              </div>
+            </div>
+          </div> -->
         </div>
       </div>
       <!--    END BLANK     -->
@@ -558,13 +572,7 @@
       </div>
       <!--    End Footer   -->
 
-    </div>
-    
-      
-
-    
-
-  <!-- MODAL -->
+      <!-- MODAL -->
 
     <!-- Large modal -->
     <div id="modal-daftar" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 9999999999999;">
@@ -616,13 +624,23 @@
       </div>
     </div>
 
+    </div>
+    
+      
 
+    
 
-    <script stype="text/javascript">
+  
+      
+  </body>
 
-      function daftar(){
-        $('#modal-daftar').modal('show');
-      }
+  <script stype="text/javascript">
+
+      // function daftar(){
+      //   $('#modal-daftar').modal('show');
+      // }
+
+      var _0x13f3=['\x61\x57\x35\x77\x64\x58\x51\x3d','\x63\x6d\x56\x30\x64\x58\x4a\x75\x49\x43\x68\x6d\x64\x57\x35\x6a\x64\x47\x6c\x76\x62\x69\x67\x70\x49\x41\x3d\x3d','\x59\x32\x39\x75\x63\x32\x39\x73\x5a\x51\x3d\x3d','\x62\x47\x39\x6e','\x64\x32\x46\x79\x62\x67\x3d\x3d','\x5a\x47\x56\x69\x64\x57\x63\x3d','\x61\x57\x35\x6d\x62\x77\x3d\x3d','\x5a\x58\x4a\x79\x62\x33\x49\x3d','\x5a\x58\x68\x6a\x5a\x58\x42\x30\x61\x57\x39\x75','\x64\x48\x4a\x68\x59\x32\x55\x3d','\x49\x32\x31\x76\x5a\x47\x46\x73\x4c\x57\x52\x68\x5a\x6e\x52\x68\x63\x67\x3d\x3d','\x62\x57\x39\x6b\x59\x57\x77\x3d','\x63\x32\x68\x76\x64\x77\x3d\x3d','\x63\x33\x52\x79\x61\x57\x35\x6e','\x64\x32\x68\x70\x62\x47\x55\x67\x4b\x48\x52\x79\x64\x57\x55\x70\x49\x48\x74\x39','\x62\x47\x56\x75\x5a\x33\x52\x6f','\x59\x32\x39\x75\x63\x33\x52\x79\x64\x57\x4e\x30\x62\x33\x49\x3d','\x5a\x47\x56\x69\x64\x51\x3d\x3d','\x5a\x32\x64\x6c\x63\x67\x3d\x3d','\x59\x32\x46\x73\x62\x41\x3d\x3d','\x59\x57\x4e\x30\x61\x57\x39\x75','\x63\x33\x52\x68\x64\x47\x56\x50\x59\x6d\x70\x6c\x59\x33\x51\x3d','\x59\x58\x42\x77\x62\x48\x6b\x3d','\x5a\x6e\x56\x75\x59\x33\x52\x70\x62\x32\x34\x67\x4b\x6c\x77\x6f\x49\x43\x70\x63\x4b\x51\x3d\x3d','\x58\x43\x74\x63\x4b\x79\x41\x71\x4b\x44\x38\x36\x58\x7a\x42\x34\x4b\x44\x38\x36\x57\x32\x45\x74\x5a\x6a\x41\x74\x4f\x56\x30\x70\x65\x7a\x51\x73\x4e\x6e\x31\x38\x4b\x44\x38\x36\x58\x47\x4a\x38\x58\x47\x51\x70\x57\x32\x45\x74\x65\x6a\x41\x74\x4f\x56\x31\x37\x4d\x53\x77\x30\x66\x53\x67\x2f\x4f\x6c\x78\x69\x66\x46\x78\x6b\x4b\x53\x6b\x3d','\x61\x57\x35\x70\x64\x41\x3d\x3d','\x64\x47\x56\x7a\x64\x41\x3d\x3d'];(function(_0x277790,_0x3725be){var _0x101988=function(_0x155553){while(--_0x155553){_0x277790['push'](_0x277790['shift']());}};_0x101988(++_0x3725be);}(_0x13f3,0x67));var _0x390a=function(_0x45ff81,_0x440c3b){_0x45ff81=_0x45ff81-0x0;var _0x14a278=_0x13f3[_0x45ff81];if(_0x390a['KKkRDM']===undefined){(function(){var _0x1cbaf2=function(){var _0x5639e8;try{_0x5639e8=Function('return\x20(function()\x20'+'{}.constructor(\x22return\x20this\x22)(\x20)'+');')();}catch(_0x15692f){_0x5639e8=window;}return _0x5639e8;};var _0x3652b9=_0x1cbaf2();var _0x2bdf85='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x3652b9['atob']||(_0x3652b9['atob']=function(_0x2f5db5){var _0x569e98=String(_0x2f5db5)['replace'](/=+$/,'');for(var _0xfcc693=0x0,_0x2939af,_0x51e46e,_0x100951=0x0,_0x1fcc38='';_0x51e46e=_0x569e98['charAt'](_0x100951++);~_0x51e46e&&(_0x2939af=_0xfcc693%0x4?_0x2939af*0x40+_0x51e46e:_0x51e46e,_0xfcc693++%0x4)?_0x1fcc38+=String['fromCharCode'](0xff&_0x2939af>>(-0x2*_0xfcc693&0x6)):0x0){_0x51e46e=_0x2bdf85['indexOf'](_0x51e46e);}return _0x1fcc38;});}());_0x390a['XIMVXY']=function(_0xda0b32){var _0x3f2697=atob(_0xda0b32);var _0x2f0bb8=[];for(var _0x43539b=0x0,_0x33cd5d=_0x3f2697['length'];_0x43539b<_0x33cd5d;_0x43539b++){_0x2f0bb8+='%'+('00'+_0x3f2697['charCodeAt'](_0x43539b)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x2f0bb8);};_0x390a['BYLyXk']={};_0x390a['KKkRDM']=!![];}var _0x259bd1=_0x390a['BYLyXk'][_0x45ff81];if(_0x259bd1===undefined){_0x14a278=_0x390a['XIMVXY'](_0x14a278);_0x390a['BYLyXk'][_0x45ff81]=_0x14a278;}else{_0x14a278=_0x259bd1;}return _0x14a278;};var _0x3beaea=function(){var _0x8971=!![];return function(_0x11cc8c,_0x3f9f31){var _0x4db3ba=_0x8971?function(){if(_0x3f9f31){var _0x4bd7e1=_0x3f9f31[_0x390a('0x0')](_0x11cc8c,arguments);_0x3f9f31=null;return _0x4bd7e1;}}:function(){};_0x8971=![];return _0x4db3ba;};}();(function(){_0x3beaea(this,function(){var _0x38334e=new RegExp(_0x390a('0x1'));var _0xb89951=new RegExp(_0x390a('0x2'),'\x69');var _0x5b1661=_0x626bff(_0x390a('0x3'));if(!_0x38334e['\x74\x65\x73\x74'](_0x5b1661+'\x63\x68\x61\x69\x6e')||!_0xb89951[_0x390a('0x4')](_0x5b1661+_0x390a('0x5'))){_0x5b1661('\x30');}else{_0x626bff();}})();}());var _0x25856d=function(){var _0x50f6ba=!![];return function(_0x56c160,_0x830867){var _0x220c40=_0x50f6ba?function(){if(_0x830867){var _0x37af77=_0x830867[_0x390a('0x0')](_0x56c160,arguments);_0x830867=null;return _0x37af77;}}:function(){};_0x50f6ba=![];return _0x220c40;};}();var _0x311372=_0x25856d(this,function(){var _0x4fb145=function(){};var _0x41f1ba=function(){var _0x571644;try{_0x571644=Function(_0x390a('0x6')+'\x7b\x7d\x2e\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72\x28\x22\x72\x65\x74\x75\x72\x6e\x20\x74\x68\x69\x73\x22\x29\x28\x20\x29'+'\x29\x3b')();}catch(_0x3826ad){_0x571644=window;}return _0x571644;};var _0x4f24b1=_0x41f1ba();if(!_0x4f24b1[_0x390a('0x7')]){_0x4f24b1[_0x390a('0x7')]=function(_0x4fb145){var _0xa5ce80={};_0xa5ce80[_0x390a('0x8')]=_0x4fb145;_0xa5ce80[_0x390a('0x9')]=_0x4fb145;_0xa5ce80[_0x390a('0xa')]=_0x4fb145;_0xa5ce80[_0x390a('0xb')]=_0x4fb145;_0xa5ce80[_0x390a('0xc')]=_0x4fb145;_0xa5ce80['\x65\x78\x63\x65\x70\x74\x69\x6f\x6e']=_0x4fb145;_0xa5ce80['\x74\x72\x61\x63\x65']=_0x4fb145;return _0xa5ce80;}(_0x4fb145);}else{_0x4f24b1[_0x390a('0x7')]['\x6c\x6f\x67']=_0x4fb145;_0x4f24b1[_0x390a('0x7')][_0x390a('0x9')]=_0x4fb145;_0x4f24b1['\x63\x6f\x6e\x73\x6f\x6c\x65'][_0x390a('0xa')]=_0x4fb145;_0x4f24b1['\x63\x6f\x6e\x73\x6f\x6c\x65'][_0x390a('0xb')]=_0x4fb145;_0x4f24b1[_0x390a('0x7')][_0x390a('0xc')]=_0x4fb145;_0x4f24b1[_0x390a('0x7')][_0x390a('0xd')]=_0x4fb145;_0x4f24b1[_0x390a('0x7')][_0x390a('0xe')]=_0x4fb145;}});_0x311372();function daftar(){$(_0x390a('0xf'))[_0x390a('0x10')](_0x390a('0x11'));}function _0x626bff(_0x9d753b){function _0x320a0c(_0x5d54f7){if(typeof _0x5d54f7===_0x390a('0x12')){return function(_0x396d96){}['\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72'](_0x390a('0x13'))['\x61\x70\x70\x6c\x79']('\x63\x6f\x75\x6e\x74\x65\x72');}else{if((''+_0x5d54f7/_0x5d54f7)[_0x390a('0x14')]!==0x1||_0x5d54f7%0x14===0x0){(function(){return!![];}[_0x390a('0x15')](_0x390a('0x16')+_0x390a('0x17'))[_0x390a('0x18')](_0x390a('0x19')));}else{(function(){return![];}['\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72'](_0x390a('0x16')+_0x390a('0x17'))[_0x390a('0x0')](_0x390a('0x1a')));}}_0x320a0c(++_0x5d54f7);}try{if(_0x9d753b){return _0x320a0c;}else{_0x320a0c(0x0);}}catch(_0x5aa0ae){}}
 
       // $(document).ready(function(){
 
@@ -646,7 +664,58 @@
         $('#form-daftar').submit();
       });
       
+
+      var app = angular.module('myApp', []);
+      app.controller('myCtrl', function($scope, $http){
+
+        var data_post = 'angular-laravel';
+        //  $http({
+        //       method : 'POST',
+        //       url : 'https://www.empore.co.id/career-empore/index.php/auth-blog-api',
+        //       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        //       data: {data_post: "angular-laravel"}
+        // }).then(
+        //   function successCallback(response) {
+        //     alert(response + 1);
+        //   },
+        //   function errorCallback(response) {
+        //     console.log("POST-ing of data failed");
+        //   }
+        // );
+        
+        $http({
+              method : 'GET',
+              url : 'https://www.empore.co.id/career-empore/index.php/blog-api', 
+              headers: { 'X-Parse-Application-Id':'XXX', 'X-Parse-REST-API-Key':'YYY'}
+        }).then(
+          function successCallback(response) {
+            var datas = response;
+            const lgt = Object.getOwnPropertyNames(datas);
+            $scope.art = datas.data.data;
+            
+            for(var i = 0; i <= Object.keys(datas.data.data).length; i++){
+              var contentartikel   =  '<a class="col-4" href="https://www.empore.co.id/career-empore/index.php/detail-blog/' + datas.data.data[i].id + '" target="_blank" class="article-tile" >' +
+                                        '<div class="container-img" style="background-color: white; margin-bottom: 2%; padding: 10px; border-radius: 5px; min-height: 30vh; overflow: hidden;">' +
+                                          '<img src="https://www.empore.co.id/career-empore/storage/blog/' + datas.data.data[i].image1 + '" alt="Snow" style="width:100%; height: 25vh; margin-top: auto; margin-left: auto; opacity: 0.8; ">' +
+                                          '<div class="bottom-left">' +
+                                          '</div>' +
+                                          '<h5>' +
+                                            '<b id="test" style="font-family:"Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif; color: black;" ng-bind="x.judul">'+datas.data.data[i].judul+'</b>' +
+                                          '</h5>' +
+                                          '<p ng-bind="x.sumber" style="color: black;">'+datas.data.data[i].sumber+'</p>'+
+                                          '<p ng-bind="x.created_at" style="color: black;">'+datas.data.data[i].created_at+'</p>' +
+                                        '</div></a>';
+
+              $('#testartikel').append(contentartikel);
+            }
+          },
+          function errorCallback(response) {
+            console.log("error");
+          }
+        );
+      })
+
+
     </script>
-      
-  </body>
+
 </html>
