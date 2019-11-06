@@ -695,12 +695,13 @@
             
             for(var i = 0; i <= Object.keys(datas.data.data).length; i++){
               var contentartikel   =  '<a class="col-4" href="https://www.empore.co.id/career-empore/index.php/detail-blog/' + datas.data.data[i].id + '" target="_blank" class="article-tile" >' +
-                                        '<div class="container-img" style="background-color: white; margin-bottom: 2%; padding: 10px; border-radius: 5px; min-height: 30vh; overflow: hidden;">' +
+                                        '<div class="container-img" style="background-color: white; margin-bottom: 2%; padding: 10px; border-radius: 5px; min-height: 30vh; height: 40vh; overflow: hidden;">' +
                                           '<img src="https://www.empore.co.id/career-empore/storage/blog/' + datas.data.data[i].image1 + '" alt="Snow" style="width:100%; height: 25vh; margin-top: auto; margin-left: auto; opacity: 0.8; ">' +
                                           '<div class="bottom-left">' +
                                           '</div>' +
                                           '<h5>' +
-                                            '<b id="test" style="font-family:"Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif; color: black;" ng-bind="x.judul">'+datas.data.data[i].judul+'</b>' +
+                                            // '<b id="test" style="font-family:Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif; color: black;" ng-bind="x.judul">'+datas.data.data[i].judul+'</b>' +
+                                            '<b id="test" style="font-family: Arial; color: black;" ng-bind="x.judul">'+datas.data.data[i].judul+'</b>' +
                                           '</h5>' +
                                           '<p ng-bind="x.sumber" style="color: black;">'+datas.data.data[i].sumber+'</p>'+
                                           '<p ng-bind="x.created_at" style="color: black;">'+datas.data.data[i].created_at+'</p>' +
