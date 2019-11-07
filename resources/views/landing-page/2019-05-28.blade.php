@@ -333,7 +333,7 @@
       <!--    Usaha   -->
       <div style="background-color: black;" id="">
         <div style="background-color: #d40d0d; height: 100vh; border-radius: 180px 0 0 180px;">
-          <div class="container" style="padding-top: 10vh; padding-bottom: 12vh;">
+          <div class="container" style="padding-top: 10vh; padding-bottom: 15vh;">
               <div class="row" >
                 <div class="col-12" style="text-align: center; color: white;">
                   <h1 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 4vw;">
