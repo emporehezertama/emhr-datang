@@ -403,14 +403,14 @@
       <div style="background-color: black;" id="">
         <div style="background-color: #d40d0d; border-radius: 0 180px 180px 0;">
           <div class="container" style="padding: 15vh 0;">
-            <div class="row" >
+            <!-- <div class="row" >
                 <div class="col-12" style="color: white; text-align: center; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"">
                   <h3 style="font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"><b>ARTIKEL</b></h3>
                 </div>
             </div>
-            <hr>
+            <hr> -->
             
-            <div id="testartikel" class="row" ng-app="myApp" ng-controller="myCtrl">
+            <!-- <div id="testartikel" class="row" ng-app="myApp" ng-controller="myCtrl"> -->
               
                 <!-- <a class="col-4" href="https://www.empore.co.id/career-empore/index.php/detail-blog/1" target="_blank" class="article-tile" ng-repeat="x in art">
                 
@@ -423,7 +423,7 @@
                 <span ng-bind="x.sumber"></span><span ng-bind="x.created_at"></span>
               </a> -->
                                         
-            </div>
+            <!-- </div> -->
 
           </div>
         </div>
