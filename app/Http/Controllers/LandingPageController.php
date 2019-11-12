@@ -65,7 +65,7 @@ class LandingPageController extends Controller
         Excel::store(new ClientExport($nama, $email, $nama_perusahaan, $handphone), $name_excel.'.xlsx');
     
         $params['text']     = 'Request Free Trial Absensi Digital';
-        $emailto = ['farros@empore.co.id'];
+        $emailto = ['marketing@empore.co.id'];
         \Mail::send('email.trial-account', $params,
             function($message) use($request, $file, $email, $emailto,$name_excel, $destination) {
                 $message->from($email);
